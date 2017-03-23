@@ -17,7 +17,7 @@ and using the KML format requires a polyfill for `URL`.
 
 ## Installation
 
-##Authors
+## Authors
 
 **bearzy**
 
