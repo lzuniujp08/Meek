@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+</head>
+<body>
+<script src="./dist/meek.js"></script>
+</body>
+
+
+
+<script>
+
+
+  function mul(value0){
+    return function(value1){
+      return function(value2){
+        return value0 * value1 * value2;
+      }
+    }
+  }
+
+  console.log(mul(2)(3)(4))
+  console.log(mul(3)(4)(6))
+
+
+  function isArray(obj){
+    return obj && typeof obj === ['object']
+  }
+
+  console.log(isArray([34]))
+
+</script>
+</html>
