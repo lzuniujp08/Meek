@@ -8,6 +8,15 @@ import LayerRenderer from '../../renderer/canvas/LayerRenderer'
 export default class FeatureLayerRenderer extends LayerRenderer {
   constructor (layer) {
     super(layer)
+    
+    this._geometryRender = null
+  }
+  
+  /**
+   *
+   */
+  prepareFrame () {
+    
   }
   
   

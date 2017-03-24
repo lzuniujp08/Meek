@@ -17,6 +17,20 @@ const Config = {}
  */
 Config.DEBUG = true
 
+/**
+ * Default max zoom level fro map view.
+ * Defaylt is '10'
+ * @type {number}
+ */
+Config.DEFAULT_MAX_ZOOM = 10
+
+/**
+ * Default min zoom level fro map view.
+ * Defaylt is '0'
+ * @type {number}
+ */
+Config.DEFAYLT_MIN_ZOOM = 0
+
 
 
 

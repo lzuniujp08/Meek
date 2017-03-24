@@ -5,7 +5,10 @@
 import BaseObject from '../../core/BaseObject'
 
 export default class GeomertyRender extends BaseObject {
-  constructor () {
+  constructor (context) {
     super()
+    this.context = context
   }
+  
+  render () {}
 }

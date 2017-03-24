@@ -5,9 +5,10 @@ import GeometryRender from '../render/GeomertyRender'
 
 export default class PointRender extends GeometryRender {
   
-  constructor () {
-    super()
+  constructor (context) {
+    super(context)
   }
+  
   
   
   

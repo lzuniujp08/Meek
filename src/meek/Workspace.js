@@ -6,18 +6,30 @@ import BaseObject from '../core/BaseObject'
 import CanvasRenderer from '../renderer/CanvasRenderer'
 import BrowserEventHandler from './BrowserEventHandler'
 import BrowserEvent from './BrowserEvent'
+import View from './View'
 import {listen} from '../core/EventManager'
+import {transform} from '../data/matrix/Transform'
 
 export default class Workspace extends BaseObject {
 
   constructor (options) {
     super()
 
+    this._frameState = null
+    
     /**
      * 添加到map中的layers集合
      * @private
      */
     this._layers = []
+  
+    /**
+     * 初始化矩阵转换器
+     * @type {*}
+     * @private
+     */
+    this._toPixelTransform = transform.create()
+    this._toCoordinateTransform = transform.create()
 
     /**
      *
@@ -40,7 +52,9 @@ export default class Workspace extends BaseObject {
 
     this._createViewport()
 
+    this.layers = options.layers || []
     this.target = options.target
+    this.view = options.view || new View()
 
     this._createRenderer()
 
@@ -83,7 +97,7 @@ export default class Workspace extends BaseObject {
      * 监听浏览器上的鼠标事件 mousemove,mouseup,mousedown
      * 并处理浏览器事件
      */
-    for (var key in BrowserEvent) {
+    for (let key in BrowserEvent) {
       listen(this._browserEventHandler, BrowserEvent[key],
         this._handleBrowserEvent, this)
     }
@@ -95,7 +109,7 @@ export default class Workspace extends BaseObject {
 
     if (this.dispatchEvent(browserEvent) !== false) {
       for (i = cpts.length - 1; i >= 0; i--) {
-        var cpt = cpts[i]
+        let cpt = cpts[i]
 
         if (!cpt.active) {
           continue
@@ -109,13 +123,23 @@ export default class Workspace extends BaseObject {
     }
   }
 
-  // _animationDelay () {
-  //   this._animationDelayKey = undefined
-  //   this._renderFrame(Date.now())
-  // }.bind(this)
-
   _renderFrame () {
-    this._renderer.renderFrame()
+    
+    const size = this.size
+    const view = this.view
+    let frameState = null
+
+    const viewState = view.getViewState()
+    frameState = {
+      size: size,
+      viewState: viewState,
+      toPixelTransform: this._toPixelTransform,
+      toCoordinateTransform: this._toCoordinateTransform,
+    }
+    
+    this._frameState = frameState
+    
+    this._renderer.renderFrame(frameState)
   }
 
   render () {
@@ -124,14 +148,30 @@ export default class Workspace extends BaseObject {
     }
   }
 
+  get size () { return this._size }
+  set size (value) {
+    this._size = value
+  }
+  
   get components () { return this._components }
   get layers () { return this._layers }
+  set layers (value) {
+    if (Array.isArray(value)) {
+      for(let layer of value){
+        this._layers.push(layer)
+      }
+      
+      this.render()
+    }
+  }
 
   get target () { return this._target }
   set target (value) {
     this._target = value
     const targetElement = document.getElementById(this._target)
     targetElement.appendChild(this._viewport)
+    
+    this.updateSize()
   }
   
   addComponents (cpt) {
@@ -142,23 +182,60 @@ export default class Workspace extends BaseObject {
   addLayer (layer) {
     this.layers.push(layer)
   }
+  
+  getTargetElement () {
+    const target = this.target
+    if(target !== undefined) {
+      return typeof target === 'string' ?
+        document.getElementById(target) :
+        target
+    }else{
+      return null
+    }
+  }
+  
+  /**
+   * Update the map viewport size,this is a recalculation.
+   */
+  updateSize () {
+    const targetElement = this.getTargetElement()
+    if (!targetElement) {
+      this.size = undefined
+    } else {
+      const computedStyle = getComputedStyle(targetElement)
+      this.size = [
+        targetElement.offsetWidth -
+        parseFloat(computedStyle['borderLeftWidth']) -
+        parseFloat(computedStyle['paddingLeft']) -
+        parseFloat(computedStyle['paddingRight']) -
+        parseFloat(computedStyle['borderRightWidth']),
+        targetElement.offsetHeight -
+        parseFloat(computedStyle['borderTopWidth']) -
+        parseFloat(computedStyle['paddingTop']) -
+        parseFloat(computedStyle['paddingBottom']) -
+        parseFloat(computedStyle['borderBottomWidth'])
+      ]
+    }
+  }
 
   /**
    * Returns the map pixel position for a browser event relative to the viewport.
    * @param {Event} event Event.
-   * @return {ol.Pixel} Pixel.
+   * @return
    * @api stable
    */
   getEventPixel (event) {
     // 获取viewport元素在浏览器视图窗口总的位置(left,top,bottom,right)
-    var viewportPosition = this._viewport.getBoundingClientRect()
-    var eventPosition = event.changedTouches ? event.changedTouches[0] : event
+    const viewportPosition = this._viewport.getBoundingClientRect()
+    const eventPosition = event.changedTouches ? event.changedTouches[0] : event
     return [
       eventPosition.clientX - viewportPosition.left,
       eventPosition.clientY - viewportPosition.top
     ]
   }
 
-  getCoordinateFromPixel () {
+  getCoordinateFromPixel (pixelPoint) {
+    
+    
   }
 }

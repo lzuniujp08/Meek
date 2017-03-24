@@ -34,7 +34,7 @@ export default class CanvasRenderer extends Renderer {
     this._transform = transform.create()
   }
 
-  renderFrame (renderState) {
+  renderFrame (frameState) {
     if (this._ws === null) {
       return
     }
