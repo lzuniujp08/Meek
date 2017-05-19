@@ -50,7 +50,7 @@ export default class DrawCpt extends Component {
   
     /**
      * Sketch coordinates. Used when drawing a line or polygon.
-     * @type {ol.Coordinate|Array.<ol.Coordinate>|Array.<Array.<ol.Coordinate>>}
+     * @type
      * @private
      */
     this._sketchCoords = null
@@ -64,7 +64,7 @@ export default class DrawCpt extends Component {
     /**
      * A function to decide if a potential finish coordinate is permissable
      * @private
-     * @type {ol.EventsConditionType}
+     * @type
      */
     this._finishCondition = options.finishCondition ?
         options.finishCondition : function() {return true}
@@ -136,7 +136,7 @@ export default class DrawCpt extends Component {
   
     /**
      * @private
-     * @type {ol.EventsConditionType}
+     * @type
      */
     this._freehandCondition = options.freehandCondition ?
       options.freehandCondition : function () { return true }
@@ -301,15 +301,6 @@ export default class DrawCpt extends Component {
       coordinates[0].push(coordinates[0][0])
       this.geometryFunction(coordinates, geometry)
     }
-  
-    // cast multi-part geometries
-    // if (this.type_ === ol.geom.GeometryType.MULTI_POINT) {
-    //   sketchFeature.setGeometry(new ol.geom.MultiPoint([coordinates]))
-    // } else if (this.type_ === ol.geom.GeometryType.MULTI_LINE_STRING) {
-    //   sketchFeature.setGeometry(new ol.geom.MultiLineString([coordinates]))
-    // } else if (this.type_ === ol.geom.GeometryType.MULTI_POLYGON) {
-    //   sketchFeature.setGeometry(new ol.geom.MultiPolygon([coordinates]))
-    // }
   
     // First dispatch event to allow full set up of feature
     // this.dispatchEvent(new DrawCpt.DrawEvent(
