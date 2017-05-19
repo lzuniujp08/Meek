@@ -7,11 +7,14 @@ import EventManager from 'core/EventManager'
 import BaseObject from 'core/BaseObject'
 import Counter from 'utils/Counter'
 import Helpers from 'utils/Helpers'
-import Geometry from 'geom/Geometry'
-import MBR from 'geom/MBR'
-import Point from 'geom/Point'
-import Line from 'geom/Line'
-import Polygon from 'geom/Polygon'
+
+import Geometry from 'geometry/Geometry'
+import Extent from 'geometry/Extent'
+import Point from 'geometry/Point'
+import Line from 'geometry/Line'
+import Polygon from 'geometry/Polygon'
+
+import Style from 'style/Style'
 import PointStyle from 'style/PointStyle'
 import LineStyle from 'style/LineStyle'
 import FillStyle from 'style/FillStyle'
@@ -19,14 +22,14 @@ import BaseLayer from 'lyr/BaseLayer'
 import FeatureLayer from 'lyr/FeatureLayer'
 import SingleImageLayer from 'lyr/SingleImageLayer'
 import Renderer from 'renderer/Renderer'
-import CanvasRenderer from 'renderer/CanvasRenderer'
+import CanvasRenderer from 'renderer/canvas/CanvasRenderer'
 import Component from 'components/Component'
 import DrawCpt from 'components/DrawCpt'
 import BrowserEvent from 'meek/BrowserEvent'
 import BrowserEventHandler from 'meek/BrowserEventHandler'
 import EventType from 'meek/EventType'
 import Feature from 'meek/Feature'
-import Workspace from 'meek/Workspace'
+import Map from 'meek/Map'
 
 export default {
   Event,
@@ -35,10 +38,11 @@ export default {
   Counter,
   Helpers,
   Geometry,
-  MBR,
+  Extent,
   Point,
   Line,
   Polygon,
+  Style,
   PointStyle,
   LineStyle,
   FillStyle,
@@ -53,5 +57,5 @@ export default {
   BrowserEventHandler,
   EventType,
   Feature,
-  Workspace
+  Map
 }

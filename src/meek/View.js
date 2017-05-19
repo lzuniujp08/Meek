@@ -10,7 +10,9 @@ export default class View extends BaseObject {
   constructor (options) {
     super()
     
-    this.center = options.center || null
+    let _innerOptions = options || {}
+    
+    this.center = _innerOptions.center || null || [200,200]
     
   }
   

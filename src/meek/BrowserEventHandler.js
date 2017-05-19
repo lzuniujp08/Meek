@@ -6,15 +6,39 @@
 import BaseObject from '../core/BaseObject'
 import {listen} from '../core/EventManager'
 import BrowserEvent from './BrowserEvent'
+import {EventType} from './EventType'
 
 export default class BrowserEventHandler extends BaseObject {
 
-  constructor (workspace, element) {
+  constructor (map, element) {
     super()
 
-    this._ws = workspace
+    this.map = map
 
+    
     this._element = element
+  
+    /**
+     *
+     * @type {boolean}
+     * @private
+     */
+    this._dragging = false
+  
+    /**
+     * The most recent "down" type event (or null if none have occurred).
+     * @private
+     */
+    this._down = null
+  
+  
+    /**
+     *
+     * @type {number}
+     * @private
+     */
+    this._clickTimeoutId = 0
+    
 
     // 事件和对应的处理方法
     // 映射关系
@@ -30,6 +54,7 @@ export default class BrowserEventHandler extends BaseObject {
   }
 
   _registerSource () {
+    // console.log('注册鼠标事件')
     const events = this.getEvents()
     events.forEach(eventName =>
         listen(this._element, eventName, this._mapping[eventName], this))
@@ -40,30 +65,71 @@ export default class BrowserEventHandler extends BaseObject {
   }
 
   _mousedown (e) {
-    console.info('mouse down click')
-    let event = new BrowserEvent(this._ws, e, 'movedown')
+    let event = new BrowserEvent(this.map, e, EventType.MOUSEDOWN)
     this.dispatchEvent(event)
+    
+    this._down = e
   }
 
   _mousemove (e) {
-    console.info('mouse move click')
-    let event = new BrowserEvent(this._ws, e, 'mousemove')
+    // if (this._isMoving(e)) {
+    this._dragging = true
+    let event = new BrowserEvent(this.map, e, EventType.MOUSEMOVE)
     this.dispatchEvent(event)
+    // }
   }
 
   _mouseup (e) {
-    let event = new BrowserEvent(this._ws, e, 'mouseup')
+    let event = new BrowserEvent(this.map, e, EventType.MOUSEUP)
     this.dispatchEvent(event)
+  
+    if (!this._dragging) {
+      // this._emulateClick(this._down)
+    }
+    
+    this._dragging = false
+    this._down = null
   }
 
   _mouseover (e) {
-    let event = new BrowserEvent(this._ws, e)
+    let event = new BrowserEvent(this.map, e,EventType.MOUSEOVER)
     this.dispatchEvent(event)
   }
 
   _mouseout (e) {
-    let event = new BrowserEvent(this._ws, e, 'mouseout')
+    let event = new BrowserEvent(this.map, e, EventType.MOUSEOUT)
     this.dispatchEvent(event)
+  }
+  
+  _emulateClick (event) {
+    // var newEvent = new ol.MapBrowserPointerEvent(
+    //   ol.MapBrowserEvent.EventType.CLICK, this.map_, pointerEvent);
+    // this.dispatchEvent(newEvent);
+    
+    let newEvent
+    
+    if (this._clickTimeoutId !== 0) {
+      // double click
+      clearTimeout(this._clickTimeoutId)
+      this._clickTimeoutId = 0
+      newEvent = new BrowserEvent(EventType.DBLCLICK, this.map, event)
+      this.dispatchEvent(newEvent)
+    } else {
+      // single click
+      this._clickTimeoutId = setTimeout(function() {
+        this._clickTimeoutId = 0
+        let newEvent = new BrowserEvent(EventType.SINGLECLICK, this.map, event)
+        this.dispatchEvent(newEvent)
+      }.bind(this), 250)
+    }
+  }
+  
+  _isMoving (event) {
+    if(this._down === null ){
+      return false
+    }
+    
+    return event.clientX !== this._down.clientX || event.clientY !== this._down.clientY
   }
 
 }

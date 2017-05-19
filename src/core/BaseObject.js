@@ -27,7 +27,7 @@ export default class BaseObject extends Event {
    * 获取对象的ID
    * @returns {string}
    */
-  get Id () {
+  get id () {
     return this._id
   }
 }

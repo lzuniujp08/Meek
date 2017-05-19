@@ -7,13 +7,15 @@ import BaseObject from '../core/BaseObject'
 
 export default class Renderer extends BaseObject {
 
-  constructor (contianer, ws) {
+  constructor (contianer, map) {
     super()
 
-    this._ws = ws
+    this._map = map
   }
+  
+  get map () { return this._map }
 
-  renderFrame () {}
+  renderFrame (frameState) {}
 
   /**
    *

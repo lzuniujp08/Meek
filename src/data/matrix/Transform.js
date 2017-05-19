@@ -14,7 +14,7 @@
  * ```
  */
 
-export const transform = {
+export const Transform = {
   
   /**
    * @private
@@ -200,8 +200,7 @@ export const transform = {
    * @return {!Transform} Inverse of the transform.
    */
   invert: function (transform) {
-    const det = transform.determinant(transform)
-    asserts.assert(det !== 0, 32) // Transformation matrix cannot be inverted
+    const det = Transform.determinant(transform)
     
     const a = transform[0]
     const b = transform[1]
@@ -232,5 +231,5 @@ export const transform = {
 }
 
 export default {
-  transform
+  Transform
 }

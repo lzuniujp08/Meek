@@ -7,8 +7,10 @@ import BaseObject from '../../core/BaseObject'
 export default class GeomertyRender extends BaseObject {
   constructor (context) {
     super()
-    this.context = context
+    this._context = context
   }
   
-  render () {}
+  get context () { return this._context }
+  
+  render (feature) { return feature }
 }

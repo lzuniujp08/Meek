@@ -6,7 +6,7 @@ import BaseObject from '../core/BaseObject'
 
 export default class BrowserEvent extends BaseObject {
 
-  constructor (ws, oriEvent, eventTyle) {
+  constructor (map, oriEvent, eventTyle) {
     super()
 
     /**
@@ -17,7 +17,7 @@ export default class BrowserEvent extends BaseObject {
     /**
      *
      */
-    this.ws = ws
+    this.map = map
 
     /**
      * 记录事件源对象
@@ -30,7 +30,13 @@ export default class BrowserEvent extends BaseObject {
      * @type {ol.Pixel}
      * @api stable
      */
-    this.coordinates = ws.getEventPixel(oriEvent)
+    this.pixel = map.getEventPixel(oriEvent)
+  
+  
+    /**
+     * 将canvas左边转换成地图坐标
+     */
+    this.coordinate = map.getCoordinateFromPixel(this.pixel)
   }
 }
 

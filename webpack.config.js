@@ -19,7 +19,7 @@ webpackConfig.output = {
   path: path.resolve(__dirname, 'dist'),
   publicPath: '<%=baseUrl%>/',
   filename: 'meek.js',
-  library: 'Meek',
+  library: 'Datatang',
   libraryTarget: 'umd'
 }
 

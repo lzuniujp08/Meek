@@ -5,13 +5,5 @@
 import WorkSpace from '../src/mk/Workspace.js'
 
 let ws = new WorkSpace({
-    target:'ws'
-});
-
-
-
-function foo(){
-  var a = function(){
-
-  }
-}
+  target:'ws'
+})
