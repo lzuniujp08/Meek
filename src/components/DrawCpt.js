@@ -318,6 +318,11 @@ export default class DrawCpt extends Component {
     }
   }
   
+  /**
+   * Stop drawing without adding the sketch feature to the sketch layer
+   * @returns {Feature|null|_Feature2.default}
+   * @private
+   */
   _abortDrawing () {
     this._finishCoordinate = null
     const sketchFeature = this._sketchFeature
