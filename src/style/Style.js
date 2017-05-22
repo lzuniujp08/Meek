@@ -2,7 +2,6 @@
  * Created by zhangyong on 2017/3/17.
  */
 
-
 import Geometry from '../geometry/Geometry'
 import FillStyle from './FillStyle'
 import LineStyle from './LineStyle'
@@ -11,7 +10,6 @@ import PointStyle from './PointStyle'
 export const Style = {}
 
 Style._default = null
-
 
 /**
  * 设置缺省图形style
