@@ -12,6 +12,9 @@ import Geometry from '../geometry/Geometry'
 import Point from '../geometry/Point'
 import Line from '../geometry/Line'
 import Polygon from '../geometry/Polygon'
+import Extent from '../geometry/Extent'
+
+import DrawEvent from './DrawEvent'
 
 
 export default class DrawCpt extends Component {
@@ -173,11 +176,18 @@ export default class DrawCpt extends Component {
       Constructor = Line
     } else if(mode === DrawCpt.DrawMode.POLYGON) {
       Constructor = Polygon
+    } else if (mode === DrawCpt.DrawMode.EXTENT) {
+      Constructor = Extent
     }
     
     return Constructor
   }
   
+  /**
+   * 设置缺省 geometryfunction
+   * @returns {function(*, *)}
+   * @private
+   */
   _initGeometryFunction () {
     const geometryFunction = (coordinates, opt_geometry) => {
       let mode = this.drawMode
@@ -188,6 +198,9 @@ export default class DrawCpt extends Component {
           geometry.rings = [coordinates[0].concat([coordinates[0][0]])]
         } else if(mode === DrawCpt.DrawMode.LINE) {
           geometry.path = coordinates
+        } else if(mode === DrawCpt.DrawMode.EXTENT) {
+          //
+          
         }
       } else {
         let Constructor = this._geometryFactory()
@@ -200,19 +213,39 @@ export default class DrawCpt extends Component {
     return geometryFunction
   }
   
+  
+  /**
+   * Handle move events
+   * @param {BrowserEvent} event A move event.
+   * @return {boolean} Pass the event to other compoments.
+   * @private
+   */
   _handleMouseMove (event) {
     if (this._finishCoordinate) {
       this._modifyDrawing(event)
     } else {
       this._updateSketchPoint(event)
     }
+    
+    return true
   }
   
+  /**
+   * Handle down events
+   * @param {BrowserEvent} event A up event.
+   * @returns {boolean}
+   * @private
+   */
   _handleDownEvent (event) {
     this._downPointPx = event.pixel
     return true
   }
   
+  /**
+   * Handle up events.
+   * @param {BrowserEvent} event
+   * @private
+   */
   _handleUpEvent (event) {
     const downPx = this._downPointPx
     const clickPx = event.pixel, mode = this.drawMode
@@ -244,7 +277,8 @@ export default class DrawCpt extends Component {
   
   /**
    * 启动绘制，生成feature
-   * @param event
+   * Start the drawing
+   * @param {BrowserEvent} event
    * @private
    */
   _startDrawing (event) {
@@ -271,16 +305,19 @@ export default class DrawCpt extends Component {
       this._sketchLine = new Feature(new Line(this._sketchLineCoords))
     }
     
+    // Build a geometry uesed sketchCorrdds
     const geometry = this.geometryFunction(this._sketchCoords)
     
     this._sketchFeature = new Feature()
     
     this._sketchFeature.geometry = geometry
     
+    // Redraw the sketch features
     this._updateSketchFeatures()
     
     // 派发绘制开始事件
-    // ...
+    // Trigger the draw strat event
+    this.dispatchEvent(new DrawEvent(DrawEvent.EventType.DRAWSTART, this._sketchFeature))
   }
   
   _finishDrawing () {
@@ -544,30 +581,12 @@ DrawCpt.getDrawMode = function(type) {
   case Geometry.MULTI_POLYGON:
     drawMode = DrawCpt.DrawMode.POLYGON
     break
+  case Geometry.EXTENT:
+    drawMode = DrawCpt.DrawMode.EXTENT
+    break
   }
   
   return drawMode
-}
-
-
-/**
- * 定义绘制工具的事件类型
- * @type {{DRAWSTART: string, DRAWEND: string}}
- */
-DrawCpt.EventType = {
-  /**
-   * Triggered upon feature draw start
-   * @api stable
-   */
-  DRAWSTART: 'drawstart',
-  
-  
-  /**
-   * Triggered upon feature draw end
-   * @api stable
-   */
-  DRAWEND: 'drawend'
-  
 }
 
 
@@ -580,5 +599,6 @@ DrawCpt.DrawMode = {
   POINT: 'Point',
   LINE: 'LineString',
   POLYGON: 'Polygon',
-  CIRCLE: 'Circle'
+  CIRCLE: 'Circle',
+  EXTENT: 'Extent'
 }
