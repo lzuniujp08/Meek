@@ -4,6 +4,14 @@
 
 import BaseObject from '../core/BaseObject'
 
+
+/**
+ * The feature class is intent to represent geographic features,with a geometry ,a style and
+ * other attrubutes properties.
+ * Feature provides a function named style that can be seted a style you want,
+ * otherwise will use the style of feature layer.
+ *
+ */
 export default class Feature extends BaseObject {
 
   constructor (geometry, attributes, style) {
