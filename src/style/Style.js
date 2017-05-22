@@ -15,6 +15,7 @@ Style._default = null
 
 /**
  * 设置缺省图形style
+ * Create a defaut style for feature layer
  * @returns {null|Array|[*]}
  */
 Style.defaultFunction = function () {
@@ -25,17 +26,17 @@ Style.defaultFunction = function () {
   
     Style._default = {}
     
-    // 面样式
+    // 面样式 polygon style
     Style._default[Geometry.POLYGON] = [
       new FillStyle(white,new LineStyle(blue,1,1.25),0.5,10)
     ]
   
-    // 线样式
+    // 线样式 line style
     Style._default[Geometry.LINE] = [
       new LineStyle(blue,1,width,LineStyle.LineCap.ROUND,LineStyle.LineJion.ROUND)// 内框
     ]
   
-    // 点样式
+    // 点样式 point style
     Style._default[Geometry.POINT] = [new PointStyle(10,white,1,new LineStyle(blue,1,width))]
     
   }
@@ -44,7 +45,7 @@ Style.defaultFunction = function () {
 }
 
 /**
- *
+ * Create a default style while drawing
  * @returns {{}}
  */
 Style.createDefaultEditing = function () {
@@ -76,6 +77,12 @@ Style.createDefaultEditing = function () {
   return styles
 }
 
+/**
+ * Convert the passed obj into a style function.
+ *
+ * @param obj
+ * @returns {*}
+ */
 Style.createFunction = function(obj) {
   let styleFunction
   
