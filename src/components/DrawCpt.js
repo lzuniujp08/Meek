@@ -199,8 +199,7 @@ export default class DrawCpt extends Component {
         } else if(mode === DrawCpt.DrawMode.LINE) {
           geometry.path = coordinates
         } else if(mode === DrawCpt.DrawMode.EXTENT) {
-          //
-          
+          geometry.rings = [Extent.boundingExtent(coordinates)]
         }
       } else {
         let Constructor = this._geometryFactory()
@@ -212,7 +211,6 @@ export default class DrawCpt extends Component {
     
     return geometryFunction
   }
-  
   
   /**
    * Handle move events
@@ -265,7 +263,10 @@ export default class DrawCpt extends Component {
       } else if (mode === DrawCpt.DrawMode.CIRCLE ) {
         //
         //
-      } else if (this._atFinish(event)) {
+      } else if (mode === DrawCpt.DrawMode.EXTENT) {
+        this._finishDrawing()
+      }
+      else if (this._atFinish(event)) {
         if (this._finishCondition(event)) {
           this._finishDrawing()
         }
@@ -292,12 +293,12 @@ export default class DrawCpt extends Component {
       this._sketchCoords = startPoint.slice() // 缓存up的点
     } else if (_drawMode === DrawCpt.DrawMode.POLYGON ) {
       this._sketchCoords = [[startPoint.slice(), startPoint.slice()]]
-      this._sketchLineCoords = this._sketchCoords[0]
+      this._sketchLineCoords = this._sketchCoords[0]// temp line
     } else {
       this._sketchCoords = [startPoint.slice(),startPoint.slice()] // 缓存up的点，最后一个值，用于move的替换
       
-      if (_drawMode === DrawCpt.DrawMode.CIRCLE) {
-        //
+      if (_drawMode === DrawCpt.DrawMode.EXTENT) {
+        this._sketchLineCoords = this._sketchCoords
       }
     }
   
@@ -316,63 +317,9 @@ export default class DrawCpt extends Component {
     this._updateSketchFeatures()
     
     // 派发绘制开始事件
-    // Trigger the draw strat event
+    // Trigger the draw-strat event
     this.dispatchEvent(new DrawEvent(DrawEvent.EventType.DRAWSTART, this._sketchFeature))
   }
-  
-  _finishDrawing () {
-    
-    const sketchFeature = this._abortDrawing()// 中止绘制，
-    const coordinates = this._sketchCoords
-    const geometry = (sketchFeature.geometry)
-  
-    if (this.drawMode === DrawCpt.DrawMode.LINE) {
-      // remove the redundant last point
-      coordinates.pop()
-      this.geometryFunction(coordinates, geometry)
-    } else if (this.drawMode === DrawCpt.DrawMode.POLYGON) {
-      // When we finish drawing a polygon on the last point,
-      // the last coordinate is duplicated as for LineString
-      // we force the replacement by the first point
-      coordinates[0].pop()
-      coordinates[0].push(coordinates[0][0])
-      this.geometryFunction(coordinates, geometry)
-    }
-  
-    // First dispatch event to allow full set up of feature
-    // this.dispatchEvent(new DrawCpt.DrawEvent(
-    //   DrawCpt.DrawEventType.DRAWEND, sketchFeature))
-  
-    // Then insert feature
-    // if (this._features) {
-    //   this.features_.push(sketchFeature)
-    // }
-  
-    // 最终放到shource中，形成正式feature
-    if (this._drawLayer) {
-      let newFeature = new Feature(geometry)
-      this._drawLayer.addFeatures([newFeature])
-    }
-  }
-  
-  /**
-   * Stop drawing without adding the sketch feature to the sketch layer
-   * @returns {Feature|null|_Feature2.default}
-   * @private
-   */
-  _abortDrawing () {
-    this._finishCoordinate = null
-    const sketchFeature = this._sketchFeature
-    if (sketchFeature) {
-      this._sketchFeature = null
-      this._sketchPoint = null
-      this._sketchLine = null
-      this._sketchLayer.clear()
-    }
-    
-    return sketchFeature
-  }
-  
   
   /**
    * Modify the drawing
@@ -411,20 +358,75 @@ export default class DrawCpt extends Component {
     }
     
     let sketchLineGeom
-    if (geometry instanceof Polygon && mode !== DrawCpt.DrawMode.POLYGON) {
-      if (!this.sketchLine_) {
-        this.sketchLine_ = new Feature(new Line(null))
+    if (mode === DrawCpt.DrawMode.EXTENT) {
+      if (!this._sketchLine) {
+        this._sketchLine = new Feature(new Line(null))
       }
       
-      const ring = geometry.getLinearRing(0)
-      sketchLineGeom = (this._sketchLine.getGeometry())
-      sketchLineGeom.setFlatCoordinates(ring.getLayout(), ring.getFlatCoordinates())
+      const rings = geometry.rings
+      sketchLineGeom = this._sketchLine.geometry
+      sketchLineGeom.path = rings[0]
     } else if (this._sketchLineCoords) {
       sketchLineGeom =  (this._sketchLine.geometry)
       sketchLineGeom.path = this._sketchLineCoords
     }
     
     this._updateSketchFeatures()
+  }
+  
+  /**
+   * Stop drawing and add the sketch feature to the target layer.
+   * @private
+   */
+  _finishDrawing () {
+    const sketchFeature = this._abortDrawing()// 中止绘制，
+    const coordinates = this._sketchCoords
+    const geometry = (sketchFeature.geometry)
+  
+    if (this.drawMode === DrawCpt.DrawMode.LINE) {
+      // remove the redundant last point
+      coordinates.pop()
+      this.geometryFunction(coordinates, geometry)
+    } else if (this.drawMode === DrawCpt.DrawMode.POLYGON) {
+      // When we finish drawing a polygon on the last point,
+      // the last coordinate is duplicated as for LineString
+      // we force the replacement by the first point
+      coordinates[0].pop()
+      coordinates[0].push(coordinates[0][0])
+      this.geometryFunction(coordinates, geometry)
+    }
+  
+    // First dispatch event to allow full set up of feature
+    this.dispatchEvent(new DrawCpt.DrawEvent(DrawEvent.EventType.DRAWEND, sketchFeature))
+  
+    // Then insert feature
+    // if (this._features) {
+    //   this.features_.push(sketchFeature)
+    // }
+  
+    // 最终放到shource中，形成正式feature
+    if (this._drawLayer) {
+      let newFeature = new Feature(geometry)
+      this._drawLayer.addFeatures([newFeature])
+    }
+  }
+  
+  /**
+   * Stop drawing without adding the sketch feature to the sketch layer
+   * @returns {Feature|null|_Feature2.default}
+   * @private
+   */
+  _abortDrawing () {
+    this._finishCoordinate = null
+    const sketchFeature = this._sketchFeature
+    if (sketchFeature) {
+      this._sketchFeature = null
+      this._sketchPoint = null
+      this._sketchLine = null
+      this._sketchLayer.clear()
+    }
+    
+    return sketchFeature
   }
   
   /**
@@ -504,9 +506,13 @@ export default class DrawCpt extends Component {
     return at
   }
   
+  /**
+   * Create or update the sketch point
+   * @param event
+   * @private
+   */
   _updateSketchPoint (event) {
     const coordinates = event.coordinate
-    // console.log('更新坐标')
     if (this._sketchPoint === null) {
       const geom = new Point(coordinates[0], coordinates[1])
       this._sketchPoint = new Feature(geom)
@@ -552,6 +558,10 @@ export default class DrawCpt extends Component {
     this._sketchLayer.map = active ? map : null
   }
   
+  /**
+   * Get the default style which will be used while a feature is drawn
+   * @returns {Function}
+   */
   getDefaultStyleFunction () {
     const styles = Style.createDefaultEditing()
     return function (feature) {
