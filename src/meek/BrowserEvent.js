@@ -40,6 +40,14 @@ export default class BrowserEvent extends BaseObject {
   }
 }
 
+
+/**
+ * The single click is different form double click,which
+ * consider as two click heppen during 250ms.
+ * @type {string}
+ */
+BrowserEvent.SINGLE_CLICK = 'singleclick'
+
 BrowserEvent.MOUSE_DOWN = 'mousedown'
 
 BrowserEvent.MOUSE_MOVE = 'mousemove'

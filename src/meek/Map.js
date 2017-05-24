@@ -195,6 +195,27 @@ export default class Map extends BaseObject {
     }
   }
   
+  forEachFeatureAtPiexl (piexl,callback,options) {
+    if (!this._frameState) {
+      return
+    }
+    
+    const coordinate = this.getCoordinateFromPixel(piexl)
+    const hitTolerance = options.tolerance
+    
+    const layers = this.layers
+    let result = null
+    for (let i = 0, ii = layers.length; i < ii; i++){
+      let layer = layers[i]
+      result = layer.forEachFeatureAtPiexl(this._frameState,coordinate,callback,hitTolerance)
+      if(result){
+        return callback(result)
+      }
+    }
+    
+    return result
+  }
+  
   /**
    * Update the map viewport size,this is a recalculation.
    */
