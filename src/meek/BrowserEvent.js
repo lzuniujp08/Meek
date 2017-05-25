@@ -48,10 +48,24 @@ export default class BrowserEvent extends BaseObject {
  */
 BrowserEvent.SINGLE_CLICK = 'singleclick'
 
+/**
+ * A click with no draging.
+ * @type {string}
+ */
+BrowserEvent.CLICK = 'click'
+
+/**
+ * A real double click
+ * @type {string}
+ */
+BrowserEvent.DBLCLICK = 'dblclick'
+
 BrowserEvent.MOUSE_DOWN = 'mousedown'
 
 BrowserEvent.MOUSE_MOVE = 'mousemove'
 
 BrowserEvent.MOUSE_UP = 'mouseup'
+
+BrowserEvent.MOUSE_OVER = 'mouseover'
 
 BrowserEvent.MOUSE_OUT = 'mouseout'

@@ -65,26 +65,27 @@ export default class BrowserEventHandler extends BaseObject {
   }
 
   _mousedown (e) {
-    let event = new BrowserEvent(this.map, e, EventType.MOUSEDOWN)
+    let event = new BrowserEvent(this.map, e, BrowserEvent.MOUSE_DOWN)
     this.dispatchEvent(event)
-    
+  
+    this._dragging = false
     this._down = e
   }
 
   _mousemove (e) {
     // if (this._isMoving(e)) {
-    this._dragging = true
-    let event = new BrowserEvent(this.map, e, EventType.MOUSEMOVE)
+    // this._dragging = true
+    let event = new BrowserEvent(this.map, e, BrowserEvent.MOUSE_MOVE)
     this.dispatchEvent(event)
     // }
   }
 
   _mouseup (e) {
-    let event = new BrowserEvent(this.map, e, EventType.MOUSEUP)
+    let event = new BrowserEvent(this.map, e, BrowserEvent.MOUSE_UP)
     this.dispatchEvent(event)
   
     if (!this._dragging) {
-      // this._emulateClick(this._down)
+      this._emulateClick(this._down)
     }
     
     this._dragging = false
@@ -92,33 +93,30 @@ export default class BrowserEventHandler extends BaseObject {
   }
 
   _mouseover (e) {
-    let event = new BrowserEvent(this.map, e,EventType.MOUSEOVER)
+    let event = new BrowserEvent(this.map, e,BrowserEvent.MOUSE_OVER)
     this.dispatchEvent(event)
   }
 
   _mouseout (e) {
-    let event = new BrowserEvent(this.map, e, EventType.MOUSEOUT)
+    let event = new BrowserEvent(this.map, e, BrowserEvent.MOUSE_OUT)
     this.dispatchEvent(event)
   }
   
   _emulateClick (event) {
-    // var newEvent = new ol.MapBrowserPointerEvent(
-    //   ol.MapBrowserEvent.EventType.CLICK, this.map_, pointerEvent);
-    // this.dispatchEvent(newEvent);
-    
-    let newEvent
-    
+    let newEvent = new BrowserEvent(this.map,event,BrowserEvent.CLICK)
+    this.dispatchEvent(newEvent)
+  
+    // double click
     if (this._clickTimeoutId !== 0) {
-      // double click
       clearTimeout(this._clickTimeoutId)
       this._clickTimeoutId = 0
-      newEvent = new BrowserEvent(EventType.DBLCLICK, this.map, event)
+      newEvent = new BrowserEvent(this.map,event,BrowserEvent.DBLCLICK)
       this.dispatchEvent(newEvent)
     } else {
       // single click
       this._clickTimeoutId = setTimeout(function() {
         this._clickTimeoutId = 0
-        let newEvent = new BrowserEvent(EventType.SINGLECLICK, this.map, event)
+        let newEvent = new BrowserEvent(this.map,event,BrowserEvent.SINGLE_CLICK)
         this.dispatchEvent(newEvent)
       }.bind(this), 250)
     }
