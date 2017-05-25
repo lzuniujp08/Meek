@@ -13,9 +13,12 @@ window.onload = function () {
   var rings = [[[500,400],[490,478],[350,350],[500,400]]]
   var polygon = new Datatang.Polygon(rings)
   
+  var extent = new Datatang.Extent(1100, 300, 1400, 600)
+  
   var features = [new Datatang.Feature(point),
     new Datatang.Feature(line),
-    new Datatang.Feature(polygon)]
+    new Datatang.Feature(polygon),
+    new Datatang.Feature(extent)]
   
   // 将会获取缺省样式
   var selectLayer = new Datatang.FeatureLayer()
@@ -33,5 +36,14 @@ window.onload = function () {
   })
 
   map.addComponents(selectTool)
+  
+  var typeSelect = document.getElementById('type')
+  
+  /**
+   * Handle change event.
+   */
+  typeSelect.onchange = function() {
+    selectTool.selectMode = typeSelect.value
+  }
   
 }
