@@ -3,6 +3,7 @@
  */
 
 import BaseObject from '../core/BaseObject'
+import {ExtentUtil} from './support/ExtentUtil'
 
 export default class Geometry extends BaseObject {
 
@@ -26,7 +27,31 @@ export default class Geometry extends BaseObject {
    * 除去点意外，任何图形都有最小外接矩形
    * @abstrct function
    */
-  get extent () {return this._extent}
+  get extent () { return this._extent }
+  
+  /**
+   * Check if the passed point is contained in extent
+   * @param point
+   */
+  pointInExtent (coordinate) {
+    return ExtentUtil.containsPoint(this.extent, coordinate)
+  }
+  
+  /**
+   *
+   * @param geomtry
+   * @returns {boolean}
+   */
+  intersect (geomtry) {
+    return false
+  }
+  
+  /**
+   *
+   * @param x
+   * @param y
+   */
+  containsXY (x, y) {}
   
   /**
    * 定义move方法

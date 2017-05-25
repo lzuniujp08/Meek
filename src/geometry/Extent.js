@@ -3,12 +3,12 @@
  */
 
 import Geometry from './Geometry'
-import Point from './Point'
+import {ExtentUtil} from './support/ExtentUtil'
 
 export default class Extent extends Geometry {
 
   /**
-   * 构建一个MBR对象
+   * 构建一个extent对象
    * @param xmin
    * @param ymin
    * @param xmax
@@ -21,6 +21,8 @@ export default class Extent extends Geometry {
     this._ymin = ymin
     this._xmax = xmax
     this._ymax = ymax
+  
+    this._rings = []
   }
 
   /**
@@ -34,7 +36,7 @@ export default class Extent extends Geometry {
    * @returns {*} 返回一个Point对象
    */
   get centerPoint () {
-    return new Point(this.centerX, this.centerY)
+    // return new Point(this.centerX, this.centerY)
   }
 
   /**
@@ -66,7 +68,7 @@ export default class Extent extends Geometry {
    * 本对象
    * @returns {MBR}
    */
-  get MBR () { return this }
+  get extent () { return this }
 
   get xmin () { return this._xmin }
   set xmin (value) { this._xmin = value }
@@ -79,4 +81,24 @@ export default class Extent extends Geometry {
 
   get ymax () { return this._ymax }
   set ymax (value) { this._ymax = value }
+  
+  
+  /**
+   * 设置多边形的边，如果设置了边，则需要重新计算
+   * 外接矩形
+   */
+  get rings () { return this._rings }
+  set rings (value) {
+    this._rings = value
+  
+    let extentArr = ExtentUtil.boundingExtent(value)
+    
+  
+  }
+  
+  clone () {
+    
+  }
+  
 }
+

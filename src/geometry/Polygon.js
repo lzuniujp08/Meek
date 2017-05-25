@@ -30,10 +30,10 @@ export default class Polygon extends Geometry {
 
       for (let ring of rings) {
         for (let point of ring) {
-          xmin = Math.min(xmin, point.x)
-          ymin = Math.min(ymin, point.y)
-          xmax = Math.max(xmax, point.x)
-          ymax = Math.max(ymax, point.y)
+          xmin = Math.min(xmin, point[0])
+          ymin = Math.min(ymin, point[1])
+          xmax = Math.max(xmax, point[0])
+          ymax = Math.max(ymax, point[1])
         }
       }
 
@@ -62,5 +62,57 @@ export default class Polygon extends Geometry {
   addRing (ring) {
     this.rings.push(ring)
     this._extent = null
+  }
+  
+  /**
+   * Detemine if a point is contained in this polygon
+   * @param x
+   * @param y
+   * @param opt
+   * @returns {boolean}
+   */
+  containsXY (x, y, opt) {
+    const px = x
+    const py = y
+    let flag = false
+  
+    const ring = this.rings[0]
+    
+    for (let i = 0, l = ring.length, j = l - 1; i < l; j = i, i++) {
+      const sx = ring[i][0]
+      const sy = ring[i][1]
+      const tx = ring[j][0]
+      const ty = ring[j][1]
+    
+      // 点与多边形顶点重合
+      if ((sx === px && sy === py) || (tx === px && ty === py)) {
+        return true
+      }
+    
+      // 判断线段两端点是否在射线两侧
+      if ((sy < py && ty >= py) || (sy >= py && ty < py)) {
+        // 线段上与射线 Y 坐标相同的点的 X 坐标
+        let x = sx + (py - sy) * (tx - sx) / (ty - sy)
+      
+        // 点在多边形的边上
+        if (x === px) {
+          // return 'on';
+          return true
+        }
+      
+        // 射线穿过多边形的边界
+        if (x > px) {
+          flag = !flag
+        }
+      }
+    }
+  
+    // 射线穿过多边形边界的次数为奇数时点在多边形内
+    return flag
+    
+  }
+  
+  clone () {
+    return new Polygon(this.rings)
   }
 }

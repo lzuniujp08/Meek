@@ -5,6 +5,8 @@
 import Geometry from './Geometry'
 import Extent from './Extent'
 
+import {squaredSegmentDistance} from './support/GeometryUtil'
+
 export default class Line extends Geometry {
 
   constructor (path) {
@@ -32,13 +34,11 @@ export default class Line extends Geometry {
       let xmax = Number.NEGATIVE_INFINITY
       let ymax = Number.NEGATIVE_INFINITY
 
-      for (let path of me._paths) {
-        for (let point of path) {
-          xmin = Math.min(xmin, point.x)
-          ymin = Math.min(ymin, point.y)
-          xmax = Math.max(xmax, point.x)
-          ymax = Math.max(ymax, point.y)
-        }
+      for (let p of me.path) {
+        xmin = Math.min(xmin, p[0])
+        ymin = Math.min(ymin, p[1])
+        xmax = Math.max(xmax, p[0])
+        ymax = Math.max(ymax, p[1])
       }
 
       me._extent = new Extent(xmin, ymin, xmax, ymax)
@@ -57,4 +57,41 @@ export default class Line extends Geometry {
     this.path.push(coordinates)
     this._extent = null
   }
+  
+  forEachSegment (callback, opt) {
+    this.path.forEach(callback, opt)
+  }
+  
+  /**
+   *
+   * @param x
+   * @param y
+   * @param opt
+   * @returns {boolean}
+   */
+  containsXY (x, y, opt) {
+    const tolerance = opt.tolerance ? opt.tolerance : 2
+    const path = this.path
+    const squaredSegmentDistanceFn = squaredSegmentDistance
+  
+    let find = false
+    for (let i = 0, ii = path.length - 1; i < ii; i++) {
+      let nowP = path[i]
+      let nextP = path[i + 1]
+      let distance = squaredSegmentDistanceFn(x, y, nowP[0], nowP[1], nextP[0], nextP[1])
+      distance = Math.sqrt(distance)
+      if (distance <= tolerance) {
+        find = true
+        break
+      }
+    }
+  
+    return find
+  }
+  
+  clone () {
+    return new Line(this.path)
+  }
+  
+  
 }
