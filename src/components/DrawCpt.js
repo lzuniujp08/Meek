@@ -13,16 +13,22 @@ import Point from '../geometry/Point'
 import Line from '../geometry/Line'
 import Polygon from '../geometry/Polygon'
 import Extent from '../geometry/Extent'
+import {ExtentUtil} from '../geometry/support/ExtentUtil'
+import {listen, unlistenByKey} from '../core/EventManager'
+import {EventType} from '../meek/EventType'
 
 import DrawEvent from './DrawEvent'
 
-
+/**
+ * DrawCpt class is resonsibility to draw geometries.
+ */
 export default class DrawCpt extends Component {
 
   constructor (options) {
     super()
   
   
+    this._mapRenderKey = null
     /**
      * 绘制作用图层
      * 需要给绘制工具一个绘制的图层
@@ -143,6 +149,10 @@ export default class DrawCpt extends Component {
      */
     this._freehandCondition = options.freehandCondition ?
       options.freehandCondition : function () { return true }
+  
+    // Here will add activie event listener for switch drawing
+    //
+  
   }
 
   get geometryFunction () {
@@ -199,7 +209,7 @@ export default class DrawCpt extends Component {
         } else if(mode === DrawCpt.DrawMode.LINE) {
           geometry.path = coordinates
         } else if(mode === DrawCpt.DrawMode.EXTENT) {
-          geometry.rings = [Extent.boundingExtent(coordinates)]
+          geometry.rings = [ExtentUtil.boundingExtent(coordinates)]
         }
       } else {
         let Constructor = this._geometryFactory()
@@ -397,7 +407,7 @@ export default class DrawCpt extends Component {
     }
   
     // First dispatch event to allow full set up of feature
-    this.dispatchEvent(new DrawCpt.DrawEvent(DrawEvent.EventType.DRAWEND, sketchFeature))
+    this.dispatchEvent(new DrawEvent(DrawEvent.EventType.DRAWEND, sketchFeature))
   
     // Then insert feature
     // if (this._features) {
@@ -548,11 +558,32 @@ export default class DrawCpt extends Component {
     this._sketchLayer.addFeatures(features)
   }
   
+  
+  set map (map) {
+    if (this._mapRenderKey) {
+      unlistenByKey(this._mapRenderKey)
+      this._mapRenderKey = null
+    }
+
+    if (map) {
+      this._map = map
+      this._mapRenderKey = listen(this, EventType.CHANGE, map.render, map)
+    }
+    
+    this._updateState()
+  }
+  
+  get map (){ return this._map }
+  
+  /**
+   * Update the drawing state for aborting drawing if active is false
+   * @private
+   */
   _updateState () {
     const map = this.map
     const active = this.active
     if (!map || !active){
-      return
+      this._abortDrawing()
     }
   
     this._sketchLayer.map = active ? map : null
