@@ -31,6 +31,11 @@ export default class PointStyle extends BaseObject {
     this._borderStyle = borderStyle
   }
   
+  clone () {
+    return new PointStyle(this.size, this.color, this.alpha,
+       this.borderStyle.clone(), this.xoffset, this.yoffset, this.angle, this.style)
+  }
+  
   get style () { return this._style }
   set style (value) { this._style = value }
   

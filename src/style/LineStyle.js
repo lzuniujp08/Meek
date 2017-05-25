@@ -40,6 +40,11 @@ export default class LineStyle extends BaseObject {
   
   set miterLimit (value) { this._miterLimit = value }
   get miterLimit () { return this._miterLimit }
+  
+  clone () {
+    return new LineStyle(this.color, this.alpha, this.width,
+      this.style, this.lineCap, this.lineJion, this.miterLimit)
+  }
 }
 
 /**

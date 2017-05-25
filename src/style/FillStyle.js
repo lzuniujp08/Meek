@@ -41,6 +41,11 @@ export default class FillStyle extends BaseObject {
   get size(){ return this._size }
   set size(value){ this._size = value}
   
+  clone () {
+    return new FillStyle(this.color, this.borderStyle.clone(),
+      this.alpha, this.size, this.style)
+  }
+  
 }
 
 FillStyle.SOLID = 'solid'

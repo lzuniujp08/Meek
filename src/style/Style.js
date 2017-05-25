@@ -28,6 +28,8 @@ Style.defaultFunction = function () {
     Style._default[Geometry.POLYGON] = [
       new FillStyle(white,new LineStyle(blue,1,1.25),0.5,10)
     ]
+    // same as polygon style
+    Style._default[Geometry.EXTENT] = Style._default[Geometry.POLYGON]
   
     // 线样式 line style
     Style._default[Geometry.LINE] = [
@@ -60,6 +62,7 @@ Style.createDefaultEditing = function () {
     ,1)
   ]
   styles[Geometry.MULTI_POLYGON] = styles[Geometry.POLYGON]
+  styles[Geometry.EXTENT] = styles[Geometry.POLYGON]
     
   // 线样式
   styles[Geometry.LINE] = [
