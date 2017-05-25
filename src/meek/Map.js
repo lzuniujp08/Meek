@@ -195,13 +195,13 @@ export default class Map extends BaseObject {
     }
   }
   
-  forEachFeatureAtPiexl (piexl,callback,options) {
+  forEachFeatureAtPiexl (piexl,callback,tolerance) {
     if (!this._frameState) {
       return
     }
     
     const coordinate = this.getCoordinateFromPixel(piexl)
-    const hitTolerance = options.tolerance
+    const hitTolerance = tolerance
     
     const layers = this.layers
     let result = null

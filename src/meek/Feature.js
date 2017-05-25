@@ -60,4 +60,9 @@ export default class Feature extends BaseObject {
       // 需要触动绘制事件派发
     }
   }
+  
+  clone () {
+    return new Feature(this.geometry.clone(),
+      this.attributes, [this.style[0].clone()])
+  }
 }
