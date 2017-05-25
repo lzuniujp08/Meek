@@ -12,21 +12,18 @@ import {Style} from '../style/Style'
 
 import FillStyle from '../style/FillStyle'
 import LineStyle from '../style/LineStyle'
+import PointStyle from '../style/PointStyle'
 
-import Feature from '../meek/Feature'
-
+import SelectEvent from '../components/SelectEvent'
 
 export default class SelectCpt extends Component {
   
   constructor (options) {
     super()
     
-    
     const opt = options ? options : {}
     
-    this.selectMode = opt.selectMode ? opt.selectMode : BrowserEvent.SINGLE_CLICK
-    
-    this._hitTolerance = opt.hitTolerance ? opt.hitTolerance : 2
+    this._hitTolerance = opt.hitTolerance ? opt.hitTolerance : 6
   
   
     /**
@@ -36,10 +33,10 @@ export default class SelectCpt extends Component {
      * @private
      */
     this._selectLayer = new FeaureLayer()
-    // this._selectLayer.style = this.getDefaultStyleFunction()
     
     this._selectFeatures = []
-    
+  
+    this.selectMode = opt.selectMode ? opt.selectMode : BrowserEvent.SINGLE_CLICK
   }
   
   _condition (event) {
@@ -55,21 +52,40 @@ export default class SelectCpt extends Component {
     const pixel = browserEvent.pixel
     const hitTolerance = this._hitTolerance
     
-    this._selectLayer.clear()
+    this.selectClean()
     
     map.forEachFeatureAtPiexl(pixel, (function(features) {
       if(features.length > 0){
         this.selectFeatures = features
-        this.getHightLighStyleForFeature()
-        this._selectLayer.addFeatures(features)
       }
     }).bind(this), hitTolerance)
+  
+    if (this.selectFeatures.length > 0 ) {
+  
+      this.forEachStyle()
+      this._selectLayer.addFeatures(this.selectFeatures)
+      
+      // dispatch the select event after some features selected successfully
+      this.dispatchEvent(
+        new SelectEvent(SelectEvent.EventType.SELECT, this.selectFeatures,browserEvent))
+    }
+    
+    
+  }
+  
+  selectClean () {
+    this._selectLayer.clear()
+    this.selectFeatures = []
   }
   
   set selectFeatures (features) {
-    features.forEach( feature =>
-      this._selectFeatures.push(feature.clone())
-    )
+    if (features.length === 0 ) {
+      this._selectFeatures = []
+    } else {
+      features.forEach( feature =>
+        this._selectFeatures.push(feature.clone())
+      )
+    }
   }
   
   get selectFeatures () { return this._selectFeatures }
@@ -88,16 +104,21 @@ export default class SelectCpt extends Component {
     this._selectLayer.map = active ? map : null
   }
   
-  getHightLighStyleForFeature () {
+  /**
+   *
+   */
+  forEachStyle () {
     const features = this.selectFeatures
     features.forEach (function(feature) {
       const styles = feature.style
       styles.forEach (function(style){
-        if (style instanceof FillStyle ) {
+        if (style instanceof FillStyle) {
           style.alpha = style.alpha + 0.2
           style.borderStyle.width = style.borderStyle.width + 2
         } else if (style instanceof LineStyle) {
-          style.width = style.width + 2
+          style.width = style.width + 1
+        } else if (style instanceof PointStyle) {
+          style.size = style.size + 4
         }
       })
     })
@@ -118,6 +139,14 @@ export default class SelectCpt extends Component {
   }
   
   get map (){ return this._map }
+  
+  get selectMode () { return this._selectMode }
+  set selectMode (value) {
+    if (this._selectMode !== value) {
+      this._selectMode = value
+      this.selectClean()
+    }
+  }
   
   /**
    * Get the default style which will be used while a feature is drawn
