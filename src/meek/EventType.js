@@ -6,19 +6,19 @@ export const EventType = {
 
 EventType.CHANGE = 'change'
 
-EventType.MOUSEDOWN = 'mousedown'
-
-EventType.MOUSEMOVE = 'mousemove'
-
-EventType.MOUSEUP = 'mouseup'
-
-EventType.MOUSEOVER = 'mouseover'
-
-EventType.MOUSEOUT = 'mouseout'
-
-EventType.DBLCLICK = 'dblclick'
-
-EventType.SINGLECLICK = 'singleclick'
+// EventType.MOUSEDOWN = 'mousedown'
+//
+// EventType.MOUSEMOVE = 'mousemove'
+//
+// EventType.MOUSEUP = 'mouseup'
+//
+// EventType.MOUSEOVER = 'mouseover'
+//
+// EventType.MOUSEOUT = 'mouseout'
+//
+// EventType.DBLCLICK = 'dblclick'
+//
+// EventType.SINGLECLICK = 'singleclick'
 
 
 
