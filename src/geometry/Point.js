@@ -35,7 +35,7 @@ export default class Point extends Geometry {
    */
   get extent () {
     if (!this._extent) {
-      const extentObj = ExtentUtil.createScaleExtent(this, 1)
+      const extentObj = ExtentUtil.createScaleExtent(this, 8)
       this._extent = new Extent(extentObj[0], extentObj[1], extentObj[2], extentObj[3])
     }
     

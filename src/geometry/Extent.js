@@ -84,20 +84,46 @@ export default class Extent extends Geometry {
   
   
   /**
+   * Check if contains a point
+   * @param x
+   * @param y
+   */
+  containsXY (x, y) {
+    return ExtentUtil.containsPoint(this, [x, y])
+  }
+  
+  
+  /**
    * 设置多边形的边，如果设置了边，则需要重新计算
    * 外接矩形
    */
-  get rings () { return this._rings }
+  get rings () {
+    if (this._rings.length === 0) {
+      if (this.xmin !== 0 && this.ymin !== 0 && this.xmax !== 0 && this.ymax !== 0) {
+        this._rings = [ExtentUtil.minMaxToRing(this.xmin, this.ymin, this.xmax, this.ymax)]
+      }
+    }
+    
+    return this._rings
+  }
+  
+  /**
+   *
+   * @param value
+   */
   set rings (value) {
     this._rings = value
   
     let extentArr = ExtentUtil.boundingExtent(value)
-    
   
   }
   
+  /**
+   * Clone an extent
+   * @returns {Extent}
+   */
   clone () {
-    
+    return new Extent(this.xmin, this.ymin, this.xmax, this.ymax)
   }
   
 }

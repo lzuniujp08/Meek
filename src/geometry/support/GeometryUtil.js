@@ -78,6 +78,16 @@ export function squaredSegmentDistance (x, y, x1, y1, x2, y2) {
   return squaredDistance(x, y, x1, y1)
 }
 
+/**
+ *
+ * @param coordinate
+ * @param segment
+ * @returns {number}
+ */
+export function squaredDistanceToSegment (coordinate, segment) {
+  return squaredDistance(coordinate, closestOnSegment(coordinate, segment))
+}
+
 
 export function pointIntersectPolygon (pointA, polygon, tolerance) {
   
@@ -98,10 +108,52 @@ export function squaredDistance (x1, y1, x2, y2) {
   return dx * dx + dy * dy
 }
 
+/**
+ * Calculate the distance between two points
+ * @param coord1
+ * @param coord2
+ * @returns {number}
+ */
+export function distance (coord1, coord2) {
+  return Math.sqrt(squaredDistance(coord1[0], coord1[1], coord2[0], coord2[1]))
+}
+
+
+export function closestOnSegment (coordinate, segment) {
+  const x0 = coordinate[0]
+  const y0 = coordinate[1]
+  const start = segment[0]
+  const end = segment[1]
+  const x1 = start[0]
+  const y1 = start[1]
+  const x2 = end[0]
+  const y2 = end[1]
+  const dx = x2 - x1
+  const dy = y2 - y1
+  
+  const along = (dx === 0 && dy === 0) ? 0 :
+  ((dx * (x0 - x1)) + (dy * (y0 - y1))) / ((dx * dx + dy * dy) || 0)
+  
+  let x, y
+  if (along <= 0) {
+    x = x1
+    y = y1
+  } else if (along >= 1) {
+    x = x2
+    y = y2
+  } else {
+    x = x1 + along * dx
+    y = y1 + along * dy
+  }
+  
+  return [x, y]
+}
+
 
 
 export default {
   pointIntersectPoint,
-  squaredDistance
-
+  squaredDistance,
+  closestOnSegment,
+  distance
 }

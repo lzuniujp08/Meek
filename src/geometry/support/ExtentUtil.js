@@ -142,3 +142,23 @@ ExtentUtil.buffer = function(extent, value, optExtent) {
     ]
   }
 }
+
+/**
+ * Convert xmin, ymin, xmax, ymax of an extent to a ring array
+ * @param xmin
+ * @param ymin
+ * @param xmax
+ * @param ymax
+ * @returns {[*,*,*,*,*]}
+ */
+ExtentUtil.minMaxToRing = function (xmin, ymin, xmax, ymax) {
+  const ring = [
+    [xmin, ymin],
+    [xmax, ymin],
+    [xmax, ymax],
+    [xmin, ymax],
+    [xmin, ymin]
+  ]
+  
+  return ring
+}

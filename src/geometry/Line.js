@@ -89,8 +89,14 @@ export default class Line extends Geometry {
     return find
   }
   
+  /**
+   * Clone a line
+   * @returns {Line} new line
+   */
   clone () {
-    return new Line(this.path)
+    const newLine = new Line()
+    newLine.path = this.path
+    return newLine
   }
   
   
