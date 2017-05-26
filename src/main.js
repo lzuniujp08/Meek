@@ -13,6 +13,8 @@ import Extent from 'geometry/Extent'
 import Point from 'geometry/Point'
 import Line from 'geometry/Line'
 import Polygon from 'geometry/Polygon'
+import GeometryUtil from 'geometry/support/GeometryUtil'
+import ExtentUtil from 'geometry/support/ExtentUtil'
 
 import Style from 'style/Style'
 import PointStyle from 'style/PointStyle'
@@ -25,6 +27,10 @@ import Renderer from 'renderer/Renderer'
 import CanvasRenderer from 'renderer/canvas/CanvasRenderer'
 import Component from 'components/Component'
 import DrawCpt from 'components/DrawCpt'
+import SelectCpt from 'components/SelectCpt'
+import ModifyCpt from 'components/ModifyCpt'
+
+
 import BrowserEvent from 'meek/BrowserEvent'
 import BrowserEventHandler from 'meek/BrowserEventHandler'
 import EventType from 'meek/EventType'
@@ -57,5 +63,9 @@ export default {
   BrowserEventHandler,
   EventType,
   Feature,
-  Map
+  Map,
+  GeometryUtil,
+  ExtentUtil,
+  SelectCpt,
+  ModifyCpt
 }
