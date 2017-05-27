@@ -98,3 +98,4 @@ FeatureLayerRenderer.GeometryRender = {}
 FeatureLayerRenderer.GeometryRender['point'] = PointRender
 FeatureLayerRenderer.GeometryRender['line'] = LineRender
 FeatureLayerRenderer.GeometryRender['polygon'] = PolygonRender
+FeatureLayerRenderer.GeometryRender['extent'] = PolygonRender

@@ -22,8 +22,6 @@ export default class LineRender extends GeometryRender {
     const len = styleArray.length
     for(let i = 0; i < len ; i ++){
       let styleObj = styleArray[i]
-      
-      
     
       let renderOptions = {
         coordinates: geometry.path,

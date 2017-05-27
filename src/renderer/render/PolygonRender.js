@@ -53,6 +53,8 @@ export default class PolygonRender extends GeometryRender {
       ctx.fill()
     }
   
+    ctx.closePath()
+    
     const borderStyle = renderOpt.borderStyle
     if (borderStyle) {
       ctx.strokeStyle = colorToString(borderStyle.color,borderStyle.alpha)
@@ -64,8 +66,7 @@ export default class PolygonRender extends GeometryRender {
     
       ctx.stroke()
     }
-  
-    ctx.closePath()
+    
     ctx.restore()
   }
   
