@@ -73,11 +73,21 @@ export default class BrowserEventHandler extends BaseObject {
   }
 
   _mousemove (e) {
-    // if (this._isMoving(e)) {
-    // this._dragging = true
+  
     let event = new BrowserEvent(this.map, e, BrowserEvent.MOUSE_MOVE)
+  
+    if (event.coordinate === null) {
+      return
+    }
+    
     this.dispatchEvent(event)
-    // }
+    
+    if (this._isMoving(e)) {
+      this._dragging = true
+  
+      const newEvent = new BrowserEvent(this.map, e, BrowserEvent.MOUSE_DRAG, this._dragging)
+      this.dispatchEvent(newEvent)
+    }
   }
 
   _mouseup (e) {
@@ -123,11 +133,12 @@ export default class BrowserEventHandler extends BaseObject {
   }
   
   _isMoving (event) {
-    if(this._down === null ){
+    if (this._down === null) {
       return false
     }
     
-    return event.clientX !== this._down.clientX || event.clientY !== this._down.clientY
+    return event.clientX !== this._down.clientX ||
+           event.clientY !== this._down.clientY
   }
 
 }

@@ -60,6 +60,14 @@ BrowserEvent.CLICK = 'click'
  */
 BrowserEvent.DBLCLICK = 'dblclick'
 
+
+/**
+ *
+ * @type {string}
+ */
+BrowserEvent.MOUSE_DRAG = 'mousedrag'
+
+
 BrowserEvent.MOUSE_DOWN = 'mousedown'
 
 BrowserEvent.MOUSE_MOVE = 'mousemove'
