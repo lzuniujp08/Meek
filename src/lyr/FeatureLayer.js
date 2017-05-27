@@ -32,7 +32,7 @@ export default class FeatureLayer extends BaseLayer {
    * @returns {boolean}
    */
   addFeatures (features) {
-    if (!features || features.length === 0) {
+    if (!Array.isArray(features)) {
       return false
     }
     
@@ -41,11 +41,25 @@ export default class FeatureLayer extends BaseLayer {
   }
 
   _addFeaturesInner (features) {
-    if (!Array.isArray(features)) {
+    features.map(feature => this.features.push(feature))
+    
+    // Should dispatch features adding event
+    // this.dispatchEvent()
+    
+  }
+  
+  /**
+   * Add a feature to collection
+   * @param feature
+   * @returns {boolean}
+   */
+  addFeature (feature) {
+    if (!feature) {
       return false
     }
-
-    features.map(feature => this.features.push(feature))
+    
+    this._addFeaturesInner([feature])
+    this.changed()
   }
   
   
@@ -74,6 +88,30 @@ export default class FeatureLayer extends BaseLayer {
   
   _getCurrentExtentFeatures () {
     return this.features
+  }
+  
+  /**
+   * Remove a feature from collection
+   * @param feature
+   * @returns {boolean}
+   */
+  removeFeature (feature) {
+    const features = this.features
+    if (features.length === 0) {
+      return false
+    }
+    
+    const index = features.findIndex(function(f){
+      return f.id === feature.id
+    })
+    
+    if (index > -1) {
+      features.splice(index, 1)
+    }
+    
+    // dispatch feature removed event
+    // this.dispatchEvent()
+    this.changed()
   }
   
   set style (value) {
