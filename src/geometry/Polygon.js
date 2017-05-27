@@ -109,7 +109,25 @@ export default class Polygon extends Geometry {
   
     // 射线穿过多边形边界的次数为奇数时点在多边形内
     return flag
-    
+  }
+  
+  /**
+   * Get the collection of geometry
+   * TODO 将来都需要换成这种线性的存储方式，并逐步替换成这种模式
+   * @returns {[*,*]}
+   */
+  getCoordinates () {
+    return this.rings[0]
+  }
+  
+  setCoordinates (coords) {
+    this.rings = [coords]
+  }
+  
+  getCoordinateIndex (coord) {
+    return this.rings[0].findIndex(function(points){
+      return points[0] === coord[0] && points[1] === coord[1]
+    })
   }
   
   clone () {

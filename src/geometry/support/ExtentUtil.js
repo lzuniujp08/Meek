@@ -21,6 +21,33 @@ ExtentUtil.createScaleExtent = function (center,value) {
   return [center.x  - value, center.y  - value, center.x  + value, center.y + value]
 }
 
+/**
+ *
+ * @param point1
+ * @param point2
+ * @returns {[*,*,*,*]}
+ */
+ExtentUtil.boundingExtentFromTwoPoints = function (point1, point2) {
+  let xmin = 0, ymin = 0, xmax = 0, ymax = 0
+  
+  if (point1[0] > point2[0]) {
+    xmin = point2[0]
+    xmax = point1[0]
+  } else {
+    xmin = point1[0]
+    xmax = point2[0]
+  }
+  
+  if (point1[1] > point2[1]) {
+    ymin = point2[1]
+    ymax = point1[1]
+  } else {
+    ymin = point1[1]
+    ymax = point2[1]
+  }
+  
+  return [xmin, ymin, xmax, ymax]
+}
 
 /**
  * Build an extent that includes all given coordinates.
@@ -41,6 +68,21 @@ ExtentUtil.boundingExtent = function (coordinates) {
     ExtentUtil.getTopLeft(extent),
     ExtentUtil.getBottomLeft(extent)
   ]
+}
+
+/**
+ * Build an extent that includes all given coordinates.
+ * @param extent
+ * @param coordinate
+ */
+ExtentUtil.boundingSimpleExtent = function (coordinates) {
+  let extent = ExtentUtil.createEmpty()
+  
+  for (let i = 0, ii = coordinates.length; i < ii; ++i) {
+    ExtentUtil.extendCoordinate(extent, coordinates[i])
+  }
+  
+  return extent
 }
 
 /**
@@ -115,8 +157,13 @@ ExtentUtil.containsPoint = function(extent, point){
   const x = point[0]
   const y = point[1]
   
-  return extent.xmin <= x && x <= extent.xmax &&
-         extent.ymin <= y && y <= extent.ymax
+  if (Array.isArray(extent)) {
+    return extent[0] <= x && x <= extent[2] &&
+           extent[1] <= y && y <= extent[3]
+  } else {
+    return extent.xmin <= x && x <= extent.xmax &&
+           extent.ymin <= y && y <= extent.ymax
+  }
 }
 
 /**
@@ -161,4 +208,55 @@ ExtentUtil.minMaxToRing = function (xmin, ymin, xmax, ymax) {
   ]
   
   return ring
+}
+
+
+ExtentUtil.updateExtent = function (geometry, newCoordinates, dragSegments) {
+  const dragSegment = dragSegments[0]
+  const index = dragSegment.index
+  const extentCoordinates = geometry.getCoordinates()[0]
+  const segment1 = extentCoordinates[index]
+  const segment2 = extentCoordinates[index + 1]
+  
+  const isVertex = dragSegment.isVertex
+  if (isVertex) {
+    if (index === 0 || index === 4) {
+      extentCoordinates[0] = newCoordinates
+      extentCoordinates[4] = newCoordinates
+      extentCoordinates[1][1] = newCoordinates[1]
+      extentCoordinates[3][0] = newCoordinates[0]
+    } else if (index === 1) {
+      extentCoordinates[1] = newCoordinates
+      
+      extentCoordinates[2][0] = newCoordinates[0]
+      extentCoordinates[0][1] = newCoordinates[1]
+      extentCoordinates[4] = extentCoordinates[0]
+    } else if (index === 2) {
+      extentCoordinates[2] = newCoordinates
+      extentCoordinates[1][0] = newCoordinates[0]
+      extentCoordinates[3][1] = newCoordinates[1]
+    } else if (index === 3) {
+      extentCoordinates[3] = newCoordinates
+      extentCoordinates[2][1] = newCoordinates[1]
+      extentCoordinates[0][0] = newCoordinates[0]
+      extentCoordinates[4] = extentCoordinates[0]
+    }
+  } else {
+    if (segment1[0] === segment2[0]) {
+      extentCoordinates[index][0] = newCoordinates[0]
+      extentCoordinates[index + 1][0] = newCoordinates[0]
+    }
+  
+    if (segment1[1] === segment2[1]) {
+      extentCoordinates[index][1] = newCoordinates[1]
+      extentCoordinates[index + 1][1] = newCoordinates[1]
+    }
+  
+    if (index === 3) {
+      extentCoordinates[0] = extentCoordinates[4]
+    }
+  }
+  
+  
+  return extentCoordinates
 }

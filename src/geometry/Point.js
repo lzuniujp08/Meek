@@ -93,8 +93,27 @@ export default class Point extends Geometry {
   update (nx, ny) {
     this.x = nx
     this.y = ny
+    
+    this._extent = null
   }
-
+  
+  /**
+   * Get the collection of geometry
+   * TODO 将来都需要换成这种线性的存储方式，并逐步替换成这种模式
+   * @returns {[*,*]}
+   */
+  getCoordinates () {
+    return [this.x, this.y]
+  }
+  
+  setCoordinates (coordinates) {
+    this.update(coordinates[0], coordinates[1])
+  }
+  
+  getCoordinateIndex () {
+    return 0
+  }
+  
   /**
    * Determine if two objects should be equal
    * 判断两个图形对象是否相等

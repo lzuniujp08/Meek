@@ -23,11 +23,11 @@ export default class Component extends BaseObject {
     let type = browserEvent.type
     if (type === BrowserEvent.MOUSE_MOVE) {
       this._handleMouseMove(browserEvent)
-    }else if(type === BrowserEvent.MOUSE_DOWN){
+    } else if (type === BrowserEvent.MOUSE_DOWN) {
       let handled = this._handleDownEvent(browserEvent)
       // this.handlingDownUpSequence = handled;
       // stopEvent = this.shouldStopEvent(handled);
-    }else if(type === BrowserEvent.MOUSE_UP){
+    } else if (type === BrowserEvent.MOUSE_UP){
       // this.handlingDownUpSequence = this._handleUpEvent_(browserEvent)
       this._handleUpEvent(browserEvent)
     }

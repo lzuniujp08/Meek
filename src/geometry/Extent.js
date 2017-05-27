@@ -113,9 +113,30 @@ export default class Extent extends Geometry {
    */
   set rings (value) {
     this._rings = value
+    let extentArr = ExtentUtil.boundingSimpleExtent(value[0])
+    this.xmin = extentArr[0]
+    this.ymin = extentArr[1]
+    this.xmax = extentArr[2]
+    this.ymax = extentArr[3]
+  }
   
-    let extentArr = ExtentUtil.boundingExtent(value)
+  /**
+   * Get the collection of geometry
+   * TODO 将来都需要换成这种线性的存储方式，并逐步替换成这种模式
+   * @returns {[*,*]}
+   */
+  getCoordinates () {
+    return this.rings
+  }
   
+  setCoordinates (coordinates) {
+    this.rings = coordinates
+  }
+  
+  getCoordinateIndex (coord) {
+    return this.rings[0].findIndex(function(points){
+      return points[0] === coord[0] && points[1] === coord[1]
+    })
   }
   
   /**

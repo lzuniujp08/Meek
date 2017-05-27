@@ -46,6 +46,8 @@ export default class Geometry extends BaseObject {
     return false
   }
   
+  getCoordinates () {}
+  
   /**
    *
    * @param x

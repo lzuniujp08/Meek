@@ -90,6 +90,25 @@ export default class Line extends Geometry {
   }
   
   /**
+   * Get the collection of geometry
+   * TODO 将来都需要换成这种线性的存储方式，并逐步替换成这种模式
+   * @returns {[*,*]}
+   */
+  getCoordinates () {
+    return this.path
+  }
+  
+  setCoordinates (coords) {
+    this.path = coords
+  }
+  
+  getCoordinateIndex (coord) {
+    return this.path.findIndex(function(points){
+      return points[0] === coord[0] && points[1] === coord[1]
+    })
+  }
+  
+  /**
    * Clone a line
    * @returns {Line} new line
    */

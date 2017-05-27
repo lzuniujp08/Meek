@@ -16,6 +16,12 @@ import PointStyle from '../style/PointStyle'
 
 import SelectEvent from '../components/SelectEvent'
 
+
+/**
+ * The select component can be used for features selecting.
+ * By default,selected features are styled differently, so this
+ *
+ */
 export default class SelectCpt extends Component {
   
   constructor (options) {
@@ -43,6 +49,10 @@ export default class SelectCpt extends Component {
     return this.selectMode === event.type
   }
   
+  /**
+   *
+   * @param browserEvent
+   */
   handleMouseEvent (browserEvent) {
     if (!this._condition(browserEvent)) {
       return
