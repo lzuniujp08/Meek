@@ -31,14 +31,30 @@ window.onload = function () {
   
   selectLayer.addFeatures(features)
   
-  var selectedFeatures = [new Datatang.Feature(line)]
+  var selectedFeatures = [new Datatang.Feature(point)]
   var modifyTool = new Datatang.ModifyCpt({
     features: selectedFeatures
-    // style: overlayStyle
   });
   
   map.addComponents(modifyTool)
   
+  var typeSelect = document.getElementById('type')
   
+  /**
+   * Handle change event.
+   */
+  typeSelect.onchange = function() {
+    var value = typeSelect.value
+    if(value === 'point') {
+      modifyTool.features = [new Datatang.Feature(point)]
+    } else if (value === 'line') {
+      modifyTool.features = [new Datatang.Feature(line)]
+    } else if (value === 'polygon') {
+      modifyTool.features = [new Datatang.Feature(polygon)]
+    } else if (value === 'extent') {
+      modifyTool.features = [new Datatang.Feature(extent)]
+    }
+    
+  }
 }
 
