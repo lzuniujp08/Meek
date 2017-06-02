@@ -10,11 +10,33 @@ export default class View extends BaseObject {
   constructor (options) {
     super()
     
-    let _innerOptions = options || {}
+    const _innerOptions = Object.assign({}, options)
     
-    this.center = _innerOptions.center || null || [200,200]
-    
+    this._applyOptions(_innerOptions)
   }
+  
+  
+  _applyOptions (options) {
+    this.center = options.center !== undefined ?
+         options.center : this._calculateCenter()
+    
+    
+    this.resolution = options.resolution !== undefined ?
+        options.resolution : this._calculateResolution()
+    
+    this.rotation = 0
+  }
+  
+  
+  _calculateCenter () {
+    return [500, 500]
+  }
+  
+  _calculateResolution () {
+    return 0.94
+  }
+  
+  
   
   getViewState () {
     const center = this.center

@@ -10,6 +10,9 @@ import View from './View'
 import {listen} from '../core/EventManager'
 import {Transform} from '../data/matrix/Transform'
 
+import Kinetic from '../components/Kinetic'
+import DragPanCpt from '../components/DragPanCpt'
+
 export default class Map extends BaseObject {
 
   constructor (options) {
@@ -61,6 +64,9 @@ export default class Map extends BaseObject {
     this.target = options.target
 
     this.view = options.view || new View()
+  
+    let kinetic = new Kinetic(-0.005, 0.05, 100)
+    this.addComponents(new DragPanCpt({kinetic: kinetic}))
   }
 
   /**
