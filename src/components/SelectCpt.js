@@ -79,8 +79,6 @@ export default class SelectCpt extends Component {
       this.dispatchEvent(
         new SelectEvent(SelectEvent.EventType.SELECT, this.selectFeatures,browserEvent))
     }
-    
-    
   }
   
   selectClean () {
