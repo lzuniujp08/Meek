@@ -40,6 +40,25 @@ export const Transform = {
     return transform.set(transform, 1, 0, 0, 1, 0, 0)
   },
   
+  transform2D: function (flatCoordinates, offset, end, stride, transform, opt_dest) {
+    const dest = opt_dest ? opt_dest : []
+    let i = 0
+    let j
+    
+    for (j = offset; j < end; j += stride) {
+      const x = flatCoordinates[j]
+      const y = flatCoordinates[j + 1]
+      dest[i++] = transform[0] * x + transform[2] * y + transform[4]
+      dest[i++] = transform[1] * x + transform[3] * y + transform[5]
+    }
+    
+    if (opt_dest && dest.length != i) {
+      dest.length = i
+    }
+    
+    return dest
+  },
+  
   /**
    * 矩阵相乘
    * Multiply（相乘） the underlying matrices of two transforms and return the result in
