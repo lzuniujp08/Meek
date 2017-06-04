@@ -11,6 +11,11 @@ export function singleClick (browserEvent) {
 }
 
 
-
+export function noModifierKeys (browserEvent) {
+  const originalEvent = browserEvent.originalEvent
+  return ( !originalEvent.altKey &&
+  !(originalEvent.metaKey || originalEvent.ctrlKey) &&
+  !originalEvent.shiftKey)
+}
 
 
