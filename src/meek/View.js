@@ -36,8 +36,6 @@ export default class View extends BaseObject {
     return 0.94
   }
   
-  
-  
   getViewState () {
     const center = this.center
     const resolution = this.resolution
@@ -53,6 +51,12 @@ export default class View extends BaseObject {
   get center () { return this._center }
   set center ( value ) {
     this._center = value
+
+    // if (this.getAnimating()) {
+    //   this.cancelAnimations()
+    // }
+
+    this.changed()
   }
   
   get resolution () { return this._resolution }
