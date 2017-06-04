@@ -33,6 +33,29 @@ export default class Component extends BaseObject {
     }
   }
 
+  _isPointerDraggingEvent (browserEvent) {
+    var type = browserEvent.type
+    return (
+      type === BrowserEvent.MOUSE_DOWN ||
+      type === BrowserEvent.MOUSE_DRAG ||
+      type === BrowserEvent.MOUSE_UP)
+  }
+
+  _updateTrackedPointers (browserEvent) {
+    if (this._isPointerDraggingEvent(browserEvent)) {
+      var event = browserEvent.pointerEvent
+
+      if (browserEvent.type == BrowserEvent.MOUSE_UP) {
+        delete this.trackedPointers_[event.pointerId]
+      } else if (browserEvent.type == BrowserEvent.MOUSE_DOWN) {
+        this.trackedPointers_[event.pointerId] = event
+      } else if (event.pointerId in this.trackedPointers_) {
+        this.trackedPointers_[event.pointerId] = event
+      }
+      this.targetPointers = ol.obj.getValues(this.trackedPointers_)
+    }
+  }
+
   get map () { return this._map }
   set map (value) { this._map = value }
 

@@ -6,6 +6,8 @@
 import Component from './Component'
 
 import BrowserEvent from '../meek/BrowserEvent'
+import {noModifierKeys} from '../utils/MouseKey'
+import {Coordinate} from '../utils/Coordinate'
 
 // import {Style} from '../style/Style'
 //
@@ -58,8 +60,8 @@ export default class DragPanCpt extends Component {
      * @private
      * @type {ol.EventsConditionType}
      */
-    this.condition_ = options.condition ?
-      options.condition : ol.events.condition.noModifierKeys
+    this._condition = options.condition ?
+      options.condition : noModifierKeys
   
     /**
      * @private
@@ -76,9 +78,7 @@ export default class DragPanCpt extends Component {
    */
   handleMouseEvent (browserEvent) {
     let type = browserEvent.type
-    if (type === BrowserEvent.MOUSE_MOVE) {
-      this._handleMouseMove(browserEvent)
-    } else if (type === BrowserEvent.MOUSE_DOWN) {
+    if (type === BrowserEvent.MOUSE_DOWN) {
       this._handleDownEvent(browserEvent)
     } else if (type === BrowserEvent.MOUSE_UP){
       this._handleUpEvent(browserEvent)
@@ -97,7 +97,7 @@ export default class DragPanCpt extends Component {
    * @private
    */
   _handleDownEvent (browserEvent) {
-    if (this.targetPointers.length > 0 && this.condition_(browserEvent)) {
+    if (this.targetPointers.length > 0 && this._condition(browserEvent)) {
       const map = browserEvent.map
       const view = map.view
       this.lastCentroid = null
@@ -107,9 +107,9 @@ export default class DragPanCpt extends Component {
       // }
       
       // stop any current animation
-      if (view.getHints()[ol.ViewHint.ANIMATING]) {
-        view.setCenter(browserEvent.frameState.viewState.center)
-      }
+      // if (view.getHints()[ol.ViewHint.ANIMATING]) {
+      //   view.setCenter(browserEvent.frameState.viewState.center)
+      // }
       
       if (this._kinetic) {
         this._kinetic.begin()
@@ -117,22 +117,18 @@ export default class DragPanCpt extends Component {
       
       // No kinetic as soon as more than one pointer on the screen is
       // detected. This is to prevent nasty pans after pinch.
-      this.noKinetic_ = this.targetPointers.length > 1
+      this._noKinetic = this.targetPointers.length > 1
       return true
     } else {
       return false
     }
   }
   
-  /**
-   * @param {ol.MapBrowserPointerEvent} mapBrowserEvent Event.
-   * @this {ol.interaction.DragPan}
-   * @private
-   */
-  _handleDragEvent (mapBrowserEvent) {
+  _handleDragEvent (browserEvent) {
     const targetPointers = this.targetPointers
     const centroid = this.centroid(targetPointers)
-    if (targetPointers.length == this.lastPointersCount_) {
+
+    if (targetPointers.length === this._lastPointersCount) {
       if (this._kinetic) {
         this._kinetic.update(centroid[0], centroid[1])
       }
@@ -140,23 +136,22 @@ export default class DragPanCpt extends Component {
       if (this.lastCentroid) {
         const deltaX = this.lastCentroid[0] - centroid[0]
         const deltaY = centroid[1] - this.lastCentroid[1]
-        const map = mapBrowserEvent.map
-        const view = map.view()
-        const viewState = view.getState()
+        const map = browserEvent.map
+        const view = map.view
+        const viewState = view.getViewState()
         const center = [deltaX, deltaY]
-        coordinate.scale(center, viewState.resolution)
-        coordinate.rotate(center, viewState.rotation)
-        coordinate.add(center, viewState.center)
-        center = view.constrainCenter(center)
+        Coordinate.scale(center, viewState.resolution)
+        Coordinate.rotate(center, viewState.rotation)
+        Coordinate.add(center, viewState.center)
+        // center = view.constrainCenter(center)
         view.center = center
       }
-    } else if (this.kinetic_) {
-      // reset so we don't overestimate the kinetic energy after
-      // after one finger down, tiny drag, second finger down
+    } else if (this._kinetic) {
       this._kinetic.begin()
     }
+
     this.lastCentroid = centroid
-    this.lastPointersCount_ = targetPointers.length
+    this._lastPointersCount = targetPointers.length
   }
   
   centroid (pointerEvents) {
