@@ -7,6 +7,7 @@ import EventManager from 'core/EventManager'
 import BaseObject from 'core/BaseObject'
 import Counter from 'utils/Counter'
 import Helpers from 'utils/Helpers'
+import Obj from 'utils/Obj'
 
 import Geometry from 'geometry/Geometry'
 import Extent from 'geometry/Extent'
@@ -29,6 +30,8 @@ import Component from 'components/Component'
 import DrawCpt from 'components/DrawCpt'
 import SelectCpt from 'components/SelectCpt'
 import ModifyCpt from 'components/ModifyCpt'
+import DragPanCpt from 'components/DragPanCpt'
+import Kinetic from 'components/Kinetic'
 
 
 import BrowserEvent from 'meek/BrowserEvent'
@@ -67,5 +70,8 @@ export default {
   GeometryUtil,
   ExtentUtil,
   SelectCpt,
-  ModifyCpt
+  ModifyCpt,
+  DragPanCpt,
+  Kinetic,
+  Obj
 }

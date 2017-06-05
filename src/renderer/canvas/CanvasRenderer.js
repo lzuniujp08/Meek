@@ -71,7 +71,7 @@ export default class CanvasRenderer extends Renderer {
     let layerRender = undefined
     
     // 更新转化运算矩阵
-    //this.updateTranceform(frameState)
+    this.updateTranceform(frameState)
   
     this._dispatchComposeEvent(RenderEventType.PRERENDER, frameState)
     

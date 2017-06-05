@@ -65,8 +65,8 @@ export default class Map extends BaseObject {
 
     this.view = options.view || new View()
   
-    let kinetic = new Kinetic(-0.005, 0.05, 100)
-    this.addComponents(new DragPanCpt({kinetic: kinetic}))
+    // let kinetic = new Kinetic(-0.005, 0.05, 100)
+    // this.addComponents(new DragPanCpt({kinetic: kinetic}))
   }
 
   /**

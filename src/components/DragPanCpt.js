@@ -2,39 +2,18 @@
  * Created by zhangyong on 2017/6/2.
  */
 
-
 import Component from './Component'
 
 import BrowserEvent from '../meek/BrowserEvent'
 import {noModifierKeys} from '../utils/MouseKey'
 import {Coordinate} from '../utils/Coordinate'
 
-// import {Style} from '../style/Style'
-//
-// import FeaureLayer from '../lyr/FeatureLayer'
-// import Feature from '../meek/Feature'
-// import Geometry from '../geometry/Geometry'
-// import Point from '../geometry/Point'
-// import Line from '../geometry/Line'
-// import Polygon from '../geometry/Polygon'
-// import Extent from '../geometry/Extent'
-// import {ExtentUtil} from '../geometry/support/ExtentUtil'
-// import {listen, unlistenByKey} from '../core/EventManager'
-// import {EventType} from '../meek/EventType'
-//
-// import DrawEvent from './DrawEvent'
-
-/**
- * DrawCpt class is resonsibility to draw geometries.
- */
 export default class DragPanCpt extends Component {
   
   constructor (optOptions) {
-    
     super()
     
     const options = optOptions ? optOptions : {}
-  
   
     this.targetPointers = []
   
@@ -71,20 +50,27 @@ export default class DragPanCpt extends Component {
     
   }
   
-  
   /**
    * Handles the browser event and then may call into the subclass functions.
    * @param browserEvent
    */
   handleMouseEvent (browserEvent) {
+    if (!(browserEvent instanceof BrowserEvent)) {
+      return true
+    }
+  
+    this._updateTrackedPointers(browserEvent)
+    
     let type = browserEvent.type
     if (type === BrowserEvent.MOUSE_DOWN) {
       this._handleDownEvent(browserEvent)
     } else if (type === BrowserEvent.MOUSE_UP){
-      this._handleUpEvent(browserEvent)
+      // this._handleUpEvent(browserEvent)
     } else if (type === BrowserEvent.MOUSE_DRAG) {
       this._handleDragEvent(browserEvent)
     }
+    
+    return true
   }
   
   
@@ -160,8 +146,8 @@ export default class DragPanCpt extends Component {
     let clientY = 0
     
     for (let i = 0; i < length; i++) {
-      clientX += pointerEvents[i].clientX
-      clientY += pointerEvents[i].clientY
+      clientX += pointerEvents[i].originalEvent.clientX
+      clientY += pointerEvents[i].originalEvent.clientY
     }
     
     return [clientX / length, clientY / length]

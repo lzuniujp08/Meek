@@ -4,6 +4,7 @@
 import GeometryRender from '../render/GeomertyRender'
 
 import {colorToString} from '../../utils/Helpers'
+import {Transform} from '../../data/matrix/Transform'
 
 export default class LineRender extends GeometryRender {
   
@@ -11,7 +12,7 @@ export default class LineRender extends GeometryRender {
     super(context)
   }
   
-  render (feature) {
+  render (feature, transform) {
     if (!feature) {
       return
     }
@@ -19,12 +20,24 @@ export default class LineRender extends GeometryRender {
     const ctx = this.context
     const styleArray = feature.style
     const geometry = feature.geometry
+  
+    
+    const  transform2D =  Transform.transform2D
+    const coordinates = []
+    geometry.path.forEach(function(points){
+      let coordinate = transform2D(
+        points, 0, points.length, 2,
+        transform)
+      
+      coordinates.push(coordinate)
+    })
+    
     const len = styleArray.length
     for(let i = 0; i < len ; i ++){
       let styleObj = styleArray[i]
     
       let renderOptions = {
-        coordinates: geometry.path,
+        coordinates: coordinates,
         width: styleObj.width,
         strokeStyle: colorToString(styleObj.color,styleObj.alpha),
         lineCap: styleObj.lineCap,

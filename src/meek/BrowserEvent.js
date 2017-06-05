@@ -37,6 +37,9 @@ export default class BrowserEvent extends BaseObject {
      * 将canvas左边转换成地图坐标
      */
     this.coordinate = map.getCoordinateFromPixel(this.pixel)
+  
+  
+    this.pointerId = 0
   }
 }
 

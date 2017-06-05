@@ -4,15 +4,18 @@
 import GeometryRender from '../render/GeomertyRender'
 
 import {colorToString} from '../../utils/Helpers'
+import {Transform} from '../../data/matrix/Transform'
 
 export default class PointRender extends GeometryRender {
   
   constructor (context) {
     super(context)
+  
+    this._pixelCoordinates = []
   }
   
   
-  render (feature) {
+  render (feature, transform) {
     if(!feature){
       return
     }
@@ -20,13 +23,23 @@ export default class PointRender extends GeometryRender {
     const ctx = this.context
     const styleArray = feature.style
     const geomerty = feature.geometry
+  
+    const coordinates = [geomerty.x, geomerty.y]
+    
+    const pixelCoordinates = Transform.transform2D(
+      coordinates, 0, coordinates.length, 2,
+      transform, this._pixelCoordinates)
+    
+    const x = pixelCoordinates[0]
+    const y = pixelCoordinates[1]
+    
     const len = styleArray.length
     for(let i = 0; i < len ; i ++){
       let styleObj = styleArray[i]
       
       let renderOptions = {
-        centerX: geomerty.x,
-        centerY: geomerty.y,
+        centerX: x,
+        centerY: y,
         radius: styleObj.size / 2 || styleObj.borderStyle.width / 2,
         fillStyle: colorToString(styleObj.color,styleObj.alpha),
         borderStyle: styleObj.borderStyle

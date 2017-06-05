@@ -4,8 +4,7 @@
 
 import BaseObject from '../core/BaseObject'
 import BrowserEvent from '../meek/BrowserEvent'
-
-
+import {Obj} from '../utils/Obj'
 
 export default class Component extends BaseObject {
   constructor () {
@@ -13,6 +12,9 @@ export default class Component extends BaseObject {
 
     this.active = true
     this._mapRenderKey = null
+  
+    this.targetPointers = null
+    this._trackedPointers = {}
   }
   
   /**
@@ -34,7 +36,7 @@ export default class Component extends BaseObject {
   }
 
   _isPointerDraggingEvent (browserEvent) {
-    var type = browserEvent.type
+    const type = browserEvent.type
     return (
       type === BrowserEvent.MOUSE_DOWN ||
       type === BrowserEvent.MOUSE_DRAG ||
@@ -43,16 +45,16 @@ export default class Component extends BaseObject {
 
   _updateTrackedPointers (browserEvent) {
     if (this._isPointerDraggingEvent(browserEvent)) {
-      var event = browserEvent.pointerEvent
+      const event = browserEvent
 
       if (browserEvent.type == BrowserEvent.MOUSE_UP) {
-        delete this.trackedPointers_[event.pointerId]
+        delete this._trackedPointers[event.pointerId]
       } else if (browserEvent.type == BrowserEvent.MOUSE_DOWN) {
-        this.trackedPointers_[event.pointerId] = event
-      } else if (event.pointerId in this.trackedPointers_) {
-        this.trackedPointers_[event.pointerId] = event
+        this._trackedPointers[event.pointerId] = event
+      } else if (event.pointerId in this._trackedPointers) {
+        this._trackedPointers[event.pointerId] = event
       }
-      this.targetPointers = ol.obj.getValues(this.trackedPointers_)
+      this.targetPointers = Obj.getValues(this._trackedPointers)
     }
   }
 
