@@ -70,11 +70,16 @@ export default class FeatureLayerRenderer extends LayerRenderer {
   /**
    *
    */
-  composeFrame (frameStateOpt) {
+  composeFrame (frameStateOpt, context) {
     // console.log('featureLayer Render 开启渲染')
     const frameState = frameStateOpt
     const layer = this.layer
     const features = layer.features
+  
+    const transform = this.getTransform(frameState, 0)
+  
+    this.preCompose(context, frameState, transform)
+    
     features.forEach(feature => {
       if(!feature.style){
         let styleFunction = layer.styleFunction
@@ -85,10 +90,20 @@ export default class FeatureLayerRenderer extends LayerRenderer {
       
       // console.log('找到point geometry 的render')
       let geomertyRender = this._getGeometryRender(feature.geometry)
-      geomertyRender.render(feature)
+      geomertyRender.render(feature, transform)
     })
   
+    this.postCompose(context, frameState, transform)
+    
     return true
+  }
+  
+  preCompose () {
+    
+  }
+  
+  postCompose () {
+    
   }
   
 }
