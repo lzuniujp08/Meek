@@ -23,11 +23,22 @@ window.onload = function () {
     new Datatang.Feature(polygon),
     new Datatang.Feature(extent)]
   
+  
+  var extent = [0, 0, 1024, 968]
+  
   // 将会获取缺省样式
   var tempLayer = new Datatang.FeatureLayer({features: features})
   var map = new Datatang.Map({
     layers: [tempLayer],
-    target: 'map'
+    target: 'map',
+    view: new Datatang.View({
+      projection: {
+        extent: extent
+      },
+      center: Datatang.ExtentUtil.getCenter(extent),
+      zoom: 2,
+      maxZoom: 8
+    })
   })
 
   var dragPan = new Datatang.DragPanCpt({
