@@ -3,37 +3,60 @@
  */
 
 import Component from './Component'
+import BrowserEvent from '../meek/BrowserEvent'
+
+
+import {Config} from '../meek/Config'
+
+import {mouseWheel} from '../utils/MouseKey'
+import {clamp} from '../utils/Math'
 
 
 export default class MouseWheelZoom extends Component {
   
-  constructor (options){
+  constructor (optionsObj){
     
     super()
     
-    const iOptions = options || {}
+    const options = optionsObj || {}
+  
+    this._delta = 0
+  
+    this._useAnchor = options.useAnchor !== undefined ?
+      options.useAnchor : true
+  
+    this._duration = options.duration !== undefined ?
+      options.duration : 250
+  
+    this._lastAnchor = null
+  
+    this._startTime = undefined
     
+    this._timeout = undefined
     
+    this._timeoutId = undefined
     
-    
-    
+    this._mode = undefined
   }
   
   
-  
+  /**
+   *
+   * @param mapBrowserEvent
+   * @returns {boolean}
+   */
   handleMouseEvent (mapBrowserEvent){
-    const type = mapBrowserEvent.type
-    if (type !== BrowserEvent.WHEEL && type !== BrowserEvent.MOUSEWHEEL) {
+    if (!mouseWheel(mapBrowserEvent)) {
       return true
     }
   
     mapBrowserEvent.preventDefault()
   
     const map = mapBrowserEvent.map
-    const wheelEvent = /** @type {WheelEvent} */ (mapBrowserEvent.originalEvent)
+    const wheelEvent = mapBrowserEvent.originalEvent
   
-    if (this.useAnchor_) {
-      this.lastAnchor_ = mapBrowserEvent.coordinate
+    if (this._useAnchor) {
+      this._useAnchor = mapBrowserEvent.coordinate
     }
   
     // Delta normalisation inspired by
@@ -41,18 +64,8 @@ export default class MouseWheelZoom extends Component {
     let delta
     if (mapBrowserEvent.type == BrowserEvent.WHEEL) {
       delta = wheelEvent.deltaY
-      if (ol.has.FIREFOX &&
-        wheelEvent.deltaMode === WheelEvent.DOM_DELTA_PIXEL) {
-        delta /= ol.has.DEVICE_PIXEL_RATIO
-      }
-      if (wheelEvent.deltaMode === WheelEvent.DOM_DELTA_LINE) {
-        delta *= 40
-      }
-    } else if (mapBrowserEvent.type == BrowserEvent.MOUSEWHEEL) {
+    } else if (mapBrowserEvent.type == BrowserEvent.MOUSE_WHEEL) {
       delta = -wheelEvent.wheelDeltaY
-      if (ol.has.SAFARI) {
-        delta /= 3
-      }
     }
   
     if (delta === 0) {
@@ -61,77 +74,35 @@ export default class MouseWheelZoom extends Component {
   
     const now = Date.now()
   
-    if (this.startTime_ === undefined) {
-      this.startTime_ = now
+    if (this._startTime === undefined) {
+      this._startTime = now
     }
   
-    if (!this.mode_ || now - this.startTime_ > this.trackpadEventGap_) {
-      this.mode_ = Math.abs(delta) < 4 ?
-        ol.interaction.MouseWheelZoom.Mode_.TRACKPAD :
-        ol.interaction.MouseWheelZoom.Mode_.WHEEL
-    }
+    this._delta += delta
   
-    if (this.mode_ === ol.interaction.MouseWheelZoom.Mode_.TRACKPAD) {
-      const view = map.getView()
-      if (this.trackpadTimeoutId_) {
-        clearTimeout(this.trackpadTimeoutId_)
-      } else {
-        view.setHint(ol.ViewHint.INTERACTING, 1)
-      }
-      this.trackpadTimeoutId_ = setTimeout(this.decrementInteractingHint_.bind(this), this.trackpadEventGap_)
-      let resolution = view.getResolution() * Math.pow(2, delta / this.trackpadDeltaPerZoom_)
-      const minResolution = view.getMinResolution()
-      const maxResolution = view.getMaxResolution()
-      let rebound = 0
-      if (resolution < minResolution) {
-        resolution = Math.max(resolution, minResolution / this.trackpadZoomBuffer_)
-        rebound = 1
-      } else if (resolution > maxResolution) {
-        resolution = Math.min(resolution, maxResolution * this.trackpadZoomBuffer_)
-        rebound = -1
-      }
-      if (this.lastAnchor_) {
-        const center = view.calculateCenterZoom(resolution, this.lastAnchor_)
-        view.setCenter(view.constrainCenter(center))
-      }
-      view.setResolution(resolution)
-    
-      if (rebound === 0 && this.constrainResolution_) {
-        view.animate({
-          resolution: view.constrainResolution(resolution, delta > 0 ? -1 : 1),
-          easing: ol.easing.easeOut,
-          anchor: this.lastAnchor_,
-          duration: this.duration_
-        })
-      }
-    
-      if (rebound > 0) {
-        view.animate({
-          resolution: minResolution,
-          easing: ol.easing.easeOut,
-          anchor: this.lastAnchor_,
-          duration: 500
-        })
-      } else if (rebound < 0) {
-        view.animate({
-          resolution: maxResolution,
-          easing: ol.easing.easeOut,
-          anchor: this.lastAnchor_,
-          duration: 500
-        })
-      }
-      this.startTime_ = now
-      return false
-    }
+    const timeLeft = Math.max(this._timeout - (now - this._startTime), 0)
   
-    this.delta_ += delta
-  
-    const timeLeft = Math.max(this.timeout_ - (now - this.startTime_), 0)
-  
-    clearTimeout(this.timeoutId_)
-    this.timeoutId_ = setTimeout(this.handleWheelZoom_.bind(this, map), timeLeft)
+    clearTimeout(this._timeoutId)
+    this._timeoutId = setTimeout(() => this._handleWheelZoom(map), timeLeft)
   
     return false
+  }
+  
+  _handleWheelZoom (map) {
+    const view = map.view
+    // if (view.getAnimating()) {
+    //   view.cancelAnimations()
+    // }
     
+    const maxDelta = Config.MOUSE_WHEEL_ZOOM_MAXDELTA
+    const delta = clamp(this._delta, -maxDelta, maxDelta)
+    
+    this.zoomByDelta(view, -delta, this._lastAnchor, this._duration)
+    
+    this._mode = undefined
+    this._delta = 0
+    this._useAnchor = null
+    this._startTime = undefined
+    this._timeoutId = undefined
   }
 }

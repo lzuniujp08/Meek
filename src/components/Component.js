@@ -57,6 +57,58 @@ export default class Component extends BaseObject {
       this.targetPointers = Obj.getValues(this._trackedPointers)
     }
   }
+  
+  
+  zoomByDelta (view, delta, opt_anchor, opt_duration) {
+    const currentResolution = view.resolution
+    const resolution = view.constrainResolution(currentResolution, delta, 0)
+    
+    // If we have a constraint on center, we need to change the anchor so that the
+    // new center is within the extent. We first calculate the new center, apply
+    // the constraint to it, and then calculate back the anchor
+    if (opt_anchor && resolution !== undefined && resolution !== currentResolution) {
+      const currentCenter = view.center
+      let center = view.calculateCenterZoom(resolution, opt_anchor)
+      center = view.constrainCenter(center)
+      
+      opt_anchor = [
+        (resolution * currentCenter[0] - currentResolution * center[0]) /
+        (resolution - currentResolution),
+        (resolution * currentCenter[1] - currentResolution * center[1]) /
+        (resolution - currentResolution)
+      ]
+    }
+    
+    this.zoomWithoutConstraints(
+      view, resolution, opt_anchor, opt_duration)
+  }
+  
+  zoomWithoutConstraints (view, resolution, opt_anchor, opt_duration) {
+    if (resolution) {
+      const currentResolution = view.resolution
+      const currentCenter = view.center
+      
+      if (currentResolution !== undefined && currentCenter &&
+          resolution !== currentResolution && opt_duration) {
+        // view.animate({
+        //   resolution: resolution,
+        //   anchor: opt_anchor,
+        //   duration: opt_duration,
+        //   // easing: 1 - ol.easing.easeIn(1 - t)
+        // })
+  
+        view.resolution = resolution
+      } else {
+        if (opt_anchor) {
+          const center = view.calculateCenterZoom(resolution, opt_anchor)
+          view.center = center
+        }
+        view.resolution = resolution
+      }
+    }
+  }
+  
+  
 
   get map () { return this._map }
   set map (value) { this._map = value }
