@@ -2,10 +2,7 @@
  * Created by zhangyong on 2017/6/5.
  */
 
-
-const Obj = {}
-
-
+export const Obj = {}
 
 Obj.getValues = function (object) {
   const values = []

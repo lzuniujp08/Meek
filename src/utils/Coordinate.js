@@ -1,9 +1,7 @@
 /**
  * Created by zypc on 2017/6/4.
  */
-
-const Coordinate = {}
-
+export const Coordinate = {}
 
 Coordinate.add = function(coordinate, delta) {
   coordinate[0] += delta[0]
@@ -13,10 +11,10 @@ Coordinate.add = function(coordinate, delta) {
 
 
 Coordinate.rotate = function(coordinate, angle) {
-  var cosAngle = Math.cos(angle)
-  var sinAngle = Math.sin(angle)
-  var x = coordinate[0] * cosAngle - coordinate[1] * sinAngle
-  var y = coordinate[1] * cosAngle + coordinate[0] * sinAngle
+  const cosAngle = Math.cos(angle)
+  const sinAngle = Math.sin(angle)
+  const x = coordinate[0] * cosAngle - coordinate[1] * sinAngle
+  const y = coordinate[1] * cosAngle + coordinate[0] * sinAngle
   coordinate[0] = x
   coordinate[1] = y
   return coordinate

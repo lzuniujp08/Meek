@@ -27,3 +27,7 @@ export function colorToString(color,alpha = 1){
   
   return 'rgba(' + r + ',' + g + ',' + b + ',' + alpha + ')'
 }
+
+export default {
+  colorToString
+}

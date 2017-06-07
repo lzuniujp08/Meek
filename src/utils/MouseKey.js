@@ -21,4 +21,8 @@ export function noModifierKeys (browserEvent) {
   !originalEvent.shiftKey)
 }
 
-
+export default {
+  singleClick,
+  mouseWheel,
+  noModifierKeys
+}

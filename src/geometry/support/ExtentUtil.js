@@ -2,7 +2,6 @@
  * Created by zhangyong on 2017/5/24.
  */
 
-
 export const ExtentUtil = {}
 
 /**
@@ -11,6 +10,15 @@ export const ExtentUtil = {}
  */
 ExtentUtil.createEmpty = function () {
   return [Infinity, Infinity, -Infinity, -Infinity]
+}
+
+/**
+ * Get the center coordinate of an extent
+ * @param extent
+ * @returns {[*,*]}
+ */
+ExtentUtil.getCenter = function(extent) {
+  return [(extent[0] + extent[2]) / 2, (extent[1] + extent[3]) / 2]
 }
 
 /**
@@ -210,7 +218,31 @@ ExtentUtil.minMaxToRing = function (xmin, ymin, xmax, ymax) {
   return ring
 }
 
+/**
+ * Get the height of an extent
+ * @param extent
+ * @returns {number}
+ */
+ExtentUtil.getHeight = function(extent) {
+  return extent[3] - extent[1]
+}
 
+/**
+ * Get the width of an extent
+ * @param extent
+ * @returns {number}
+ */
+ExtentUtil.getWidth = function(extent) {
+  return extent[2] - extent[0]
+}
+
+/**
+ *
+ * @param geometry
+ * @param newCoordinates
+ * @param dragSegments
+ * @returns {*|*}
+ */
 ExtentUtil.updateExtent = function (geometry, newCoordinates, dragSegments) {
   const dragSegment = dragSegments[0]
   const index = dragSegment.index
@@ -259,4 +291,72 @@ ExtentUtil.updateExtent = function (geometry, newCoordinates, dragSegments) {
   
   
   return extentCoordinates
+}
+
+/**
+ *
+ * @param extent1
+ * @param extent2
+ * @param opt_extent
+ * @returns {(*|*|*|*)[]}
+ */
+ExtentUtil.getIntersection = function(extent1, extent2, opt_extent) {
+  const intersection = opt_extent ? opt_extent : ExtentUtil.createEmpty()
+  if (ExtentUtil.intersects(extent1, extent2)) {
+    if (extent1[0] > extent2[0]) {
+      intersection[0] = extent1[0]
+    } else {
+      intersection[0] = extent2[0]
+    }
+    
+    if (extent1[1] > extent2[1]) {
+      intersection[1] = extent1[1]
+    } else {
+      intersection[1] = extent2[1]
+    }
+    
+    if (extent1[2] < extent2[2]) {
+      intersection[2] = extent1[2]
+    } else {
+      intersection[2] = extent2[2]
+    }
+    
+    if (extent1[3] < extent2[3]) {
+      intersection[3] = extent1[3]
+    } else {
+      intersection[3] = extent2[3]
+    }
+  }
+  
+  return intersection
+}
+
+/**
+ * Detemine if one extent intersects another.
+ * @param extent1
+ * @param extent2
+ * @returns {boolean}
+ */
+ExtentUtil.intersects = function(extent1, extent2) {
+  return extent1[0] <= extent2[2] &&
+    extent1[2] >= extent2[0] &&
+    extent1[1] <= extent2[3] &&
+    extent1[3] >= extent2[1]
+}
+
+/**
+ *
+ * @param extent1
+ * @param extent2
+ * @returns {boolean}
+ */
+ExtentUtil.containsExtent = function(extent1, extent2) {
+  return extent1[0] <= extent2[0] &&
+         extent2[2] <= extent1[2] &&
+         extent1[1] <= extent2[1] &&
+         extent2[3] <= extent1[3]
+}
+
+export default {
+  ExtentUtil
 }
