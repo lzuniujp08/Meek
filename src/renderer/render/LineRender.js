@@ -21,10 +21,10 @@ export default class LineRender extends GeometryRender {
     const styleArray = feature.style
     const geometry = feature.geometry
   
-    
     const  transform2D =  Transform.transform2D
-    const coordinates = []
-    geometry.path.forEach(function(points){
+    const coordinates = [], geometryCoordinates = geometry.getCoordinates()
+    
+    geometryCoordinates.forEach(function(points){
       let coordinate = transform2D(
         points, 0, points.length, 2,
         transform)

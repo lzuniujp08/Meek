@@ -2,8 +2,9 @@
  * Created by zhangyong on 2017/3/20.
  */
 import GeometryRender from '../render/GeomertyRender'
-
+import {Transform} from '../../data/matrix/Transform'
 import {colorToString} from '../../utils/Helpers'
+import Extent from '../../geometry/Extent'
 
 export default class PolygonRender extends GeometryRender {
   
@@ -11,7 +12,7 @@ export default class PolygonRender extends GeometryRender {
     super(context)
   }
   
-  render (feature) {
+  render (feature, transform) {
     if (!feature) {
       return
     }
@@ -19,12 +20,29 @@ export default class PolygonRender extends GeometryRender {
     const ctx = this.context
     const styleArray = feature.style
     const geometry = feature.geometry
+  
+    const  transform2D =  Transform.transform2D
+    const coordinates = []
+    let geometryCoordinages = geometry.getCoordinates()
+    
+    if (geometry instanceof Extent) {
+      geometryCoordinages = geometryCoordinages[0]
+    }
+    
+    geometryCoordinages.forEach(function(points){
+      let coordinate = transform2D(
+        points, 0, points.length, 2,
+        transform)
+    
+      coordinates.push(coordinate)
+    })
+    
     const len = styleArray.length
     for(let i = 0; i < len ; i ++){
       let styleObj = styleArray[i]
     
       let renderOptions = {
-        coordinates: geometry.rings,
+        coordinates: [coordinates],
         fillStyle: colorToString(styleObj.color,styleObj.alpha),
         borderStyle: styleObj.borderStyle
       }
