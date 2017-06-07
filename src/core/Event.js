@@ -11,30 +11,29 @@ export default class Event {
 
     this.nullFunction = function () {}
   }
-
+  
   /**
-   * Get the listeners for a specified event type. Listeners are returned in the
-   * order that they will be called in.
    *
-   * @param {string} type Type.
-   * @return {Array.<ol.EventsListenerFunctionType>} Listeners.
+   * @param type
+   * @returns {*}
    */
   getListeners (type) {
     return this._listeners[type]
   }
-
+  
   /**
-   * @param {string=} opt_type Type. If not provided,
-   *     `true` will be returned if this EventTarget has any listeners.
-   * @return {boolean} Has listeners.
+   *
+   * @param optType
+   * @returns {boolean}
    */
   hasListener (optType) {
     return optType ? optType in this._listeners : Object.keys(this._listeners).length > 0
   }
-
+  
   /**
-   * @param {string} type Type.
-   * @param {ol.EventsListenerFunctionType} listener Listener.
+   *
+   * @param type
+   * @param listener
    */
   removeEventListener (type, listener) {
     const listeners = this._listeners[type]
@@ -53,10 +52,11 @@ export default class Event {
       }
     }
   }
-
+  
   /**
-   * @param {string} type Type.
-   * @param {ol.EventsListenerFunctionType} listener Listener.
+   *
+   * @param type
+   * @param listener
    */
   addEventListener (type, listener) {
     let listeners = this._listeners[type]
@@ -68,13 +68,11 @@ export default class Event {
       listeners.push(listener)
     }
   }
-
+  
   /**
-   * @param {{type: string,
- *     target: (EventTarget|ol.events.EventTarget|undefined)}|ol.events.Event|
- *     string} event Event or event type.
-   * @return {boolean|undefined} `false` if anyone called preventDefault on the
-   *     event object or if any of the listeners returned false.
+   *
+   * @param event
+   * @returns {*}
    */
   dispatchEvent (event) {
     const evt = typeof event === 'string' ? {type: event} : event
