@@ -7,7 +7,7 @@ const Obj = {}
 
 
 
-Obj.getValues = function(object) {
+Obj.getValues = function (object) {
   const values = []
   for (let property in object) {
     values.push(object[property])
@@ -15,7 +15,11 @@ Obj.getValues = function(object) {
   return values
 }
 
-
+Obj.clear = function (object) {
+  for (let property in object) {
+    delete object[property]
+  }
+}
 
 
 export default {

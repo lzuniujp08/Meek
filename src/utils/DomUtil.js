@@ -15,6 +15,3 @@ export function createCanvasContext2D (optWidth, optHeight) {
   return canvas.getContext('2d')
 }
 
-export default {
-  createCanvasContext2D
-}
