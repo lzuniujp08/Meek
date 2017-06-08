@@ -32,7 +32,7 @@ export default class MouseWheelZoom extends Component {
   
     this._startTime = undefined
     
-    this._timeout = undefined
+    this._timeout = options.timeout !== undefined ? options.timeout : 80
     
     this._timeoutId = undefined
     
@@ -56,7 +56,7 @@ export default class MouseWheelZoom extends Component {
     const wheelEvent = mapBrowserEvent.originalEvent
   
     if (this._useAnchor) {
-      this._useAnchor = mapBrowserEvent.coordinate
+      this._lastAnchor = mapBrowserEvent.coordinate
     }
   
     // Delta normalisation inspired by
@@ -101,7 +101,7 @@ export default class MouseWheelZoom extends Component {
     
     this._mode = undefined
     this._delta = 0
-    this._useAnchor = null
+    this._lastAnchor = null
     this._startTime = undefined
     this._timeoutId = undefined
   }
