@@ -2,16 +2,17 @@
  * Created by zhangyong on 2017/6/6.
  */
 
-import BaseImage from '../core/BaseImage'
-import {ImageState} from '../core/ImageState'
-import {Obj} from '../utils/Obj'
-import {ExtentUtil} from '../geometry/support/ExtentUtil'
-import {EventType} from '../meek/EventType'
+import BaseImage from '../../core/BaseImage'
+import {ImageState} from './ImageState'
+import {Obj} from '../../utils/Obj'
+import {ExtentUtil} from '../../geometry/support/ExtentUtil'
+import {EventType} from '../../meek/EventType'
 
-import {listenOnce, unlistenByKey} from '../core/EventManager'
-import {getUid} from '../utils/Counter'
+import {listenOnce, unlistenByKey} from '../../core/EventManager'
+import {getUid} from '../../utils/Counter'
 
 export default class SingleImage extends BaseImage {
+  
   constructor (extent, resolution, pixelRatio, attributions, src,
                crossOrigin, imageLoadFunction) {
     
@@ -28,9 +29,9 @@ export default class SingleImage extends BaseImage {
      * @private
      * @type {HTMLCanvasElement|Image|HTMLVideoElement}
      */
-    this._image = new Image()
+    this.domImage = new Image()
     if (crossOrigin !== null) {
-      this._image.crossOrigin = crossOrigin
+      this.getDomImage().crossOrigin = crossOrigin
     }
   
     /**
@@ -62,21 +63,23 @@ export default class SingleImage extends BaseImage {
    * @inheritDoc
    * @api
    */
-  getImage (opt_context) {
+  getDomImage (opt_context) {
     if (opt_context !== undefined) {
       let image
       let key = getUid(opt_context)
+      
       if (key in this._imageByContext) {
         return this._imageByContext[key]
       } else if (Obj.isEmpty(this._imageByContext)) {
-        image = this._image
+        image = this._domImage
       } else {
-        image = /** @type {Image} */ (this._image.cloneNode(false))
+        image = this._domImage.cloneNode(false)
       }
+      
       this._imageByContext[key] = image
       return image
     } else {
-      return this._image
+      return this._domImage
     }
   }
   
@@ -100,8 +103,9 @@ export default class SingleImage extends BaseImage {
    */
   _handleImageLoad () {
     if (this.resolution === undefined) {
-      this.resolution = ExtentUtil.getHeight(this.extent) / this._image.height
+      this.resolution = ExtentUtil.getHeight(this.extent) / this.getDomImage().height
     }
+    
     this.state = ImageState.LOADED
     this._unlistenImage()
     this.changed()
@@ -116,15 +120,16 @@ export default class SingleImage extends BaseImage {
    * @api
    */
   load () {
-    if (this.state == ImageState.IDLE || this.state == ImageState.ERROR) {
+    if (this.state === ImageState.IDLE || this.state === ImageState.ERROR) {
       this.state = ImageState.LOADING
       this.changed()
       this._imageListenerKeys = [
-        listenOnce(this._image, EventType.ERROR,
+        listenOnce(this.getDomImage(), EventType.ERROR,
           this._handleImageError, this),
-        listenOnce(this._image, EventType.LOAD,
+        listenOnce(this.getDomImage(), EventType.LOAD,
           this._handleImageLoad, this)
       ]
+      
       this._imageLoadFunction(this, this._src)
     }
   }
@@ -133,10 +138,9 @@ export default class SingleImage extends BaseImage {
   /**
    * @param {HTMLCanvasElement|Image|HTMLVideoElement} image Image.
    */
-  setImage (image) {
-    this._image = image
+  set domImage (value) {
+    this._domImage = value
   }
-  
   
   /**
    * Discards event handlers which listen for load completion or errors.

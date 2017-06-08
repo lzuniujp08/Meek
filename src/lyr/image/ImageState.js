@@ -3,16 +3,15 @@
  */
 
 
-const ImageState = {}
-
+export const ImageState = {}
 
 ImageState.IDLE = 0
 
-ImageState.LOADING = 0
+ImageState.LOADING = 1
 
-ImageState.LOADED = 0
+ImageState.LOADED = 2
 
-ImageState.ERROR = 0
+ImageState.ERROR = 3
 
 export default {
   ImageState
