@@ -106,5 +106,10 @@ Style.createFunction = function(obj) {
   return styleFunction
 }
 
+export default {
+  Style
+}
+
+
 
 
