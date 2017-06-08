@@ -4,6 +4,7 @@
 
 
 import BaseObject from '../core/BaseObject'
+import {EventType} from '../meek/EventType'
 
 export default class BaseImage extends BaseObject {
   
@@ -11,45 +12,45 @@ export default class BaseImage extends BaseObject {
                state, attributions) {
   
     super()
-    
+  
     this._attributions = attributions
   
-    this.extent = extent
+    this._extent = extent
   
     this._pixelRatio = pixelRatio
   
-    this.resolution = resolution
+    this._resolution = resolution
   
-    this.state = state
-    
+    this._state = state
   }
   
+  changed () {
+    this.dispatchEvent(EventType.CHANGE)
+  }
   
   /**
-   * @return {Array.<ol.Attribution>} Attributions.
+   *
+   * @returns {*}
    */
-  getAttributions () {
+  get attributions () {
     return this._attributions
   }
   
-  
-  getExtent () {
-    return this.extent
+  /**
+   *
+   * @returns {*}
+   */
+  get extent () {
+    return this._extent
   }
   
-  
-  /**
-   * @abstract
-   * @param {Object=} opt_context Object.
-   * @return {HTMLCanvasElement|Image|HTMLVideoElement} Image.
-   */
-  getImage (opt_context) {}
+  getDomImage (optContext) {}
   
   
   /**
    * @return {number} PixelRatio.
    */
-  getPixelRatio () {
+  get pixelRatio () {
     return this._pixelRatio
   }
   
@@ -57,14 +58,22 @@ export default class BaseImage extends BaseObject {
   /**
    * @return {number} Resolution.
    */
-  getResolution () {
-    return this.resolution
+  get resolution () {
+    return this._resolution
   }
   
-  getState () {
-    return this.state
+  set resolution (value) {
+    if (this.resolution !== value) {
+      this._resolution = value
+    }
   }
   
+  get state () { return this._state }
+  set state (value) {
+    if (this.state !== value){
+      this._state = value
+    }
+  }
   
   /**
    * Load not yet loaded URI.
