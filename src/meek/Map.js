@@ -9,9 +9,8 @@ import BrowserEvent from './BrowserEvent'
 import View from './View'
 import {listen} from '../core/EventManager'
 import {Transform} from '../data/matrix/Transform'
-
-import Kinetic from '../components/Kinetic'
-import DragPanCpt from '../components/DragPanCpt'
+import {EventType} from '../meek/EventType'
+import {ExtentUtil} from '../geometry/support/ExtentUtil'
 
 export default class Map extends BaseObject {
 
@@ -64,9 +63,11 @@ export default class Map extends BaseObject {
     this.target = options.target
 
     this.view = options.view || new View()
-  
-    // let kinetic = new Kinetic(-0.005, 0.05, 100)
-    // this.addComponents(new DragPanCpt({kinetic: kinetic}))
+    listen(this.view, EventType.CHANGE, this._handleViewChange, this)
+    
+    // add mouse wheel events listener
+    listen(this._viewport, BrowserEvent.MOUSE_WHEEL, this._handleMouseWheelEvent, this)
+    listen(this._viewport, BrowserEvent.WHEEL, this._handleMouseWheelEvent, this)
   }
 
   /**
@@ -110,7 +111,23 @@ export default class Map extends BaseObject {
         this._handleBrowserEvent, this)
     }
   }
-
+  
+  /**
+   * Handle the mouse wheel event
+   * @param wheelEvent
+   * @private
+   */
+  _handleMouseWheelEvent (wheelEvent) {
+    const type = wheelEvent.type
+    const browserEvent = new BrowserEvent(this, wheelEvent, type)
+    this._handleBrowserEvent(browserEvent)
+  }
+  
+  /**
+   * Handle browser events
+   * @param browserEvent
+   * @private
+   */
   _handleBrowserEvent (browserEvent) {
     const cpts = this.components
     let i
@@ -130,32 +147,55 @@ export default class Map extends BaseObject {
       }
     }
   }
-
+  
+  /**
+   * Render map frame
+   * @private
+   */
   _renderFrame () {
     const size = this.size
     const view = this.view
     let frameState = null
 
+    const extent = ExtentUtil.createEmpty()
     const viewState = view.getViewState()
     frameState = {
       size: size,
       viewState: viewState,
+      pixelRatio: 1,
+      extent:extent,
       toPixelTransform: this._toPixelTransform,
       toCoordinateTransform: this._toCoordinateTransform,
     }
     
-    this._frameState = frameState
+    if (frameState) {
+      frameState.extent = ExtentUtil.getForViewAndSize(viewState.center,
+        viewState.resolution, viewState.rotation, frameState.size, extent)
+    }
     
-    // console.log('map接受渲染命令，调动render渲染')
+    this._frameState = frameState
     this._renderer.renderFrame(frameState)
+    
+    
   }
-
+  
+  /**
+   * Render function
+   */
   render () {
     if (this._animationDelayKey === undefined) {
       this._animationDelayKey = window.requestAnimationFrame(this._animationDelay)
     }
   }
-
+  
+  /**
+   * Render map while the view has been changed
+   * @private
+   */
+  _handleViewChange () {
+    this.render()
+  }
+  
   get size () { return this._size }
   set size (value) {
     this._size = value
@@ -167,6 +207,7 @@ export default class Map extends BaseObject {
     if (Array.isArray(value)) {
       for(let layer of value){
         this._layers.push(layer)
+        layer.map = this
       }
     }
   }

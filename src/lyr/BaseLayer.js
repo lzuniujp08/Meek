@@ -70,8 +70,11 @@ export default class BaseLayer extends BaseObject {
   get maxResolution () { return this._maxResolution }
   set maxResolution (value) { this._maxResolution = value }
 
-  get dataExtend () {}
-
+  get dataExtent () {}
+  set dataExtent (value) {
+    this._dataExtent = value
+  }
+  
   get datasouce () { return this._datasource }
   set datasource (value) {
     this._datasource = value

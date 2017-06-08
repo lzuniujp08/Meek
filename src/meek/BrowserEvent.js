@@ -41,6 +41,21 @@ export default class BrowserEvent extends BaseObject {
   
     this.pointerId = 0
   }
+  
+  /**
+   *
+   */
+  preventDefault () {
+    this.originalEvent.preventDefault()
+  }
+  
+  /**
+   *
+   */
+  stopPropagation () {
+    this.originalEvent.stopPropagation()
+  }
+  
 }
 
 
@@ -80,3 +95,7 @@ BrowserEvent.MOUSE_UP = 'mouseup'
 BrowserEvent.MOUSE_OVER = 'mouseover'
 
 BrowserEvent.MOUSE_OUT = 'mouseout'
+
+BrowserEvent.WHEEL = 'wheel'
+
+BrowserEvent.MOUSE_WHEEL = 'mousewheel'

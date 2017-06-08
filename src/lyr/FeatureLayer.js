@@ -17,6 +17,10 @@ export default class FeatureLayer extends BaseLayer {
     
     this.style = optionsInner.style
     
+    // add features if passed by options
+    if (optionsInner.features) {
+      this.addFeatures(optionsInner.features)
+    }
   }
   
   clear () {
