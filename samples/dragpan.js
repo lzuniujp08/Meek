@@ -1,9 +1,6 @@
 /**
  * Created by zypc on 2017/6/4.
  */
-/**
- * Created by zhangyong on 2017/5/23.
- */
 
 window.onload = function () {
   
