@@ -13,6 +13,27 @@ ExtentUtil.createEmpty = function () {
 }
 
 /**
+ * Create or update an extent.
+ * @param minX
+ * @param minY
+ * @param maxX
+ * @param maxY
+ * @param opt_extent
+ * @returns {*}
+ */
+ExtentUtil.createOrUpdate = function(minX, minY, maxX, maxY, opt_extent) {
+  if (opt_extent) {
+    opt_extent[0] = minX
+    opt_extent[1] = minY
+    opt_extent[2] = maxX
+    opt_extent[3] = maxY
+    return opt_extent
+  } else {
+    return [minX, minY, maxX, maxY]
+  }
+}
+
+/**
  * Get the center coordinate of an extent
  * @param extent
  * @returns {[*,*]}
@@ -355,6 +376,50 @@ ExtentUtil.containsExtent = function(extent1, extent2) {
          extent2[2] <= extent1[2] &&
          extent1[1] <= extent2[1] &&
          extent2[3] <= extent1[3]
+}
+
+/**
+ *
+ * @param extent
+ * @returns {boolean}
+ */
+ExtentUtil.isEmpty = function(extent) {
+  return extent[2] < extent[0] || extent[3] < extent[1]
+}
+
+/**
+ *
+ * @param center
+ * @param resolution
+ * @param rotation
+ * @param size
+ * @param opt_extent
+ * @returns {*}
+ */
+ExtentUtil.getForViewAndSize = function(center, resolution, rotation, size, opt_extent) {
+  const dx = resolution * size[0] / 2
+  const dy = resolution * size[1] / 2
+  const cosRotation = Math.cos(rotation)
+  const sinRotation = Math.sin(rotation)
+  const xCos = dx * cosRotation
+  const xSin = dx * sinRotation
+  const yCos = dy * cosRotation
+  const ySin = dy * sinRotation
+  const x = center[0]
+  const y = center[1]
+  const x0 = x - xCos + ySin
+  const x1 = x - xCos - ySin
+  const x2 = x + xCos - ySin
+  const x3 = x + xCos + ySin
+  const y0 = y - xSin - yCos
+  const y1 = y - xSin + yCos
+  const y2 = y + xSin + yCos
+  const y3 = y + xSin - yCos
+  
+  return ExtentUtil.createOrUpdate(
+    Math.min(x0, x1, x2, x3), Math.min(y0, y1, y2, y3),
+    Math.max(x0, x1, x2, x3), Math.max(y0, y1, y2, y3),
+    opt_extent)
 }
 
 export default {
