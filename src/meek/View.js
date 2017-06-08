@@ -294,14 +294,16 @@ export default class View extends BaseObject {
    * @returns {*}
    */
   constrainCenter (center) {
-    return this._constraints.center = center
+    this._constraints.center = center
+    this._center = center
+    return true
   }
   
   
   get center () { return this._center }
   set center ( value ) {
-    this._center = value
-
+    this.constrainCenter(value)
+    
     // if (this.getAnimating()) {
     //   this.cancelAnimations()
     // }
