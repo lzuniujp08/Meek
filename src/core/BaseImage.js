@@ -2,12 +2,18 @@
  * Created by zhangyong on 2017/6/6.
  */
 
-
 import BaseObject from '../core/BaseObject'
-import {EventType} from '../meek/EventType'
 
 export default class BaseImage extends BaseObject {
   
+  /**
+   *
+   * @param extent
+   * @param resolution
+   * @param pixelRatio
+   * @param state
+   * @param attributions
+   */
   constructor (extent, resolution, pixelRatio,
                state, attributions) {
   
@@ -22,10 +28,6 @@ export default class BaseImage extends BaseObject {
     this._resolution = resolution
   
     this._state = state
-  }
-  
-  changed () {
-    this.dispatchEvent(EventType.CHANGE)
   }
   
   /**
@@ -44,8 +46,12 @@ export default class BaseImage extends BaseObject {
     return this._extent
   }
   
-  getDomImage (optContext) {}
-  
+  /**
+   * Get the DOM image
+   * @param optContext
+   * @returns {*}
+   */
+  getDomImage (optContext) { return optContext }
   
   /**
    * @return {number} PixelRatio.
@@ -54,7 +60,6 @@ export default class BaseImage extends BaseObject {
     return this._pixelRatio
   }
   
-  
   /**
    * @return {number} Resolution.
    */
@@ -62,9 +67,9 @@ export default class BaseImage extends BaseObject {
     return this._resolution
   }
   
-  set resolution (value) {
-    if (this.resolution !== value) {
-      this._resolution = value
+  set resolution (val) {
+    if (this.resolution !== val) {
+      this._resolution = val
     }
   }
   

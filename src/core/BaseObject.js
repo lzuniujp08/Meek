@@ -15,10 +15,14 @@ export default class BaseObject extends Event {
   constructor () {
     super()
 
-    // 定义每一个类都拥有一个唯一ID
+    // every subclass will keep an id
     this._id = getUid()
   }
-
+  
+  /**
+   * Dispatch a 'change' event and the
+   * map will render the frame.
+   */
   changed () {
     this.dispatchEvent(EventType.CHANGE)
   }
