@@ -6,6 +6,10 @@ import Event from './Event'
 import {getUid} from '../utils/Counter'
 import {EventType} from '../meek/EventType'
 
+/**
+ * The base object that only can be inherited,
+ * It will
+ */
 export default class BaseObject extends Event {
 
   /**

@@ -7,6 +7,8 @@ import CanvasRenderer from '../renderer/canvas/CanvasRenderer'
 import BrowserEventHandler from './BrowserEventHandler'
 import BrowserEvent from './BrowserEvent'
 import View from './View'
+
+import FeatureLayer from '../lyr/FeatureLayer'
 import {listen} from '../core/EventManager'
 import {Transform} from '../data/matrix/Transform'
 import {EventType} from '../meek/EventType'
@@ -231,6 +233,19 @@ export default class Map extends BaseObject {
     this.layers.push(layer)
   }
   
+  /**
+   * Get all the fetures layer from map.
+   */
+  getFeaturesLayer () {
+    return this.layers.filter( layer => {
+      return layer instanceof FeatureLayer
+    })
+  }
+  
+  /**
+   *
+   * @returns {*}
+   */
   getTargetElement () {
     const target = this.target
     if(target !== undefined) {
@@ -242,6 +257,13 @@ export default class Map extends BaseObject {
     }
   }
   
+  /**
+   *
+   * @param piexl
+   * @param callback
+   * @param tolerance
+   * @returns {*}
+   */
   forEachFeatureAtPiexl (piexl,callback,tolerance) {
     if (!this._frameState) {
       return
@@ -250,7 +272,7 @@ export default class Map extends BaseObject {
     const coordinate = this.getCoordinateFromPixel(piexl)
     const hitTolerance = tolerance
     
-    const layers = this.layers
+    const layers = this.getFeaturesLayer()
     let result = null
     for (let i = 0, ii = layers.length; i < ii; i++){
       let layer = layers[i]

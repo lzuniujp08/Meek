@@ -25,7 +25,7 @@ export default class BaseImage extends BaseObject {
   
     this._pixelRatio = pixelRatio
   
-    this._resolution = resolution
+    this.resolution = resolution
   
     this._state = state
   }
@@ -67,9 +67,9 @@ export default class BaseImage extends BaseObject {
     return this._resolution
   }
   
-  set resolution (val) {
-    if (this.resolution !== val) {
-      this._resolution = val
+  set resolution (value) {
+    if (this._resolution !== value) {
+      this._resolution = value
     }
   }
   

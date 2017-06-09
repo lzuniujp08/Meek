@@ -22,13 +22,14 @@ window.onload = function () {
     new Datatang.Feature(extent)]
   
   // 将会获取缺省样式
-  var selectLayer = new Datatang.FeatureLayer()
+  var featureLayer = new Datatang.FeatureLayer()
+  featureLayer.addFeatures(features)
   
   var mapextent = [0, 0, 1024, 968];
   
   var map = new Datatang.Map({
     layers: [
-      selectLayer
+      featureLayer
     ],
     target: 'map',
     view: new Datatang.View({
@@ -40,9 +41,6 @@ window.onload = function () {
       maxZoom: 8
     })
   });
-  
-  
-  selectLayer.addFeatures(features)
   
   var selectedFeatures = [new Datatang.Feature(point)]
   

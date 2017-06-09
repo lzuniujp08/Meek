@@ -154,6 +154,14 @@ export function listen (target, type, listener, optThis, optOnce) {
   return listenerObj
 }
 
+/**
+ *
+ * @param target
+ * @param type
+ * @param listener
+ * @param opt_this
+ * @returns {*}
+ */
 export function listenOnce (target, type, listener, opt_this) {
   return listen(target, type, listener, opt_this, true)
 }

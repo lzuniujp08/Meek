@@ -3,6 +3,10 @@
  */
 
 export default class Event {
+  
+  /**
+   *
+   */
   constructor () {
     this._pendingRemovals = {}
 

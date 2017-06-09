@@ -47,6 +47,11 @@ import MouseWheelZoom from 'components/MouseWheelZoom'
 
 
 import BrowserEvent from 'meek/BrowserEvent'
+import SelectEvent from 'components/SelectEvent'
+import FeatureEvent from 'meek/FeatureEvent'
+import ModifyEvent from 'components/ModifyEvent'
+
+
 import BrowserEventHandler from 'meek/BrowserEventHandler'
 import Feature from 'meek/Feature'
 import Map from 'meek/Map'
@@ -57,6 +62,9 @@ export default {
   Coordinate,
   Canvas,
   Event,
+  SelectEvent,
+  FeatureEvent,
+  ModifyEvent,
   EventManager,
   BaseObject,
   Counter,
