@@ -1,6 +1,7 @@
 
 import BaseLayer from './BaseLayer'
 import {Style} from '../style/Style'
+import FeatureEvent from '../meek/FeatureEvent'
 
 export default class FeatureLayer extends BaseLayer {
 
@@ -23,8 +24,12 @@ export default class FeatureLayer extends BaseLayer {
     }
   }
   
+  /**
+   * Clear all feature in collection
+   */
   clear () {
     this._features = []
+    this.dispatchEvent(new FeatureEvent(FeatureEvent.EventType.CLEAR))
     this.changed()
   }
 
@@ -43,13 +48,20 @@ export default class FeatureLayer extends BaseLayer {
     this._addFeaturesInner(features)
     this.changed()
   }
-
+  
+  /**
+   * Put features to the layer collection and then
+   * dispacth a feature event.
+   * @param features
+   * @private
+   */
   _addFeaturesInner (features) {
     features.map(feature => this.features.push(feature))
     
-    // Should dispatch features adding event
-    // this.dispatchEvent()
-    
+    features.forEach(feature => {
+      this.features.push(feature)
+      this.dispatchEvent(new FeatureEvent(FeatureEvent.EventType.ADD_FEATURE, feature))
+    })
   }
   
   /**
@@ -66,7 +78,14 @@ export default class FeatureLayer extends BaseLayer {
     this.changed()
   }
   
-  
+  /**
+   *
+   * @param frameState
+   * @param piexl
+   * @param callback
+   * @param tolerance
+   * @returns {*}
+   */
   forEachFeatureAtPiexl (frameState,piexl,callback,tolerance) {
     // frameState 携带 view 信息
   
@@ -83,6 +102,12 @@ export default class FeatureLayer extends BaseLayer {
     return callback(result)
   }
   
+  /**
+   *
+   * @param point
+   * @param features
+   * @private
+   */
   _getIntersectedFeatures (point, features) {
     return features.filter(function(feature){
       let geometry = feature.geometry
@@ -90,6 +115,11 @@ export default class FeatureLayer extends BaseLayer {
     })
   }
   
+  /**
+   *
+   * @returns {*}
+   * @private
+   */
   _getCurrentExtentFeatures () {
     return this.features
   }
@@ -111,11 +141,10 @@ export default class FeatureLayer extends BaseLayer {
     
     if (index > -1) {
       features.splice(index, 1)
+      
+      this.dispatchEvent(new FeatureEvent(FeatureEvent.EventType.REMOVE_FEATURE, feature))
+      this.changed()
     }
-    
-    // dispatch feature removed event
-    // this.dispatchEvent()
-    this.changed()
   }
   
   set style (value) {

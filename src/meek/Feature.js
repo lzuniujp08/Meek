@@ -50,7 +50,7 @@ export default class Feature extends BaseObject {
 
   /**
    * 设置图层的透明度
-   * 将会触发WS的重绘事件
+   * 将会触发map的重绘事件
    * @param value
    */
   get display () { return this._display }
@@ -61,8 +61,13 @@ export default class Feature extends BaseObject {
     }
   }
   
+  /**
+   * Clone a feature
+   * @returns {Feature}
+   */
   clone () {
     return new Feature(this.geometry.clone(),
       this.attributes, [this.style[0].clone()])
   }
 }
+
