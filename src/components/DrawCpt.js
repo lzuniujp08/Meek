@@ -28,7 +28,13 @@ export default class DrawCpt extends Component {
     super()
   
   
+    /**
+     *
+     * @type {null}
+     * @private
+     */
     this._mapRenderKey = null
+    
     /**
      * 绘制作用图层
      * 需要给绘制工具一个绘制的图层
@@ -38,7 +44,7 @@ export default class DrawCpt extends Component {
     this._drawLayer = options.drawLayer ? options.drawLayer : null
   
     /**
-     *
+     * Keep the point while mouse pressing down
      * @type {null}
      * @private
      */
@@ -100,7 +106,12 @@ export default class DrawCpt extends Component {
      * @private
      */
     this._sketchFeature = null
-    
+  
+    /**
+     * The function that can build a geometry by the passed geometry type.
+     * @type {null}
+     * @private
+     */
     this._geometryFunction = null
   
     /**
@@ -154,7 +165,11 @@ export default class DrawCpt extends Component {
     //
   
   }
-
+  
+  /**
+   * Get the geometry function.
+   * @returns {(function(*, *))|*|null}
+   */
   get geometryFunction () {
     if(!this._geometryFunction){
       this._geometryFunction = this._initGeometryFunction()
@@ -163,6 +178,12 @@ export default class DrawCpt extends Component {
     return this._geometryFunction
   }
   
+  /**
+   * The draw mode getter and setter.
+   * Set a draw mode means to draw a new type geometry.
+   *
+   * @returns {*}
+   */
   get drawMode () { return this._drawMode }
   set drawMode (value){
     this._drawMode = value
@@ -558,16 +579,20 @@ export default class DrawCpt extends Component {
     this._sketchLayer.addFeatures(features)
   }
   
-  
-  set map (map) {
+  /**
+   * Map setter.
+   * It will add an event listener of map rendering.
+   * @param {Datatang.map} mapVal
+   */
+  set map (mapValue) {
     if (this._mapRenderKey) {
       unlistenByKey(this._mapRenderKey)
       this._mapRenderKey = null
     }
 
-    if (map) {
-      this._map = map
-      this._mapRenderKey = listen(this, EventType.CHANGE, map.render, map)
+    if (mapValue) {
+      this._map = mapValue
+      this._mapRenderKey = listen(this, EventType.CHANGE, mapValue.render, mapValue)
     }
     
     this._updateState()

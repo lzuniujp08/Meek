@@ -2,11 +2,18 @@
  * Created by zhangyong on 2017/5/22.
  */
 
-
 import BaseEvent from '../core/BaseEvent'
 
+/**
+ * The DrawEvent will emitted while geometrys on drawing end.
+ */
 export default class DrawEvent extends BaseEvent {
   
+  /**
+   * @constructor
+   * @param type
+   * @param feature
+   */
   constructor (type, feature) {
   
     super(type)
@@ -26,14 +33,12 @@ export default class DrawEvent extends BaseEvent {
 DrawEvent.EventType = {
   /**
    * Triggered upon feature draw start
-   * @api stable
    */
   DRAWSTART: 'drawstart',
   
   
   /**
    * Triggered upon feature draw end
-   * @api stable
    */
   DRAWEND: 'drawend'
   
