@@ -7,11 +7,11 @@ import Component from './Component'
 import BrowserEvent from '../meek/BrowserEvent'
 import Geometry from '../geometry/Geometry'
 import Point from '../geometry/Point'
-import Line from '../geometry/Line'
 
 import {listen, unlistenByKey} from '../core/EventManager'
 import {EventType} from '../meek/EventType'
 
+import ModifyEvent from './ModifyEvent'
 
 import Feature from '../meek/Feature'
 import FeatureLayer from '../lyr/FeatureLayer'
@@ -19,15 +19,18 @@ import {Style} from '../style/Style'
 import {ExtentUtil} from '../geometry/support/ExtentUtil'
 
 import {closestOnSegment, squaredDistanceToSegment,
-        squaredDistance, distance,
-        equals} from '../geometry/support/GeometryUtil'
+        squaredDistance, distance} from '../geometry/support/GeometryUtil'
 
 
+/**
+ *
+ */
 export default class ModifyCpt extends Component {
   
-  
-  constructor(options) {
+  constructor(optionsParam) {
     super()
+    
+    const options = Object.assign({}, optionsParam)
     
     this._pixelTolerance = options.pixelTolerance ?
         options.pixelTolerance : 10
@@ -46,11 +49,12 @@ export default class ModifyCpt extends Component {
   
   
     this._vertexFeature = null
-    
-    
-    this._features = null
   
-    this.features = options.features
+    /**
+     * The features
+     * @type {*}
+     */
+    this.features = options.features || []
   
   
     this._lastPixel = [0, 0]
@@ -64,15 +68,24 @@ export default class ModifyCpt extends Component {
   
     
     this._dragSegments = []
-    
+  
+    /**
+     *
+     * @type {boolean}
+     * @private
+     */
     this._modified = false
   
     this._changingFeature = true
   }
   
-  features (value) {
-    this._features = value
-  
+  /**
+   * Features getter and setter
+   * @returns {null|*}
+   */
+  get features () { return this._features }
+  set features (valueOpt = []) {
+    this._features = valueOpt
     this._vertexSegments = null
     this._snapSegments = null
     this._vertexFeature = null
@@ -80,8 +93,18 @@ export default class ModifyCpt extends Component {
     this._snappedToVertex = false
   }
   
+  /**
+   * Handle the mouse events emitted from map.
+   * @param browserEvent
+   * @returns {boolean}
+   */
   handleMouseEvent (browserEvent) {
     if (!(browserEvent instanceof BrowserEvent)) {
+      return true
+    }
+    
+    // 未激活工具
+    if (this.active === false){
       return true
     }
   
@@ -95,18 +118,22 @@ export default class ModifyCpt extends Component {
     } else if (type === BrowserEvent.MOUSE_DRAG) {
       this._handleDragEvent(browserEvent)
     }
-  
   }
   
   _compareIndexes (a, b) {
     return a.index - b.index
   }
   
-  _willModifyFeatures (evt) {
-    if (!this.modified_) {
-      this.modified_ = true
-      // this.dispatchEvent(new ol.interaction.Modify.Event(
-      //   ol.interaction.ModifyEventType.MODIFYSTART, this.features_, evt))
+  /**
+   *
+   * @param event
+   * @private
+   */
+  _willModifyFeatures (event) {
+    if (!this._modified) {
+      this._modified = true
+      this.dispatchEvent(new ModifyEvent(ModifyEvent.EventType.MODIFY_START,
+        this.features, event))
     }
   }
   
@@ -198,7 +225,12 @@ export default class ModifyCpt extends Component {
   }
   
   
-  
+  /**
+   *
+   * @param pixel
+   * @param map
+   * @private
+   */
   _handlePointerAtPixel (pixel, map) {
     const pixelCoordinate = map.getCoordinateFromPixel(pixel)
     
@@ -274,6 +306,12 @@ export default class ModifyCpt extends Component {
     
   }
   
+  
+  /**
+   * Handle mouse drag event.
+   * @param evt
+   * @private
+   */
   _handleDragEvent (evt) {
     // this.ignoreNextSingleClick_ = false
     this._willModifyFeatures(evt)
@@ -317,8 +355,7 @@ export default class ModifyCpt extends Component {
         coordinates[segmentData.index] = vertex
         break
       case Geometry.EXTENT:
-        let newCoordinates = ExtentUtil.updateExtent(geometry, vertex, dragSegment)
-        coordinates = [newCoordinates]
+        coordinates = [ExtentUtil.updateExtent(geometry, vertex, dragSegment)]
         break
       case Geometry.MULTI_POLYGON:
         coordinates = geometry.getCoordinates()
@@ -349,10 +386,15 @@ export default class ModifyCpt extends Component {
     this._createOrUpdateVertexFeature(vertex)
   }
   
-  
+  /**
+   *
+   * @param evt
+   * @returns {boolean}
+   * @private
+   */
   _handleUpEvent (evt) {
-    let segmentData
-    let geometry
+    // let segmentData
+    // let geometry
   
     this._dragSegments.length = 0
     
@@ -373,15 +415,21 @@ export default class ModifyCpt extends Component {
     //   }
     // }
     //
-    // if (this.modified_) {
-    //   this.dispatchEvent(new ol.interaction.Modify.Event(
-    //     ol.interaction.ModifyEventType.MODIFYEND, this.features, evt))
-    //   this.modified_ = false
-    // }
+    
+    if (this._modified) {
+      this.dispatchEvent(new ModifyEvent(ModifyEvent.MODIFY_END, this.features, evt))
+      this._modified = false
+    }
     
     return false
   }
   
+  /**
+   *
+   * @param segmentData
+   * @param vertex
+   * @private
+   */
   _insertVertex (segmentData, vertex) {
     const segment = segmentData.segment
     const feature = segmentData.feature
@@ -542,12 +590,25 @@ export default class ModifyCpt extends Component {
     return result
   }
   
+  /**
+   *
+   * @param geometry
+   * @param coordinates
+   * @private
+   */
   _setGeometryCoordinates (geometry, coordinates) {
     this._changingFeature = true
     geometry.setCoordinates(coordinates)
     this._changingFeature = false
   }
   
+  /**
+   *
+   * @param coordinates
+   * @param segmentData
+   * @returns {number}
+   * @private
+   */
   _pointDistanceToSegment (coordinates, segmentData) {
     const geometry = segmentData.geometry
     
@@ -567,6 +628,13 @@ export default class ModifyCpt extends Component {
     return squaredDistanceToSegment(coordinates, segmentData.segment)
   }
   
+  /**
+   *
+   * @param coordinate
+   * @param segmentData
+   * @returns {*}
+   * @private
+   */
   _closestOnSegment (coordinate, segmentData) {
     // const geometry = segmentData.geometry
     return closestOnSegment(coordinate, segmentData.segment)
@@ -603,25 +671,36 @@ export default class ModifyCpt extends Component {
     }
   }
   
-  
+  /**
+   * Get the default geometry style
+   * @returns {Function}
+   */
   getDefaultStyleFunction () {
     const style = Style.createDefaultEditing()
-    return function (feature) {
+    return function () {
       return style[Geometry.POINT]
     }
   }
   
+  /**
+   *
+   * @returns {*}
+   */
+  get active () { return this._active }
   set active (isActive) {
     if (this._vertexFeature && !isActive) {
-      // this.overlay_.getSource().removeFeature(this._vertexFeature)
+      this._overLayer.removeFeature(this._vertexFeature)
       this._vertexFeature = null
     }
     
     this._active = isActive
   }
   
-  get active () { return this._active }
-  
+  /**
+   *
+   * @returns {*}
+   */
+  get map () {return this._map}
   set map (map) {
     if (this._mapRenderKey) {
       unlistenByKey(this._mapRenderKey)
@@ -635,12 +714,16 @@ export default class ModifyCpt extends Component {
     
     this._overLayer.map = map
   }
-  
-  get map () {return this._map}
-  
 }
 
-
+/**
+ *
+ * @type {number}
+ */
 ModifyCpt.MODIFY_SEGMENT_CIRCLE_CIRCUMFERENCE_INDEX = 1
 
+/**
+ *
+ * @type {number}
+ */
 ModifyCpt.MODIFY_SEGMENT_CIRCLE_CENTER_INDEX = 0

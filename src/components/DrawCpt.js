@@ -624,6 +624,8 @@ export default class DrawCpt extends Component {
       return styles[feature.geometry.geometryType]
     }
   }
+  
+  get drawLayer () { return this._drawLayer }
 }
 
 /**

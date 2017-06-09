@@ -50,12 +50,16 @@ export default class SelectCpt extends Component {
   }
   
   /**
-   *
+   * Handler mouse event
    * @param browserEvent
    */
   handleMouseEvent (browserEvent) {
     if (!this._condition(browserEvent)) {
-      return
+      return true
+    }
+    
+    if (this.active === false) {
+      return true
     }
     
     const map = browserEvent.map
@@ -81,11 +85,15 @@ export default class SelectCpt extends Component {
     }
   }
   
+  /**
+   *
+   */
   selectClean () {
     this._selectLayer.clear()
     this.selectFeatures = []
   }
   
+  get selectFeatures () { return this._selectFeatures }
   set selectFeatures (features) {
     if (features.length === 0 ) {
       this._selectFeatures = []
@@ -95,8 +103,6 @@ export default class SelectCpt extends Component {
       )
     }
   }
-  
-  get selectFeatures () { return this._selectFeatures }
   
   /**
    * Update the drawing state for aborting drawing if active is false
@@ -132,6 +138,7 @@ export default class SelectCpt extends Component {
     })
   }
   
+  get map (){ return this._map }
   set map (map) {
     if (this._mapRenderKey) {
       unlistenByKey(this._mapRenderKey)
@@ -145,8 +152,6 @@ export default class SelectCpt extends Component {
     
     this._updateState()
   }
-  
-  get map (){ return this._map }
   
   get selectMode () { return this._selectMode }
   set selectMode (value) {

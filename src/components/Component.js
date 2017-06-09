@@ -22,6 +22,11 @@ export default class Component extends BaseObject {
    * @param browserEvent
    */
   handleMouseEvent (browserEvent) {
+    
+    if(this.active === false){
+      return true
+    }
+    
     let type = browserEvent.type
     if (type === BrowserEvent.MOUSE_MOVE) {
       this._handleMouseMove(browserEvent)
@@ -58,14 +63,17 @@ export default class Component extends BaseObject {
     }
   }
   
-  
+  /**
+   *
+   * @param view
+   * @param delta
+   * @param opt_anchor
+   * @param opt_duration
+   */
   zoomByDelta (view, delta, opt_anchor, opt_duration) {
     const currentResolution = view.resolution
     const resolution = view.constrainResolution(currentResolution, delta, 0)
     
-    // If we have a constraint on center, we need to change the anchor so that the
-    // new center is within the extent. We first calculate the new center, apply
-    // the constraint to it, and then calculate back the anchor
     if (opt_anchor && resolution !== undefined && resolution !== currentResolution) {
       const currentCenter = view.center
       let center = view.calculateCenterZoom(resolution, opt_anchor)
@@ -79,10 +87,16 @@ export default class Component extends BaseObject {
       ]
     }
     
-    this.zoomWithoutConstraints(
-      view, resolution, opt_anchor, opt_duration)
+    this.zoomWithoutConstraints(view, resolution, opt_anchor, opt_duration)
   }
   
+  /**
+   *
+   * @param view
+   * @param resolution
+   * @param opt_anchor
+   * @param opt_duration
+   */
   zoomWithoutConstraints (view, resolution, opt_anchor, opt_duration) {
     if (resolution) {
       const currentResolution = view.resolution
