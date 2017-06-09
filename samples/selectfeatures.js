@@ -23,10 +23,22 @@ window.onload = function () {
   // 将会获取缺省样式
   var selectLayer = new Datatang.FeatureLayer()
   
+  var mapextent = [0, 0, 1024, 968];
+  
   var map = new Datatang.Map({
-    layers: [selectLayer],
-    target: 'map'
-  })
+    layers: [
+      selectLayer
+    ],
+    target: 'map',
+    view: new Datatang.View({
+      projection: {
+        extent: mapextent
+      },
+      center: Datatang.ExtentUtil.getCenter(mapextent),
+      zoom: 2,
+      maxZoom: 8
+    })
+  });
   
   selectLayer.addFeatures(features)
   

@@ -45,6 +45,7 @@ window.onload = function () {
   selectLayer.addFeatures(features)
   
   var selectedFeatures = [new Datatang.Feature(point)]
+  
   var modifyTool = new Datatang.ModifyCpt({
     features: selectedFeatures
   });
