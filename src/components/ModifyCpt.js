@@ -108,6 +108,8 @@ export default class ModifyCpt extends Component {
       return true
     }
   
+    let stopEvent = true
+    
     let type = browserEvent.type
     if (type === BrowserEvent.MOUSE_MOVE) {
       this._handlePointerMove(browserEvent)
@@ -118,6 +120,8 @@ export default class ModifyCpt extends Component {
     } else if (type === BrowserEvent.MOUSE_DRAG) {
       this._handleDragEvent(browserEvent)
     }
+    
+    return stopEvent
   }
   
   _compareIndexes (a, b) {
@@ -242,7 +246,11 @@ export default class ModifyCpt extends Component {
   
     this._snapSegments = null
     
-    const nodes = this._getInExtent(this.features[0].geometry, pixelCoordinate, this._pixelTolerance)
+    if (this.features.length === 0) {
+      return
+    }
+    
+    const nodes = this._getInExtent(this.features, pixelCoordinate, this._pixelTolerance)
     if (nodes.length > 0) {
       nodes.sort(sortByDistance)
       const node = nodes[0]
@@ -531,69 +539,65 @@ export default class ModifyCpt extends Component {
    * @returns {Array}
    * @private
    */
-  _getInExtent (geometry, pixelCoordinate, tolarance) {
+  _getInExtent (features, pixelCoordinate, tolarance) {
     let result = []
     const _ExtentUtil = ExtentUtil
-    
-    const gometryExtent = geometry.extent
-    const bufferExtent = _ExtentUtil.buffer([gometryExtent.xmin, gometryExtent.ymin,
-      gometryExtent.xmax, gometryExtent.ymax], tolarance)
   
-    if (!_ExtentUtil.containsPoint(bufferExtent, pixelCoordinate)) {
-      return result
-    }
-    
-    const geometryType = geometry.geometryType
-    if (geometryType === Geometry.POINT) {
-      const points = geometry.getCoordinates()
-      const dist = distance(points, pixelCoordinate)
-      if (dist <= tolarance) {
-        result.push({
-          geometry: geometry,
-          segment: [points, points],
-          index: 0
-        })
-      }
-    } else if (geometryType === Geometry.LINE) {
-      const path = geometry.path
+    // loop the passed features
+    features.forEach( feature => {
+      const geometry = feature.geometry
       
-      for (let i = 0, ii = path.length - 1; i < ii; i++) {
-        let points = path[i]
-        let nextPoints = path[i + 1]
+      // build an extent from the passed geometry with tolarance
+      const gometryExtent = geometry.extent
+      const bufferExtent = _ExtentUtil.buffer([gometryExtent.xmin, gometryExtent.ymin,
+        gometryExtent.xmax, gometryExtent.ymax], tolarance)
+  
+      // Exclude the moved point
+      if (_ExtentUtil.containsPoint(bufferExtent, pixelCoordinate)) {
         
-        let pathExtent = _ExtentUtil.boundingExtentFromTwoPoints(points, nextPoints)
-        let pathBufferExtent = _ExtentUtil.buffer(pathExtent, tolarance)
+        // Calculte if the moved point has insected a geometry
+        const geometryType = geometry.geometryType
         
-        if (_ExtentUtil.containsPoint(pathBufferExtent, pixelCoordinate)) {
-          const segment = [points, nextPoints]
-          result.push({
-            geometry: geometry,
-            segment: segment,
-            index: i
-          })
+        if (geometryType === Geometry.POINT) {
+          const points = geometry.getCoordinates()
+          const dist = distance(points, pixelCoordinate)
+          if (dist <= tolarance) {
+            result.push({
+              geometry: geometry,
+              segment: [points, points],
+              index: 0
+            })
+          }
+        } else if (geometryType === Geometry.POLYGON ||
+          geometryType === Geometry.EXTENT ||
+          geometryType === Geometry.LINE) {
+    
+          let coordinates = null
+          if (geometryType === Geometry.EXTENT) {
+            coordinates = geometry.getCoordinates()[0]
+          } else {
+            coordinates = geometry.getCoordinates()
+          }
+    
+          for (let j = 0, jj = coordinates.length - 1; j < jj; j++) {
+            let points = coordinates[j]
+            let nextPoints = coordinates[j + 1]
+      
+            let pathExtent = _ExtentUtil.boundingExtentFromTwoPoints(points, nextPoints)
+            let pathBufferExtent = _ExtentUtil.buffer(pathExtent, tolarance)
+      
+            if (ExtentUtil.containsPoint(pathBufferExtent, pixelCoordinate)) {
+              const segment = [points, nextPoints]
+              result.push({
+                geometry: geometry,
+                segment: segment,
+                index: j
+              })
+            }
+          }
         }
       }
-    } else if (geometryType === Geometry.POLYGON || geometryType === Geometry.EXTENT) {
-      //
-      const rings = geometry.rings[0]
-  
-      for (let j = 0, jj = rings.length - 1; j < jj; j++) {
-        let points = rings[j]
-        let nextPoints = rings[j + 1]
-  
-        let pathExtent = _ExtentUtil.boundingExtentFromTwoPoints(points, nextPoints)
-        let pathBufferExtent = _ExtentUtil.buffer(pathExtent, tolarance)
-  
-        if (ExtentUtil.containsPoint(pathBufferExtent, pixelCoordinate)) {
-          const segment = [points, nextPoints]
-          result.push({
-            geometry: geometry,
-            segment: segment,
-            index: j
-          })
-        }
-      }
-    }
+    })
     
     return result
   }
