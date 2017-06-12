@@ -314,11 +314,19 @@ export default class ModifyCpt extends Component {
    */
   _handleDragEvent (evt) {
     // this.ignoreNextSingleClick_ = false
+    
+    const dragSegments = this._dragSegments
+    const len = dragSegments.length
+    
+    if (len === 0) {
+      return
+    }
+    
     this._willModifyFeatures(evt)
     
     const vertex = evt.coordinate
-    for (let i = 0, ii = this._dragSegments.length; i < ii; ++i) {
-      const dragSegment = this._dragSegments[i]
+    for (let i = 0; i < len; ++i) {
+      const dragSegment = dragSegments[i]
       const segmentData = dragSegment[0]
       const depth = segmentData.depth
       const geometry = segmentData.geometry

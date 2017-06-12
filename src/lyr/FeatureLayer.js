@@ -56,8 +56,6 @@ export default class FeatureLayer extends BaseLayer {
    * @private
    */
   _addFeaturesInner (features) {
-    features.map(feature => this.features.push(feature))
-    
     features.forEach(feature => {
       this.features.push(feature)
       this.dispatchEvent(new FeatureEvent(FeatureEvent.EventType.ADD_FEATURE, feature))
