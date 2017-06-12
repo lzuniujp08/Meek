@@ -5,8 +5,7 @@
 
 
 var drawTool,
-    modifyTool,
-    selectTool;
+    modifyTool;
 
 var drawlayer ;
 
@@ -46,19 +45,12 @@ window.onload = function () {
     drawLayer: drawlayer
   });
   
-  // 选择工具
-  selectTool = new Datatang.SelectCpt({
-    selectMode: Datatang.BrowserEvent.SINGLE_CLICK
+  
+  modifyTool = new Datatang.ModifyCpt({
+    features: drawlayer.features
   });
   
-  modifyTool = new Datatang.ModifyCpt();
-  
-  // selectTool.addEventListener(Datatang.EventType.SELECT,function(selectEvent){
-  //   modifyTool.features = selectEvent.selectedFeatures
-  // })
-  
   map.addComponents(drawTool)
-  map.addComponents(selectTool)
   map.addComponents(modifyTool)
   
   var typeSelect = document.getElementById('type')
@@ -71,24 +63,11 @@ window.onload = function () {
     drawTool.drawMode = typeSelect.value
   }
   
-  drawTool.active = true;
-  selectTool.active = false;
-  modifyTool.active = false;
-  
-}
-
-function onSelectClick(){
-  selectTool.active = true;
-  drawTool.active = false;
-  modifyTool.active = false;
-  
-  selectTool.features = drawTool.drawLayer.features;
+  // drawTool.active = true;
+  // modifyTool.active = true;
 }
 
 function onModifyClick(){
-  selectTool.active = false;
   drawTool.active = false;
   modifyTool.active = true;
-  
-  modifyTool.features = selectTool.selectFeatures
 }
