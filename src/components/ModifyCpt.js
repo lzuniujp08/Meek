@@ -27,10 +27,8 @@ import {closestOnSegment, squaredDistanceToSegment,
  */
 export default class ModifyCpt extends Component {
   
-  constructor(optionsParam) {
+  constructor(options = {}) {
     super()
-    
-    const options = Object.assign({}, optionsParam)
     
     this._pixelTolerance = options.pixelTolerance ?
         options.pixelTolerance : 10
@@ -42,12 +40,25 @@ export default class ModifyCpt extends Component {
      */
     this._snappedToVertex = false
   
-    
+    /**
+     *
+     * @type {null}
+     * @private
+     */
     this._vertexSegments = null
-    
+  
+    /**
+     *
+     * @type {null}
+     * @private
+     */
     this._snapSegments = null
   
-  
+    /**
+     *
+     * @type {null}
+     * @private
+     */
     this._vertexFeature = null
   
     /**
@@ -56,7 +67,11 @@ export default class ModifyCpt extends Component {
      */
     this.features = options.features || []
   
-  
+    /**
+     *
+     * @type {[*]}
+     * @private
+     */
     this._lastPixel = [0, 0]
   
   
@@ -84,8 +99,8 @@ export default class ModifyCpt extends Component {
    * @returns {null|*}
    */
   get features () { return this._features }
-  set features (valueOpt = []) {
-    this._features = valueOpt
+  set features (features = []) {
+    this._features = features
     this._vertexSegments = null
     this._snapSegments = null
     this._vertexFeature = null

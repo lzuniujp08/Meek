@@ -24,9 +24,8 @@ import DrawEvent from './DrawEvent'
  */
 export default class DrawCpt extends Component {
 
-  constructor (options) {
+  constructor (options = {}) {
     super()
-  
   
     /**
      *

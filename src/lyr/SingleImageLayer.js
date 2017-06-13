@@ -15,7 +15,7 @@ import {ExtentUtil} from '../geometry/support/ExtentUtil'
 
 export default class SingleImageLayer extends BaseLayer {
 
-  constructor (options) {
+  constructor (options = {}) {
     super(options)
   
     const imageExtent = options.imageExtent

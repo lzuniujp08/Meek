@@ -10,13 +10,19 @@ import {Coordinate} from '../utils/Coordinate'
 
 export default class DragPanCpt extends Component {
   
-  constructor (optOptions) {
+  constructor (options = {}) {
     super()
-    
-    const options = optOptions ? optOptions : {}
   
+    /**
+     *
+     * @type {Array}
+     */
     this.targetPointers = []
   
+    /**
+     *
+     * @type {null}
+     */
     this.lastCentroid = null
   
     /**
@@ -72,8 +78,6 @@ export default class DragPanCpt extends Component {
     
     return true
   }
-  
-  
   
   
   /**

@@ -24,12 +24,10 @@ import SelectEvent from '../components/SelectEvent'
  */
 export default class SelectCpt extends Component {
   
-  constructor (options) {
+  constructor (options = {}) {
     super()
     
-    const opt = options ? options : {}
-    
-    this._hitTolerance = opt.hitTolerance ? opt.hitTolerance : 6
+    this._hitTolerance = options.hitTolerance ? options.hitTolerance : 6
   
   
     /**
@@ -42,7 +40,7 @@ export default class SelectCpt extends Component {
     
     this._selectFeatures = []
   
-    this.selectMode = opt.selectMode ? opt.selectMode : BrowserEvent.SINGLE_CLICK
+    this.selectMode = options.selectMode ? options.selectMode : BrowserEvent.SINGLE_CLICK
   }
   
   _condition (event) {

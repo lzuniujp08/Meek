@@ -11,31 +11,69 @@ import {Config} from '../meek/Config'
 import {mouseWheel} from '../utils/MouseKey'
 import {clamp} from '../utils/Math'
 
-
+/**
+ *
+ */
 export default class MouseWheelZoom extends Component {
   
-  constructor (optionsObj){
+  constructor (options = {}){
     
     super()
-    
-    const options = optionsObj || {}
   
+    /**
+     *
+     * @type {number}
+     * @private
+     */
     this._delta = 0
   
+    /**
+     *
+     * @type {boolean}
+     * @private
+     */
     this._useAnchor = options.useAnchor !== undefined ?
       options.useAnchor : true
   
+    /**
+     *
+     */
     this._duration = options.duration !== undefined ?
       options.duration : 250
   
+    /**
+     *
+     * @type {null}
+     * @private
+     */
     this._lastAnchor = null
   
+    /**
+     *
+     * @type {undefined}
+     * @private
+     */
     this._startTime = undefined
-    
+  
+    /**
+     *
+     * @type {number}
+     * @private
+     */
     this._timeout = options.timeout !== undefined ? options.timeout : 80
-    
+  
+    /**
+     *
+     * @type {undefined}
+     * @private
+     */
     this._timeoutId = undefined
-    
+  
+    /**
+     *
+     * @type {undefined}
+     * @private
+     */
     this._mode = undefined
   }
   

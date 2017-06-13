@@ -5,22 +5,38 @@ import FeatureEvent from '../meek/FeatureEvent'
 
 export default class FeatureLayer extends BaseLayer {
 
-  constructor (options) {
-    const baseOptions = Object.assign({}, options)
-    super(baseOptions)
-
-    let optionsInner = options ? options : ({})
+  constructor (options = {}) {
+    super(options)
+  
+    /**
+     *
+     * @type {Array}
+     * @private
+     */
     this._features = []
   
-  
+    /**
+     *
+     * @type {null}
+     * @private
+     */
     this._style = null
+  
+    /**
+     *
+     * @type {null}
+     * @private
+     */
     this._styleFunction = null
-    
-    this.style = optionsInner.style
+  
+    /**
+     *
+     */
+    this.style = options.style
     
     // add features if passed by options
-    if (optionsInner.features) {
-      this.addFeatures(optionsInner.features)
+    if (options.features) {
+      this.addFeatures(options.features)
     }
   }
   
