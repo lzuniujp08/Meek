@@ -9,6 +9,86 @@
 <body>
 <div id="map" style="width:1887px;height:952px;background:#b5d0d0"></div>
 
+<div class="edit-form">
+  <input id="refresh-points" type="button" value="Refresh" />
+  <h2>Points</h2>
+  <div class="edit-form-elem">
+    <label>Text: </label>
+    <select id="points-text">
+      <option value="hide">Hide</option>
+      <option value="normal">Normal</option>
+      <option value="shorten" selected="selected">Shorten</option>
+      <option value="wrap">Wrap</option>
+    </select>
+    <br />
+    <label title="Max Resolution Denominator">resolution.:</label>
+    <select id="points-maxreso">
+      <option value="8">8</option>
+      <option value="4">4</option>
+      <option value="2">2</option>
+      <option value="1">1</option>
+    </select>
+    <br />
+    <label>Align: </label>
+    <select id="points-align">
+      <option value="center" selected="selected">Center</option>
+      <option value="end">End</option>
+      <option value="left">Left</option>
+      <option value="right">Right</option>
+      <option value="start">Start</option>
+    </select>
+    <br />
+    <label>Baseline: </label>
+    <select id="points-baseline">
+      <option value="alphabetic">Alphabetic</option>
+      <option value="bottom">Bottom</option>
+      <option value="hanging">Hanging</option>
+      <option value="ideographic">Ideographic</option>
+      <option value="middle" selected="selected">Middle</option>
+      <option value="top">Top</option>
+    </select>
+    <br />
+    <label>Rotation: </label>
+    <select id="points-rotation">
+      <option value="0">0°</option>
+      <option value="0.785398164">45°</option>
+      <option value="1.570796327">90°</option>
+    </select>
+    <br />
+    <label>Font: </label>
+    <select id="points-font">
+      <option value="Arial" selected="selected">Arial</option>
+      <option value="Courier New">Courier New</option>
+      <option value="Quattrocento Sans">Quattrocento</option>
+      <option value="Verdana">Verdana</option>
+    </select>
+    <br />
+    <label>Weight: </label>
+    <select id="points-weight">
+      <option value="bold">Bold</option>
+      <option value="normal" selected="selected">Normal</option>
+    </select>
+    <br />
+    <label>Size: </label>
+    <input type="text" value="12px" id="points-size" />
+    <br />
+    <label>Offset X:</label>
+    <input type="text" value="0" id="points-offset-x" />
+    <br />
+    <label>Offset Y:</label>
+    <input type="text" value="0" id="points-offset-y" />
+    <br />
+    <label>Color :</label>
+    <input type="text" value="#aa3300" id="points-color" />
+    <br />
+    <label title="Outline Color">O. Color:</label>
+    <input type="text" value="#ffffff" id="points-outline" />
+    <br />
+    <label title="Outline Width">O. Width :</label>
+    <input type="text" value="3" id="points-outline-width" />
+  </div>
+</div>
+
 <script src="../dist/meek.js"></script>
 <script src="text.js"></script>
 </body>
