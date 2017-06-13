@@ -42,7 +42,7 @@ export default class Geometry extends BaseObject {
    * @param geomtry
    * @returns {boolean}
    */
-  intersect (geomtry) {
+  intersect (geomtry) { // eslint-disable-line no-unused-vars
     return false
   }
   
@@ -53,31 +53,31 @@ export default class Geometry extends BaseObject {
    * @param x
    * @param y
    */
-  containsXY (x, y) {}
+  containsXY (x, y) {} // eslint-disable-line no-unused-vars
   
   /**
    * 定义move方法
    */
-  move (x = 0,y = 0) {}
+  move (x = 0,y = 0) {} // eslint-disable-line no-unused-vars
   
   /**
    * 定义对图形本身的缩放方法
    * @param scale 缩放比率
    * @param origin 缩放参考点
    */
-  scale(scale = 1,origin) {}
+  scale(scale = 1,origin) {} // eslint-disable-line no-unused-vars
   
   /**
    * 定义图形本身的旋转方法
    */
-  rotate(angle,anchor) {}
+  rotate(angle,anchor) {} // eslint-disable-line no-unused-vars
   
   /**
    * 创建一个简化后的图形副本
    * @param tolerance
    */
-  simplify(tolerance = 1) {}
-
+  simplify(tolerance = 1) {} // eslint-disable-line no-unused-vars
+ 
   /**
    * 将图形转换成json格式
    * @abstrct

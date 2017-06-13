@@ -14,8 +14,12 @@ export default class Renderer extends BaseObject {
   }
   
   get map () { return this._map }
-
-  renderFrame (frameState) {}
+  
+  /**
+   *
+   * @param frameState
+   */
+  renderFrame (frameState) {} // eslint-disable-line no-unused-vars
 
   /**
    *
