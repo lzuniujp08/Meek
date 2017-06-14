@@ -2,11 +2,19 @@
  * Created by zhangyong on 2017/6/12.
  */
 
-import BaseObject from '../core/BaseObject'
+import BaseStyle from './BaseStyle'
 import FillStyle from './FillStyle'
 
-export default class TextStyle extends BaseObject {
+/**
+ * The text style for geometrys
+ */
+export default class TextStyle extends BaseStyle {
   
+  /**
+   *
+   * @constructor
+   * @param optOptions
+   */
   constructor (optOptions) {
     super()
   
@@ -35,12 +43,6 @@ export default class TextStyle extends BaseObject {
      * @type {number|undefined}
      */
     this.scale = options.scale
-  
-    /**
-     * @private
-     * @type {string|undefined}
-     */
-    this.text = options.text
   
     /**
      * @private
@@ -92,9 +94,6 @@ export default class TextStyle extends BaseObject {
   
   get scale () { return this._scale }
   set scale (value) { this._scale = value }
-  
-  get text () { return this._text }
-  set text (value) { this._text = value }
   
   get textAlign () { return this._textAlign }
   set textAlign (value) { this._textAlign = value }

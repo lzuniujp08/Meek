@@ -9,8 +9,6 @@ import PointStyle from './PointStyle'
 
 export const Style = {}
 
-Style._default = null
-
 /**
  * 设置缺省图形style
  * Create a defaut style for feature layer
@@ -26,7 +24,7 @@ Style.defaultFunction = function () {
     
     // 面样式 polygon style
     Style._default[Geometry.POLYGON] = [
-      new FillStyle(white,new LineStyle(blue,1,1.25),0.5,10)
+      new FillStyle(white,new LineStyle(blue,1,1.25),0.5)
     ]
     // same as polygon style
     Style._default[Geometry.EXTENT] = Style._default[Geometry.POLYGON]
@@ -58,8 +56,7 @@ Style.createDefaultEditing = function () {
   styles[Geometry.POLYGON] = [
     new FillStyle(white,// 填充
     new LineStyle(blue,1,1)// 边框
-    ,0.5
-    ,1)
+    ,0.5)
   ]
   styles[Geometry.MULTI_POLYGON] = styles[Geometry.POLYGON]
   styles[Geometry.EXTENT] = styles[Geometry.POLYGON]
@@ -106,10 +103,10 @@ Style.createFunction = function(obj) {
   return styleFunction
 }
 
+
 export default {
   Style
 }
-
 
 
 

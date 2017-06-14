@@ -2,32 +2,20 @@
  * Created by zypc on 2016/11/15.
  */
 
-import BaseObject from '../core/BaseObject'
+import BaseStyle from './BaseStyle'
 
-export default class LineStyle extends BaseObject {
+export default class LineStyle extends BaseStyle {
 
   constructor (color = [255,255,255], alpha = 1, width = 1,
         style = LineStyle.SOLID,lineCap = LineStyle.LineCap.BUTT,
         lineJion = LineStyle.LineJion.MITER,miterLimit = 10) {
-    super()
+    super(color, style, alpha)
 
-    this.style = style
-    this.color = color
-    this.alpha = alpha
     this.width = width
     this.lineCap = lineCap
     this.lineJion = lineJion
     this.miterLimit = miterLimit
   }
-  
-  get style () { return this._style }
-  set style (value) { this._style = value }
-  
-  get color () { return this._color }
-  set color (value) { this._color = value }
-  
-  get alpha () { return this._alpha }
-  set alpha (value) { this._alpha = value }
   
   get width () { return this._width }
   set width (value) { this._width = value }
