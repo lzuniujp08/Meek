@@ -141,7 +141,12 @@ export function distance (coord1, coord2) {
   return Math.sqrt(squaredDistance(coord1[0], coord1[1], coord2[0], coord2[1]))
 }
 
-
+/**
+ *
+ * @param coordinate
+ * @param segment
+ * @returns {[*,*]}
+ */
 export function closestOnSegment (coordinate, segment) {
   const x0 = coordinate[0]
   const y0 = coordinate[1]
@@ -172,9 +177,79 @@ export function closestOnSegment (coordinate, segment) {
   return [x, y]
 }
 
+/**
+ *
+ * @param flatCoordinates
+ * @param offset
+ * @param ends
+ * @param stride
+ * @param x
+ * @param y
+ * @returns {boolean}
+ */
+export function linearRingsContainsXY (flatCoordinates, offset, ends, stride, x, y) {
+  if (ends.length === 0) {
+    return false
+  }
+  
+  if (!linearRingContainsXY(flatCoordinates, offset, ends[0], stride, x, y)) {
+    return false
+  }
+  
+  let i, ii
+  for (i = 1, ii = ends.length; i < ii; ++i) {
+    if (linearRingContainsXY(flatCoordinates, ends[i - 1], ends[i], stride, x, y)) {
+      return false
+    }
+  }
+  
+  return true
+}
+
+/**
+ *
+ * @param flatCoordinates
+ * @param offset
+ * @param end
+ * @param stride
+ * @param x
+ * @param y
+ * @returns {boolean}
+ */
+export function linearRingContainsXY (flatCoordinates, offset, end, stride, x, y) {
+  // http://geomalgorithms.com/a03-_inclusion.html
+  // Copyright 2000 softSurfer, 2012 Dan Sunday
+  // This code may be freely used and modified for any purpose
+  // providing that this copyright notice is included with it.
+  // SoftSurfer makes no warranty for this code, and cannot be held
+  // liable for any real or imagined damage resulting from its use.
+  // Users of this code must verify correctness for their application.
+  let wn = 0
+  let x1 = flatCoordinates[end - stride]
+  let y1 = flatCoordinates[end - stride + 1]
+  for (; offset < end; offset += stride) {
+    let x2 = flatCoordinates[offset]
+    let y2 = flatCoordinates[offset + 1]
+    
+    if (y1 <= y) {
+      if (y2 > y && ((x2 - x1) * (y - y1)) - ((x - x1) * (y2 - y1)) > 0) {
+        wn++
+      }
+    } else if (y2 <= y && ((x2 - x1) * (y - y1)) - ((x - x1) * (y2 - y1)) < 0) {
+      wn--
+    }
+    
+    x1 = x2
+    y1 = y2
+  }
+  
+  return wn !== 0
+}
 
 
 export default {
+  linearRingContainsXY,
+  linearRingsContainsXY,
   pointIntersectPoint,
   squaredDistance,
   closestOnSegment,
