@@ -14,6 +14,8 @@ export default class Geometry extends BaseObject {
     super()
     
     this._extent = null
+  
+    this.stride = 2
   }
 
   /**

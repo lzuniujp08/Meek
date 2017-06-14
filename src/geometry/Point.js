@@ -98,6 +98,14 @@ export default class Point extends Geometry {
   }
   
   /**
+   *
+   * @returns {(*|*)[]}
+   */
+  getFlatInteriorPoint () {
+    return this.getCoordinates()
+  }
+  
+  /**
    * Get the collection of geometry
    * TODO 将来都需要换成这种线性的存储方式，并逐步替换成这种模式
    * @returns {[*,*]}

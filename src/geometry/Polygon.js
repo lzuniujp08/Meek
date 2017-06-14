@@ -5,6 +5,9 @@
 import Geometry from './Geometry'
 import Extent from './Extent'
 
+import {linearRings} from './support/Interpolate'
+import {linearRingsAreOriented,orientLinearRings} from './support/Orient'
+
 export default class Polygon extends Geometry {
 
   constructor (rings = []) {
@@ -109,6 +112,49 @@ export default class Polygon extends Geometry {
   
     // 射线穿过多边形边界的次数为奇数时点在多边形内
     return flag
+  }
+  
+  /**
+   *
+   * @returns {*}
+   */
+  getFlatInteriorPoint () {
+    const flatCenter = [this.extent.centerX, this.extent.centerY]
+  
+    const ends = [this.getCoordinates().length * 2]
+    const flatInteriorPoint = linearRings(
+      this.getOrientedFlatCoordinates(), 0, ends, this.stride, flatCenter, 0)
+    
+    return  flatInteriorPoint
+  }
+  
+  /**
+   *
+   * @returns {*}
+   */
+  getOrientedFlatCoordinates () {
+    let orientedFlatCoordinates
+    
+    const flatCoordinates = []
+    const coordinates = this.getCoordinates()
+  
+    coordinates.forEach( point => {
+      flatCoordinates.push(point[0], point[1])
+    })
+  
+    const ends = [flatCoordinates.length]
+    
+    if (linearRingsAreOriented(flatCoordinates, 0, ends, this.stride)) {
+      orientedFlatCoordinates = flatCoordinates
+    } else {
+      orientedFlatCoordinates = flatCoordinates.slice()
+      orientedFlatCoordinates.length = orientLinearRings(orientedFlatCoordinates,
+        0, ends, this.stride)
+    }
+    
+    // this.orientedRevision_ = this.getRevision()
+      
+    return orientedFlatCoordinates
   }
   
   /**

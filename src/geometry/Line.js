@@ -6,6 +6,7 @@ import Geometry from './Geometry'
 import Extent from './Extent'
 
 import {squaredSegmentDistance} from './support/GeometryUtil'
+import {lineString} from './support/Interpolate'
 
 export default class Line extends Geometry {
 
@@ -87,6 +88,24 @@ export default class Line extends Geometry {
     }
   
     return find
+  }
+  
+  /**
+   *
+   * @returns {(*|*)[]}
+   */
+  getFlatInteriorPoint () {
+    const interiorPoint = null
+    const fraction = 0.5
+    const flatCoordinates = []
+    const coordinates = this.getCoordinates()
+    
+    coordinates.forEach( point => {
+      flatCoordinates.push(point[0], point[1])
+    })
+    
+    return lineString( flatCoordinates, 0, flatCoordinates.length, this.stride,
+      fraction, interiorPoint)
   }
   
   /**
