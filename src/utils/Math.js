@@ -9,6 +9,11 @@ export function clamp (value, min, max) {
 }
 
 
+export function lerp (a, b, x) {
+  return a + x * (b - a)
+}
+
 export default {
-  clamp
+  clamp,
+  lerp
 }
