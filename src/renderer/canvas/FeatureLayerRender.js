@@ -8,13 +8,28 @@ import LayerRenderer from '../../renderer/canvas/LayerRenderer'
 import PointRender from '../render/PointRender'
 import LineRender from '../render/LineRender'
 import PolygonRender from '../render/PolygonRender'
+import TextRender from '../render/TextRender'
 
 export default class FeatureLayerRenderer extends LayerRenderer {
   constructor (layer,context) {
-    super(layer,context)
-    
-    this._geometryRenderGroup = {}
+    super(layer, context)
+  
+    /**
+     *
+     * @type {Map}
+     * @private
+     */
+    this._geometryRenderGroup = new Map()
+  
+    /**
+     *
+     * @type {TextRender}
+     * @private
+     */
+    this._textRender = new TextRender(this.context)
+  
   }
+  
   
   /**
    * 1、对渲染对象需要做切割 （当前范围内）
@@ -50,20 +65,20 @@ export default class FeatureLayerRenderer extends LayerRenderer {
     return true
   }
   
+  /**
+   *  Get a renderer by geometry type
+   * @param geometry
+   * @returns {*}
+   * @private
+   */
   _getGeometryRender (geometry) {
     const type = geometry.geometryType
     
-    if(!this._geometryRenderGroup[type]){
-      this._geometryRenderGroup[type] = new FeatureLayerRenderer.GeometryRender[type](this.context)
+    if ( !this._geometryRenderGroup.has(type) ) {
+      this._geometryRenderGroup.set(type, new FeatureLayerRenderer.GeometryRender[type](this.context))
     }
     
-    // if (type === 'point'){
-    //   this._geometryRenderGroup[type] = new PointRender(this.context)
-    // } else if ( type === 'line'){
-    //   this._geometryRenderGroup[type] = new LineRender(this.context)
-    // }
-    
-    return this._geometryRenderGroup[type]
+    return this._geometryRenderGroup.get(type)
   }
   
   
@@ -73,8 +88,10 @@ export default class FeatureLayerRenderer extends LayerRenderer {
   composeFrame (frameStateOpt, context) {
     // console.log('featureLayer Render 开启渲染')
     const frameState = frameStateOpt
+    const viewState = frameState.viewState
     const layer = this.layer
     const features = layer.features
+    const resolution = viewState.resolution
   
     const transform = this.getTransform(frameState, 0)
   
@@ -84,13 +101,19 @@ export default class FeatureLayerRenderer extends LayerRenderer {
       if(!feature.style){
         let styleFunction = layer.styleFunction
         if(styleFunction){
-          feature.style = styleFunction(feature)
+          feature.style = styleFunction(feature, resolution)
         }
       }
       
-      // console.log('找到point geometry 的render')
       let geomertyRender = this._getGeometryRender(feature.geometry)
       geomertyRender.render(feature, transform)
+  
+      /**
+       * Render text
+       */
+      if (feature.style[0].textStyle ) {
+        this._textRender.render(feature, transform)
+      }
     })
   
     this.postCompose(context, frameState, transform)

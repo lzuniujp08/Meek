@@ -75,7 +75,7 @@ export default class CanvasRenderer extends Renderer {
   
     this._dispatchComposeEvent(RenderEventType.PRERENDER, frameState)
     
-    // @FIXME Shulde the order of layers rendering,such as feature layer earlier than any layers else.
+    // @FIXME Should be rendered in order
     layers.forEach(layer => {
       layerRender = this.getLayerRenderer(layer)
       if(layerRender.prepareFrame(frameState)){

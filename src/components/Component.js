@@ -4,7 +4,7 @@
 
 import BaseObject from '../core/BaseObject'
 import BrowserEvent from '../meek/BrowserEvent'
-import {Obj} from '../utils/Obj'
+import Obj from '../utils/Obj'
 
 export default class Component extends BaseObject {
   constructor () {

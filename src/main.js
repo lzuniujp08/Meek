@@ -5,7 +5,7 @@
 import {Config} from 'meek/Config'
 import Counter from 'utils/Counter'
 import Helpers from 'utils/Helpers'
-import {Obj} from 'utils/Obj'
+import Obj from 'utils/Obj'
 import {Math} from 'utils/Math'
 import {Coordinate} from 'utils/Coordinate'
 import {Canvas} from 'utils/Canvas'
@@ -29,9 +29,12 @@ import {ImageState} from 'lyr/image/ImageState'
 import {ImageEvent} from 'lyr/image/ImageEvent'
 import SingleImage from 'lyr/image/SingleImage'
 
+import BaseStyle from 'style/BaseStyle'
 import PointStyle from 'style/PointStyle'
 import LineStyle from 'style/LineStyle'
 import FillStyle from 'style/FillStyle'
+import TextStyle from 'style/TextStyle'
+
 import BaseLayer from 'lyr/BaseLayer'
 import FeatureLayer from 'lyr/FeatureLayer'
 import SingleImageLayer from 'lyr/SingleImageLayer'
@@ -78,9 +81,11 @@ export default {
   Line,
   Polygon,
   Style,
+  BaseStyle,
   PointStyle,
   LineStyle,
   FillStyle,
+  TextStyle,
   BaseLayer,
   FeatureLayer,
   SingleImageLayer,

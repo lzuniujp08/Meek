@@ -25,7 +25,7 @@ export default class PointRender extends GeometryRender {
     const geomerty = feature.geometry
   
     const coordinates = [geomerty.x, geomerty.y]
-    
+  
     const pixelCoordinates = Transform.transform2D(
       coordinates, 0, coordinates.length, 2,
       transform, this._pixelCoordinates)
