@@ -43,13 +43,13 @@ export default class Extent extends Geometry {
    * 计算X坐标的中心
    * @returns {number}
    */
-  get centerX () { return (this.xmax - this.xmin) / 2 }
+  get centerX () { return (this.xmax + this.xmin) / 2 }
 
   /**
    * 计算Y坐标的中心
    * @returns {number}
    */
-  get centerY () { return (this.ymax - this.ymin) / 2 }
+  get centerY () { return (this.ymax + this.ymin) / 2 }
 
   /**
    * 计算最小外接矩形的宽
@@ -92,6 +92,9 @@ export default class Extent extends Geometry {
     return ExtentUtil.containsPoint(this, [x, y])
   }
   
+  getFlatInteriorPoint () {
+    return [this.centerX, this.centerY]
+  }
   
   /**
    * 设置多边形的边，如果设置了边，则需要重新计算
