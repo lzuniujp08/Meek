@@ -9,21 +9,23 @@ window.onload = function () {
   
   var point = new Datatang.Point(1960,1210)
   
-  var path = [[400,1000],[500,1300],[1000,1500],[1800,800]]
+    
+  var path = [[1960,1210],[2000,1000],[1980,800],[1900,600],[1850,500],[1828, 310]]
   var line = new Datatang.Line()
   line.path = path
   
-  var rings = [[[500,400],[490,478],[350,350],[1500,400],[100,100],[500, 400]]]
+  var rings = [[[800,580],[490,600],[400,660],[300, 700],[270, 780],[255, 820],[230, 860],[280,1050],
+    [1000,1000],[1000,800],[800,580]]]
   var polygon = new Datatang.Polygon(rings)
   
   var extent = new Datatang.Extent(1500, 1500, 2000, 2000)
   
-  var features = [new Datatang.Feature(point,{
-    name: '北京市'
-  }),
-    new Datatang.Feature(line,{'name': '京沪高铁'}),
-    new Datatang.Feature(polygon, {'name': '我的地盘 我做主'}),
-    new Datatang.Feature(extent, {'name': '第51区域'})]
+  var features = [
+    new Datatang.Feature(point,{name: '北京站'})
+    ,new Datatang.Feature(line,{'name': '京广高铁'})
+    ,new Datatang.Feature(polygon, {'name': '三江源湿地'})
+    ,new Datatang.Feature(extent, {'name': '第51区域'})
+  ]
   
   
   dom = {
@@ -44,14 +46,38 @@ window.onload = function () {
   
   
   var styleFunction = function (feature, resolution) {
-    var defaultStyle = Datatang.Style.defaultFunction()
   
     var textStyle = getTextStyle(feature, resolution)
-    defaultStyle.map(function(geometryStyle){
-      return geometryStyle.text = textStyle
-    })
     
-    return defaultStyle[feature.geometry.geometryType]
+    var white = [255, 255, 255]
+    var blue = [0, 153, 255]
+    var width = 1.5
+  
+    var style = {}
+  
+    // 面样式 polygon style
+    style[Datatang.Geometry.POLYGON] = [
+      new Datatang.FillStyle(white,new Datatang.LineStyle(blue,1,1.25),0.5)
+    ]
+    
+    // same as polygon style
+    style[Datatang.Geometry.EXTENT] = style[Datatang.Geometry.POLYGON]
+  
+    // 线样式 line style
+    style[Datatang.Geometry.LINE] =
+      [new Datatang.LineStyle(blue,1,width,Datatang.LineStyle.LineCap.ROUND,
+        Datatang.LineStyle.LineJion.ROUND)// 内框
+    ]
+  
+    // 点样式 point style
+    style[Datatang.Geometry.POINT] =
+      [new Datatang.PointStyle(10,white,1,new Datatang.LineStyle(blue,1,width))]
+    
+    for (var item in style) {
+      style[item][0].textStyle = textStyle
+    }
+    
+    return style[feature.geometry.geometryType]
   }
   
   
@@ -124,8 +150,8 @@ function getTextStyle(feature, resolution) {
   var weight = dom.weight.value;
   var rotation = parseFloat(dom.rotation.value);
   var font = weight + ' ' + size + ' ' + dom.font.value;
-  var fillColor = dom.color.value;
-  var outlineColor = dom.outline.value;
+  var fillColor = [0, 0, 255] || dom.color.value;
+  var outlineColor = [255, 255, 255] || dom.outline.value;
   var outlineWidth = parseInt(dom.outlineWidth.value, 10);
   
   return new Datatang.TextStyle({
@@ -163,3 +189,8 @@ function stringDivider(str, width, spaceReplacer) {
   }
   return str;
 }
+
+String.prototype.trunc = String.prototype.trunc ||
+  function(n) {
+    return this.length > n ? this.substr(0, n - 1) + '...' : this.substr(0);
+  };
