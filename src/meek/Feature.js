@@ -3,6 +3,7 @@
  */
 
 import BaseObject from '../core/BaseObject'
+import Obj from '../utils/Obj'
 
 
 /**
@@ -14,11 +15,13 @@ import BaseObject from '../core/BaseObject'
  */
 export default class Feature extends BaseObject {
 
-  constructor (geometry, attributes, style) {
+  constructor (geometry, attributes = {}, style) {
     super()
 
     this.geometry = geometry
-    this.attributes = attributes
+    
+    this.initArribute(attributes)
+    
     this.style = style
 
     /**
@@ -29,16 +32,45 @@ export default class Feature extends BaseObject {
     this.display = true
     this._styleFunction = undefined
   }
-
+  
+  
+  initArribute (attributes) {
+    this._attributesMap = Obj.objectToMap(attributes)
+  }
+  
+  get (property) {
+    if ( this._attributesMap.has(property)) {
+      return this._attributesMap.get(property)
+    }
+    
+    return undefined
+  }
+  
+  set (property, value) {
+    return this._attributesMap.set(property, value)
+  }
+  
+  delete (property) {
+    return this._attributesMap.delete(property)
+  }
+  
+  forEachAttribute (callback) {
+    this._attributesMap.forEach(callback)
+  }
+  
+  has (property) {
+    return this._attributesMap.has(property)
+  }
+  
   get geometry () { return this._geometry }
   set geometry (value) {
     this._geometry = value
   }
 
-  get attributes () { return this._attributes }
-  set attributes (value) {
-    this._attributes = value
-  }
+  // get attributes () { return this._attributes }
+  // set attributes (value) {
+  //   this._attributes = value
+  // }
   
   get styleFunction () { return this._styleFunction }
   set styleFunction (value) {
@@ -62,12 +94,26 @@ export default class Feature extends BaseObject {
   }
   
   /**
+   * Clone the attribute map and return a new map
+   * @returns {Map}
+   */
+  cloneAttributesMap () {
+    const newMap = new Map()
+    const entries = this._attributesMap.entries()
+    for (let [key, value] of entries()) {
+      newMap.set(key, value)
+    }
+    
+    return newMap
+  }
+  
+  /**
    * Clone a feature
    * @returns {Feature}
    */
   clone () {
     return new Feature(this.geometry.clone(),
-      this.attributes, [this.style[0].clone()])
+      this.cloneAttributesMap(), [this.style[0].clone()])
   }
 }
 
