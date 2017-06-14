@@ -4,7 +4,7 @@
 
 import BaseImage from '../../core/BaseImage'
 import {ImageState} from './ImageState'
-import {Obj} from '../../utils/Obj'
+import Obj from '../../utils/Obj'
 import {ExtentUtil} from '../../geometry/support/ExtentUtil'
 import {EventType} from '../../meek/EventType'
 
