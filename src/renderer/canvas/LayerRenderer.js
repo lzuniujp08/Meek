@@ -36,7 +36,7 @@ export default class LayerRenderer extends BaseObject {
     const dx1 = pixelRatio * frameState.size[0] / 2
     const dy1 = pixelRatio * frameState.size[1] / 2
     const sx = pixelRatio / viewState.resolution
-    const sy = -sx
+    const sy = sx
     const angle = -viewState.rotation
     const dx2 = -viewState.center[0] + offsetX
     const dy2 = -viewState.center[1]

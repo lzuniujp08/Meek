@@ -131,7 +131,7 @@ export default class DragPanCpt extends Component {
       
       if (this.lastCentroid) {
         const deltaX = this.lastCentroid[0] - centroid[0]
-        const deltaY = centroid[1] - this.lastCentroid[1]
+        const deltaY = this.lastCentroid[1] - centroid[1]
         const map = browserEvent.map
         const view = map.view
         const viewState = view.getViewState()

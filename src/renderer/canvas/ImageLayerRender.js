@@ -82,7 +82,7 @@ export default class ImageLayerRenderer extends LayerRenderer {
       
       const transform = Transform.compose(this.imageTransform,
         pixelRatio * size[0] / 2, pixelRatio * size[1] / 2,
-        scale, scale,
+        scale, -scale,
         0,
         imagePixelRatio * (imageExtent[0] - viewCenter[0]) / imageResolution,
         imagePixelRatio * (viewCenter[1] - imageExtent[3]) / imageResolution)

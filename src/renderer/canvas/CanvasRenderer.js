@@ -28,6 +28,11 @@ export default class CanvasRenderer extends Renderer {
     this._addToContainer(container)
   }
   
+  /**
+   * Add the canvas dom to the container
+   * @param container
+   * @private
+   */
   _addToContainer (container) {
     /**
      * 创建CANVAS元素，并将其添加到container中
@@ -40,7 +45,11 @@ export default class CanvasRenderer extends Renderer {
     this._canvas.className = 'dt-unselectable'
     container.insertBefore(this._canvas, container.childNodes[0] || null)
   }
-
+  
+  /**
+   * Render frame
+   * @param frameState
+   */
   renderFrame (frameState) {
     if (this.map === null) {
       return
@@ -71,7 +80,7 @@ export default class CanvasRenderer extends Renderer {
     let layerRender = undefined
     
     // 更新转化运算矩阵
-    this.updateTranceform(frameState)
+    this.updateTransform(frameState)
   
     this._dispatchComposeEvent(RenderEventType.PRERENDER, frameState)
     
@@ -86,6 +95,11 @@ export default class CanvasRenderer extends Renderer {
     this._dispatchComposeEvent(RenderEventType.POSTRENDER, frameState)
   }
   
+  /**
+   * Get the layer renderer by the params layer object
+   * @param layer
+   * @returns {*}
+   */
   getLayerRenderer (layer) {
     const layerKey = layer.id.toString()
     // 应用层缓存
@@ -98,13 +112,14 @@ export default class CanvasRenderer extends Renderer {
     }
   }
   
+  /**
+   * Create the layer renderer
+   * @param layer
+   * @returns {*}
+   */
   createLayerRenderer(layer){
     if (layer instanceof SingleImageLayer) {
       return new ImageLayerRender(layer,this.context)
-    // } else if (layer instanceof ol.layer.Tile) {
-      //   return new ol.renderer.canvas.TileLayer(layer)
-      // } else if (layer instanceof ol.layer.VectorTile) {
-      //   return new ol.renderer.canvas.VectorTileLayer(layer)
     } else if (layer instanceof FeatureLayer) {
       return new FeatureLayerRender(layer,this.context)
     } else {
@@ -112,16 +127,24 @@ export default class CanvasRenderer extends Renderer {
     }
   }
   
-  updateTranceform (frameState){
+  /**
+   * Update the transform
+   * @param frameState
+   */
+  updateTransform (frameState){
     const viewState = frameState.viewState
     const coordinateToPixelTransform = frameState.toPixelTransform
     const pixelToCoordinateTransform = frameState.toCoordinateTransform
+    const size = frameState.size
+    const resolution = viewState.resolution
+    const center = viewState.center
+    const rotation = viewState.rotation
   
     Transform.compose(coordinateToPixelTransform,
-          frameState.size[0] / 2, frameState.size[1] / 2,
-          1 / viewState.resolution, -1 / viewState.resolution,
-          -viewState.rotation,
-          -viewState.center[0], -viewState.center[1])
+          size[0] / 2, size[1] / 2,
+          1 / resolution,  1 / resolution,
+          - rotation,
+          - center[0], - center[1])
   
     Transform.invert(Transform.setFromArray(pixelToCoordinateTransform, coordinateToPixelTransform))
   }
