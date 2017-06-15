@@ -13,6 +13,9 @@ import {listen} from '../core/EventManager'
 import {Transform} from '../data/matrix/Transform'
 import {EventType} from '../meek/EventType'
 import {ExtentUtil} from '../geometry/support/ExtentUtil'
+import {componentsDefaults} from '../components/ComponentDefaults'
+
+
 
 export default class Map extends BaseObject {
 
@@ -46,13 +49,17 @@ export default class Map extends BaseObject {
      * @private
      */
     this._components = []
-
-    this._viewport = null
-    
+  
+    // Create the viewport for map container
     this._createViewport()
   
-    this._createRenderer()
+    // Get the options inner
+    const optionsInner = Map.parseOptionsInner(options)
   
+    // Create the renderer
+    this._renderer = new optionsInner.rendererClass(this.viewport, this)
+    
+    // Create the browser events handler
     this._createBrowserEventHandler()
   
     this._animationDelay = function () {
@@ -60,16 +67,17 @@ export default class Map extends BaseObject {
       this._renderFrame(Date.now())
     }.bind(this)
     
-    this.layers = options.layers || []
+    // Set up the properties for map
+    this.layers = optionsInner.values['layers']
+    this.target = optionsInner.values['target']
+    this.view = optionsInner.values['view']
     
-    this.target = options.target
-
-    this.view = options.view || new View()
+    //
     listen(this.view, EventType.CHANGE, this._handleViewChange, this)
     
     // add mouse wheel events listener
-    listen(this._viewport, BrowserEvent.MOUSE_WHEEL, this._handleMouseWheelEvent, this)
-    listen(this._viewport, BrowserEvent.WHEEL, this._handleMouseWheelEvent, this)
+    listen(this.viewport, BrowserEvent.MOUSE_WHEEL, this._handleMouseWheelEvent, this)
+    listen(this.viewport, BrowserEvent.WHEEL, this._handleMouseWheelEvent, this)
   }
 
   /**
@@ -87,13 +95,15 @@ export default class Map extends BaseObject {
 
     this._viewport = viewport
   }
+  
+  get viewport () { return this._viewport }
 
   /**
    * 地图渲染器对象;默认渲染方式为canvas方式
    * @private
    */
   _createRenderer () {
-    this._renderer = new CanvasRenderer(this._viewport, this)
+    this._renderer = new CanvasRenderer(this.viewport, this)
   }
 
   /**
@@ -102,7 +112,7 @@ export default class Map extends BaseObject {
    * @private
    */
   _createBrowserEventHandler () {
-    this._browserEventHandler = new BrowserEventHandler(this, this._viewport)
+    this._browserEventHandler = new BrowserEventHandler(this, this.viewport)
 
     /**
      * 监听浏览器上的鼠标事件 mousemove,mouseup,mousedown
@@ -218,7 +228,7 @@ export default class Map extends BaseObject {
   set target (value) {
     this._target = value
     const targetElement = document.getElementById(this._target)
-    targetElement.appendChild(this._viewport)
+    targetElement.appendChild(this.viewport)
     
     this.updateSize()
     this.render()
@@ -317,7 +327,7 @@ export default class Map extends BaseObject {
    */
   getEventPixel (event) {
     // 获取viewport元素在浏览器视图窗口总的位置(left,top,bottom,right)
-    const viewportPosition = this._viewport.getBoundingClientRect()
+    const viewportPosition = this.viewport.getBoundingClientRect()
     const eventPosition = event.changedTouches ? event.changedTouches[0] : event
     return [
       eventPosition.clientX - viewportPosition.left,
@@ -352,6 +362,36 @@ export default class Map extends BaseObject {
       return null
     } else {
       return Transform.apply(frameState.toPixelTransform, coordinate.slice(0, 2))
+    }
+  }
+  
+  
+  /**
+   * Parse the options passed inner
+   * @param options
+   * @returns {{rendererClass: CanvasRenderer, components: *, values: Map}}
+   */
+  static parseOptionsInner (options = {}) {
+    
+    const rendererClass = CanvasRenderer
+    
+    const values = {}
+    
+    values['view'] = options.view !== undefined ? options.view : new View()
+    values['target'] = options.target
+    values['layers'] = options.layers !== undefined ? options.layers : []
+    
+    let components
+    if (options.components) {
+      components = options.components
+    } else {
+      components = componentsDefaults()
+    }
+    
+    return {
+      rendererClass,
+      components,
+      values
     }
   }
 }
