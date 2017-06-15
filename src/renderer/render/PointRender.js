@@ -14,7 +14,11 @@ export default class PointRender extends GeometryRender {
     this._pixelCoordinates = []
   }
   
-  
+  /**
+   * Render a point
+   * @param feature
+   * @param transform
+   */
   render (feature, transform) {
     if(!feature){
       return
@@ -38,8 +42,8 @@ export default class PointRender extends GeometryRender {
       let styleObj = styleArray[i]
       
       let renderOptions = {
-        centerX: x,
-        centerY: y,
+        centerX: (x + 0.5) | 0,
+        centerY: (y + 0.5) | 0,
         radius: styleObj.size / 2 || styleObj.borderStyle.width / 2,
         fillStyle: colorToString(styleObj.color,styleObj.alpha),
         borderStyle: styleObj.borderStyle

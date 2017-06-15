@@ -29,6 +29,9 @@ export default class LineRender extends GeometryRender {
         points, 0, points.length, 2,
         transform)
       
+      coordinate[0] = (coordinate[0] + 0.5 ) | 0
+      coordinate[1] = (coordinate[1] + 0.5 ) | 0
+      
       coordinates.push(coordinate)
     })
     

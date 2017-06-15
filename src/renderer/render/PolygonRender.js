@@ -33,7 +33,10 @@ export default class PolygonRender extends GeometryRender {
       let coordinate = transform2D(
         points, 0, points.length, 2,
         transform)
-    
+  
+      coordinate[0] = (coordinate[0] + 0.5 ) | 0
+      coordinate[1] = (coordinate[1] + 0.5 ) | 0
+      
       coordinates.push(coordinate)
     })
     
