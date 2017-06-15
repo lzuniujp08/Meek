@@ -72,6 +72,10 @@ export default class Map extends BaseObject {
     this.target = optionsInner.values['target']
     this.view = optionsInner.values['view']
     
+    // add default components to maps
+    optionsInner.components.forEach(component =>
+      this.addComponents(component))
+    
     //
     listen(this.view, EventType.CHANGE, this._handleViewChange, this)
     
@@ -234,6 +238,10 @@ export default class Map extends BaseObject {
     this.render()
   }
   
+  /**
+   *
+   * @param cpt
+   */
   addComponents (cpt) {
     this.components.push(cpt)
     cpt.map = this

@@ -38,6 +38,8 @@ export default class Component extends BaseObject {
       // this.handlingDownUpSequence = this._handleUpEvent_(browserEvent)
       this._handleUpEvent(browserEvent)
     }
+    
+    return true
   }
   
   /**
