@@ -221,10 +221,9 @@ export default class Map extends BaseObject {
   get layers () { return this._layers }
   set layers (value) {
     if (Array.isArray(value)) {
-      for(let layer of value){
-        this._layers.push(layer)
+      value.forEach( layer => {
         layer.map = this
-      }
+      })
     }
   }
 
