@@ -126,6 +126,11 @@ export default class MouseWheelZoom extends Component {
     return false
   }
   
+  /**
+   * Zoom to the map
+   * @param map
+   * @private
+   */
   _handleWheelZoom (map) {
     const view = map.view
     // if (view.getAnimating()) {

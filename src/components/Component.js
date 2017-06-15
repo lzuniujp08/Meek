@@ -39,7 +39,13 @@ export default class Component extends BaseObject {
       this._handleUpEvent(browserEvent)
     }
   }
-
+  
+  /**
+   *
+   * @param browserEvent
+   * @returns {boolean}
+   * @private
+   */
   _isPointerDraggingEvent (browserEvent) {
     const type = browserEvent.type
     return (
@@ -47,7 +53,12 @@ export default class Component extends BaseObject {
       type === BrowserEvent.MOUSE_DRAG ||
       type === BrowserEvent.MOUSE_UP)
   }
-
+  
+  /**
+   *
+   * @param browserEvent
+   * @private
+   */
   _updateTrackedPointers (browserEvent) {
     if (this._isPointerDraggingEvent(browserEvent)) {
       const event = browserEvent
@@ -121,8 +132,6 @@ export default class Component extends BaseObject {
       }
     }
   }
-  
-  
 
   get map () { return this._map }
   set map (value) { this._map = value }

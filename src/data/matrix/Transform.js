@@ -40,6 +40,16 @@ export const Transform = {
     return transform.set(transform, 1, 0, 0, 1, 0, 0)
   },
   
+  /**
+   *
+   * @param flatCoordinates
+   * @param offset
+   * @param end
+   * @param stride
+   * @param transform
+   * @param opt_dest
+   * @returns {Array}
+   */
   transform2D: function (flatCoordinates, offset, end, stride, transform, opt_dest) {
     const dest = opt_dest ? opt_dest : []
     let i = 0

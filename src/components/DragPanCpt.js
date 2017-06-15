@@ -114,6 +114,12 @@ export default class DragPanCpt extends Component {
     }
   }
   
+  /**
+   * Handle the drag event
+   * Center of the view will be changed
+   * @param browserEvent
+   * @private
+   */
   _handleDragEvent (browserEvent) {
     const targetPointers = this.targetPointers
     const centroid = this.centroid(targetPointers)
@@ -144,6 +150,11 @@ export default class DragPanCpt extends Component {
     this._lastPointersCount = targetPointers.length
   }
   
+  /**
+   * Calculate a center point
+   * @param pointerEvents
+   * @returns {[*,*]}
+   */
   centroid (pointerEvents) {
     const length = pointerEvents.length
     let clientX = 0
