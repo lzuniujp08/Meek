@@ -159,7 +159,7 @@ export default class DrawCpt extends Component {
      */
     this._freehandCondition = options.freehandCondition ?
       options.freehandCondition : function () { return true }
-  
+      
     // Here will add activie event listener for switch drawing
     //
   
@@ -249,6 +249,7 @@ export default class DrawCpt extends Component {
    * @private
    */
   _handleMouseMove (event) {
+  
     if (this._finishCoordinate) {
       this._modifyDrawing(event)
     } else {
@@ -542,7 +543,8 @@ export default class DrawCpt extends Component {
    * @private
    */
   _updateSketchPoint (event) {
-    const coordinates = event.coordinate
+    let coordinates = event.coordinate
+  
     if (this._sketchPoint === null) {
       const geom = new Point(coordinates[0], coordinates[1])
       this._sketchPoint = new Feature(geom)
@@ -625,6 +627,7 @@ export default class DrawCpt extends Component {
   }
   
   get drawLayer () { return this._drawLayer }
+  
 }
 
 /**

@@ -15,7 +15,11 @@ export default class View extends BaseObject {
     this._applyOptions(_innerOptions)
   }
   
-  
+  /**
+   * Parse options and apply to view
+   * @param options
+   * @private
+   */
   _applyOptions (options) {
     
     const resolutionConstraint = this._createResolutionConstraint(options)
@@ -83,6 +87,8 @@ export default class View extends BaseObject {
 
     this.rotation = 0
     
+    this.dataExtent = resolutionConstraint.extent
+    
     this._options = options
   }
   
@@ -134,6 +140,7 @@ export default class View extends BaseObject {
     let resolutionConstraint
     let maxResolution
     let minResolution
+    let extent
   
     const defaultMaxZoom = Config.DEFAULT_MAX_ZOOM
     const defaultZoomFactor = Config.DEFAULT_ZOOM_FACTOR
@@ -157,7 +164,7 @@ export default class View extends BaseObject {
     } else {
       // calculate the default min and max resolution
       const projection = options.projection
-      const extent = projection.extent
+      extent = projection.extent
       const size = Math.max(ExtentUtil.getWidth(extent), ExtentUtil.getHeight(extent))
     
       const defaultMaxResolution = size / defaultTileSize / Math.pow(
@@ -202,7 +209,8 @@ export default class View extends BaseObject {
       maxResolution: maxResolution,
       minResolution: minResolution,
       minZoom: minZoom,
-      zoomFactor: zoomFactor
+      zoomFactor: zoomFactor,
+      extent: extent
     }
   }
   
@@ -321,6 +329,11 @@ export default class View extends BaseObject {
   get rotation () { return this._rotation }
   set rotation (value){
     this._rotation = value
+  }
+  
+  get dataExtent () { return this._dataExtent }
+  set dataExtent (value) {
+    this._dataExtent = value
   }
   
   get minResolution () { return this._minResolution }

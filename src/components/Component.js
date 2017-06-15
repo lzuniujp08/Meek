@@ -26,6 +26,8 @@ export default class Component extends BaseObject {
     if(this.active === false){
       return true
     }
+  
+    browserEvent.coordinate = this.coordinateBeyond(browserEvent.coordinate)
     
     let type = browserEvent.type
     if (type === BrowserEvent.MOUSE_MOVE) {
@@ -133,6 +135,55 @@ export default class Component extends BaseObject {
         view.resolution = resolution
       }
     }
+  }
+  
+  /**
+   *
+   * @returns {*|null}
+   */
+  getViewDataExtent () {
+    if (!this._dataExtent) {
+      this._dataExtent = this.map.view.dataExtent
+    }
+    
+    return this._dataExtent
+  }
+  
+  /**
+   *
+   * @param coordinate
+   * @returns {Array}
+   */
+  coordinateBeyond (coordinate) {
+    let newCoordinate = new Array(2)
+    
+    const x = coordinate[0]
+    const y = coordinate[1]
+  
+    newCoordinate[0] = x
+    newCoordinate[1] = y
+  
+    if (x <= 0) {
+      newCoordinate[0] = 0
+    }
+    
+    if (y <= 0) {
+      newCoordinate[1] = 0
+    }
+    
+    const extent = this.getViewDataExtent()
+    
+    if (extent) {
+      if (x >= extent[2]) {
+        newCoordinate[0] = extent[2]
+      }
+      
+      if (y >= extent[3]) {
+        newCoordinate[1] = extent[3]
+      }
+    }
+    
+    return newCoordinate
   }
 
   get map () { return this._map }

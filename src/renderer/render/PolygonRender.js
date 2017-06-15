@@ -25,8 +25,13 @@ export default class PolygonRender extends GeometryRender {
     const coordinates = []
     let geometryCoordinages = geometry.getCoordinates()
     
+    // TODO need to remove this data structure for polygon
     if (geometry instanceof Extent) {
       geometryCoordinages = geometryCoordinages[0]
+    }
+  
+    if (!geometryCoordinages) {
+      return
     }
     
     geometryCoordinages.forEach(function(points){
