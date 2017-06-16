@@ -7,6 +7,7 @@ import Extent from './Extent'
 import {ExtentUtil} from './support/ExtentUtil'
 import {squaredDistance} from './support/GeometryUtil'
 
+
 export default class Point extends Geometry {
 
   /**
