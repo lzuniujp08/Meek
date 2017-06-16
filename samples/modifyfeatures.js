@@ -1,8 +1,6 @@
 /**
  * Created by zhangyong on 2017/5/25.
  */
-
-
 window.onload = function () {
   
   var point = new Datatang.Point(900,500)
