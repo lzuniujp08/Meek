@@ -2,9 +2,36 @@
  * Created by zhangyong on 2017/6/14.
  */
 
+/**
+ *
+ * @param arr
+ * @param compareFnc
+ */
+export function stableSort (arr, compareFnc) {
+  const length = arr.length
+  let tmp = Array(arr.length)
+  let i
+  
+  for (i = 0; i < length; i++) {
+    tmp[i] = {index: i, value: arr[i]}
+  }
+  
+  tmp.sort(function(a, b) {
+    return compareFnc(a.value, b.value) || a.index - b.index
+  })
+  
+  for (i = 0; i < arr.length; i++) {
+    arr[i] = tmp[i].value
+  }
+}
 
-
-
+/**
+ *
+ * @param haystack
+ * @param needle
+ * @param opt_comparator
+ * @returns {number}
+ */
 export function binarySearch (haystack, needle, opt_comparator) {
   let mid, cmp
   const comparator = opt_comparator || numberSafeCompareFunction
@@ -31,7 +58,12 @@ export function binarySearch (haystack, needle, opt_comparator) {
   return found ? low : ~low
 }
 
-
+/**
+ *
+ * @param a
+ * @param b
+ * @returns {number}
+ */
 export function numberSafeCompareFunction (a, b) {
   return a > b ? 1 : a < b ? -1 : 0
 }
