@@ -16,6 +16,7 @@ import Extent from '../geometry/Extent'
 import {ExtentUtil} from '../geometry/support/ExtentUtil'
 import {listen, unlistenByKey} from '../core/EventManager'
 import {EventType} from '../meek/EventType'
+import BrowserEvent from '../meek/BrowserEvent'
 
 import DrawEvent from './DrawEvent'
 
@@ -27,6 +28,12 @@ export default class DrawCpt extends Component {
   constructor (options = {}) {
     super()
   
+    this.applyHandleEventOption({
+      handleDownEvent: this._handleDownEvent,
+      handleMouseEvent: this.handleMouseEvent,
+      handleUpEvent: this._handleUpEvent
+    })
+    
     /**
      *
      * @type {null}
@@ -189,6 +196,7 @@ export default class DrawCpt extends Component {
     this._finishCoordinate = null
     this._sketchCoords = null
   
+    this._minPoints = this._drawMode === DrawCpt.DrawMode.POLYGON ? 3 : 2
   }
   
   /**
@@ -243,13 +251,38 @@ export default class DrawCpt extends Component {
   }
   
   /**
+   *
+   * @param event
+   * @returns {*|boolean}
+   */
+  handleMouseEvent (event) {
+    this.freehand_ = false
+    let pass = !this.freehand_
+  
+    event.coordinate = this.coordinateBeyond(event.coordinate)
+    
+    if (this.freehand_ &&
+      event.type === BrowserEvent.MOUSE_DRAG && this._sketchFeature !== null) {
+      this._addToDrawing(event)
+      pass = false
+    } else
+      
+    if (event.type === BrowserEvent.MOUSE_MOVE) {
+      pass = this._handleMove(event)
+    } else if (event.type === BrowserEvent.DBLCLICK) {
+      pass = false
+    }
+    
+    return super.handleMouseEvent(event) && pass
+  }
+  
+  /**
    * Handle move events
    * @param {BrowserEvent} event A move event.
    * @return {boolean} Pass the event to other compoments.
    * @private
    */
-  _handleMouseMove (event) {
-  
+  _handleMove (event) {
     if (this._finishCoordinate) {
       this._modifyDrawing(event)
     } else {
@@ -513,7 +546,8 @@ export default class DrawCpt extends Component {
         potentiallyDone = this._sketchCoords.length > this._minPoints
       } else if (this.drawMode === DrawCpt.DrawMode.POLYGON) {
         potentiallyDone = this._sketchCoords[0].length > this._minPoints
-        potentiallyFinishCoordinates = [this._sketchCoords[0][0], this._sketchCoords[0][this._sketchCoords[0].length - 2]]
+        potentiallyFinishCoordinates = [this._sketchCoords[0][0],
+          this._sketchCoords[0][this._sketchCoords[0].length - 2]]
       }
       
       if (potentiallyDone) {
@@ -624,6 +658,14 @@ export default class DrawCpt extends Component {
     return function (feature) {
       return styles[feature.geometry.geometryType]
     }
+  }
+  
+  /**
+   *
+   * @returns {boolean}
+   */
+  shouldStopEvent () {
+    return false
   }
   
   get drawLayer () { return this._drawLayer }
