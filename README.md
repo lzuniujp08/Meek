@@ -1,6 +1,6 @@
 # Meek
 
-Meek is a javascript library for drawing on CANVAS.
+Meek is a javascript library for drawing on CANVAS
 
 ## Supported Browsers
 
