@@ -29,6 +29,13 @@ window.onload = function () {
   
   var map = new Datatang.Map({
     layers: [
+      new Datatang.SingleImageLayer({
+        url: 'source/online_communities.png',
+        imageExtent: mapextent,
+        projection: {
+          extent: mapextent
+        }
+      }),
       featureLayer
     ],
     target: 'map',
