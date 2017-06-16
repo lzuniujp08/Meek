@@ -28,7 +28,13 @@ import {closestOnSegment, squaredDistanceToSegment,
 export default class ModifyCpt extends Component {
   
   constructor(options = {}) {
-    super()
+    super(options)
+    
+    this.applyHandleEventOption({
+      handleDownEvent: this._handleDownEvent,
+      handleDragEvent: this._handleDragEvent,
+      handleUpEvent: this._handleUpEvent
+    })
     
     this._pixelTolerance = options.pixelTolerance ?
         options.pixelTolerance : 10
@@ -113,31 +119,31 @@ export default class ModifyCpt extends Component {
    * @param browserEvent
    * @returns {boolean}
    */
-  handleMouseEvent (browserEvent) {
-    if (!(browserEvent instanceof BrowserEvent)) {
-      return true
-    }
-    
-    // 未激活工具
-    if (this.active === false){
-      return true
-    }
-  
-    let stopEvent = true
-    
-    let type = browserEvent.type
-    if (type === BrowserEvent.MOUSE_MOVE) {
-      this._handlePointerMove(browserEvent)
-    } else if (type === BrowserEvent.MOUSE_DOWN) {
-      this._handleDownEvent(browserEvent)
-    } else if (type === BrowserEvent.MOUSE_UP) {
-      this._handleUpEvent(browserEvent)
-    } else if (type === BrowserEvent.MOUSE_DRAG) {
-      this._handleDragEvent(browserEvent)
-    }
-    
-    return stopEvent
-  }
+  // handleMouseEvent (browserEvent) {
+  //   if (!(browserEvent instanceof BrowserEvent)) {
+  //     return true
+  //   }
+  //
+  //   // 未激活工具
+  //   if (this.active === false){
+  //     return true
+  //   }
+  //
+  //   let stopEvent = false
+  //
+  //   let type = browserEvent.type
+  //   if (type === BrowserEvent.MOUSE_MOVE) {
+  //     this._handlePointerMove(browserEvent)
+  //   } else if (type === BrowserEvent.MOUSE_DOWN) {
+  //     this._handleDownEvent(browserEvent)
+  //   } else if (type === BrowserEvent.MOUSE_UP) {
+  //     this._handleUpEvent(browserEvent)
+  //   } else if (type === BrowserEvent.MOUSE_DRAG) {
+  //     this._handleDragEvent(browserEvent)
+  //   }
+  //
+  //   return !stopEvent
+  // }
   
   _compareIndexes (a, b) {
     return a.index - b.index

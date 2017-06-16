@@ -13,6 +13,12 @@ export default class DragPanCpt extends Component {
   constructor (options = {}) {
     super()
   
+  
+    this.applyHandleEventOption({
+      handleDownEvent: this._handleDownEvent,
+      handleDragEvent: this._handleDragEvent
+    })
+    
     /**
      *
      * @type {Array}
@@ -60,24 +66,24 @@ export default class DragPanCpt extends Component {
    * Handles the browser event and then may call into the subclass functions.
    * @param browserEvent
    */
-  handleMouseEvent (browserEvent) {
-    if (!(browserEvent instanceof BrowserEvent)) {
-      return true
-    }
-  
-    this._updateTrackedPointers(browserEvent)
-    
-    let type = browserEvent.type
-    if (type === BrowserEvent.MOUSE_DOWN) {
-      this._handleDownEvent(browserEvent)
-    } else if (type === BrowserEvent.MOUSE_UP){
-      // this._handleUpEvent(browserEvent)
-    } else if (type === BrowserEvent.MOUSE_DRAG) {
-      this._handleDragEvent(browserEvent)
-    }
-    
-    return true
-  }
+  // handleMouseEvent (browserEvent) {
+  //   if (!(browserEvent instanceof BrowserEvent)) {
+  //     return true
+  //   }
+  //
+  //   this._updateTrackedPointers(browserEvent)
+  //
+  //   let type = browserEvent.type
+  //   if (type === BrowserEvent.MOUSE_DOWN) {
+  //     this._handleDownEvent(browserEvent)
+  //   } else if (type === BrowserEvent.MOUSE_UP){
+  //     // this._handleUpEvent(browserEvent)
+  //   } else if (type === BrowserEvent.MOUSE_DRAG) {
+  //     this._handleDragEvent(browserEvent)
+  //   }
+  //
+  //   return true
+  // }
   
   
   /**

@@ -7,15 +7,80 @@ import BrowserEvent from '../meek/BrowserEvent'
 import Obj from '../utils/Obj'
 
 export default class Component extends BaseObject {
-  constructor () {
+  constructor (options = {}) {
     super()
-
+  
+    /**
+     *
+     * @type {boolean}
+     */
     this.active = true
+  
+    /**
+     *
+     * @type {null}
+     * @private
+     */
     this._mapRenderKey = null
   
+    /**
+     *
+     * @type {null}
+     */
     this.targetPointers = null
+  
+    /**
+     *
+     * @type {{}}
+     * @private
+     */
     this._trackedPointers = {}
+  
+    /**
+     *
+     * @type {boolean}
+     */
+    this.handlingDownUpSequence = false
+    
   }
+  
+  /**
+   *
+   * @param options
+   */
+  applyHandleEventOption (options) {
+    /**
+     *
+     */
+    this.handleMouseEvent = options.handleMouseEvent ?
+      options.handleMouseEvent : this.handleMouseEvent
+  
+    /**
+     * @private
+     */
+    this._handleDownEvent = options.handleDownEvent ?
+      options.handleDownEvent : function () { return false }
+  
+    /**
+     * @private
+     */
+    this._handleDragEvent = options.handleDragEvent ?
+      options.handleDragEvent : function () {}
+  
+    /**
+     * @private
+     */
+    this._handleMoveEvent = options.handleMoveEvent ?
+      options.handleMoveEvent : function () {}
+  
+    /**
+     * @private
+     */
+    this._handleUpEvent = options.handleUpEvent ?
+      options.handleUpEvent : function () { return false }
+    
+  }
+  
   
   /**
    * Handles the browser event and then may call into the subclass functions.
@@ -27,21 +92,26 @@ export default class Component extends BaseObject {
       return true
     }
   
-    browserEvent.coordinate = this.coordinateBeyond(browserEvent.coordinate)
-    
-    let type = browserEvent.type
-    if (type === BrowserEvent.MOUSE_MOVE) {
-      this._handleMouseMove(browserEvent)
-    } else if (type === BrowserEvent.MOUSE_DOWN) {
-      let handled = this._handleDownEvent(browserEvent)
-      // this.handlingDownUpSequence = handled;
-      // stopEvent = this.shouldStopEvent(handled);
-    } else if (type === BrowserEvent.MOUSE_UP){
-      // this.handlingDownUpSequence = this._handleUpEvent_(browserEvent)
-      this._handleUpEvent(browserEvent)
+    let stopEvent = false
+    this._updateTrackedPointers(browserEvent)
+    if (this.handlingDownUpSequence) {
+      if (browserEvent.type === BrowserEvent.MOUSE_DRAG) {
+        this._handleDragEvent(browserEvent)
+      } else if (browserEvent.type === BrowserEvent.MOUSE_UP) {
+        const handledUp = this._handleUpEvent(browserEvent)
+        this.handlingDownUpSequence = handledUp && this.targetPointers.length > 0
+      }
+    } else {
+      if (browserEvent.type === BrowserEvent.MOUSE_DOWN) {
+        const handled = this._handleDownEvent(browserEvent)
+        this.handlingDownUpSequence = handled
+        stopEvent = this.shouldStopEvent(handled)
+      } else if (browserEvent.type === BrowserEvent.MOUSE_MOVE) {
+        this._handleMoveEvent(browserEvent)
+      }
     }
     
-    return true
+    return !stopEvent
   }
   
   /**
@@ -155,6 +225,10 @@ export default class Component extends BaseObject {
    * @returns {Array}
    */
   coordinateBeyond (coordinate) {
+    if (coordinate === undefined) {
+      return coordinate
+    }
+    
     let newCoordinate = new Array(2)
     
     const x = coordinate[0]
@@ -185,7 +259,17 @@ export default class Component extends BaseObject {
     
     return newCoordinate
   }
-
+  
+  /**
+   *
+   * @param handled
+   * @returns {*}
+   * @private
+   */
+  shouldStopEvent (handled) {
+    return handled
+  }
+    
   get map () { return this._map }
   set map (value) { this._map = value }
 

@@ -16,7 +16,6 @@ import PointStyle from '../style/PointStyle'
 
 import SelectEvent from '../components/SelectEvent'
 
-
 /**
  * The select component can be used for features selecting.
  * By default,selected features are styled differently, so this
