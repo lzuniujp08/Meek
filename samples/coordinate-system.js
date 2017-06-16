@@ -19,14 +19,15 @@ window.onload = function () {
   var mapextent = [0, 0, 2783, 2125];
   var map = new Datatang.Map({
     layers: [
+      featureLayer,
       new Datatang.SingleImageLayer({
         url: 'source/China_map.jpg',
         imageExtent: mapextent,
         projection: {
           extent: mapextent
         }
-      }),
-      featureLayer
+      })
+      
     ],
     target: 'map',
     view: new Datatang.View({

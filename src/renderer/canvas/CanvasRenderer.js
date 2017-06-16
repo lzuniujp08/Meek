@@ -7,6 +7,7 @@ import ImageLayerRender from '../canvas/ImageLayerRender'
 import {createCanvasContext2D} from '../../utils/DomUtil'
 import {Transform} from '../../data/matrix/Transform'
 import {RenderEventType} from '../RenderEventType'
+import {stableSort} from '../../utils/Array'
 
 
 /**
@@ -77,16 +78,17 @@ export default class CanvasRenderer extends Renderer {
     }
 
     const layers = this.map.layers
-    let layerRender = undefined
+  
+    stableSort(layers, this.sortByZIndex)
     
     // 更新转化运算矩阵
     this.updateTransform(frameState)
   
     this._dispatchComposeEvent(RenderEventType.PRERENDER, frameState)
     
-    // @FIXME Should be rendered in order
+    // @FIXME Layers should be rendered in order
     layers.forEach(layer => {
-      layerRender = this.getLayerRenderer(layer)
+      let layerRender = this.getLayerRenderer(layer)
       if(layerRender.prepareFrame(frameState)){
         layerRender.composeFrame(frameState,context)
       }
@@ -147,6 +149,16 @@ export default class CanvasRenderer extends Renderer {
           - center[0], - center[1])
   
     Transform.invert(Transform.setFromArray(pixelToCoordinateTransform, coordinateToPixelTransform))
+  }
+  
+  /**
+   *
+   * @param state1
+   * @param state2
+   * @returns {number}
+   */
+  sortByZIndex (state1, state2) {
+    return state1.zIndex - state2.zIndex
   }
   
   get canvas(){ return this._canvas }

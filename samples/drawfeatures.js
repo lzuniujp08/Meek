@@ -7,12 +7,12 @@ window.onload = function () {
   // 将会获取缺省样式
   var flayer = new Datatang.FeatureLayer()
   
-  var extent = [0, 0, 1024, 968];
+  var extent = [0, 0, 2783, 2125];
   
   var map = new Datatang.Map({
     layers: [
       new Datatang.SingleImageLayer({
-        url: 'source/online_communities.png',
+        url: 'source/China_map.jpg',
         imageExtent: extent,
         projection: {
           extent: extent
