@@ -99,9 +99,11 @@ export default class Feature extends BaseObject {
    */
   cloneAttributesMap () {
     const newMap = new Map()
-    const entries = this._attributesMap.entries()
-    for (let [key, value] of entries()) {
-      newMap.set(key, value)
+    if (this._attributesMap.size !== 0) {
+      const entries = this._attributesMap.entries()
+      for (let [key, value] of entries()) {
+        newMap.set(key, value)
+      }
     }
     
     return newMap
