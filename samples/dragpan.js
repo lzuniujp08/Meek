@@ -38,10 +38,4 @@ window.onload = function () {
     })
   })
 
-  var dragPan = new Datatang.DragPanCpt({
-    kinetic: new Datatang.Kinetic(-0.005, 0.05, 100)
-  })
-  
-  map.addComponents(dragPan)
-
 }
