@@ -6,6 +6,7 @@ import BaseObject from '../core/BaseObject'
 import BrowserEvent from '../meek/BrowserEvent'
 import Obj from '../utils/Obj'
 
+
 export default class Component extends BaseObject {
   constructor (options = {}) {
     super()
@@ -87,11 +88,6 @@ export default class Component extends BaseObject {
    * @param browserEvent
    */
   handleMouseEvent (browserEvent) {
-    
-    if(this.active === false){
-      return true
-    }
-  
     let stopEvent = false
     this._updateTrackedPointers(browserEvent)
     if (this.handlingDownUpSequence) {

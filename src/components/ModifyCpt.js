@@ -21,6 +21,7 @@ import {ExtentUtil} from '../geometry/support/ExtentUtil'
 import {closestOnSegment, squaredDistanceToSegment,
         squaredDistance, distance} from '../geometry/support/GeometryUtil'
 
+import {noModifierKeys, singleClick} from '../utils/MouseKey'
 
 /**
  *
@@ -38,6 +39,12 @@ export default class ModifyCpt extends Component {
     
     this._pixelTolerance = options.pixelTolerance ?
         options.pixelTolerance : 10
+  
+    /**
+     * @private
+     */
+    this._deleteCondition = options.deleteCondition ?
+      options.deleteCondition : this._defaultDeleteCondition
     
     /**
      * Determine if should snap to vertexs of gemetry
@@ -98,6 +105,14 @@ export default class ModifyCpt extends Component {
     this._modified = false
   
     this._changingFeature = true
+  
+    /**
+     * Tracks if the next `singleclick` event should be ignored to prevent
+     * accidental deletion right after vertex creation.
+     * @type {boolean}
+     * @private
+     */
+    this._ignoreNextSingleClick = false
   }
   
   /**
@@ -119,31 +134,55 @@ export default class ModifyCpt extends Component {
    * @param browserEvent
    * @returns {boolean}
    */
-  // handleMouseEvent (browserEvent) {
-  //   if (!(browserEvent instanceof BrowserEvent)) {
-  //     return true
-  //   }
-  //
-  //   // 未激活工具
-  //   if (this.active === false){
-  //     return true
-  //   }
-  //
-  //   let stopEvent = false
-  //
-  //   let type = browserEvent.type
-  //   if (type === BrowserEvent.MOUSE_MOVE) {
-  //     this._handlePointerMove(browserEvent)
-  //   } else if (type === BrowserEvent.MOUSE_DOWN) {
-  //     this._handleDownEvent(browserEvent)
-  //   } else if (type === BrowserEvent.MOUSE_UP) {
-  //     this._handleUpEvent(browserEvent)
-  //   } else if (type === BrowserEvent.MOUSE_DRAG) {
-  //     this._handleDragEvent(browserEvent)
-  //   }
-  //
-  //   return !stopEvent
-  // }
+  handleMouseEvent (browserEvent) {
+    if (!(browserEvent instanceof BrowserEvent)) {
+      return true
+    }
+  
+    browserEvent.coordinate = this.coordinateBeyond(browserEvent.coordinate)
+    
+    this.lastPointerEvent_ = browserEvent
+  
+    let handled
+    if ( browserEvent.type == BrowserEvent.MOUSE_MOVE &&
+      !this.handlingDownUpSequence) {
+      this._handlePointerMove(browserEvent)
+    }
+    if (this._vertexFeature && this._deleteCondition(browserEvent)) {
+      if (browserEvent.type !== BrowserEvent.SINGLE_CLICK ||
+        !this._ignoreNextSingleClick) {
+        handled = this.removePoint()
+      } else {
+        handled = true
+      }
+    }
+  
+    if (browserEvent.type == BrowserEvent.SINGLE_CLICK) {
+      this._ignoreNextSingleClick = false
+    }
+  
+    return super.handleMouseEvent(browserEvent) && !handled
+  }
+  
+  /**
+   * Removes the vertex currently being pointed.
+   * @return {boolean} True when a vertex was removed.
+   * @api
+   */
+  removePoint () {
+    if (this._lastPointerEvent && this._lastPointerEvent.type != BrowserEvent.MOUSE_DRAG) {
+      let evt = this.lastPointerEvent_
+      this.willModifyFeatures_(evt)
+      this._removeVertex()
+      
+      this.dispatchEvent(new ModifyEvent(
+        ModifyEvent.EventType.MODIFY_END, this.features, evt))
+      this._modified = false
+      return true
+    }
+    
+    return false
+  }
   
   _compareIndexes (a, b) {
     return a.index - b.index
@@ -342,7 +381,7 @@ export default class ModifyCpt extends Component {
    * @private
    */
   _handleDragEvent (evt) {
-    // this.ignoreNextSingleClick_ = false
+    this._ignoreNextSingleClick = false
     
     const dragSegments = this._dragSegments
     const len = dragSegments.length
@@ -548,7 +587,7 @@ export default class ModifyCpt extends Component {
     // rTree.insert(ol.extent.boundingExtent(newSegmentData2.segment), newSegmentData2)
     
     // this._dragSegments.push([newSegmentData2, 0])
-    // this.ignoreNextSingleClick_ = true
+    this._ignoreNextSingleClick = true
   }
   
   /**
@@ -713,6 +752,17 @@ export default class ModifyCpt extends Component {
     return function () {
       return style[Geometry.POINT]
     }
+  }
+  
+  /**
+   *
+   * @param mapBrowserEvent
+   * @returns {*}
+   * @private
+   */
+  _defaultDeleteCondition (mapBrowserEvent) {
+    return noModifierKeys(mapBrowserEvent) &&
+           singleClick(mapBrowserEvent)
   }
   
   /**
