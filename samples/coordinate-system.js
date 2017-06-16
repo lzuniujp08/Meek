@@ -2,7 +2,6 @@
  * Created by zhangyong on 2017/6/15.
  */
 
-
 window.onload = function () {
   
   var point = new Datatang.Point(100, 100)
