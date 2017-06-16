@@ -38,6 +38,12 @@ export default class FeatureLayer extends BaseLayer {
     if (options.features) {
       this.addFeatures(options.features)
     }
+  
+    /**
+     *
+     * @type {number}
+     */
+    this.zIndex = 2
   }
   
   /**

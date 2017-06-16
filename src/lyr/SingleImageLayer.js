@@ -43,7 +43,12 @@ export default class SingleImageLayer extends BaseLayer {
     this._imageSize = options.imageSize ? options.imageSize : null
   
     listen(this.singleImage, EventType.CHANGE, this.handleImageChange, this)
-    
+  
+    /**
+     *
+     * @type {number}
+     */
+    this.zIndex = 0
   }
   
   get singleImage () { return this._singleImage }

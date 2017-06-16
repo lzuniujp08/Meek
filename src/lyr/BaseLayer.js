@@ -20,7 +20,7 @@ export default class BaseLayer extends BaseObject {
     this.dataExtent = null
     this.maxResolution = 0
     this.minResolution = 0
-    this._zIndex = 1
+    this.zIndex = baseOptions.zIndex || 0
 
     this._mapRenderKey = null
     
@@ -78,6 +78,13 @@ export default class BaseLayer extends BaseObject {
   get datasouce () { return this._datasource }
   set datasource (value) {
     this._datasource = value
+  }
+  
+  get zIndex () { return this._zIndex }
+  set zIndex (value) {
+    if (this._zIndex !== value) {
+      this._zIndex = value
+    }
   }
   
   loadFeature (extent) {
