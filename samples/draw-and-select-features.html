@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Draw And Select features</title>
+</head>
+<body>
+<div id = "map" style = "width: 1280px; heigth:800px;background: #7b98bc"></div>
+<from class = "form-inline">
+  <lable1>选择绘图类型 &nbsp;</lable1>
+  <select id="type">
+    <option value = "Point">点</option>
+    <option value = "LineString">线</option>
+    <option value = "Polygon">多边形</option>
+    <option value = "Extent">矩形</option>
+    <option value = "None">None</option>
+  </select>
+</from>
+<script src = "../dist/meek.js"></script>
+<script src = "draw-and-select-features.js"></script>
+
+</body>
+</html>
