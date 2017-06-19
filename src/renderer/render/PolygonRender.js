@@ -12,6 +12,12 @@ export default class PolygonRender extends GeometryRender {
     super(context)
   }
   
+  /**
+   * Render a polygon
+   * @param feature
+   * @param transform
+   * @returns {boolean}
+   */
   render (feature, transform) {
     if (!feature) {
       return
@@ -25,11 +31,6 @@ export default class PolygonRender extends GeometryRender {
     const coordinates = []
     let geometryCoordinages = geometry.getCoordinates()
     
-    // TODO need to remove this data structure for polygon
-    // if (geometry instanceof Extent) {
-    //   geometryCoordinages = geometryCoordinages
-    // }
-  
     if (!geometryCoordinages) {
       return false
     }

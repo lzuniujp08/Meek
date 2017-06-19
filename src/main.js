@@ -42,6 +42,7 @@ import Renderer from 'renderer/Renderer'
 import CanvasRenderer from 'renderer/canvas/CanvasRenderer'
 import Component from 'components/Component'
 import DrawCpt from 'components/DrawCpt'
+import DrawEvent from 'components/DrawEvent'
 import SelectCpt from 'components/SelectCpt'
 import ModifyCpt from 'components/ModifyCpt'
 import DragPanCpt from 'components/DragPanCpt'
@@ -93,6 +94,7 @@ export default {
   CanvasRenderer,
   Component,
   DrawCpt,
+  DrawEvent,
   BrowserEvent,
   BrowserEventHandler,
   EventType,
