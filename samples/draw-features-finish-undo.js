@@ -34,15 +34,21 @@ window.onload = function () {
   
   // 示例：回车键结束绘制
   var finishCondition = function (event) {
-    // return event.keyCode === 13
-    return event.keyCode === 32
+    return event.keyCode === 13
+    // return event.keyCode === 32
+  }
+  
+  // 示例：ESC键撤销上一步绘制
+  var undoCondition = function(event) {
+    return event.keyCode === 27
   }
   
   // 绘图工具
   var drawTool = new Datatang.DrawCpt({
     type: 'point',
     drawLayer: flayer,
-    finishCondition: finishCondition
+    finishCondition: finishCondition,
+    undoCondition: undoCondition
   })
   
   map.addComponents(drawTool)

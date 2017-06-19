@@ -191,6 +191,13 @@ export default class DrawCpt extends Component {
     
     // If finish drawing
     if (this._finishCondition(event)) {
+      if (this.drawMode === DrawCpt.DrawMode.POLYGON) {
+        const pcoordinates = this._sketchFeature.geometry.getCoordinates()
+        if (pcoordinates.length < 5) {
+          return
+        }
+      }
+      
       this._finishDrawing()
     }
     
@@ -644,15 +651,35 @@ export default class DrawCpt extends Component {
   }
   
   /**
-   *
+   * Undo the drawing
    * @private
    */
   _undoDrawing () {
     const drawMode = this.drawMode
-    if (drawMode === DrawCpt.DrawMode.LINE ||
-        drawMode === DrawCpt.DrawMode.POLYGON ) {
-      
-      
+    if (drawMode === DrawCpt.DrawMode.LINE ) {
+      if (this._sketchFeature) {
+        const coordinates = this._sketchFeature.geometry.getCoordinates()
+        if (coordinates.length > 2) {
+          
+          coordinates.splice(coordinates.length - 2, 1)
+  
+          this.changed()
+        }
+      }
+    } else if (drawMode === DrawCpt.DrawMode.POLYGON) {
+      if (this._sketchFeature) {
+        
+        const pcoordinates = this._sketchFeature.geometry.getCoordinates()
+        
+        if (pcoordinates.length > 3 ) {
+          pcoordinates.splice(pcoordinates.length - 3, 1)
+  
+          const lineCoordinate = this._sketchLine.geometry.getCoordinates()
+          lineCoordinate.splice(lineCoordinate.length - 2, 1)
+  
+          this.changed()
+        }
+      }
     }
   }
   
