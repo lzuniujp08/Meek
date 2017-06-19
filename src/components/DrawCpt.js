@@ -193,8 +193,9 @@ export default class DrawCpt extends Component {
   get drawMode () { return this._drawMode }
   set drawMode (value){
     this._drawMode = value
-    this._finishCoordinate = null
-    this._sketchCoords = null
+    
+    this._sketchLineCoords = null
+    this._abortDrawing()
   
     this._minPoints = this._drawMode === DrawCpt.DrawMode.POLYGON ? 3 : 2
   }
@@ -427,9 +428,9 @@ export default class DrawCpt extends Component {
         this._sketchLine = new Feature(new Line(null))
       }
       
-      const rings = geometry.rings
+      const rings = geometry.getCoordinates()
       sketchLineGeom = this._sketchLine.geometry
-      sketchLineGeom.path = rings[0]
+      sketchLineGeom.path = rings
     } else if (this._sketchLineCoords) {
       sketchLineGeom =  (this._sketchLine.geometry)
       sketchLineGeom.path = this._sketchLineCoords
