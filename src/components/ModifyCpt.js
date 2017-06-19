@@ -632,13 +632,14 @@ export default class ModifyCpt extends Component {
           geometryType === Geometry.EXTENT ||
           geometryType === Geometry.LINE) {
     
-          let coordinates = null
-          if (geometryType === Geometry.EXTENT) {
-            coordinates = geometry.getCoordinates()[0]
-          } else {
-            coordinates = geometry.getCoordinates()
-          }
-    
+          // let coordinates = null
+          // if (geometryType === Geometry.EXTENT) {
+          //   coordinates = geometry.getCoordinates()
+          // } else {
+          // }
+  
+          let coordinates = geometry.getCoordinates()
+          
           for (let j = 0, jj = coordinates.length - 1; j < jj; j++) {
             let points = coordinates[j]
             let nextPoints = coordinates[j + 1]

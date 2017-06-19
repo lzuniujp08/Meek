@@ -63,11 +63,4 @@ window.onload = function () {
     drawTool.drawMode = typeSelect.value
   }
   
-  // drawTool.active = true;
-  // modifyTool.active = true;
-}
-
-function onModifyClick(){
-  drawTool.active = false;
-  modifyTool.active = true;
 }

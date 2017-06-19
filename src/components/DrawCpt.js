@@ -233,11 +233,11 @@ export default class DrawCpt extends Component {
       
       if (geometry) {
         if (mode === DrawCpt.DrawMode.POLYGON) {
-          geometry.rings = [coordinates[0].concat([coordinates[0][0]])]
+          geometry.setCoordinates(coordinates[0].concat([coordinates[0][0]]))
         } else if(mode === DrawCpt.DrawMode.LINE) {
-          geometry.path = coordinates
+          geometry.setCoordinates(coordinates)
         } else if(mode === DrawCpt.DrawMode.EXTENT) {
-          geometry.rings = [ExtentUtil.boundingExtent(coordinates)]
+          geometry.setCoordinates(ExtentUtil.boundingExtent(coordinates))
         }
       } else {
         let Constructor = this._geometryFactory()

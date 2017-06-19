@@ -10,7 +10,7 @@ window.onload = function () {
   var line = new Datatang.Line()
   line.path = path
   
-  var rings = [[[500,400],[490,478],[350,350],[500,400]]]
+  var rings = [[500,400],[490,478],[350,350],[500,400]]
   var polygon = new Datatang.Polygon(rings)
   
   var extent = new Datatang.Extent(1100, 300, 1400, 600)

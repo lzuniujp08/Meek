@@ -3,7 +3,6 @@
  */
 
 import Component from './Component'
-
 import BrowserEvent from '../meek/BrowserEvent'
 import FeaureLayer from '../lyr/FeatureLayer'
 import {listen, unlistenByKey} from '../core/EventManager'

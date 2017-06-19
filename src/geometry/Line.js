@@ -35,7 +35,8 @@ export default class Line extends Geometry {
       let xmax = Number.NEGATIVE_INFINITY
       let ymax = Number.NEGATIVE_INFINITY
 
-      for (let p of me.path) {
+      const coors = me.getCoordinates()
+      for (let p of coors) {
         xmin = Math.min(xmin, p[0])
         ymin = Math.min(ymin, p[1])
         xmax = Math.max(xmax, p[0])
@@ -117,12 +118,22 @@ export default class Line extends Geometry {
     return this.path
   }
   
+  /**
+   * Set coordinate for line
+   * @param coords
+   */
   setCoordinates (coords) {
     this.path = coords
+    this._extent = null
   }
   
+  /**
+   * Get index in line coordinates by gived point
+   * @param coord
+   * @returns {*|number}
+   */
   getCoordinateIndex (coord) {
-    return this.path.findIndex(function(points){
+    return this.getCoordinates().findIndex(function(points){
       return points[0] === coord[0] && points[1] === coord[1]
     })
   }

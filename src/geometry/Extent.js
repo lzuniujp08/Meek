@@ -103,7 +103,7 @@ export default class Extent extends Geometry {
   get rings () {
     if (this._rings.length === 0) {
       if (this.xmin !== 0 && this.ymin !== 0 && this.xmax !== 0 && this.ymax !== 0) {
-        this._rings = [ExtentUtil.minMaxToRing(this.xmin, this.ymin, this.xmax, this.ymax)]
+        this._rings = ExtentUtil.minMaxToRing(this.xmin, this.ymin, this.xmax, this.ymax)
       }
     }
     
@@ -129,15 +129,36 @@ export default class Extent extends Geometry {
    * @returns {[*,*]}
    */
   getCoordinates () {
-    return this.rings
+    if (this._rings.length === 0) {
+      if (this.xmin !== 0 && this.ymin !== 0 && this.xmax !== 0 && this.ymax !== 0) {
+        this._rings = ExtentUtil.minMaxToRing(this.xmin, this.ymin, this.xmax, this.ymax)
+      }
+    }
+  
+    return this._rings
   }
   
+  /**
+   *
+   * @param coordinates
+   */
   setCoordinates (coordinates) {
     this.rings = coordinates
+  
+    let extentArr = ExtentUtil.boundingSimpleExtent(coordinates)
+    this.xmin = extentArr[0]
+    this.ymin = extentArr[1]
+    this.xmax = extentArr[2]
+    this.ymax = extentArr[3]
   }
   
+  /**
+   * Get index in this coordinates by given coordinate
+   * @param coord
+   * @returns {*|number}
+   */
   getCoordinateIndex (coord) {
-    return this.rings[0].findIndex(function(points){
+    return this.getCoordinates().findIndex(function(points){
       return points[0] === coord[0] && points[1] === coord[1]
     })
   }

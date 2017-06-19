@@ -227,8 +227,14 @@ export default class Component extends BaseObject {
     
     let newCoordinate = new Array(2)
     
-    const x = coordinate[0]
-    const y = coordinate[1]
+    let x,y
+    
+    try{
+      x = coordinate[0]
+      y = coordinate[1]
+    } catch (e) {
+      console.log(coordinate)
+    }
   
     newCoordinate[0] = x
     newCoordinate[1] = y

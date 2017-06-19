@@ -25,19 +25,17 @@ export default class Polygon extends Geometry {
    */
   get extent () {
     if (this._extent === null) {
-      const rings = this._rings
+      const rings = this.getCoordinates()
       let xmin = Number.POSITIVE_INFINITY
       let ymin = Number.POSITIVE_INFINITY
       let xmax = Number.NEGATIVE_INFINITY
       let ymax = Number.NEGATIVE_INFINITY
 
       for (let ring of rings) {
-        for (let point of ring) {
-          xmin = Math.min(xmin, point[0])
-          ymin = Math.min(ymin, point[1])
-          xmax = Math.max(xmax, point[0])
-          ymax = Math.max(ymax, point[1])
-        }
+        xmin = Math.min(xmin, ring[0])
+        ymin = Math.min(ymin, ring[1])
+        xmax = Math.max(xmax, ring[0])
+        ymax = Math.max(ymax, ring[1])
       }
 
       this._extent = new Extent(xmin, ymin, xmax, ymax)
@@ -79,7 +77,7 @@ export default class Polygon extends Geometry {
     const py = y
     let flag = false
   
-    const ring = this.rings[0]
+    const ring = this.getCoordinates()
     
     for (let i = 0, l = ring.length, j = l - 1; i < l; j = i, i++) {
       const sx = ring[i][0]
@@ -163,20 +161,34 @@ export default class Polygon extends Geometry {
    * @returns {[*,*]}
    */
   getCoordinates () {
-    return this.rings[0]
+    return this.rings
   }
   
+  /**
+   *
+   * @param coords
+   */
   setCoordinates (coords) {
-    this.rings = [coords]
+    this.rings = coords
+    this._extent = null
   }
   
+  /**
+   *
+   * @param coord
+   * @returns {*|number}
+   */
   getCoordinateIndex (coord) {
-    return this.rings[0].findIndex(function(points){
+    return this.getCoordinates().findIndex(function(points){
       return points[0] === coord[0] && points[1] === coord[1]
     })
   }
   
+  /**
+   *
+   * @returns {Polygon}
+   */
   clone () {
-    return new Polygon(this.rings)
+    return new Polygon(this.getCoordinates())
   }
 }

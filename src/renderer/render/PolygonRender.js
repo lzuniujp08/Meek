@@ -26,12 +26,16 @@ export default class PolygonRender extends GeometryRender {
     let geometryCoordinages = geometry.getCoordinates()
     
     // TODO need to remove this data structure for polygon
-    if (geometry instanceof Extent) {
-      geometryCoordinages = geometryCoordinages[0]
-    }
+    // if (geometry instanceof Extent) {
+    //   geometryCoordinages = geometryCoordinages
+    // }
   
     if (!geometryCoordinages) {
-      return
+      return false
+    }
+    
+    if (geometryCoordinages.length === 0) {
+      return false
     }
     
     geometryCoordinages.forEach(function(points){
@@ -50,28 +54,33 @@ export default class PolygonRender extends GeometryRender {
       let styleObj = styleArray[i]
     
       let renderOptions = {
-        coordinates: [coordinates],
+        coordinates: coordinates,
         fillStyle: colorToString(styleObj.color,styleObj.alpha),
         borderStyle: styleObj.borderStyle
       }
     
       this.drawPolygon(ctx, renderOptions)
     }
+    
+    return true
   }
   
+  /**
+   * Draw a polygon
+   * @param ctx
+   * @param renderOpt
+   */
   drawPolygon (ctx, renderOpt) {
     ctx.save()
   
     ctx.beginPath()
   
     const coordinates = renderOpt.coordinates
+    ctx.moveTo(coordinates[0][0],coordinates[0][1])
+    
     for(let k = 0, kk = coordinates.length ; k < kk ; k ++){
       let cd = coordinates[k]
-  
-      ctx.moveTo(cd[0][0],cd[0][1])
-      for(let i = 1,ii = cd.length ; i < ii - 1 ; i++){
-        ctx.lineTo(cd[i][0],cd[i][1])
-      }
+      ctx.lineTo(cd[0],cd[1])
     }
   
     if (renderOpt.fillStyle) {
