@@ -88,7 +88,21 @@ export default class DrawCpt extends Component {
      * @type
      */
     this._finishCondition = options.finishCondition ?
-        options.finishCondition : function() {return true}
+        options.finishCondition : function () { return true }
+        
+    /**
+     *
+     * @type {Function}
+     * @private
+     */
+    this._undoCondition = options.undoCondition ?
+        options.undoCondition : function () { return true }
+        
+    // add keyboard events
+    if (options.undoCondition || options.finishCondition) {
+      listen(document, 'keyup',
+        this._handleKeyboardEvent, this)
+    }
   
     /**
      * 初始化草稿图层，用于临时显示绘制的图形
@@ -170,6 +184,20 @@ export default class DrawCpt extends Component {
     // Here will add activie event listener for switch drawing
     //
   
+  }
+  
+  
+  _handleKeyboardEvent (event) {
+    
+    // If finish drawing
+    if (this._finishCondition(event)) {
+      this._finishDrawing()
+    }
+    
+    // If undo drawing
+    if (this._undoCondition(event)) {
+      this._undoDrawing()
+    }
   }
   
   /**
@@ -613,6 +641,19 @@ export default class DrawCpt extends Component {
     // 出发map的render
     this._sketchLayer.clear()
     this._sketchLayer.addFeatures(features)
+  }
+  
+  /**
+   *
+   * @private
+   */
+  _undoDrawing () {
+    const drawMode = this.drawMode
+    if (drawMode === DrawCpt.DrawMode.LINE ||
+        drawMode === DrawCpt.DrawMode.POLYGON ) {
+      
+      
+    }
   }
   
   /**
