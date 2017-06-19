@@ -120,8 +120,8 @@ export default class ModifyCpt extends Component {
    * @returns {null|*}
    */
   get features () { return this._features }
-  set features (features = []) {
-    this._features = features
+  set features (value = []) {
+    this._features = value
     this._vertexSegments = null
     this._snapSegments = null
     this._vertexFeature = null
@@ -431,7 +431,7 @@ export default class ModifyCpt extends Component {
         coordinates[segmentData.index] = vertex
         break
       case Geometry.EXTENT:
-        coordinates = [ExtentUtil.updateExtent(geometry, vertex, dragSegment)]
+        coordinates = ExtentUtil.updateExtent(geometry, vertex, dragSegment)
         break
       case Geometry.MULTI_POLYGON:
         coordinates = geometry.getCoordinates()
@@ -632,12 +632,6 @@ export default class ModifyCpt extends Component {
           geometryType === Geometry.EXTENT ||
           geometryType === Geometry.LINE) {
     
-          // let coordinates = null
-          // if (geometryType === Geometry.EXTENT) {
-          //   coordinates = geometry.getCoordinates()
-          // } else {
-          // }
-  
           let coordinates = geometry.getCoordinates()
           
           for (let j = 0, jj = coordinates.length - 1; j < jj; j++) {

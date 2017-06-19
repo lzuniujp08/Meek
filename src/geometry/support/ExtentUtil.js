@@ -267,7 +267,7 @@ ExtentUtil.getWidth = function(extent) {
 ExtentUtil.updateExtent = function (geometry, newCoordinates, dragSegments) {
   const dragSegment = dragSegments[0]
   const index = dragSegment.index
-  const extentCoordinates = geometry.getCoordinates()[0]
+  const extentCoordinates = geometry.getCoordinates()
   const segment1 = extentCoordinates[index]
   const segment2 = extentCoordinates[index + 1]
   

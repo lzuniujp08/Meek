@@ -116,7 +116,7 @@ export default class Extent extends Geometry {
    */
   set rings (value) {
     this._rings = value
-    let extentArr = ExtentUtil.boundingSimpleExtent(value[0])
+    let extentArr = ExtentUtil.boundingSimpleExtent(value)
     this.xmin = extentArr[0]
     this.ymin = extentArr[1]
     this.xmax = extentArr[2]
