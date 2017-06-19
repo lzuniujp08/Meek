@@ -383,7 +383,7 @@ export default class DrawCpt extends Component {
     
     // 派发绘制开始事件
     // Trigger the draw-strat event
-    this.dispatchEvent(new DrawEvent(DrawEvent.EventType.DRAWSTART, this._sketchFeature))
+    this.dispatchEvent(new DrawEvent(DrawEvent.EventType.DRAW_START, this._sketchFeature))
   }
   
   /**
@@ -462,7 +462,7 @@ export default class DrawCpt extends Component {
     }
   
     // First dispatch event to allow full set up of feature
-    this.dispatchEvent(new DrawEvent(DrawEvent.EventType.DRAWEND, sketchFeature))
+    this.dispatchEvent(new DrawEvent(DrawEvent.EventType.DRAW_END, sketchFeature))
   
     // Then insert feature
     // if (this._features) {

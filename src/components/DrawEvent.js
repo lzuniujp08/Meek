@@ -28,18 +28,18 @@ export default class DrawEvent extends BaseEvent {
 
 /**
  * 定义绘制工具的事件类型
- * @type {{DRAWSTART: string, DRAWEND: string}}
+ * @type {{DRAW_START: string, DRAW_END: string}}
  */
 DrawEvent.EventType = {
   /**
    * Triggered upon feature draw start
    */
-  DRAWSTART: 'drawstart',
+  DRAW_START: 'drawstart',
   
   
   /**
    * Triggered upon feature draw end
    */
-  DRAWEND: 'drawend'
+  DRAW_END: 'drawend'
   
 }
