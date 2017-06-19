@@ -48,9 +48,19 @@ window.onload = function () {
     drawTool.drawMode = typeSelect.value
   }
   
-  drawTool.addEventListener(Datatang., function(event){
-    console.log('draw start')
+  var tipDom1 = document.getElementById('starttip')
+  drawTool.addEventListener(Datatang.DrawEvent.EventType.DRAW_START,
+    function(event){
+    tipDom1.innerHTML = '开始绘制，当前绘制的是：' + event.feature.geometry.geometryType +
+      '  他的ID为：' + event.feature.id;
   })
+  
+  var tipDom = document.getElementById('endtip')
+  drawTool.addEventListener(Datatang.DrawEvent.EventType.DRAW_END,
+    function(event){
+      tipDom.innerHTML = '绘制完成，当前绘制的是：' + event.feature.geometry.geometryType +
+        '  他的ID为：' + event.feature.id;
+    })
   
 }
 
