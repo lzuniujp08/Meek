@@ -23,7 +23,8 @@ export default class LineRender extends GeometryRender {
   
     const  transform2D =  Transform.transform2D
     const coordinates = [], geometryCoordinates = geometry.getCoordinates()
-    
+
+    // TODO  Should be cached
     geometryCoordinates.forEach(function(points){
       let coordinate = transform2D(
         points, 0, points.length, 2,

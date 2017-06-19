@@ -38,7 +38,8 @@ export default class PolygonRender extends GeometryRender {
     if (geometryCoordinages.length === 0) {
       return false
     }
-    
+
+    // TODO  Should be cached
     geometryCoordinages.forEach(function(points){
       let coordinate = transform2D(
         points, 0, points.length, 2,
