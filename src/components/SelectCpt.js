@@ -4,7 +4,7 @@
 
 import Component from './Component'
 import BrowserEvent from '../meek/BrowserEvent'
-import FeaureLayer from '../lyr/FeatureLayer'
+import FeatureLayer from '../lyr/FeatureLayer'
 import {listen, unlistenByKey} from '../core/EventManager'
 import {EventType} from '../meek/EventType'
 import {Style} from '../style/Style'
@@ -34,7 +34,7 @@ export default class SelectCpt extends Component {
      * @type {FeatureLayer}
      * @private
      */
-    this._selectLayer = new FeaureLayer()
+    this._selectLayer = new FeatureLayer()
     
     this._selectFeatures = []
   
