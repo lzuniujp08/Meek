@@ -43,7 +43,7 @@ export default class FeatureLayer extends BaseLayer {
      *
      * @type {number}
      */
-    this.zIndex = 2
+    this.zIndex = options.zIndex || 2
   }
   
   /**
