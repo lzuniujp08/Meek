@@ -114,8 +114,20 @@ export default class Feature extends BaseObject {
    * @returns {Feature}
    */
   clone () {
+    let renderStyleArr
+    if (this.style) {
+      let style
+      if (Array.isArray(this.style)) {
+        style = this.style[0].clone()
+      } else {
+        style = this.style.clone()
+      }
+      
+      renderStyleArr = [style]
+    }
+    
     return new Feature(this.geometry.clone(),
-      this.cloneAttributesMap(), [this.style[0].clone()])
+      this.cloneAttributesMap(), renderStyleArr)
   }
 }
 
