@@ -6,6 +6,7 @@
 var dom;
 /**
  * 文本样式设置
+ * 点击刷新按钮时收集表单数据、然后重新绘制
  */
 window.onload = function () {
   
