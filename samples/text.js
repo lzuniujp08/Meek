@@ -128,15 +128,11 @@ window.onload = function () {
     })
   });
 
-
   document.getElementById('refresh-points')
     .addEventListener('click', function() {
       featureLayer.style = styleFunction;
       map.render()
     });
-
-
-  // map.render()
 }
 
 function getText(feature, resolution, dom) {
