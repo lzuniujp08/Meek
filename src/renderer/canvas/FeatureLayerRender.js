@@ -11,6 +11,8 @@ import PolygonRender from '../render/PolygonRender'
 import TextRender from '../render/TextRender'
 
 export default class FeatureLayerRenderer extends LayerRenderer {
+  
+  
   constructor (layer,context) {
     super(layer, context)
   
@@ -30,7 +32,7 @@ export default class FeatureLayerRenderer extends LayerRenderer {
   
   }
   
-  
+ 
   /**
    * 1、对渲染对象需要做切割 （当前范围内）
    */
@@ -41,7 +43,6 @@ export default class FeatureLayerRenderer extends LayerRenderer {
     const frameExtent = frameState.extent
     
     const extent = frameExtent
-  
   
     // 加载当前屏的图形
     // const features = this.layer.loadFeature(extent)
@@ -61,9 +62,10 @@ export default class FeatureLayerRenderer extends LayerRenderer {
     // },this)
     
     // 转换为canvas坐标
-    
+  
     return true
   }
+  
   
   /**
    *  Get a renderer by geometry type
@@ -98,21 +100,25 @@ export default class FeatureLayerRenderer extends LayerRenderer {
     this.preCompose(context, frameState, transform)
     
     features.forEach(feature => {
-      if(!feature.style){
+      let renderStyle
+      
+      if (feature.style) {
+        renderStyle = feature.style
+      } else {
         let styleFunction = layer.styleFunction
-        if(styleFunction){
-          feature.style = styleFunction(feature, resolution)
+        if (styleFunction) {
+          renderStyle = styleFunction(feature, resolution)
         }
       }
       
       let geomertyRender = this._getGeometryRender(feature.geometry)
-      geomertyRender.render(feature, transform)
+      geomertyRender.render(feature, renderStyle, transform)
   
       /**
        * Render text
        */
-      if (feature.style[0].textStyle ) {
-        this._textRender.render(feature, transform)
+      if (renderStyle[0].textStyle ) {
+        this._textRender.render(feature, renderStyle, transform)
       }
     })
   

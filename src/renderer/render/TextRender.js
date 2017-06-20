@@ -19,7 +19,7 @@ export default class TextRender extends GeometryRender {
    * @param feature
    * @param transform
    */
-  render (feature, transform) {
+  render (feature, renderStyle, transform) {
     
     const ctx = this.context
     ctx.save()
@@ -33,7 +33,7 @@ export default class TextRender extends GeometryRender {
       coordinates, 0, coordinates.length, 2,
       transform, this._pixelCoordinates)
     
-    const textStyle = feature.style[0].textStyle
+    const textStyle = renderStyle[0].textStyle
     
     // set the context text style
     this._setTextStyle(ctx, textStyle)

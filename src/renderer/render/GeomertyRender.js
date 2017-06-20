@@ -12,5 +12,5 @@ export default class GeomertyRender extends BaseObject {
   
   get context () { return this._context }
   
-  render (feature, transform) {} // eslint-disable-line no-unused-vars
+  render (feature, renderStyle, transform) {} // eslint-disable-line no-unused-vars
 }

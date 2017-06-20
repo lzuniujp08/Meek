@@ -19,13 +19,13 @@ export default class PointRender extends GeometryRender {
    * @param feature
    * @param transform
    */
-  render (feature, transform) {
+  render (feature, renderStyle, transform) {
     if(!feature){
       return
     }
     
     const ctx = this.context
-    const styleArray = feature.style
+    const styleArray = renderStyle
     const geomerty = feature.geometry
   
     const coordinates = [geomerty.x, geomerty.y]

@@ -18,13 +18,13 @@ export default class PolygonRender extends GeometryRender {
    * @param transform
    * @returns {boolean}
    */
-  render (feature, transform) {
+  render (feature, renderStyle, transform) {
     if (!feature) {
       return
     }
   
     const ctx = this.context
-    const styleArray = feature.style
+    const styleArray = renderStyle
     const geometry = feature.geometry
   
     const  transform2D =  Transform.transform2D
