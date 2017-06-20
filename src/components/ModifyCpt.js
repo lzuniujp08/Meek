@@ -119,6 +119,20 @@ export default class ModifyCpt extends Component {
      * @private
      */
     this._ignoreNextSingleClick = false
+  
+    /**
+     *
+     * @type {boolean}
+     * @private
+     */
+    this._shouldAddToVertexs = false
+  
+    /**
+     *
+     * @type {Array}
+     * @private
+     */
+    this._insertVertices = []
   }
   
   /**
@@ -130,7 +144,12 @@ export default class ModifyCpt extends Component {
     this._features = value
     this._vertexSegments = null
     this._snapSegments = null
-    this._vertexFeature = null
+  
+    if (this._vertexFeature) {
+      this._overLayer.removeFeature(this._vertexFeature)
+      this._vertexFeature = null
+    }
+    
     this._dragSegments = []
     this._snappedToVertex = false
   }
@@ -276,9 +295,12 @@ export default class ModifyCpt extends Component {
         this._willModifyFeatures(evt)
       }
   
-      for (let j = insertVertices.length - 1; j >= 0; --j) {
-        this._insertVertex(insertVertices[j], vertex)
-      }
+      this._shouldAddToVertexs = true
+      this._insertVertices = insertVertices
+      
+      // for (let j = insertVertices.length - 1; j >= 0; --j) {
+      //   this._insertVertex(insertVertices[j], vertex)
+      // }
     }
     
     return !!this._vertexFeature
@@ -370,7 +392,6 @@ export default class ModifyCpt extends Component {
         this._vertexSegments = vertexSegments
         return
       }
-      
     }
     
     if (this._vertexFeature) {
@@ -388,6 +409,19 @@ export default class ModifyCpt extends Component {
    */
   _handleDragEvent (evt) {
     this._ignoreNextSingleClick = false
+  
+    if (this._shouldAddToVertexs) {
+      const vertexFeature = this._vertexFeature
+      const geometry = vertexFeature.geometry
+      const vertex = geometry.getCoordinates()
+    
+      const insertVertices = this._insertVertices
+      for (let j = insertVertices.length - 1; j >= 0; --j) {
+        this._insertVertex(insertVertices[j], vertex)
+      }
+    
+      this._shouldAddToVertexs = false
+    }
     
     const dragSegments = this._dragSegments
     const len = dragSegments.length
@@ -482,6 +516,13 @@ export default class ModifyCpt extends Component {
     // let geometry
   
     this._dragSegments.length = 0
+    this._shouldAddToVertexs = false
+    this._insertVertices = []
+  
+    if (this._vertexFeature) {
+      this._overLayer.removeFeature(this._vertexFeature)
+      this._vertexFeature = null
+    }
     
     // for (let i = this._dragSegments.length - 1; i >= 0; --i) {
     //   segmentData = this._dragSegments[i][0]
