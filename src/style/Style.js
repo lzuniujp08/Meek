@@ -76,6 +76,39 @@ Style.createDefaultEditing = function () {
 }
 
 /**
+ *
+ * @returns {{}}
+ */
+Style.createDefaultSelecting = function () {
+  const styles = {}
+  const white = [255, 255, 255]
+  const blue = [0, 153, 255]
+  const width = 3
+  
+  // 面样式
+  styles[Geometry.POLYGON] = [
+    new FillStyle(white,// 填充
+      new LineStyle(blue,1,3)// 边框
+      ,0.5)
+  ]
+  styles[Geometry.MULTI_POLYGON] = styles[Geometry.POLYGON]
+  styles[Geometry.EXTENT] = styles[Geometry.POLYGON]
+  
+  // 线样式
+  styles[Geometry.LINE] = [
+    new LineStyle(white,1,width + 2,LineStyle.LineCap.ROUND,LineStyle.LineJion.ROUND),// 外框
+    new LineStyle(blue,1,width,LineStyle.LineCap.ROUND,LineStyle.LineJion.ROUND)// 内框
+  ]
+  styles[Geometry.MULTI_LINE] = styles[Geometry.LINE]
+  
+  // 点样式
+  styles[Geometry.POINT] = [new PointStyle(12,blue,1,new LineStyle(blue,1,1))]
+  styles[Geometry.MULTI_POINT] = styles[Geometry.POINT]
+  
+  return styles
+}
+
+/**
  * Convert the passed obj into a style function.
  *
  * @param obj
