@@ -435,6 +435,9 @@ export default class ModifyCpt extends Component {
       case Geometry.POLYGON:
         coordinates = geometry.getCoordinates()
         coordinates[segmentData.index] = vertex
+        if (segmentData.index === 0) {
+          coordinates[coordinates.length - 1] = vertex
+        }
         break
       case Geometry.EXTENT:
         coordinates = ExtentUtil.updateExtent(geometry, vertex, dragSegment)
