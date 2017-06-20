@@ -46,6 +46,8 @@ window.onload = function (){
   map.addComponents(drawTool)
   map.addComponents(selectTool)
   map.addComponents(modifyTool)
+  selectTool.active = false
+  modifyTool.active = false
 
   var typeSelect = document.getElementById('type')
 
