@@ -4,7 +4,9 @@
 
 
 var dom;
-
+/**
+ * 文本样式设置
+ */
 window.onload = function () {
   
   // 点
