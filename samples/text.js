@@ -7,21 +7,24 @@ var dom;
 
 window.onload = function () {
   
+  // 点
   var point = new Datatang.Point(1960,1210)
-  
     
+  // 多段线
   var path = [[1960,1210],[2000,1000],[1980,800],[1900,600],[1850,500],[1828, 310]]
   var line = new Datatang.Line()
   line.path = path
   
+  // 多边形
   var rings = [[800,580],[490,600],[400,660],[300, 700],[270, 780],[255, 820],[230, 860],[280,1050],
     [1000,1000],[1000,800],[800,580]]
   var polygon = new Datatang.Polygon(rings)
   
+  // 矩形
   var extent = new Datatang.Extent(1500, 1500, 2000, 2000)
   
   var features = [
-    new Datatang.Feature(point,{name: '北京站'})
+    new Datatang.Feature(point,{'name': '北京站'})
     ,new Datatang.Feature(line,{'name': '京广高铁'})
     ,new Datatang.Feature(polygon, {'name': '三江源湿地'})
     ,new Datatang.Feature(extent, {'name': '第51区域'})
@@ -44,9 +47,15 @@ window.onload = function () {
     maxreso: document.getElementById('points-maxreso')
   }
   
-  
+  /**
+   * 在渲染时 要获取样式的函数
+   * @param feature
+   * @param resolution
+   * @returns {*}
+   */
   var styleFunction = function (feature, resolution) {
   
+    // 1、获取文本样式
     var textStyle = getTextStyle(feature, resolution)
     
     var white = [255, 255, 255]
@@ -55,6 +64,10 @@ window.onload = function () {
   
     var style = {}
   
+    // -----------------------
+    // 图形样式
+    // -----------------------
+    
     // 面样式 polygon style
     style[Datatang.Geometry.POLYGON] = [
       new Datatang.FillStyle(white,new Datatang.LineStyle(blue,1,1.25),0.5)
@@ -72,7 +85,11 @@ window.onload = function () {
     // 点样式 point style
     style[Datatang.Geometry.POINT] =
       [new Datatang.PointStyle(10,white,1,new Datatang.LineStyle(blue,1,width))]
-    
+  
+  
+    // -----------------------
+    // 文本样式
+    // -----------------------
     for (var item in style) {
       style[item][0].textStyle = textStyle
     }
@@ -81,12 +98,13 @@ window.onload = function () {
   }
   
   
-  // 将会获取缺省样式
+  //初始化图层对象以及style回调函数
   var featureLayer = new Datatang.FeatureLayer({
     features: features,
     style: styleFunction
   })
   
+  // 初始化map、view和layer
   var mapextent = [0, 0, 2783, 2125];
   var map = new Datatang.Map({
     layers: [
@@ -111,15 +129,7 @@ window.onload = function () {
   });
   
   
-  var dragPan = new Datatang.DragPanCpt({
-    kinetic: new Datatang.Kinetic(-0.005, 0.05, 100)
-  })
-  
-  var tool = new Datatang.MouseWheelZoom()
-  
-  map.addComponents(dragPan)
-  map.addComponents(tool)
-  
+  // map.render()
 }
 
 function getText(feature, resolution, dom) {
@@ -140,7 +150,12 @@ function getText(feature, resolution, dom) {
   return text;
 };
 
-
+/**
+ * Get the style of text by the give feature and resolution.
+ * @param feature
+ * @param resolution
+ * @returns {*|TextStyle}
+ */
 function getTextStyle(feature, resolution) {
   var align = dom.align.value;
   var baseline = dom.baseline.value;

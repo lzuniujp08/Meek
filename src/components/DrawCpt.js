@@ -186,7 +186,11 @@ export default class DrawCpt extends Component {
   
   }
   
-  
+  /**
+   * Handler the keyboard event
+   * @param event
+   * @private
+   */
   _handleKeyboardEvent (event) {
     
     // If finish drawing
