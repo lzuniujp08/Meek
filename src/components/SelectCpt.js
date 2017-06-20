@@ -34,11 +34,13 @@ export default class SelectCpt extends Component {
      * @type {FeatureLayer}
      * @private
      */
-    this._selectLayer = new FeatureLayer()
+    this._selectLayer = new FeatureLayer({
+      style: options.style || Style.createDefaultSelecting()
+    })
     
     this._selectFeatures = []
   
-    this.selectMode = options.selectMode ? options.selectMode : BrowserEvent.SINGLE_CLICK
+    this.selectMode = options.selectMode ? options.selectMode : BrowserEvent.CLICK
   }
   
   _condition (event) {
@@ -72,13 +74,14 @@ export default class SelectCpt extends Component {
   
     if (this.selectFeatures.length > 0 ) {
   
-      this.forEachStyle()
+      // this.forEachStyle()
       this._selectLayer.addFeatures(this.selectFeatures)
       
       // dispatch the select event after some features selected successfully
-      this.dispatchEvent(
-        new SelectEvent(SelectEvent.EventType.SELECT, this.selectFeatures,browserEvent))
     }
+  
+    this.dispatchEvent(
+      new SelectEvent(SelectEvent.EventType.SELECT, this.selectFeatures,browserEvent))
   }
   
   /**
@@ -95,7 +98,7 @@ export default class SelectCpt extends Component {
       this._selectFeatures = []
     } else {
       features.forEach( feature =>
-        this._selectFeatures.push(feature.clone())
+        this._selectFeatures.push(feature)
       )
     }
   }

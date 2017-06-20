@@ -88,8 +88,14 @@ export default class ModifyCpt extends Component {
     this._lastPixel = [0, 0]
   
   
+    /**
+     * The over layer is resonsible for modified features highlight
+     * @type {FeatureLayer}
+     * @private
+     */
     this._overLayer = new FeatureLayer({
-      style: options.style ? options.style : this.getDefaultStyleFunction()
+      style: options.style ? options.style : this.getDefaultStyleFunction(),
+      zIndex: 1000
     })
   
     this.active = true

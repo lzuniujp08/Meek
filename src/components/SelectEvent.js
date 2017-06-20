@@ -32,6 +32,6 @@ SelectEvent.EventType = {
    * Triggered upon features select
    * @api stable
    */
-  SELECT: 'drawstart',
+  SELECT: 'select',
   
 }
