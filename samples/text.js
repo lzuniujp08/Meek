@@ -127,8 +127,15 @@ window.onload = function () {
       maxZoom: 8
     })
   });
-  
-  
+
+
+  document.getElementById('refresh-points')
+    .addEventListener('click', function() {
+      featureLayer.style = styleFunction;
+      map.render()
+    });
+
+
   // map.render()
 }
 
