@@ -42,7 +42,7 @@ export default class TextRender extends GeometryRender {
     const offsetY = textStyle.offsetY - 10
     const stroke = textStyle.stroke ? true : false
     const fill = textStyle.fill ? true : false
-    const text = feature.get('name')
+    const text = textStyle.text
   
     let x = pixelCoordinates[0] + offsetX
     let y = pixelCoordinates[1] + offsetY

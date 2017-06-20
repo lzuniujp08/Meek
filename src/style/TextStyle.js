@@ -21,6 +21,11 @@ export default class TextStyle extends BaseStyle {
     const options = optOptions || {}
   
     /**
+     *
+     */
+    this.text = options.text
+    
+    /**
      * @private
      * @type {string|undefined}
      */
@@ -82,6 +87,9 @@ export default class TextStyle extends BaseStyle {
     this.offsetY = options.offsetY !== undefined ? options.offsetY : 0
     
   }
+  
+  get text () { return this._text }
+  set text (value) { this._text = value }
   
   get font () { return this._font }
   set font (value) { this._font = value }

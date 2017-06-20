@@ -29,7 +29,7 @@ window.onload = function () {
   var features = [
     new Datatang.Feature(point,{'name': '北京站'})
     ,new Datatang.Feature(line,{'name': '京广高铁'})
-    ,new Datatang.Feature(polygon, {'name': '三江源湿地'})
+    ,new Datatang.Feature(polygon, {'name': '此处是中国西部地区面积很大的三江源湿地'})
     ,new Datatang.Feature(extent, {'name': '第51区域'})
   ]
   
