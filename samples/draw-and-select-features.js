@@ -9,6 +9,18 @@ window.onload = function (){
   var Fortesting = new Datatang.FeatureLayer()
   var extent = [0,0,1280,800]
 
+
+  //随机添加i个点
+  for(i = 0; i<=10; i++){
+    var x = parseInt(Math.random()*1280)
+    var y = parseInt(Math.random()*800)
+    var point = new Datatang.Point(x,y)
+    var features = [new Datatang.Feature(point)]
+    Fortesting.addFeatures(features)
+  }
+
+
+
   var map = new Datatang.Map({
     layers:[new Datatang.SingleImageLayer({
       url : "source/image01450.jpg",
