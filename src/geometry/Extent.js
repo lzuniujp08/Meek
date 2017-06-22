@@ -97,6 +97,60 @@ export default class Extent extends Geometry {
   }
   
   /**
+   * Move the goemetry by the given x and y
+   * @param x
+   * @param y
+   */
+  move (x = 0, y = 0, opts) {
+    const coordinate = this.getCoordinates()
+  
+    let beyond
+    if (opts) {
+      if (opts.beyond) {
+        beyond = opts.beyond
+      }
+    }
+    
+    const width = this.width
+    const height = this.heigth
+    
+    const minPoint = coordinate[0]
+    const newMinPoint = new Array(2)
+    
+    newMinPoint[0] = minPoint[0] + x
+    newMinPoint[1] = minPoint[1] + y
+    
+    if (beyond) {
+      if (minPoint[0] < beyond.xmin) {
+        minPoint[0] = beyond.xmin
+        newMinPoint[0] = minPoint[0]
+      }
+      
+      if (minPoint[0] + width + x >= beyond.xmax) {
+        newMinPoint[0] = minPoint[0]
+      }
+  
+      if (minPoint[1] < beyond.ymin) {
+        minPoint[1] = beyond.ymin
+        newMinPoint[1] = minPoint[1]
+      }
+  
+      if (minPoint[1] + height + y >= beyond.ymax) {
+        newMinPoint[1] = minPoint[1]
+      }
+    }
+  
+    const newCoordiante = [
+      newMinPoint,
+      [newMinPoint[0] + width, newMinPoint[1]],
+      [newMinPoint[0] + width, newMinPoint[1] + height],
+      [newMinPoint[0], newMinPoint[1] + height],
+      newMinPoint]
+    
+    this.setCoordinates(newCoordiante)
+  }
+  
+  /**
    * 设置多边形的边，如果设置了边，则需要重新计算
    * 外接矩形
    */
