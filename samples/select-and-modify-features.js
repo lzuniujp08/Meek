@@ -6,11 +6,11 @@ window.onload = function () {
   
   var point = new Datatang.Point(900,500)
   
-  var path = [[400,200],[500,300],[500,50],[80,600]]
+  var path = [[1400,1200],[1500,1300],[1500,150],[180,1600]]
   var line = new Datatang.Line()
   line.path = path
   
-  var rings = [[500,400],[490,478],[350,350],[500,400]]
+  var rings = [[1500,1400],[1490,1478],[1350,1350],[1950,1350],[1500,1400]]
   var polygon = new Datatang.Polygon(rings)
   
   var extent = new Datatang.Extent(1100, 300, 1400, 600)
@@ -24,12 +24,12 @@ window.onload = function () {
   var featureLayer = new Datatang.FeatureLayer()
   featureLayer.addFeatures(features)
   
-  var mapextent = [0, 0, 1024, 968];
+  var mapextent = [0, 0, 2783, 2125];
   
   var map = new Datatang.Map({
     layers: [
       new Datatang.SingleImageLayer({
-        url: 'source/online_communities.png',
+        url: 'source/China_map.jpg',
         imageExtent: mapextent,
         projection: {
           extent: mapextent
