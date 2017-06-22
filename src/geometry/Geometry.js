@@ -59,7 +59,7 @@ export default class Geometry extends BaseObject {
   /**
    * 定义move方法
    */
-  move (x = 0,y = 0) {} // eslint-disable-line no-unused-vars
+  move (x = 0,y = 0, opts) {} // eslint-disable-line no-unused-vars
   
   /**
    * 定义对图形本身的缩放方法

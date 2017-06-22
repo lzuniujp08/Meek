@@ -36,9 +36,59 @@ export default class ModifyCpt extends Component {
       handleDragEvent: this._handleDragEvent,
       handleUpEvent: this._handleUpEvent
     })
+  
+    /**
+     * The features array is to modify
+     * @type {Array}
+     * @private
+     */
+    this._features = []
     
+    /**
+     *
+     * @type {number}
+     * @private
+     */
     this._pixelTolerance = options.pixelTolerance ?
         options.pixelTolerance : 10
+  
+    /**
+     *
+     * @type {[*]}
+     * @private
+     */
+    this._movableGeometrys = options.movableGeometrys ?
+        options.movableGeometrys : ['extent']
+  
+  
+    /**
+     *
+     * @type {boolean}
+     * @private
+     */
+    this._hasMoveableGeometrys = true
+    
+    const movableGeometrys = this._movableGeometrys
+    if (movableGeometrys === null || movableGeometrys === undefined) {
+      this._hasMoveableGeometrys = false
+    }
+  
+    if (Array.isArray(movableGeometrys)) {
+      if (movableGeometrys.length === 0) {
+        this._hasMoveableGeometrys = false
+      }
+    }
+  
+    /**
+     *
+     * @type {Set}
+     * @private
+     */
+    this.movableGeometrySet
+    
+    if (this._hasMoveableGeometrys) {
+      this.movableGeometrySet = new Set(this._movableGeometrys)
+    }
   
     /**
      * @private
@@ -110,6 +160,11 @@ export default class ModifyCpt extends Component {
      */
     this._modified = false
   
+    /**
+     *
+     * @type {boolean}
+     * @private
+     */
     this._changingFeature = true
   
     /**
@@ -133,6 +188,20 @@ export default class ModifyCpt extends Component {
      * @private
      */
     this._insertVertices = []
+  
+    /**
+     * Keep the mouse-down point
+     * @type {null}
+     * @private
+     */
+    this._downPoint = null
+  
+    /**
+     * Keep the current moved geometry
+     * @type {null}
+     * @private
+     */
+    this._currentMovedGeometry = null
   }
   
   /**
@@ -149,6 +218,9 @@ export default class ModifyCpt extends Component {
       this._overLayer.removeFeature(this._vertexFeature)
       this._vertexFeature = null
     }
+    
+    this._hasMoveableGeometrys =
+      value.length === 0 ? false : true
     
     this._dragSegments = []
     this._snappedToVertex = false
@@ -209,6 +281,13 @@ export default class ModifyCpt extends Component {
     return false
   }
   
+  /**
+   *
+   * @param a
+   * @param b
+   * @returns {number}
+   * @private
+   */
   _compareIndexes (a, b) {
     return a.index - b.index
   }
@@ -234,8 +313,10 @@ export default class ModifyCpt extends Component {
   _handleDownEvent (evt) {
     // this._handlePointerAtPixel(evt.pixel, evt.map)
     // const pixelCoordinate = evt.map.getCoordinateFromPixel(evt.pixel)
+    this._downPoint = evt.coordinate
     this._dragSegments.length = 0
     this._modified = false
+    const coordinate = evt.coordinate
     const vertexFeature = this._vertexFeature
     
     if (vertexFeature) {
@@ -297,13 +378,32 @@ export default class ModifyCpt extends Component {
   
       this._shouldAddToVertexs = true
       this._insertVertices = insertVertices
+  
+      return !!this._vertexFeature
+    }
+    // Move the selected geometry
+    else {
       
-      // for (let j = insertVertices.length - 1; j >= 0; --j) {
-      //   this._insertVertex(insertVertices[j], vertex)
-      // }
+      if (!this._hasMoveableGeometrys) {
+        return
+      }
+      
+      const filters = this.features.filter(feature => {
+        const geometry = feature.geometry
+        return this.movableGeometrySet.has(geometry.geometryType) &&
+               geometry.containsXY(coordinate[0], coordinate[1])
+      })
+      
+      // We get the first filter geometry to move
+      // Otherwise, you should reselect
+      if (filters.length > 0) {
+        this._currentMovedGeometry = filters[0]
+        return true
+      }
+      
+      return false
     }
     
-    return !!this._vertexFeature
   }
   
   /**
@@ -409,6 +509,7 @@ export default class ModifyCpt extends Component {
    */
   _handleDragEvent (evt) {
     this._ignoreNextSingleClick = false
+    const vertex = evt.coordinate
   
     if (this._shouldAddToVertexs) {
       const vertexFeature = this._vertexFeature
@@ -426,83 +527,96 @@ export default class ModifyCpt extends Component {
     const dragSegments = this._dragSegments
     const len = dragSegments.length
     
-    if (len === 0) {
-      return
-    }
-    
-    this._willModifyFeatures(evt)
-    
-    const vertex = evt.coordinate
-    for (let i = 0; i < len; ++i) {
-      const dragSegment = dragSegments[i]
-      const segmentData = dragSegment[0]
-      const depth = segmentData.depth
-      const geometry = segmentData.geometry
-      let coordinates = null
-      const segment = segmentData.segment
-      const index = dragSegment.index
+    // move the edge of selected geometry
+    if (len !== 0) {
+      this._willModifyFeatures(evt)
       
-      // while (vertex.length < geometry.getStride()) {
-      //   vertex.push(segment[index][vertex.length])
-      // }
-      
-      switch (geometry.geometryType) {
-      case Geometry.POINT:
-        coordinates = vertex
-        segment[0] = segment[1] = vertex
-        break
-      case Geometry.MULTI_POINT:
-        coordinates = geometry.getCoordinates()
-        coordinates[segmentData.index] = vertex
-        segment[0] = segment[1] = vertex
-        break
-      case Geometry.LINE:
-        coordinates = geometry.getCoordinates()
-        coordinates[segmentData.index] = vertex
-        // segment[index] = vertex
-        break
-      case Geometry.MULTI_LINE:
-        coordinates = geometry.getCoordinates()
-        coordinates[depth[0]][segmentData.index + index] = vertex
-        segment[index] = vertex
-        break
-      case Geometry.POLYGON:
-        coordinates = geometry.getCoordinates()
-        coordinates[segmentData.index] = vertex
-        if (segmentData.index === 0) {
-          coordinates[coordinates.length - 1] = vertex
+      for (let i = 0; i < len; ++i) {
+        const dragSegment = dragSegments[i]
+        const segmentData = dragSegment[0]
+        const depth = segmentData.depth
+        const geometry = segmentData.geometry
+        let coordinates = null
+        const segment = segmentData.segment
+        const index = dragSegment.index
+        
+        switch (geometry.geometryType) {
+        case Geometry.POINT:
+          coordinates = vertex
+          segment[0] = segment[1] = vertex
+          break
+        case Geometry.MULTI_POINT:
+          coordinates = geometry.getCoordinates()
+          coordinates[segmentData.index] = vertex
+          segment[0] = segment[1] = vertex
+          break
+        case Geometry.LINE:
+          coordinates = geometry.getCoordinates()
+          coordinates[segmentData.index] = vertex
+          // segment[index] = vertex
+          break
+        case Geometry.MULTI_LINE:
+          coordinates = geometry.getCoordinates()
+          coordinates[depth[0]][segmentData.index + index] = vertex
+          segment[index] = vertex
+          break
+        case Geometry.POLYGON:
+          coordinates = geometry.getCoordinates()
+          coordinates[segmentData.index] = vertex
+          if (segmentData.index === 0) {
+            coordinates[coordinates.length - 1] = vertex
+          }
+          break
+        case Geometry.EXTENT:
+          coordinates = ExtentUtil.updateExtent(geometry, vertex, dragSegment)
+          break
+        case Geometry.MULTI_POLYGON:
+          coordinates = geometry.getCoordinates()
+          coordinates[depth[1]][depth[0]][segmentData.index + index] = vertex
+          segment[index] = vertex
+          break
+        case Geometry.CIRCLE:
+          segment[0] = segment[1] = vertex
+          if (segmentData.index === ModifyCpt.MODIFY_SEGMENT_CIRCLE_CENTER_INDEX) {
+            this._changingFeature = true
+            geometry.setCenter(vertex)
+            this._changingFeature = false
+          } else { // We're dragging the circle's circumference:
+            this._changingFeature = true
+            geometry.setRadius(distance(geometry.getCenter(), vertex))
+            this._changingFeature = false
+          }
+          break
+        default:
+          // pass
         }
-        break
-      case Geometry.EXTENT:
-        coordinates = ExtentUtil.updateExtent(geometry, vertex, dragSegment)
-        break
-      case Geometry.MULTI_POLYGON:
-        coordinates = geometry.getCoordinates()
-        coordinates[depth[1]][depth[0]][segmentData.index + index] = vertex
-        segment[index] = vertex
-        break
-      case Geometry.CIRCLE:
-        segment[0] = segment[1] = vertex
-        if (segmentData.index === ModifyCpt.MODIFY_SEGMENT_CIRCLE_CENTER_INDEX) {
-          this._changingFeature = true
-          geometry.setCenter(vertex)
-          this._changingFeature = false
-        } else { // We're dragging the circle's circumference:
-          this._changingFeature = true
-          geometry.setRadius(distance(geometry.getCenter(), vertex))
-          this._changingFeature = false
+        
+        if (coordinates) {
+          this._setGeometryCoordinates(geometry, coordinates)
         }
-        break
-      default:
-        // pass
       }
       
-      if (coordinates) {
-        this._setGeometryCoordinates(geometry, coordinates)
-      }
+      this._createOrUpdateVertexFeature(vertex)
+    }
+    // move the whole selected geometry
+    else if (this._currentMovedGeometry) {
+      const downPoint = this._downPoint
+      const dx = vertex[0] - downPoint[0]
+      const dy = vertex[1] - downPoint[1]
+      
+      this._currentMovedGeometry.geometry.move(dx, dy, {
+        beyond: {
+          xmin: 0,
+          ymin: 0,
+          xmax: this.map.view.dataExtent[2],
+          ymax: this.map.view.dataExtent[3]
+        }
+      })
+      this.changed()
+  
+      this._downPoint = vertex
     }
     
-    this._createOrUpdateVertexFeature(vertex)
   }
   
   /**
@@ -512,9 +626,6 @@ export default class ModifyCpt extends Component {
    * @private
    */
   _handleUpEvent (evt) {
-    // let segmentData
-    // let geometry
-  
     this._dragSegments.length = 0
     this._shouldAddToVertexs = false
     this._insertVertices = []
@@ -524,23 +635,8 @@ export default class ModifyCpt extends Component {
       this._vertexFeature = null
     }
     
-    // for (let i = this._dragSegments.length - 1; i >= 0; --i) {
-    //   segmentData = this._dragSegments[i][0]
-    //   geometry = segmentData.geometry
-    //   if (geometry.geometryType === Geometry.CIRCLE) {
-    //     // Update a circle object in the R* bush:
-    //     const coordinates = geometry.getCenter()
-    //     const centerSegmentData = segmentData.featureSegments[0]
-    //     const circumferenceSegmentData = segmentData.featureSegments[1]
-    //     centerSegmentData.segment[0] = centerSegmentData.segment[1] = coordinates
-    //     circumferenceSegmentData.segment[0] = circumferenceSegmentData.segment[1] = coordinates
-    //     this.rBush_.update(ol.extent.createOrUpdateFromCoordinate(coordinates), centerSegmentData)
-    //     this.rBush_.update(geometry.getExtent(), circumferenceSegmentData)
-    //   } else {
-    //     this.rBush_.update(ol.extent.boundingExtent(segmentData.segment), segmentData)
-    //   }
-    // }
-    //
+    this._downPoint = null
+    this._currentMovedGeometry = null
     
     if (this._modified) {
       this.dispatchEvent(new ModifyEvent(ModifyEvent.MODIFY_END, this.features, evt))
@@ -604,7 +700,6 @@ export default class ModifyCpt extends Component {
     case Geometry.EXTENT:
       coordinates = geometry.getCoordinates()
       break
-    
     default:
       return
     }
