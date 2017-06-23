@@ -18,9 +18,20 @@ export default class BaseObject extends Event {
    */
   constructor () {
     super()
-
-    // every subclass will keep an id
+  
+    /**
+     *
+     * @type {number}
+     * @private
+     */
     this._id = getUid()
+  
+    /**
+     *
+     * @type {number}
+     * @private
+     */
+    this._revision = 0
   }
   
   /**
@@ -28,6 +39,7 @@ export default class BaseObject extends Event {
    * map will render the frame.
    */
   changed () {
+    ++this._revision
     this.dispatchEvent(EventType.CHANGE)
   }
 
@@ -38,4 +50,11 @@ export default class BaseObject extends Event {
   get id () {
     return this._id
   }
+  
+  /**
+   *
+   * @returns {number}
+   */
+  get revision () { return this._revision }
+  
 }
