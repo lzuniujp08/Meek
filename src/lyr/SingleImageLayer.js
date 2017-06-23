@@ -13,8 +13,15 @@ import {EventType} from '../meek/EventType'
 import {ImageState} from '../lyr/image/ImageState'
 import {ExtentUtil} from '../geometry/support/ExtentUtil'
 
+/**
+ *
+ */
 export default class SingleImageLayer extends BaseLayer {
-
+  
+  /**
+   *
+   * @param options
+   */
   constructor (options = {}) {
     super(options)
   
@@ -42,6 +49,9 @@ export default class SingleImageLayer extends BaseLayer {
      */
     this._imageSize = options.imageSize ? options.imageSize : null
   
+    /**
+     * Listen the change event for SingleImage
+     */
     listen(this.singleImage, EventType.CHANGE, this.handleImageChange, this)
   
     /**
@@ -49,6 +59,16 @@ export default class SingleImageLayer extends BaseLayer {
      * @type {number}
      */
     this.zIndex = 0
+  }
+  
+  /**
+   *
+   * @param url
+   */
+  set imageSrc (url) {
+    this._singleImage._src = url
+    this._singleImage.domImage = new Image()
+    this._singleImage.state = ImageState.IDLE
   }
   
   get singleImage () { return this._singleImage }
@@ -71,6 +91,7 @@ export default class SingleImageLayer extends BaseLayer {
   }
   
   /**
+   * Get the image dom
    * @inheritDoc
    */
   getImageInternal (extent, resolution, pixelRatio, projection) {
@@ -82,7 +103,7 @@ export default class SingleImageLayer extends BaseLayer {
   }
   
   /**
-   *
+   * Handle the image change event
    * @param evt
    */
   handleImageChange (evt) {
@@ -106,6 +127,7 @@ export default class SingleImageLayer extends BaseLayer {
         const canvas = context.canvas
         context.drawImage(image, 0, 0, imageWidth, imageHeight,
           0, 0, canvas.width, canvas.height)
+        // Pre-load image
         this.singleImage.domImage = canvas
       }
     }

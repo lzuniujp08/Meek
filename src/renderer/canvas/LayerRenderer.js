@@ -44,7 +44,7 @@ export default class LayerRenderer extends BaseObject {
   }
   
   /**
-   *
+   * Load the image
    * @param image
    * @returns {boolean}
    */

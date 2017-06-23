@@ -62,8 +62,10 @@ export default class ImageLayerRenderer extends LayerRenderer {
     if (!ExtentUtil.isEmpty(renderedExtent)) {
       const projection = viewState.projection
 
-      image = imageLayer.getImageInternal(
-        renderedExtent, viewResolution, pixelRatio, projection)
+      image = imageLayer.getImageInternal(renderedExtent,
+        viewResolution, pixelRatio, projection)
+      
+      // Load the image
       if (image) {
         const loaded = this.loadImage(image)
         if (loaded) {
