@@ -10,6 +10,9 @@ import LineRender from '../render/LineRender'
 import PolygonRender from '../render/PolygonRender'
 import TextRender from '../render/TextRender'
 
+import {Transform} from '../../data/matrix/Transform'
+import {ExtentUtil} from '../../geometry/support/ExtentUtil'
+
 export default class FeatureLayerRenderer extends LayerRenderer {
   
   
@@ -30,6 +33,41 @@ export default class FeatureLayerRenderer extends LayerRenderer {
      */
     this._textRender = new TextRender(this.context)
   
+    /**
+     *
+     * @type {null}
+     * @private
+     */
+    this._maxExtent = null
+  
+    /**
+     *
+     * @type {Array}
+     * @private
+     */
+    this._renderFeatures = []
+  
+    /**
+     *
+     * @type {NaN}
+     * @private
+     */
+    this._renderResolution = NaN
+  
+    /**
+     *
+     * @type {[*]}
+     * @private
+     */
+    this._renderExtent = [Infinity, Infinity, -Infinity, -Infinity]
+  
+    /**
+     *
+     * @type {NaN}
+     * @private
+     */
+    this._renderRevision = NaN
+  
   }
   
  
@@ -37,32 +75,37 @@ export default class FeatureLayerRenderer extends LayerRenderer {
    * 1、对渲染对象需要做切割 （当前范围内）
    */
   prepareFrame (frameState) {
-    // const frameState = frameState
-    // const layer = this.layer
+    const layer = this.layer
     
     const frameExtent = frameState.extent
+    const viewState = frameState.viewState
+    const resolution = viewState.resolution
+    const layerRevision = layer.revision
     
-    const extent = frameExtent
-  
+    const featureLayerRenderBuffer = layer.renderBuffer
+    
+    const renderExtent = ExtentUtil.buffer(frameExtent,
+      featureLayerRenderBuffer * resolution)
+    
+    if (this._renderResolution === resolution &&
+        this._renderRevision === layerRevision &&
+        ExtentUtil.containsExtent(this._renderExtent, renderExtent)) {
+      console.log('render cache')
+      return true
+    }
+    
     // 加载当前屏的图形
-    // const features = this.layer.loadFeature(extent)
-    // features.forEach(function(feature){
-    //   let styles = null
-    //   let styleFunction = feature.styleFunction()
-    //   if(styleFunction){
-    //     styles = styleFunction.call(feature)
-    //   }else{
-    //     styleFunction = this.layer.getStyleFunction()
-    //     if(styleFunction){
-    //       styles = styleFunction(feature)
-    //     }
-    //
-    //   }
-    //
-    // },this)
+    const features = this.layer.loadFeature(renderExtent)
     
     // 转换为canvas坐标
   
+    console.log('the renderer geometry length is :' + features.length)
+    
+    this._renderFeatures = features
+    this._maxExtent = renderExtent
+    this._renderResolution = resolution
+    this._renderExtent = renderExtent
+    this._renderRevision = layerRevision
     return true
   }
   
@@ -92,12 +135,16 @@ export default class FeatureLayerRenderer extends LayerRenderer {
     const frameState = frameStateOpt
     const viewState = frameState.viewState
     const layer = this.layer
-    const features = layer.features
+    const features = this._renderFeatures
     const resolution = viewState.resolution
   
     const transform = this.getTransform(frameState, 0)
   
     this.preCompose(context, frameState, transform)
+    
+    // Clip the current extent so that the parts of geometries
+    // will not be rendered
+    this._clipExtent(transform, context)
     
     features.forEach(feature => {
       let renderStyle
@@ -122,9 +169,44 @@ export default class FeatureLayerRenderer extends LayerRenderer {
       }
     })
   
+    context.restore()
+    
     this.postCompose(context, frameState, transform)
     
     return true
+  }
+  
+  /**
+   * Clip the context
+   * @param transform
+   * @private
+   */
+  _clipExtent (transform, context) {
+    const flatClipCoords = this.getClipCoords(transform)
+    
+    context.save()
+    context.beginPath()
+    context.moveTo(flatClipCoords[0], flatClipCoords[1])
+    context.lineTo(flatClipCoords[2], flatClipCoords[3])
+    context.lineTo(flatClipCoords[4], flatClipCoords[5])
+    context.lineTo(flatClipCoords[6], flatClipCoords[7])
+    context.clip()
+  }
+  
+  /**
+   * Get clip coordinates
+   * @param transform
+   * @returns {[*,*,*,*,*,*,*,*]}
+   */
+  getClipCoords (transform) {
+    const maxExtent = this._maxExtent
+    const minX = maxExtent[0]
+    const minY = maxExtent[1]
+    const maxX = maxExtent[2]
+    const maxY = maxExtent[3]
+    const flatClipCoords = [minX, minY, minX, maxY, maxX, maxY, maxX, minY]
+    Transform.transform2D(flatClipCoords, 0, 8, 2, transform, flatClipCoords)
+    return flatClipCoords
   }
   
   preCompose () {

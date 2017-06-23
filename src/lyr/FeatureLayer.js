@@ -1,6 +1,7 @@
 
 import BaseLayer from './BaseLayer'
 import {Style} from '../style/Style'
+import {ExtentUtil} from '../geometry/support/ExtentUtil'
 import FeatureEvent from '../meek/FeatureEvent'
 
 export default class FeatureLayer extends BaseLayer {
@@ -44,6 +45,15 @@ export default class FeatureLayer extends BaseLayer {
      * @type {number}
      */
     this.zIndex = options.zIndex || 2
+  
+    /**
+     * The rendering buffer will be used for building an extent that
+     * limit geometries rendering
+     * @type {number}
+     * @private
+     */
+    this._renderBuffer = options.renderBuffer !== undefined ?
+      options.renderBuffer : 100
   }
   
   /**
@@ -178,6 +188,41 @@ export default class FeatureLayer extends BaseLayer {
     }
     
     return this._style
+  }
+  
+  /**
+   * Getter and Setter for renderBuffer
+   * @returns {*|number}
+   */
+  get renderBuffer() { return this._renderBuffer }
+  set renderBuffer (value) {
+    if (this._renderBuffer !== value) {
+      this._renderBuffer = value
+    }
+  }
+  
+  /**
+   *
+   * @param extent
+   * @returns {Array}
+   */
+  loadFeature (extent) {
+    const features = this.features
+    
+    const intersects = ExtentUtil.intersects
+    const createOrUpdate = ExtentUtil.createOrUpdate
+    const newFeatures = []
+    features.forEach(feature => {
+      const geometryExtent = feature.geometry.extent
+      const extentArr = createOrUpdate(geometryExtent.xmin,
+        geometryExtent.ymin, geometryExtent.xmax, geometryExtent.ymax)
+      
+      if (intersects(extentArr, extent)) {
+        newFeatures.push(feature)
+      }
+    })
+    
+    return newFeatures
   }
   
   get styleFunction () { return this._styleFunction }

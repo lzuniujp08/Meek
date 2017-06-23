@@ -13,7 +13,7 @@ export default class BaseLayer extends BaseObject {
 
     const baseOptions = Object.assign({},options)
     
-    this._name = ''
+    this.name = baseOptions.name || ''
     this.visible = true
     this.datasource = []
     this.opacity = baseOptions.opacity !== undefined ? options.opacity : 1
