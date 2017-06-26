@@ -3,6 +3,8 @@ import BaseLayer from './BaseLayer'
 import {Style} from '../style/Style'
 import {ExtentUtil} from '../geometry/support/ExtentUtil'
 import FeatureEvent from '../meek/FeatureEvent'
+import {EventType} from '../meek/EventType'
+import {listen, unlistenByKey} from '../core/EventManager'
 
 export default class FeatureLayer extends BaseLayer {
 
@@ -32,6 +34,13 @@ export default class FeatureLayer extends BaseLayer {
   
     /**
      *
+     * @type {Map}
+     * @private
+     */
+    this._featureChangeKeys = new Map()
+  
+    /**
+     *
      */
     this.style = options.style
     
@@ -52,17 +61,28 @@ export default class FeatureLayer extends BaseLayer {
      * @type {number}
      * @private
      */
-    this._renderBuffer = options.renderBuffer !== undefined ?
-      options.renderBuffer : 100
+    this._renderBuffer = options.renderBufferValue !== undefined ?
+      options.renderBufferValue : 100
+  
   }
   
   /**
    * Clear all feature in collection
    */
   clear () {
-    this._features = []
-    this.dispatchEvent(new FeatureEvent(FeatureEvent.EventType.CLEAR))
-    this.changed()
+    if (this._features.length !== 0) {
+      this._features = []
+      
+      // remove the event listener from feature
+      const unlistenByKeyFn = unlistenByKey
+      
+      this._featureChangeKeys.forEach((value) => {
+        unlistenByKeyFn(value)
+      })
+      
+      this.dispatchEvent(new FeatureEvent(FeatureEvent.EventType.CLEAR))
+      this.changed()
+    }
   }
 
   get features () { return this._features }
@@ -82,6 +102,25 @@ export default class FeatureLayer extends BaseLayer {
   }
   
   /**
+   *
+   * @param feature
+   * @returns {boolean}
+   */
+  hasFeature (feature) {
+    if (feature === null || feature === undefined) {
+      return false
+    }
+    
+    const featureId = feature.id
+    const features = this.features
+    const findIndex = features.findIndex(f => {
+      return f.id === featureId
+    })
+    
+    return findIndex > -1
+  }
+  
+  /**
    * Put features to the layer collection and then
    * dispacth a feature event.
    * @param features
@@ -89,8 +128,12 @@ export default class FeatureLayer extends BaseLayer {
    */
   _addFeaturesInner (features) {
     features.forEach(feature => {
-      this.features.push(feature)
-      this.dispatchEvent(new FeatureEvent(FeatureEvent.EventType.ADD_FEATURE, feature))
+      if (!this.hasFeature(feature)) {
+        this.features.push(feature)
+        
+        this._setupChangeEvents(feature.id, feature)
+        this.dispatchEvent(new FeatureEvent(FeatureEvent.EventType.ADD_FEATURE, feature))
+      }
     })
   }
   
@@ -155,7 +198,7 @@ export default class FeatureLayer extends BaseLayer {
   }
   
   /**
-   * Remove a feature from collection
+   * Remove a feature from features collection
    * @param feature
    * @returns {boolean}
    */
@@ -165,17 +208,41 @@ export default class FeatureLayer extends BaseLayer {
       return false
     }
     
+    const featureId = feature.id
     const index = features.findIndex(function(f){
-      return f.id === feature.id
+      return f.id === featureId
     })
+    
     
     if (index > -1) {
       features.splice(index, 1)
+      
+      this._featureChangeKeys.delete(featureId)
       
       this.dispatchEvent(new FeatureEvent(FeatureEvent.EventType.REMOVE_FEATURE, feature))
       this.changed()
     }
   }
+  
+  /**
+   *
+   * @param featureKey
+   * @param feature
+   * @private
+   */
+  _setupChangeEvents (featureKey, feature) {
+    this._featureChangeKeys.set(featureKey, listen(feature,
+      EventType.CHANGE, this._handleFeatureChange, this))
+  }
+  
+  /**
+   *
+   * @private
+   */
+  _handleFeatureChange () {
+    this.changed()
+  }
+  
   
   set style (value) {
     this._style = value !== undefined ? value : Style.defaultFunction()
@@ -195,9 +262,9 @@ export default class FeatureLayer extends BaseLayer {
    * @returns {*|number}
    */
   get renderBuffer() { return this._renderBuffer }
-  set renderBuffer (value) {
-    if (this._renderBuffer !== value) {
-      this._renderBuffer = value
+  set renderBuffer (renderBufferValue) {
+    if (this._renderBuffer !== renderBufferValue) {
+      this._renderBuffer = renderBufferValue
     }
   }
   

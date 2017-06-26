@@ -4,7 +4,8 @@
 
 import BaseObject from '../core/BaseObject'
 import Obj from '../utils/Obj'
-
+import {listen, unlistenByKey} from '../core/EventManager'
+import {EventType} from '../meek/EventType'
 
 /**
  * The feature class is intent to represent geographic features,with a geometry ,a style and
@@ -17,11 +18,35 @@ export default class Feature extends BaseObject {
 
   constructor (geometry, attributes = {}, style) {
     super()
-
+  
+    /**
+     *
+     * @type {undefined}
+     * @private
+     */
+    this._styleFunction = undefined
+  
+    /**
+     *
+     * @type {null}
+     * @private
+     */
+    this._geometryChangeKey = null
+    
+  
+    /**
+     *
+     */
     this.geometry = geometry
-    
+  
+    /**
+     *
+     */
     this.initArribute(attributes)
-    
+  
+    /**
+     *
+     */
     this.style = style
 
     /**
@@ -30,9 +55,16 @@ export default class Feature extends BaseObject {
      * @private
      */
     this.display = true
-    this._styleFunction = undefined
+  
   }
   
+  /**
+   *
+   * @private
+   */
+  _handleGeometryChanged () {
+    this.changed()
+  }
   
   initArribute (attributes) {
     this._attributesMap = Obj.objectToMap(attributes)
@@ -62,9 +94,22 @@ export default class Feature extends BaseObject {
     return this._attributesMap.has(property)
   }
   
+  /**
+   *
+   * @returns {*}
+   */
   get geometry () { return this._geometry }
   set geometry (value) {
-    this._geometry = value
+    if (value) {
+      this._geometry = value
+  
+      if (this._geometryChangeKey) {
+        unlistenByKey(this._geometryChangeKey)
+      }
+  
+      this._geometryChangeKey = listen(value,
+        EventType.CHANGE, this._handleGeometryChanged, this)
+    }
   }
 
   // get attributes () { return this._attributes }
