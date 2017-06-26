@@ -55,9 +55,14 @@ export default class Line extends Geometry {
     this._extent = null
   }
   
+  /**
+   *
+   * @param coordinates
+   */
   addPath (coordinates) {
     this.path.push(coordinates)
     this._extent = null
+    this.changed()
   }
   
   forEachSegment (callback, opt) {
@@ -125,6 +130,7 @@ export default class Line extends Geometry {
   setCoordinates (coords) {
     this.path = coords
     this._extent = null
+    this.changed()
   }
   
   /**

@@ -115,8 +115,13 @@ export default class Point extends Geometry {
     return [this.x, this.y]
   }
   
+  /**
+   * set coordinates to point
+   * @param coordinates
+   */
   setCoordinates (coordinates) {
     this.update(coordinates[0], coordinates[1])
+    this.changed()
   }
   
   getCoordinateIndex () {

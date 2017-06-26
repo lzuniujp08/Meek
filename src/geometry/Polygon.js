@@ -171,6 +171,7 @@ export default class Polygon extends Geometry {
   setCoordinates (coords) {
     this.rings = coords
     this._extent = null
+    this.changed()
   }
   
   /**
