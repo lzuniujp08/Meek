@@ -68,6 +68,13 @@ export default class FeatureLayerRenderer extends LayerRenderer {
      */
     this._renderRevision = NaN
   
+    /**
+     *
+     * @type {boolean}
+     * @private
+     */
+    this._cacheableThisTime = true
+  
   }
   
  
@@ -76,12 +83,10 @@ export default class FeatureLayerRenderer extends LayerRenderer {
    */
   prepareFrame (frameState) {
     const layer = this.layer
-    
     const frameExtent = frameState.extent
     const viewState = frameState.viewState
     const resolution = viewState.resolution
     const layerRevision = layer.revision
-    
     const featureLayerRenderBuffer = layer.renderBuffer
     
     const renderExtent = ExtentUtil.buffer(frameExtent,
@@ -90,22 +95,24 @@ export default class FeatureLayerRenderer extends LayerRenderer {
     if (this._renderResolution === resolution &&
         this._renderRevision === layerRevision &&
         ExtentUtil.containsExtent(this._renderExtent, renderExtent)) {
-      console.log('render cache')
-      return true
+      console.log(this.id + 'render cache')
+      this._cacheableThisTime = true
+      
+      // return true
     }
-    
+  
     // 加载当前屏的图形
     const features = this.layer.loadFeature(renderExtent)
     
-    // 转换为canvas坐标
+    console.log(this.layer.name + 'the renderer geometry length is :' + features.length)
   
-    console.log('the renderer geometry length is :' + features.length)
-    
+    this._cacheableThisTime = false
     this._renderFeatures = features
     this._maxExtent = renderExtent
     this._renderResolution = resolution
     this._renderExtent = renderExtent
     this._renderRevision = layerRevision
+    
     return true
   }
   
@@ -159,6 +166,7 @@ export default class FeatureLayerRenderer extends LayerRenderer {
       }
       
       let geomertyRender = this._getGeometryRender(feature.geometry)
+      this._resetRender(geomertyRender)
       geomertyRender.render(feature, renderStyle, transform)
   
       /**
@@ -207,6 +215,17 @@ export default class FeatureLayerRenderer extends LayerRenderer {
     const flatClipCoords = [minX, minY, minX, maxY, maxX, maxY, maxX, minY]
     Transform.transform2D(flatClipCoords, 0, 8, 2, transform, flatClipCoords)
     return flatClipCoords
+  }
+  
+  /**
+   *
+   * @param geomertyRender
+   * @private
+   */
+  _resetRender (geomertyRender) {
+    if (!this._cacheableThisTime) {
+      geomertyRender.resetRenderOption()
+    }
   }
   
   preCompose () {
