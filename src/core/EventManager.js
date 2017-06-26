@@ -40,7 +40,7 @@ const removeListeners = function (target, type) {
 }
 
 /**
- *
+ * Unlisten events listeners by the passed key
  * @param key
  */
 export function unlistenByKey (key) {

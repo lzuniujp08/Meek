@@ -28,7 +28,6 @@ export default class PolygonRender extends GeometryRender {
     const geometry = feature.geometry
   
     const  transform2D =  Transform.transform2D
-    const coordinates = []
     let geometryCoordinages = geometry.getCoordinates()
     
     if (!geometryCoordinages) {
@@ -38,18 +37,31 @@ export default class PolygonRender extends GeometryRender {
     if (geometryCoordinages.length === 0) {
       return false
     }
-
-    // TODO  Should be cached
-    geometryCoordinages.forEach(function(points){
-      let coordinate = transform2D(
-        points, 0, points.length, 2,
-        transform)
   
-      coordinate[0] = (coordinate[0] + 0.5 ) | 0
-      coordinate[1] = (coordinate[1] + 0.5 ) | 0
+    // TODO find a way to cache the rendered data
+    let coordinates = []
+    if (this._pixelCoordinates &&
+      this.equalsTransform(transform, this.renderedTransform)) {
+      coordinates = this._pixelCoordinates
+      console.log('get the rendered data from chche for polygon')
+    } else {
+      const geometryCoordinates = geometry.getCoordinates()
+    
+      geometryCoordinates.forEach(function(points){
+        let coordinate = transform2D(
+          points, 0, points.length, 2,
+          transform)
       
-      coordinates.push(coordinate)
-    })
+        coordinate[0] = (coordinate[0] + 0.5 ) | 0
+        coordinate[1] = (coordinate[1] + 0.5 ) | 0
+      
+        coordinates.push(coordinate)
+      })
+    
+      this._pixelCoordinates = coordinates
+      Transform.setFromArray(this.renderedTransform, transform)
+      console.log('caclulate the rendered data for polygon')
+    }
     
     const len = styleArray.length
     for(let i = 0; i < len ; i ++){

@@ -12,6 +12,12 @@ export default class LineRender extends GeometryRender {
     super(context)
   }
   
+  /**
+   *
+   * @param feature
+   * @param renderStyle
+   * @param transform
+   */
   render (feature, renderStyle, transform) {
     if (!feature) {
       return
@@ -21,20 +27,31 @@ export default class LineRender extends GeometryRender {
     const styleArray = renderStyle
     const geometry = feature.geometry
   
-    const  transform2D =  Transform.transform2D
-    const coordinates = [], geometryCoordinates = geometry.getCoordinates()
-
-    // TODO  Should be cached
-    geometryCoordinates.forEach(function(points){
-      let coordinate = transform2D(
-        points, 0, points.length, 2,
-        transform)
-      
-      coordinate[0] = (coordinate[0] + 0.5 ) | 0
-      coordinate[1] = (coordinate[1] + 0.5 ) | 0
-      
-      coordinates.push(coordinate)
-    })
+    const transform2D =  Transform.transform2D
+    let coordinates = []
+    // TODO find a way to cache the rendered data
+    if (this._pixelCoordinates &&
+        this.equalsTransform(transform, this.renderedTransform)) {
+      coordinates = this._pixelCoordinates
+      console.log('get the rendered data from chche for line')
+    } else {
+      const geometryCoordinates = geometry.getCoordinates()
+  
+      geometryCoordinates.forEach(function(points){
+        let coordinate = transform2D(
+          points, 0, points.length, 2,
+          transform)
+    
+        coordinate[0] = (coordinate[0] + 0.5 ) | 0
+        coordinate[1] = (coordinate[1] + 0.5 ) | 0
+    
+        coordinates.push(coordinate)
+      })
+  
+      this._pixelCoordinates = coordinates
+      Transform.setFromArray(this.renderedTransform, transform)
+      console.log('caclulate the rendered data for line')
+    }
     
     const len = styleArray.length
     for(let i = 0; i < len ; i ++){
