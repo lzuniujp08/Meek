@@ -77,15 +77,30 @@ export default class Point extends Geometry {
   containsXY (x, y, opt) {
     const tolerance = opt.tolerance ? opt.tolerance : 2
     const pointA = this
-    
+
     const distance = squaredDistance(pointA.x, pointA.y, x, y)
-    if (distance <= tolerance) {
+    if (Math.sqrt(distance/2) <= tolerance) {
       return true
     }
-  
+
     return false
   }
-  
+
+
+
+  // containsXY (x, y, opt) {
+  //   const tolerance = opt.tolerance ? opt.tolerance : 2
+  //   const pointA = this
+  //   const dx = pointA.x - x
+  //   const dy = pointA.y - y
+  //   const squredtolerance = tolerance * tolerance
+  //   if (dx*dx < squredtolerance || dy*dy <squredtolerance) {
+  //     return true
+  //   }
+  //
+  //   return false
+  // }
+
   /**
    * 更新x,y坐标值
    * @param nx x新值
