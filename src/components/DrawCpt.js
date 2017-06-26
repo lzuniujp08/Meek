@@ -110,7 +110,7 @@ export default class DrawCpt extends Component {
      * @type {FeatureLayer}
      * @private
      */
-    this._sketchLayer = new FeaureLayer()
+    this._sketchLayer = new FeaureLayer({name: 'sketch layer for draw component'})
     this._sketchLayer.style = this.getDefaultStyleFunction()
   
     /**
@@ -181,9 +181,6 @@ export default class DrawCpt extends Component {
     this._freehandCondition = options.freehandCondition ?
       options.freehandCondition : function () { return true }
       
-    // Here will add activie event listener for switch drawing
-    //
-  
   }
   
   /**
@@ -625,8 +622,8 @@ export default class DrawCpt extends Component {
       this._updateSketchFeatures()
     } else {
       const sketchPointgeom = this._sketchPoint.geometry
-      sketchPointgeom.update(coordinates[0], coordinates[1])
-      this.changed()
+      sketchPointgeom.setCoordinates(coordinates)
+      // this.changed()
     }
   }
   
@@ -666,8 +663,7 @@ export default class DrawCpt extends Component {
         if (coordinates.length > 2) {
           
           coordinates.splice(coordinates.length - 2, 1)
-  
-          this.changed()
+          this._sketchFeature.changed()
         }
       }
     } else if (drawMode === DrawCpt.DrawMode.POLYGON) {
@@ -680,8 +676,7 @@ export default class DrawCpt extends Component {
   
           const lineCoordinate = this._sketchLine.geometry.getCoordinates()
           lineCoordinate.splice(lineCoordinate.length - 2, 1)
-  
-          this.changed()
+          this._sketchFeature.changed()
         }
       }
     }
@@ -700,7 +695,7 @@ export default class DrawCpt extends Component {
 
     if (mapValue) {
       this._map = mapValue
-      this._mapRenderKey = listen(this, EventType.CHANGE, mapValue.render, mapValue)
+      // this._mapRenderKey = listen(this, EventType.CHANGE, mapValue.render, mapValue)
     }
     
     this._updateState()

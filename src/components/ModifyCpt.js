@@ -311,8 +311,6 @@ export default class ModifyCpt extends Component {
    * @private
    */
   _handleDownEvent (evt) {
-    // this._handlePointerAtPixel(evt.pixel, evt.map)
-    // const pixelCoordinate = evt.map.getCoordinateFromPixel(evt.pixel)
     this._downPoint = evt.coordinate
     this._dragSegments.length = 0
     this._modified = false
@@ -320,57 +318,8 @@ export default class ModifyCpt extends Component {
     const vertexFeature = this._vertexFeature
     
     if (vertexFeature) {
-      // const insertVertices = []
       const geometry = vertexFeature.geometry
       const vertex = geometry.getCoordinates()
-      // const vertexExtent = ExtentUtil.boundingSimpleExtent([[geometry.x, geometry.y]])
-      // const segmentDataMatches = this._getInExtent(this.features[0].geometry, vertex, this._pixelTolerance)
-      // const componentSegments = {}
-      // segmentDataMatches.sort(this._compareIndexes)
-  
-      // for (let i = 0, ii = segmentDataMatches.length; i < ii; ++i) {
-      //   const segmentDataMatch = segmentDataMatches[i]
-      //   let segment = segmentDataMatch.segment
-      //   let uid = segmentDataMatch.geometry.id
-      //   const depth = segmentDataMatch.depth
-      //   if (depth) {
-      //     uid += '-' + depth.join('-') // separate feature components
-      //   }
-      //
-      //   if (!componentSegments[uid]) {
-      //     componentSegments[uid] = new Array(2)
-      //   }
-      //
-      //   if (segmentDataMatch.geometry.geometryType === Geometry.CIRCLE &&
-      //       segmentDataMatch.index === ModifyCpt.MODIFY_SEGMENT_CIRCLE_CIRCUMFERENCE_INDEX) {
-      //
-      //     const closestVertex = closestOnSegment(pixelCoordinate, segmentDataMatch)
-      //
-      //     if (equals(closestVertex, vertex) && !componentSegments[uid][0]) {
-      //       this._dragSegments.push([segmentDataMatch, 0])
-      //       componentSegments[uid][0] = segmentDataMatch
-      //     }
-      //   } else if (equals(segment[0], vertex) && !componentSegments[uid][0]) {
-      //     this._dragSegments.push([segmentDataMatch, 0])
-      //     componentSegments[uid][0] = segmentDataMatch
-      //   } else if (equals(segment[1], vertex) && !componentSegments[uid][1]) {
-      //
-      //     // prevent dragging closed linestrings by the connecting node
-      //     if ((segmentDataMatch.geometry.geometryType === Geometry.LINE ||
-      //          segmentDataMatch.geometry.geometryType === Geometry.MULTI_LINE) &&
-      //          componentSegments[uid][0] &&
-      //          componentSegments[uid][0].index === 0) {
-      //       continue
-      //     }
-      //
-      //     this._dragSegments.push([segmentDataMatch, 1])
-      //     componentSegments[uid][1] = segmentDataMatch
-      //   } else if (!componentSegments[uid][0] && !componentSegments[uid][1]) {
-      //   // else if (segment.id in this._vertexSegments && (!componentSegments[uid][0] && !componentSegments[uid][1])) {
-      //     insertVertices.push([segmentDataMatch, vertex])
-      //   }
-      // }
-  
       const insertVertices = [this._snapSegments]
       if (insertVertices.length) {
         this._willModifyFeatures(evt)
@@ -474,21 +423,8 @@ export default class ModifyCpt extends Component {
           
           // draw the snapping point
           this._createOrUpdateVertexFeature(vertex)
-          // var segment
-          // for (var i = 1, ii = nodes.length; i < ii; ++i) {
-          //   segment = nodes[i].segment
-          //   if ((equals(closestSegment[0], segment[0]) &&
-          //     equals(closestSegment[1], segment[1]) ||
-          //     (equals(closestSegment[0], segment[1]) &&
-          //     equals(closestSegment[1], segment[0])))) {
-          //     vertexSegments[ol.getUid(segment)] = true
-          //   } else {
-          //     break
-          //   }
-          // }
         }
   
-        // vertexSegments[ol.getUid(closestSegment)] = true
         this._vertexSegments = vertexSegments
         return
       }
@@ -612,11 +548,10 @@ export default class ModifyCpt extends Component {
           ymax: this.map.view.dataExtent[3]
         }
       })
+      
       this.changed()
-  
       this._downPoint = vertex
     }
-    
   }
   
   /**
@@ -879,7 +814,7 @@ export default class ModifyCpt extends Component {
     } else {
       const geom = vertexFeature.geometry
       geom.update(point[0], point[1])
-      this.changed()
+      this._overLayer.changed()
     }
   }
   
