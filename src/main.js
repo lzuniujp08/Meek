@@ -55,11 +55,11 @@ import SelectEvent from 'components/SelectEvent'
 import FeatureEvent from 'meek/FeatureEvent'
 import ModifyEvent from 'components/ModifyEvent'
 
-
 import BrowserEventHandler from 'meek/BrowserEventHandler'
 import Feature from 'meek/Feature'
 import Map from 'meek/Map'
 import View from 'meek/View'
+import Overlay from 'meek/Overlay'
 
 export default {
   Config,
@@ -101,6 +101,7 @@ export default {
   Feature,
   Map,
   View,
+  Overlay,
   GeometryUtil,
   ExtentUtil,
   SelectCpt,
