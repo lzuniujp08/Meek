@@ -7,6 +7,7 @@ import CanvasRenderer from '../renderer/canvas/CanvasRenderer'
 import BrowserEventHandler from './BrowserEventHandler'
 import BrowserEvent from './BrowserEvent'
 import View from './View'
+import {BaseEvent} from '../core/BaseEvent'
 
 import FeatureLayer from '../lyr/FeatureLayer'
 import {listen} from '../core/EventManager'
@@ -45,13 +46,38 @@ export default class Map extends BaseObject {
     this._animationDelayKey = undefined
 
     /**
-     * 添加到map中的cpts集合;例如：DrawCpt、EditCpt、NavCpt等
+     * The collection of components
      * @private
      */
     this._components = []
   
     // Create the viewport for map container
     this._createViewport()
+  
+    this._overlayContainer = document.createElement('DIV')
+    this._overlayContainer.className = 'dt-overlaycontainer'
+    this.viewport.appendChild(this._overlayContainer)
+  
+    this._overlayContainerStopEvent = document.createElement('DIV')
+    this._overlayContainerStopEvent.className = 'dt-overlaycontainer-stopevent'
+  
+    // prevent event propagation from overlay
+    const overlayEvents = [
+      BrowserEvent.CLICK,
+      BrowserEvent.DBLCLICK,
+      BrowserEvent.MOUSE_DOWN,
+      BrowserEvent.MOUSE_UP,
+      BrowserEvent.MOUSE_WHEEL,
+      BrowserEvent.WHEEL
+    ]
+    overlayEvents.forEach(overlayEvent => {
+      listen(this._overlayContainerStopEvent, overlayEvent,
+        function(evt) {
+          evt.stopPropagation()
+        })
+    })
+    
+    this.viewport.appendChild(this._overlayContainerStopEvent)
   
     // Get the options inner
     const optionsInner = Map.parseOptionsInner(options)
@@ -75,6 +101,11 @@ export default class Map extends BaseObject {
     // add default components to maps
     optionsInner.components.forEach(component =>
       this.addComponents(component))
+  
+    this._overlayIdIndex = {}
+    this._overlays = optionsInner.overlays
+    this._overlays.forEach(overlay => this._addOverlayInternal(overlay))
+    
     
     //
     listen(this.view, EventType.CHANGE, this._handleViewChange, this)
@@ -100,6 +131,22 @@ export default class Map extends BaseObject {
     this._viewport = viewport
   }
   
+  /**
+   * overlayContainer getter
+   * @returns {Element|*}
+   */
+  get overlayContainer () { return this._overlayContainer }
+  
+  /**
+   * overlayContainerStopEvent getter
+   * @returns {Element|*}
+   */
+  get overlayContainerStopEvent () { return this._overlayContainerStopEvent }
+  
+  /**
+   * viewport getter
+   * @returns {Element|*}
+   */
   get viewport () { return this._viewport }
 
   /**
@@ -212,6 +259,14 @@ export default class Map extends BaseObject {
     this.render()
   }
   
+  /**
+   *
+   * @returns {boolean}
+   */
+  isRendered () {
+    return !!this._frameState
+  }
+  
   get size () { return this._size }
   set size (value) {
     this._size = value
@@ -257,6 +312,20 @@ export default class Map extends BaseObject {
     return this.layers.filter( layer => {
       return layer instanceof FeatureLayer
     })
+  }
+  
+  /**
+   *
+   * @param overlay
+   * @private
+   */
+  _addOverlayInternal (overlay) {
+    const id = overlay.overlayId
+    if (id !== undefined) {
+      this._overlayIdIndex[id.toString()] = overlay
+    }
+    
+    overlay.map = this
   }
   
   /**
@@ -395,10 +464,21 @@ export default class Map extends BaseObject {
       components = componentsDefaults()
     }
     
+    
+    let overlays
+    if (options.overlays !== undefined) {
+      if (Array.isArray(options.overlays)) {
+        overlays = options.overlays.slice()
+      }
+    } else {
+      overlays = []
+    }
+    
     return {
       rendererClass,
       components,
-      values
+      values,
+      overlays
     }
   }
 }
