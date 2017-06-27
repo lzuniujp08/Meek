@@ -94,23 +94,6 @@ export default class View extends BaseObject {
   
   
   _createRotationConstraint () {
-    // var enableRotation = options.enableRotation !== undefined ?
-    //   options.enableRotation : true;
-    // if (enableRotation) {
-    //   var constrainRotation = options.constrainRotation;
-    //   if (constrainRotation === undefined || constrainRotation === true) {
-    //     return this.createSnapToZero();
-    //   } else if (constrainRotation === false) {
-    //     return ol.RotationConstraint.none;
-    //   } else if (typeof constrainRotation === 'number') {
-    //     return ol.RotationConstraint.createSnapToN(constrainRotation);
-    //   } else {
-    //     return ol.RotationConstraint.none;
-    //   }
-    // } else {
-    //   return ol.RotationConstraint.disable;
-    // }
-    
     return 0
   }
   
@@ -122,7 +105,6 @@ export default class View extends BaseObject {
    */
   _createCenterConstraint (options) {
     if (options.extent !== undefined) {
-      // return this._createExtent(options.extent)
     } else {
       return function (center) {
         return center
@@ -311,11 +293,6 @@ export default class View extends BaseObject {
   get center () { return this._center }
   set center ( value ) {
     this.constrainCenter(value)
-    
-    // if (this.getAnimating()) {
-    //   this.cancelAnimations()
-    // }
-
     this.changed()
   }
   
