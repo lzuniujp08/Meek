@@ -9,6 +9,8 @@ import {Transform} from '../../data/matrix/Transform'
 import {RenderEventType} from '../RenderEventType'
 import {stableSort} from '../../utils/Array'
 
+import RenderEvent from '../RenderEvent'
+
 
 /**
  *
@@ -79,6 +81,7 @@ export default class CanvasRenderer extends Renderer {
 
     const layers = this.map.layers
   
+    // render in order
     stableSort(layers, this.sortByZIndex)
     
     // 更新转化运算矩阵
@@ -86,7 +89,6 @@ export default class CanvasRenderer extends Renderer {
   
     this._dispatchComposeEvent(RenderEventType.PRERENDER, frameState)
     
-    // @FIXME Layers should be rendered in order
     layers.forEach(layer => {
       let layerRender = this.getLayerRenderer(layer)
       if(layerRender.prepareFrame(frameState)){
@@ -172,7 +174,21 @@ export default class CanvasRenderer extends Renderer {
   }
   
   
-  _dispatchComposeEvent () {
+  /**
+   * 
+   * @private
+   */
+  _dispatchComposeEvent (type, frameState) {
+    const map = this.map
+    const context = this.context
+    if (map.hasListener(type)) {
     
+      // const transform = this.getTransform(frameState)
+    
+      const composeEvent = new RenderEvent(type,
+        frameState, context, null)
+      
+      map.dispatchEvent(composeEvent)
+    }
   }
 }
