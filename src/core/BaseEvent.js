@@ -27,3 +27,18 @@ export default class BaseEvent {
   }
   
 }
+
+/**
+ * @param {Event|Event} evt Event
+ */
+BaseEvent.stopPropagation = function(evt) {
+  evt.stopPropagation()
+}
+
+
+/**
+ * @param {Event|Event} evt Event
+ */
+BaseEvent.preventDefault = function(evt) {
+  evt.preventDefault()
+}
