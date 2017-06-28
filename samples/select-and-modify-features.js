@@ -14,12 +14,14 @@ window.onload = function () {
   var polygon = new Datatang.Polygon(rings)
   
   var extent = new Datatang.Extent(1100, 300, 1400, 600)
-  
+  var extent1 = new Datatang.Extent(1100, 1300, 1400, 1600)
+
   var features = [new Datatang.Feature(point),
     new Datatang.Feature(line),
     new Datatang.Feature(polygon),
+    new Datatang.Feature(extent1),
     new Datatang.Feature(extent)]
-  
+
   // 将会获取缺省样式
   var featureLayer = new Datatang.FeatureLayer()
   featureLayer.addFeatures(features)

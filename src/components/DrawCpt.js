@@ -480,6 +480,10 @@ export default class DrawCpt extends Component {
    * @private
    */
   _finishDrawing () {
+    if (this._sketchFeature === null){
+      return
+    }
+
     const sketchFeature = this._abortDrawing()// 中止绘制，
     const coordinates = this._sketchCoords
     const geometry = (sketchFeature.geometry)

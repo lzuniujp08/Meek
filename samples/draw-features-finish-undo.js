@@ -47,6 +47,7 @@ window.onload = function () {
   var drawTool = new Datatang.DrawCpt({
     type: 'point',
     drawLayer: flayer,
+    maxPoints: 6,
     finishCondition: finishCondition,
     undoCondition: undoCondition
   })
