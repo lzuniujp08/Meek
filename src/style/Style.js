@@ -84,20 +84,21 @@ Style.createDefaultSelecting = function () {
   const white = [255, 255, 255]
   const blue = [0, 153, 255]
   const width = 3
-  
+  const outsideLine = new LineStyle(white,1,width + 2,LineStyle.LineCap.ROUND,LineStyle.LineJion.ROUND)// 外框
+  const insideLine = new LineStyle(blue,1,width,LineStyle.LineCap.ROUND,LineStyle.LineJion.ROUND)
   // 面样式
   styles[Geometry.POLYGON] = [
-    new FillStyle(white,// 填充
-      new LineStyle(blue,1,3)// 边框
-      ,0.5)
+    new FillStyle(white, outsideLine,0.5),
+
+    new FillStyle(white, insideLine,0)
   ]
   styles[Geometry.MULTI_POLYGON] = styles[Geometry.POLYGON]
   styles[Geometry.EXTENT] = styles[Geometry.POLYGON]
   
   // 线样式
   styles[Geometry.LINE] = [
-    new LineStyle(white,1,width + 2,LineStyle.LineCap.ROUND,LineStyle.LineJion.ROUND),// 外框
-    new LineStyle(blue,1,width,LineStyle.LineCap.ROUND,LineStyle.LineJion.ROUND)// 内框
+    outsideLine,// 外框
+    insideLine// 内框
   ]
   styles[Geometry.MULTI_LINE] = styles[Geometry.LINE]
   

@@ -43,7 +43,7 @@ export default class PolygonRender extends GeometryRender {
     if (this._pixelCoordinates &&
       this.equalsTransform(transform, this.renderedTransform)) {
       coordinates = this._pixelCoordinates
-      console.log('get the rendered data from chche for polygon')
+      // console.log('get the rendered data from chche for polygon')
     } else {
       const geometryCoordinates = geometry.getCoordinates()
     
@@ -60,7 +60,7 @@ export default class PolygonRender extends GeometryRender {
     
       this._pixelCoordinates = coordinates
       Transform.setFromArray(this.renderedTransform, transform)
-      console.log('caclulate the rendered data for polygon')
+      // console.log('caclulate the rendered data for polygon')
     }
     
     const len = styleArray.length

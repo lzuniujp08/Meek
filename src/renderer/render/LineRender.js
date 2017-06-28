@@ -33,7 +33,7 @@ export default class LineRender extends GeometryRender {
     if (this._pixelCoordinates &&
         this.equalsTransform(transform, this.renderedTransform)) {
       coordinates = this._pixelCoordinates
-      console.log('get the rendered data from chche for line')
+      // console.log('get the rendered data from chche for line')
     } else {
       const geometryCoordinates = geometry.getCoordinates()
   
@@ -50,7 +50,7 @@ export default class LineRender extends GeometryRender {
   
       this._pixelCoordinates = coordinates
       Transform.setFromArray(this.renderedTransform, transform)
-      console.log('caclulate the rendered data for line')
+      // console.log('caclulate the rendered data for line')
     }
     
     const len = styleArray.length

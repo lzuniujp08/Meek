@@ -42,7 +42,7 @@ export default class BaseObject extends Event {
     ++this._revision
     this.dispatchEvent(EventType.CHANGE)
     
-    console.log('revision:' + this._revision)
+    // console.log('revision:' + this._revision)
   }
 
   /**

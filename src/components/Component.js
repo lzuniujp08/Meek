@@ -233,7 +233,7 @@ export default class Component extends BaseObject {
       x = coordinate[0]
       y = coordinate[1]
     } catch (e) {
-      console.log(coordinate)
+      // console.log(coordinate)
     }
   
     newCoordinate[0] = x

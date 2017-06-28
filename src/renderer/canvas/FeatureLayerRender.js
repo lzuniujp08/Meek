@@ -95,7 +95,7 @@ export default class FeatureLayerRenderer extends LayerRenderer {
     if (this._renderResolution === resolution &&
         this._renderRevision === layerRevision &&
         ExtentUtil.containsExtent(this._renderExtent, renderExtent)) {
-      console.log(this.id + 'render cache')
+      // console.log(this.id + 'render cache')
       this._cacheableThisTime = true
       
       // return true
@@ -104,7 +104,7 @@ export default class FeatureLayerRenderer extends LayerRenderer {
     // 加载当前屏的图形
     const features = this.layer.loadFeature(renderExtent)
     
-    console.log(this.layer.name + 'the renderer geometry length is :' + features.length)
+    // console.log(this.layer.name + 'the renderer geometry length is :' + features.length)
   
     this._cacheableThisTime = false
     this._renderFeatures = features
