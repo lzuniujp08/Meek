@@ -8,6 +8,12 @@ import {RenderEventType} from '../renderer/RenderEventType'
 import {ExtentUtil} from '../geometry/support/ExtentUtil'
 import {outerWidth, outerHeight, removeChildren} from '../utils/DomUtil'
 
+/**
+ * @class Overlay
+ * @extends BaseObject
+ * @module meek
+ * @constructor
+ */
 export default class Overlay extends BaseObject {
   
   constructor (options = {}) {

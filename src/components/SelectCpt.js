@@ -19,6 +19,11 @@ import SelectEvent from '../components/SelectEvent'
  * The select component can be used for features selecting.
  * By default,selected features are styled differently, so this
  *
+ *
+ * @class SelectCpt
+ * @extends Component
+ * @module component
+ * @constructor
  */
 export default class SelectCpt extends Component {
   

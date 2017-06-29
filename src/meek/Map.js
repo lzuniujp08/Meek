@@ -17,7 +17,12 @@ import {ExtentUtil} from '../geometry/support/ExtentUtil'
 import {componentsDefaults} from '../components/ComponentDefaults'
 
 
-
+/**
+ * @class Map
+ * @extends BaseObject
+ * @module meek
+ * @constructor
+ */
 export default class Map extends BaseObject {
 
   constructor (options) {

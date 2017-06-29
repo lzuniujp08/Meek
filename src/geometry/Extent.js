@@ -5,6 +5,15 @@
 import Geometry from './Geometry'
 import {ExtentUtil} from './support/ExtentUtil'
 
+/**
+ * Extent geometry. <br/>
+ *
+ * 矩形类和数据结构
+ *
+ * @class Extent
+ * @extends Geometry
+ * @module geometry
+ */
 export default class Extent extends Geometry {
 
   /**
@@ -41,24 +50,28 @@ export default class Extent extends Geometry {
 
   /**
    * 计算X坐标的中心
+   * @property centerX
    * @returns {number}
    */
   get centerX () { return (this.xmax + this.xmin) / 2 }
 
   /**
    * 计算Y坐标的中心
+   * @property centerY
    * @returns {number}
    */
   get centerY () { return (this.ymax + this.ymin) / 2 }
 
   /**
    * 计算最小外接矩形的宽
+   * @property width
    * @returns {number}
    */
   get width () { return Math.abs(this.xmax - this.xmin) }
 
   /**
    * 计算最小外接矩形的高
+   * @property height
    * @returns {number}
    */
   get heigth () { return Math.abs(this.ymax - this.ymin) }
@@ -69,16 +82,32 @@ export default class Extent extends Geometry {
    * @returns {MBR}
    */
   get extent () { return this }
-
+  
+  /**
+   * @property xmin
+   * @type Number
+   */
   get xmin () { return this._xmin }
   set xmin (value) { this._xmin = value }
-
+  
+  /**
+   * @property ymin
+   * @type Number
+   */
   get ymin () { return this._ymin }
   set ymin (value) { this._ymin = value }
-
+  
+  /**
+   * @property xmax
+   * @type Number
+   */
   get xmax () { return this._xmax }
   set xmax (value) { this._xmax = value }
-
+  
+  /**
+   * @property ymax
+   * @type Number
+   */
   get ymax () { return this._ymax }
   set ymax (value) { this._ymax = value }
   
@@ -92,6 +121,10 @@ export default class Extent extends Geometry {
     return ExtentUtil.containsPoint(this, [x, y])
   }
   
+  /**
+   * @method getFlatInteriorPoint
+   * @returns {[*,*]}
+   */
   getFlatInteriorPoint () {
     return [this.centerX, this.centerY]
   }
@@ -193,7 +226,7 @@ export default class Extent extends Geometry {
   }
   
   /**
-   *
+   * @method setCoordinates
    * @param coordinates
    */
   setCoordinates (coordinates) {
@@ -208,6 +241,7 @@ export default class Extent extends Geometry {
   
   /**
    * Get index in this coordinates by given coordinate
+   * @method getCoordinateIndex
    * @param coord
    * @returns {*|number}
    */

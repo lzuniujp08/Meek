@@ -4,6 +4,12 @@
 
 import BaseStyle from './BaseStyle'
 
+/**
+ * @class LineStyle
+ * @extends BaseStyle
+ * @module style
+ * @constructor
+ */
 export default class LineStyle extends BaseStyle {
 
   constructor (color = [255,255,255], alpha = 1, width = 1,
@@ -17,15 +23,31 @@ export default class LineStyle extends BaseStyle {
     this.miterLimit = miterLimit
   }
   
+  /**
+   * @property width
+   * @type {Number}
+   */
   get width () { return this._width }
   set width (value) { this._width = value }
   
+  /**
+   * @property lineCap
+   * @type {Number}
+   */
   set lineCap (value) { this._lineCap = value }
   get lineCap () { return this._lineCap }
   
+  /**
+   * @property lineJion
+   * @type {Number}
+   */
   set lineJion (value) { this._lineJion = value }
   get lineJion () { return this._lineJion }
   
+  /**
+   * @property miterLimit
+   * @type {Number}
+   */
   set miterLimit (value) { this._miterLimit = value }
   get miterLimit () { return this._miterLimit }
   

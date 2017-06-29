@@ -2,6 +2,18 @@
  * Created by zypc on 2016/11/13.
  */
 
+/**
+ *
+ * The event processor for all subclasss, which can allow subclass
+ * to handle event dispatching and listening <br/>
+ *
+ * 事件处理器,让所以子类具备事件的监听和派发
+ *
+ * @class Event
+ * @module core
+ * @constructor
+ *
+ */
 export default class Event {
   
   /**
@@ -17,16 +29,15 @@ export default class Event {
   }
   
   /**
-   *
+   * @method getListeners
    * @param type
-   * @returns {*}
    */
   getListeners (type) {
     return this._listeners[type]
   }
   
   /**
-   *
+   * @method hasListener
    * @param optType
    * @returns {boolean}
    */
@@ -35,7 +46,7 @@ export default class Event {
   }
   
   /**
-   *
+   * @method removeEventListener
    * @param type
    * @param listener
    */
@@ -58,7 +69,7 @@ export default class Event {
   }
   
   /**
-   *
+   * @method addEventListener
    * @param type
    * @param listener
    */
@@ -74,7 +85,7 @@ export default class Event {
   }
   
   /**
-   *
+   * @method dispatchEvent
    * @param event
    * @returns {*}
    */

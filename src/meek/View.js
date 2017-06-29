@@ -6,6 +6,12 @@ import BaseObject from '../core/BaseObject'
 import {ExtentUtil} from '../geometry/support/ExtentUtil'
 import {Config} from '../meek/Config'
 
+/**
+ * @class View
+ * @extends BaseObject
+ * @module meek
+ * @constructor
+ */
 export default class View extends BaseObject {
   constructor (options) {
     super()

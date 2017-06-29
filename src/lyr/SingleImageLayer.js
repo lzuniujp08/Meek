@@ -14,7 +14,10 @@ import {ImageState} from '../lyr/image/ImageState'
 import {ExtentUtil} from '../geometry/support/ExtentUtil'
 
 /**
- *
+ * @class SingleImageLayer
+ * @extends BaseObject
+ * @module layer
+ * @constructor
  */
 export default class SingleImageLayer extends BaseLayer {
   

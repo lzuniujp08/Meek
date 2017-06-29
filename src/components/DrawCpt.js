@@ -22,6 +22,11 @@ import DrawEvent from './DrawEvent'
 
 /**
  * DrawCpt class is resonsibility to draw geometries.
+ *
+ * @class DrawCpt
+ * @extends Component
+ * @module component
+ * @constructor
  */
 export default class DrawCpt extends Component {
 

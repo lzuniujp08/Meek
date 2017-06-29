@@ -12,8 +12,10 @@ import {mouseWheel} from '../utils/MouseKey'
 import {clamp} from '../utils/Math'
 
 /**
- *
- *
+ * @class MouseWheelZoom
+ * @extends Component
+ * @module component
+ * @constructor
  */
 export default class MouseWheelZoom extends Component {
   

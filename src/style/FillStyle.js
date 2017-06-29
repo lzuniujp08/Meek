@@ -4,6 +4,12 @@
 
 import BaseStyle from './BaseStyle'
 
+/**
+ * @class FillStyle
+ * @extends BaseStyle
+ * @module style
+ * @constructor
+ */
 export default class FillStyle extends BaseStyle {
 
   /**
@@ -21,7 +27,10 @@ export default class FillStyle extends BaseStyle {
     this._borderStyle = borderStyle
   }
   
-  
+  /**
+   * @property borderStyle
+   * @type {LineStyle}
+   */
   get borderStyle () { return this._borderStyle}
   set borderStyle (value) { return this._borderStyle = value }
   
@@ -32,4 +41,9 @@ export default class FillStyle extends BaseStyle {
   
 }
 
+/**
+ * @static
+ * @property SOLID
+ * @type {string}
+ */
 FillStyle.SOLID = 'solid'

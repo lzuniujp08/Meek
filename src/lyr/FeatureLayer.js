@@ -6,6 +6,12 @@ import FeatureEvent from '../meek/FeatureEvent'
 import {EventType} from '../meek/EventType'
 import {listen, unlistenByKey} from '../core/EventManager'
 
+/**
+ * @class FeatureLayer
+ * @extends BaseObject
+ * @module layer
+ * @constructor
+ */
 export default class FeatureLayer extends BaseLayer {
 
   constructor (options = {}) {

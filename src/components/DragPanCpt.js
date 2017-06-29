@@ -8,6 +8,12 @@ import BrowserEvent from '../meek/BrowserEvent'
 import {noModifierKeys} from '../utils/MouseKey'
 import {Coordinate} from '../utils/Coordinate'
 
+/**
+ * @class DragPanCpt
+ * @extends Component
+ * @module component
+ * @constructor
+ */
 export default class DragPanCpt extends Component {
   
   constructor (options = {}) {

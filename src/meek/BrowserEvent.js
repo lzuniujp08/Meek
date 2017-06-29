@@ -4,6 +4,12 @@
 
 import BaseObject from '../core/BaseObject'
 
+/**
+ * @class BrowserEvent
+ * @extends BaseObject
+ * @module meek
+ * @constructor
+ */
 export default class BrowserEvent extends BaseObject {
 
   constructor (map, oriEvent, eventTyle) {

@@ -7,6 +7,13 @@ import FillStyle from './FillStyle'
 
 /**
  * The text style for geometrys
+ *
+ * <br/> 定义文本样式
+ *
+ * @class TextStyle
+ * @extends BaseStyle
+ * @module style
+ * @constructor
  */
 export default class TextStyle extends BaseStyle {
   
@@ -81,43 +88,87 @@ export default class TextStyle extends BaseStyle {
     this.offsetX = options.offsetX !== undefined ? options.offsetX : 0
   
     /**
-     * @private
+     * @property offsetY
      * @type {number}
      */
     this.offsetY = options.offsetY !== undefined ? options.offsetY : 0
     
   }
   
+  /**
+   * @property text
+   * @type {Stirng}
+   */
   get text () { return this._text }
   set text (value) { this._text = value }
   
+  /**
+   * @property font
+   * @type {Stirng}
+   */
   get font () { return this._font }
   set font (value) { this._font = value }
   
+  /**
+   * @property rotation
+   * @type {Stirng}
+   */
   get rotation () { return this._rotation }
   set rotation (value) { this._rotation = value }
   
+  /**
+   * @property rotateWithView
+   * @type {Stirng}
+   */
   get rotateWithView () { return this._rotateWithView }
   set rotateWithView (value) { this._rotateWithView = value }
   
+  /**
+   * @property scale
+   * @type {Stirng}
+   */
   get scale () { return this._scale }
   set scale (value) { this._scale = value }
   
+  /**
+   * @property textAlign
+   * @type {Stirng}
+   */
   get textAlign () { return this._textAlign }
   set textAlign (value) { this._textAlign = value }
   
+  /**
+   * @property textBaseline
+   * @type {Stirng}
+   */
   get textBaseline () { return this._textBaseline }
   set textBaseline (value) { this._textBaseline = value }
   
+  /**
+   * @property fill
+   * @type {Stirng}
+   */
   get fill () { return this._fill }
   set fill (value) { this._fill = value }
   
+  /**
+   * @property stroke
+   * @type {Stirng}
+   */
   get stroke () { return this._stroke }
   set stroke (value) { this._stroke = value }
   
+  /**
+   * @property offsetX
+   * @type {Stirng}
+   */
   get offsetX () { return this._offsetX }
   set offsetX (value) { this._offsetX = value }
   
+  /**
+   * @property offsetY
+   * @type {Stirng}
+   */
   get offsetY () { return this._offsetY }
   set offsetY (value) { this._offsetY = value }
   

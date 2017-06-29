@@ -13,6 +13,10 @@ import {EventType} from '../meek/EventType'
  * Feature provides a function named style that can be seted a style you want,
  * otherwise will use the style of feature layer.
  *
+ * @class Feature
+ * @extends BaseObject
+ * @module meek
+ * @constructor
  */
 export default class Feature extends BaseObject {
 

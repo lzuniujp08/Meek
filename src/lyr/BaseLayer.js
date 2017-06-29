@@ -6,6 +6,12 @@ import BaseObject from '../core/BaseObject'
 import {listen, unlistenByKey} from '../core/EventManager'
 import {EventType} from '../meek/EventType'
 
+/**
+ * @class BaseLayer
+ * @extends BaseObject
+ * @module layer
+ * @constructor
+ */
 export default class BaseLayer extends BaseObject {
 
   constructor (options) {

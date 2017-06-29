@@ -24,7 +24,10 @@ import {closestOnSegment, squaredDistanceToSegment,
 import {noModifierKeys, singleClick} from '../utils/MouseKey'
 
 /**
- *
+ * @class ModifyCpt
+ * @extends Component
+ * @module component
+ * @constructor
  */
 export default class ModifyCpt extends Component {
   

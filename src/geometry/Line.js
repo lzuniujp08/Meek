@@ -8,8 +8,22 @@ import Extent from './Extent'
 import {squaredSegmentDistance} from './support/GeometryUtil'
 import {lineString} from './support/Interpolate'
 
+/**
+ * Line geometry <br/>
+ *
+ * 定义线类和数据结构
+ *
+ * @class Line
+ * @extends Geometry
+ * @module geometry
+ * @constructor
+ */
 export default class Line extends Geometry {
-
+  
+  /**
+   *
+   * @param path
+   */
   constructor (path) {
     super()
     
@@ -48,7 +62,11 @@ export default class Line extends Geometry {
 
     return me._extent
   }
-
+  
+  /**
+   * @property path
+   * @returns
+   */
   get path () { return this._path }
   set path (value) {
     this._path = value
@@ -56,7 +74,8 @@ export default class Line extends Geometry {
   }
   
   /**
-   *
+   * @method addPath
+   * @deprecated
    * @param coordinates
    */
   addPath (coordinates) {
@@ -65,12 +84,16 @@ export default class Line extends Geometry {
     this.changed()
   }
   
+  /**
+   * @method forEachSegment
+   * @param callback
+   * @param opt
+   */
   forEachSegment (callback, opt) {
     this.path.forEach(callback, opt)
   }
   
   /**
-   *
    * @param x
    * @param y
    * @param opt
@@ -97,8 +120,8 @@ export default class Line extends Geometry {
   }
   
   /**
-   *
-   * @returns {(*|*)[]}
+   * @method getFlatInteriorPoint
+   * @returns {[]}
    */
   getFlatInteriorPoint () {
     const interiorPoint = null
@@ -125,6 +148,7 @@ export default class Line extends Geometry {
   
   /**
    * Set coordinate for line
+   * @method setCoordinates
    * @param coords
    */
   setCoordinates (coords) {
@@ -135,6 +159,7 @@ export default class Line extends Geometry {
   
   /**
    * Get index in line coordinates by gived point
+   * @method getCoordinateIndex
    * @param coord
    * @returns {*|number}
    */

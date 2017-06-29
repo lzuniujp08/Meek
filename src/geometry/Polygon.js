@@ -8,8 +8,22 @@ import Extent from './Extent'
 import {linearRings} from './support/Interpolate'
 import {linearRingsAreOriented,orientLinearRings} from './support/Orient'
 
+/**
+ * Polygon geometry <br/>
+ *
+ * 面类和数据结构
+ *
+ * @class Polygon
+ * @extends Geometry
+ * @module geometry
+ */
 export default class Polygon extends Geometry {
-
+  
+  /**
+   * 创建一个Polygon实例
+   * @constructor
+   * @param rings
+   */
   constructor (rings = []) {
     super()
 
@@ -53,6 +67,7 @@ export default class Polygon extends Geometry {
   /**
    * 设置多边形的边，如果设置了边，则需要重新计算
    * 外接矩形
+   * @property rings
    */
   get rings () { return this._rings }
   set rings (value) {
@@ -60,6 +75,10 @@ export default class Polygon extends Geometry {
     this._extent = null
   }
   
+  /**
+   * @
+   * @param ring
+   */
   addRing (ring) {
     this.rings.push(ring)
     this._extent = null
@@ -113,7 +132,7 @@ export default class Polygon extends Geometry {
   }
   
   /**
-   *
+   * @method getFlatInteriorPoint
    * @returns {*}
    */
   getFlatInteriorPoint () {
@@ -127,7 +146,7 @@ export default class Polygon extends Geometry {
   }
   
   /**
-   *
+   * @method getOrientedFlatCoordinates
    * @returns {*}
    */
   getOrientedFlatCoordinates () {
@@ -165,7 +184,7 @@ export default class Polygon extends Geometry {
   }
   
   /**
-   *
+   * @method setCoordinates
    * @param coords
    */
   setCoordinates (coords) {
@@ -175,7 +194,7 @@ export default class Polygon extends Geometry {
   }
   
   /**
-   *
+   * @method getCoordinateIndex
    * @param coord
    * @returns {*|number}
    */

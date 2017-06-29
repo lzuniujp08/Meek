@@ -6,7 +6,16 @@ import BaseObject from '../core/BaseObject'
 import BrowserEvent from '../meek/BrowserEvent'
 import Obj from '../utils/Obj'
 
-
+/**
+ * Abstract base class,represent a base componnet whcih should be inhrited
+ *
+ * <br/> 定义组件基础类
+ *
+ * @class Component
+ * @extends BaseObject
+ * @module component
+ * @constructor
+ */
 export default class Component extends BaseObject {
   constructor (options = {}) {
     super()
