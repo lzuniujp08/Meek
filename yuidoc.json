@@ -1,0 +1,15 @@
+{
+  "name": "Meek",
+  "description": "a drawing library for the web",
+  "version": "0.1.1",
+  "url": "http://www.datatang.com/index.html",
+  "logo": "http://www.datatang.com/img/index/logo_new.png",
+  "options": {
+    "linkNatives": "true",
+    "attributesEmit": "true",
+    "paths": [
+      "./src"
+    ],
+    "outdir": "./api"
+  }
+}
