@@ -4,14 +4,25 @@
 
 import BaseObject from '../core/BaseObject'
 
+/**
+ * The base class to represent a generic layer image,it has some basic properties.
+ * such as extent,resolution,state<br/>
+ *
+ * 基础图片图层，定义了一些基础的属性
+ *
+ * @class BaseImage
+ * @extends BaseObject
+ * @module core
+ * @constructor
+ */
 export default class BaseImage extends BaseObject {
   
   /**
-   *
-   * @param extent
-   * @param resolution
-   * @param pixelRatio
-   * @param state
+   * Create a BaseImage
+   * @param extent the extent of layer
+   * @param resolution the resolution of layer
+   * @param pixelRatio the pixel ratio
+   * @param state the image loading status
    * @param attributions
    */
   constructor (extent, resolution, pixelRatio,
@@ -19,60 +30,97 @@ export default class BaseImage extends BaseObject {
   
     super()
   
+    /**
+     * @type {Object}
+     * @private
+     */
     this._attributions = attributions
   
+    /**
+     * @type {Object}
+     * @private
+     */
     this._extent = extent
   
+    /**
+     * @type {Number}
+     * @private
+     */
     this._pixelRatio = pixelRatio
   
+    /**
+     * @type {Number}
+     * @private
+     */
     this._resolution = resolution
   
+    /**
+     * @type {Number}
+     * @private
+     */
     this._state = state
   }
   
   /**
-   *
-   * @returns {*}
+   * return the attributions of layer <br/>
+   * 返回图层的属性
+   * @property attributions
+   * @type Object
    */
   get attributions () {
     return this._attributions
   }
   
   /**
-   *
-   * @returns {*}
+   * return the extent of layer<br/>
+   * 返回图层的视图范围
+   * @property extent
+   * @type Object
    */
   get extent () {
     return this._extent
   }
   
   /**
-   * Get the DOM image
-   * @param optContext
-   * @returns {*}
+   * return the DOM image<br/>
+   * 返回DOM对象
+   * @param optContext options
+   * @method getDomImage
+   * @abstract
    */
   getDomImage (optContext) { return optContext }
   
   /**
-   * @return {number} PixelRatio.
+   * return the pixel ratio<br/>
+   * 返回像素因数
+   * @property pixelRatio
+   * @type Number
    */
   get pixelRatio () {
     return this._pixelRatio
   }
   
   /**
-   * @return {number} Resolution.
+   * return the resolution of layer<br/>
+   * 返回图层的分辨率
+   * @property resolution
+   * @type Number
    */
   get resolution () {
     return this._resolution
   }
-  
   set resolution (value) {
     if (this._resolution !== value) {
       this._resolution = value
     }
   }
   
+  /**
+   * return the state of layer loading <br/>
+   * 获取图片下载状态
+   * @property state
+   * @type Number
+   */
   get state () { return this._state }
   set state (value) {
     if (this.state !== value){
@@ -81,8 +129,10 @@ export default class BaseImage extends BaseObject {
   }
   
   /**
-   * Load not yet loaded URI.
+   * Load not yet loaded URI. <br/>
+   * 抽象方法，下载图片
    * @abstract
+   * @method load
    */
   load () {}
   
