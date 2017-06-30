@@ -7,7 +7,8 @@
  * The sub event class can define it's own property , <br/>
  * which can be passed to other event Listener via event dispatch.<br/>
  *
- * 定义事件模型基类，自定义事件必须继承该类
+ * 定义事件模型基类，自定义事件必须继承该类。<br/>
+ * 事件类及其继承者用于事件传递、数据传送和信息通告。
  *
  * @class BaseEvent
  * @constructor
@@ -30,14 +31,18 @@ export default class BaseEvent {
     this.propagatinoStopped = false
   
     /**
-     * The event type.
+     * 事件标示
+     * @example'mousedown' | 'mousemove' | 'click'
+     *
+     * <br/>The event type.
      * @type {string}
      * @property type
      */
     this.type = type
   
     /**
-     * The event target.
+     * 事件源
+     * <br/>The event target.
      * @type {Object}
      * @property target
      */
@@ -48,6 +53,7 @@ export default class BaseEvent {
 
 /**
  * stop propagation from dom event
+ * <br/> 用于阻止事件的冒泡
  * @param {Event|Event} evt Event
  * @static
  * @method stopPropagation
@@ -60,6 +66,7 @@ BaseEvent.stopPropagation = function(evt) {
 
 /**
  * Prevent the default action from browser
+ * <br/> 用于阻止浏览器的默认行为
  * @param {Event|Event} evt Event
  * @static
  * @method preventDefault

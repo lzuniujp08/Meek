@@ -6,7 +6,8 @@
 import Obj from '../utils/Obj'
 
 /**
- *
+ * 根据事件标识和监听对象获取该对象上的事件监听函数列表
+ * @method getListeners
  * @param target
  * @param type
  * @returns {undefined}
@@ -17,7 +18,7 @@ export function getListeners (target, type) {
 }
 
 /**
- *
+ * 根据事件标示和事件对象，移除全部事件监听
  * @param target
  * @param type
  */
@@ -41,7 +42,9 @@ const removeListeners = function (target, type) {
 
 /**
  * Unlisten events listeners by the passed key
- * @param key
+ * <br/>移除该事件标识下全部事件监听
+ * @method unlistenByKey
+ * @param key {String} 事件标示
  */
 export function unlistenByKey (key) {
   if (key && key.target) {
@@ -62,7 +65,6 @@ export function unlistenByKey (key) {
 }
 
 /**
- *
  * @param listenerObj
  * @returns {boundListener}
  */
@@ -117,13 +119,15 @@ const getListenerMap = function (target) {
 }
 
 /**
+ * 监听事件
  *
- * @param target
- * @param type
- * @param listener
- * @param optThis
+ * @method listen
+ * @param target {Object} 监听对象
+ * @param type {String} 事件标识
+ * @param listener {Array} 事件响应函数列表
+ * @param optThis {this} 可选
  * @param optOnce
- * @returns {*}
+ * @returns {Array}
  */
 export function listen (target, type, listener, optThis, optOnce) {
   const listenerMap = getListenerMap(target)
@@ -155,7 +159,9 @@ export function listen (target, type, listener, optThis, optOnce) {
 }
 
 /**
- *
+ * Only listen event once
+ * <br/> 对事件只是监听一次
+ * @method listenOnce
  * @param target
  * @param type
  * @param listener
@@ -164,4 +170,17 @@ export function listen (target, type, listener, optThis, optOnce) {
  */
 export function listenOnce (target, type, listener, opt_this) {
   return listen(target, type, listener, opt_this, true)
+}
+
+
+/**
+ * 定义关于事件的注册、注销、派发、监听的通用工具模块
+ * @module core
+ * @class EventManager
+ */
+export default {
+  getListeners,
+  listen,
+  listenOnce,
+  unlistenByKey,
 }

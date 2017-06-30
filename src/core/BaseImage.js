@@ -8,7 +8,7 @@ import BaseObject from '../core/BaseObject'
  * The base class to represent a generic layer image,it has some basic properties.
  * such as extent,resolution,state<br/>
  *
- * 基础图片图层，定义了一些基础的属性
+ * 基础图片图层类，定义了一些用于加载图片的必要信息
  *
  * @class BaseImage
  * @extends BaseObject
