@@ -9,7 +9,7 @@ import {squaredSegmentDistance} from './support/GeometryUtil'
 import {lineString} from './support/Interpolate'
 
 /**
- * Line geometry <br/>
+ * Line geometry
  *
  * 定义线类和数据结构
  *
@@ -17,11 +17,16 @@ import {lineString} from './support/Interpolate'
  * @extends Geometry
  * @module geometry
  * @constructor
+ * @example
+ *
+ *  var line = new Datatang.Line()
+ *
+ *  line.setCoordinates([100, 100], [200, 200], [400, 500])
  */
 export default class Line extends Geometry {
   
   /**
-   *
+   * Create a line geometry
    * @param path
    */
   constructor (path) {
@@ -31,10 +36,6 @@ export default class Line extends Geometry {
     this.addPath(path)
   }
 
-  /**
-   * 获取对象的几何类型
-   * @abstrct function
-   */
   get geometryType () { return Geometry.LINE }
 
   /**
@@ -85,8 +86,9 @@ export default class Line extends Geometry {
   }
   
   /**
+   * 遍历每一条边
    * @method forEachSegment
-   * @param callback
+   * @param callback {callback}
    * @param opt
    */
   forEachSegment (callback, opt) {
@@ -120,8 +122,10 @@ export default class Line extends Geometry {
   }
   
   /**
+   * 计算线的平面内点
+   * <br> Calcaluate the interior point
    * @method getFlatInteriorPoint
-   * @returns {[]}
+   * @returns {Array}
    */
   getFlatInteriorPoint () {
     const interiorPoint = null
@@ -137,14 +141,7 @@ export default class Line extends Geometry {
       fraction, interiorPoint)
   }
   
-  /**
-   * Get the collection of geometry
-   * TODO 将来都需要换成这种线性的存储方式，并逐步替换成这种模式
-   * @returns {[*,*]}
-   */
-  getCoordinates () {
-    return this.path
-  }
+  getCoordinates () { return this.path }
   
   /**
    * Set coordinate for line
@@ -158,6 +155,8 @@ export default class Line extends Geometry {
   }
   
   /**
+   * 根据坐标点，计算改点的下标
+   *
    * Get index in line coordinates by gived point
    * @method getCoordinateIndex
    * @param coord
@@ -178,6 +177,5 @@ export default class Line extends Geometry {
     newLine.path = this.path
     return newLine
   }
-  
   
 }

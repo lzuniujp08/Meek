@@ -8,7 +8,7 @@ import {ExtentUtil} from './support/ExtentUtil'
  *
  * Abstract base calss is for vector geometries.<br/>
  *
- * 图形基础类
+ * 图形基础类，不能直接实例化改类，只能继承和扩展，并实现该类定义的接口
  *
  * @class Geometry
  * @extends BaseObject
@@ -25,6 +25,10 @@ export default class Geometry extends BaseObject {
     
     this._extent = null
   
+    /**
+     *
+     * @type {number}
+     */
     this.stride = 2
   }
 
@@ -43,7 +47,7 @@ export default class Geometry extends BaseObject {
    * 获取图形的最小外接矩形(MBR-Minimum Bounding Rectangle)
    * 除去点意外，任何图形都有最小外接矩形
    * @property extent
-   * @type Extent
+   * @type {Datatang.Extent}
    */
   get extent () { return this._extent }
   
@@ -53,8 +57,8 @@ export default class Geometry extends BaseObject {
    * 判断传入的点坐标是否在图形内
    *
    * @method pointInExtent
-   * @param coordinate
-   * @return ture returned if success, otherwise false.
+   * @param coordinate {Array} 包含x, y的点数组
+   * @return {Boolean} ture returned if success, false otherwise.
    */
   pointInExtent (coordinate) {
     return ExtentUtil.containsPoint(this.extent, coordinate)
@@ -71,25 +75,40 @@ export default class Geometry extends BaseObject {
   }
   
   /**
+   * Get the geometry coordinates
+   * <br/> 获取图形的坐标信息
    * @abstract
    * @method getCoordinates
+   * @return {Array} 返回坐标数组
    */
-  getCoordinates () {}
+  getCoordinates () { return [] }
   
   /**
+   * 计算线的平面内点
+   * <br> Calcaluate the interior point
+   * @method getFlatInteriorPoint
+   * @returns {Array}
+   */
+  getFlatInteriorPoint () { return [] }
+  
+  /**
+   * Check if contains a point
+   * <br/> 判断当前图形是否包含一个点
    * @abstract
    * @method containsXY
-   * @param x
-   * @param y
+   * @param x {Number} x 坐标信息
+   * @param y {Number} y 坐标信息
+   * @return {Boolean} ture returned if contains, false otherwise
    */
-  containsXY (x, y) {} // eslint-disable-line no-unused-vars
+  containsXY (x, y) { return true } // eslint-disable-line no-unused-vars
   
   /**
    * Move the geometry
+   * <br/> 移动改图形，移动图形，需要传递x，y的移动量
    * @method move
    * @abstract
-   * @param x number
-   * @param y number
+   * @param x {Number} x 坐标信息
+   * @param y {Number} y 坐标信息
    */
   move (x = 0,y = 0, opts) {} // eslint-disable-line no-unused-vars
   
@@ -97,8 +116,8 @@ export default class Geometry extends BaseObject {
    * 定义对图形本身的缩放方法
    * @method scale
    * @abstract
-   * @param scale Number 缩放比率
-   * @param origin Array 缩放参考点
+   * @param scale {Number} 缩放比率
+   * @param origin {Array} 缩放参考点
    */
   scale(scale = 1,origin) {} // eslint-disable-line no-unused-vars
   
@@ -106,8 +125,8 @@ export default class Geometry extends BaseObject {
    * 定义图形本身的旋转方法
    * @method rotate
    * @abstract
-   * @param angle Number
-   * @param anchor
+   * @param angle {Number} 旋转的角度
+    * @param anchor {Object}
    */
   rotate(angle,anchor) {} // eslint-disable-line no-unused-vars
   
@@ -115,7 +134,7 @@ export default class Geometry extends BaseObject {
    * 创建一个简化后的图形副本
    * @method simplify
    * @abstract
-   * @param tolerance
+   * @param tolerance {Number} 阈值
    */
   simplify(tolerance = 1) {} // eslint-disable-line no-unused-vars
  
@@ -135,65 +154,82 @@ export default class Geometry extends BaseObject {
 }
 
 /**
- * 定义图形的类型
+ * 点类型
  * @property POINT
  * @static
- * @type String
+ * @final
+ * @type {String}
  */
 Geometry.POINT = 'point'
 
 /**
+ * 多点类型
  * @property MULTI_POINT
  * @static
- * @type {string}
+ * @final
+ * @type {String}
  */
 Geometry.MULTI_POINT = 'multi_point'
 
 /**
+ * 线类型
  * @property LINE
  * @static
- * @type {string}
+ * @final
+ * @type {String}
  */
 Geometry.LINE = 'line'
 
 /**
+ * 多线类型
  * @property MULTI_LINE
  * @static
- * @type {string}
+ * @final
+ * @type {String}
  */
 Geometry.MULTI_LINE = 'multi_line'
 
 /**
+ * 多边形类型
  * @property POLYGON
  * @static
- * @type {string}
+ * @final
+ * @type {String}
  */
 Geometry.POLYGON = 'polygon'
 
 /**
+ * 多个多边形类型
  * @property MULTI_POLYGON
  * @static
- * @type {string}
+ * @final
+ * @type {String}
  */
 Geometry.MULTI_POLYGON = 'multi_polygon'
 
 /**
+ * 矩形类型
  * @property EXTENT
  * @static
- * @type {string}
+ * @final
+ * @type {String}
  */
 Geometry.EXTENT = 'extent'
 
 /**
+ * 圆类型
  * @property CIRCLE
  * @static
- * @type {string}
+ * @final
+ * @type {String}
  */
 Geometry.CIRCLE = 'circle'
 
 /**
+ * 未定义
  * @property UNDEFINED
  * @static
- * @type {string}
+ * @final
+ * @type {String}
  */
 Geometry.UNDEFINED = 'undefined'

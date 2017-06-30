@@ -13,9 +13,16 @@ import {linearRingsAreOriented,orientLinearRings} from './support/Orient'
  *
  * 面类和数据结构
  *
+ * 多边形是<b>闭合数据结构</b>，所有首尾点必须相同，见例子
+ *
  * @class Polygon
  * @extends Geometry
  * @module geometry
+ * @constructor
+ * @example
+ *
+ *  var polygon = new Datatang.Polygon([[100, 100], [120, 130],[50, 50],[100, 100]])
+ *
  */
 export default class Polygon extends Geometry {
   

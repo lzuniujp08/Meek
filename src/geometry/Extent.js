@@ -6,13 +6,17 @@ import Geometry from './Geometry'
 import {ExtentUtil} from './support/ExtentUtil'
 
 /**
- * Extent geometry. <br/>
+ * Extent geometry.
  *
  * 矩形类和数据结构
  *
  * @class Extent
  * @extends Geometry
  * @module geometry
+ * @constructor
+ * @example
+ *
+ *  var rect = new Datatang.Extent(10, 10, 500, 500)
  */
 export default class Extent extends Geometry {
 
@@ -34,79 +38,69 @@ export default class Extent extends Geometry {
     this._rings = []
   }
 
-  /**
-   * 获取对象的几何类型
-   * @abstrct function
-   */
   get geometryType () { return Geometry.EXTENT }
 
   /**
-   * 计算最小外接矩形(MBR)的中心点
-   * @returns {*} 返回一个Point对象
-   */
-  get centerPoint () {
-    // return new Point(this.centerX, this.centerY)
-  }
-
-  /**
-   * 计算X坐标的中心
+   * 计算x轴的中心坐标
    * @property centerX
-   * @returns {number}
+   * @type {Number}
    */
   get centerX () { return (this.xmax + this.xmin) / 2 }
 
   /**
-   * 计算Y坐标的中心
+   * 计算Y轴的中心坐标
    * @property centerY
-   * @returns {number}
+   * @type {Number}
    */
   get centerY () { return (this.ymax + this.ymin) / 2 }
 
   /**
    * 计算最小外接矩形的宽
    * @property width
-   * @returns {number}
+   * @returns {Number}
    */
   get width () { return Math.abs(this.xmax - this.xmin) }
 
   /**
    * 计算最小外接矩形的高
    * @property height
-   * @returns {number}
+   * @returns {Number}
    */
   get heigth () { return Math.abs(this.ymax - this.ymin) }
 
   /**
-   * 获取最小外接矩形
-   * 本对象
-   * @returns {MBR}
+   * 获取最小外接矩形本对象
    */
   get extent () { return this }
   
   /**
+   * X 轴最小值
    * @property xmin
-   * @type Number
+   * @type {Number}
    */
   get xmin () { return this._xmin }
   set xmin (value) { this._xmin = value }
   
   /**
+   * Y 轴最小值
    * @property ymin
-   * @type Number
+   * @type {Number}
    */
   get ymin () { return this._ymin }
   set ymin (value) { this._ymin = value }
   
   /**
+   * X 轴最大值
    * @property xmax
-   * @type Number
+   * @type {Number}
    */
   get xmax () { return this._xmax }
   set xmax (value) { this._xmax = value }
   
   /**
+   * X 轴最大值
    * @property ymax
-   * @type Number
+   * @type {Number}
    */
   get ymax () { return this._ymax }
   set ymax (value) { this._ymax = value }
@@ -212,7 +206,6 @@ export default class Extent extends Geometry {
   
   /**
    * Get the collection of geometry
-   * TODO 将来都需要换成这种线性的存储方式，并逐步替换成这种模式
    * @returns {[*,*]}
    */
   getCoordinates () {
@@ -240,10 +233,11 @@ export default class Extent extends Geometry {
   }
   
   /**
+   * 获取点位于图形坐标点的下标
    * Get index in this coordinates by given coordinate
    * @method getCoordinateIndex
    * @param coord
-   * @returns {*|number}
+   * @returns {Number}
    */
   getCoordinateIndex (coord) {
     return this.getCoordinates().findIndex(function(points){

@@ -17,6 +17,9 @@ import {squaredDistance} from './support/GeometryUtil'
  * @extends Geometry
  * @module geometry
  * @constructor
+ * @example
+ *
+ *  var point = new Datatang.Point(100, 100)
  */
 export default class Point extends Geometry {
 
@@ -56,7 +59,7 @@ export default class Point extends Geometry {
   /**
    * 获取 X 坐标值
    * @property x
-   * @type {number}
+   * @type x {number}
    */
   get x () { return this._x }
   set x (value) { this._x = value }
@@ -74,7 +77,7 @@ export default class Point extends Geometry {
    * @method offset
    * @param nx x轴偏移量
    * @param ny y轴偏移量
-   * @returns {Point} 返回偏移以后的点对象
+   * @returns {Datatang.Point} 返回偏移以后的点对象
    */
   offset (nx, ny) {
     return new Point(this.x + nx, this.y + ny)
