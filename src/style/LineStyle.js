@@ -5,13 +5,32 @@
 import BaseStyle from './BaseStyle'
 
 /**
+ * The line style
+ *
+ * 定义一个线图形的样式
+ *
  * @class LineStyle
  * @extends BaseStyle
  * @module style
  * @constructor
+ * @example
+ *
+ *     var lineStye = new Datatang.LineStyle([0, 0, 255],1,3,
+ *        Datatang.LineStyle.LineCap.ROUND,
+ *        Datatang.LineStyle.LineJion.ROUND)
  */
 export default class LineStyle extends BaseStyle {
-
+  
+  /**
+   *
+   * @param color
+   * @param alpha
+   * @param width
+   * @param style
+   * @param lineCap
+   * @param lineJion
+   * @param miterLimit
+   */
   constructor (color = [255,255,255], alpha = 1, width = 1,
         style = LineStyle.SOLID,lineCap = LineStyle.LineCap.BUTT,
         lineJion = LineStyle.LineJion.MITER,miterLimit = 10) {
@@ -24,6 +43,7 @@ export default class LineStyle extends BaseStyle {
   }
   
   /**
+   * 线宽
    * @property width
    * @type {Number}
    */
@@ -31,6 +51,7 @@ export default class LineStyle extends BaseStyle {
   set width (value) { this._width = value }
   
   /**
+   * 线的末端样式
    * @property lineCap
    * @type {Number}
    */
@@ -38,6 +59,7 @@ export default class LineStyle extends BaseStyle {
   get lineCap () { return this._lineCap }
   
   /**
+   * 交叉线时的样式
    * @property lineJion
    * @type {Number}
    */
@@ -63,6 +85,10 @@ export default class LineStyle extends BaseStyle {
  */
 LineStyle.SOLID = 'solid'
 
+/**
+ * TODO 由郭靖来处理，参考 PointStyle
+ * @type {string}
+ */
 LineStyle.DASH = 'dash'
 
 LineStyle.DOT = 'dot'

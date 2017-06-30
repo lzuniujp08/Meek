@@ -5,6 +5,12 @@
 
 import BaseObject from '../core/BaseObject'
 
+/**
+ * 地图渲染器基类，
+ * @class Renderer
+ * @extends BaseObject
+ * @module renderer
+ */
 export default class Renderer extends BaseObject {
 
   constructor (contianer, map) {
@@ -13,17 +19,23 @@ export default class Renderer extends BaseObject {
     this._map = map
   }
   
+  /**
+   * @property map
+   * @type {Datatang.Map}
+   */
   get map () { return this._map }
   
   /**
    *
-   * @param frameState
+   * @method renderFrame
+   * @abstract
+   * @param frameState {Object}
    */
   renderFrame (frameState) {} // eslint-disable-line no-unused-vars
 
   /**
-   *
+   * @method clear
+   * @abstract
    */
-  clear () {
-  }
+  clear () {}
 }

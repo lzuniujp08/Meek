@@ -4,6 +4,12 @@
 
 import BaseEvent from '../core/BaseEvent'
 
+/**
+ * @class RenderEvent
+ * @extends BaseEvent
+ * @module renderer
+ * @constructor
+ */
 export default class RenderEvent extends BaseEvent {
   
   constructor (type, frameState, context, trasform) {
@@ -12,18 +18,21 @@ export default class RenderEvent extends BaseEvent {
   
   
     /**
-     *
+     * @property frameState
+     * @type {Object}
      */
     this.frameState = frameState
   
   
     /**
-     *
+     * @property trasform
+     * @type {Object}
      */
     this.trasform = trasform
   
     /**
-     *
+     *@property context
+     *@type {HTML5.}
      */
     this.context = context
   }

@@ -8,12 +8,28 @@ import FillStyle from './FillStyle'
 /**
  * The text style for geometrys
  *
- * <br/> 定义文本样式
+ * 定义文本样式
  *
  * @class TextStyle
  * @extends BaseStyle
  * @module style
  * @constructor
+ * @example
+ *
+ *     new Datatang.TextStyle({
+ *       textAlign: 'center',
+ *       textBaseline: 'middle',
+ *       font: 'Arial',
+ *       text: '标注示例',
+ *       fill: [255, 0, 0],
+ *       stroke: new Datatang.LineStyle([255, 255, 255],1,3,
+ *          Datatang.LineStyle.LineCap.ROUND,
+ *          Datatang.LineStyle.LineJion.ROUND),
+ *       offsetX: 0,
+ *       offsetY: 0,
+ *       rotation: 0
+ *     });
+ *
  */
 export default class TextStyle extends BaseStyle {
   
@@ -96,6 +112,7 @@ export default class TextStyle extends BaseStyle {
   }
   
   /**
+   * 要显示的文本
    * @property text
    * @type {Stirng}
    */
@@ -103,6 +120,7 @@ export default class TextStyle extends BaseStyle {
   set text (value) { this._text = value }
   
   /**
+   * 显示的字体
    * @property font
    * @type {Stirng}
    */
@@ -110,6 +128,7 @@ export default class TextStyle extends BaseStyle {
   set font (value) { this._font = value }
   
   /**
+   * 旋转的角度
    * @property rotation
    * @type {Stirng}
    */
@@ -124,6 +143,7 @@ export default class TextStyle extends BaseStyle {
   set rotateWithView (value) { this._rotateWithView = value }
   
   /**
+   * 缩放比例
    * @property scale
    * @type {Stirng}
    */
@@ -131,6 +151,7 @@ export default class TextStyle extends BaseStyle {
   set scale (value) { this._scale = value }
   
   /**
+   * 字体
    * @property textAlign
    * @type {Stirng}
    */
@@ -145,6 +166,7 @@ export default class TextStyle extends BaseStyle {
   set textBaseline (value) { this._textBaseline = value }
   
   /**
+   * 字体颜色
    * @property fill
    * @type {Stirng}
    */
@@ -159,6 +181,7 @@ export default class TextStyle extends BaseStyle {
   set stroke (value) { this._stroke = value }
   
   /**
+   * 字体x轴偏移
    * @property offsetX
    * @type {Stirng}
    */
@@ -166,6 +189,7 @@ export default class TextStyle extends BaseStyle {
   set offsetX (value) { this._offsetX = value }
   
   /**
+   * 字体y轴偏移
    * @property offsetY
    * @type {Stirng}
    */
@@ -195,7 +219,10 @@ export default class TextStyle extends BaseStyle {
 
 /**
  * Default fill color for text style
- * @type {string}
- * @private
+ *
+ * 默认字体颜色
+ * @type {String}
+ * @static
+ * @final
  */
 TextStyle.DEFAULT_FILL_COLOR = '#333'

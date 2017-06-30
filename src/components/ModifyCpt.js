@@ -28,6 +28,7 @@ import {noModifierKeys, singleClick} from '../utils/MouseKey'
  * @extends Component
  * @module component
  * @constructor
+ * @example
  */
 export default class ModifyCpt extends Component {
   

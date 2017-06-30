@@ -9,12 +9,11 @@ import BaseObject from '../core/BaseObject'
  * instantiated in apps.
  * Base class for styling geometries.
  *
- * <br/>定义基础样式类
+ * 定义基础样式类，包括了一些基础的属性，如颜色、对象样式、透明度
  *
  * @class BaseStyle
  * @extends BaseObject
  * @module style
- * @constructor
  */
 export default class BaseStyle extends BaseObject {
 
@@ -25,7 +24,7 @@ export default class BaseStyle extends BaseObject {
    * @param style
    * @param alpha
    */
-  constructor (color, style, alpha) {
+  constructor (color, style, alpha = 1) {
     
     super()
     
@@ -52,34 +51,39 @@ export default class BaseStyle extends BaseObject {
   }
   
   /**
-   * @protected
+   * 颜色
    * @property color
+   * @type {Array}
    */
   get color () { return this._color }
   set color (value) { this._color = value }
   
   /**
-   * @protected
+   * 样式对象
    * @property style
+   * @type {Datatang.Style}
    */
   get style () { return this._style }
   set style (value) { this._style = value }
   
   /**
-   * @protected
+   * 透明度
    * @property alpha
+   * @default 1
+   * @type {Number}
    */
   get alpha () { return this._alpha}
   set alpha (value) { return this._alpha = value }
   
   /**
-   * @protected
+   * 文本样式对象
    * @property textStyle
    */
   get textStyle () { return this._textStyle }
   set textStyle (value) { this._textStyle = value }
   
   /**
+   * 克隆一个样式对象
    * @method clone
    * @abstract
    */

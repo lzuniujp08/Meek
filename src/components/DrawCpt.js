@@ -23,13 +23,27 @@ import DrawEvent from './DrawEvent'
 /**
  * DrawCpt class is resonsibility to draw geometries.
  *
+ * 图形绘制工具，可以绘制点、线、面等图形
+ *
  * @class DrawCpt
  * @extends Component
  * @module component
  * @constructor
+ * @example
+ *
+ *      // 实例化绘图工具
+ *      var drawTool = new Datatang.DrawCpt({
+ *        type: 'point',
+ *        drawLayer: new Datatang.FeatureLayer()
+ *      })
+ *
  */
 export default class DrawCpt extends Component {
-
+  
+  /**
+   *
+   * @param options
+   */
   constructor (options = {}) {
     super()
   
@@ -215,7 +229,11 @@ export default class DrawCpt extends Component {
   
   /**
    * Get the geometry function.
-   * @returns {(function(*, *))|*|null}
+   *
+   * 获取图形创建、修改的工厂方法
+   *
+   * @property geometryFunction
+   * @type {Function}
    */
   get geometryFunction () {
     if(!this._geometryFunction){
@@ -229,7 +247,10 @@ export default class DrawCpt extends Component {
    * The draw mode getter and setter.
    * Set a draw mode means to draw a new type geometry.
    *
-   * @returns {*}
+   * 设置当前绘图的模式，重新赋值将会启动新图形类型的绘制
+   *
+   * @property drawMode
+   * @type {Datatang.DrawCpt.DrawMode}
    */
   get drawMode () { return this._drawMode }
   set drawMode (value){
@@ -694,7 +715,7 @@ export default class DrawCpt extends Component {
   /**
    * Map setter.
    * It will add an event listener of map rendering.
-   * @param {Datatang.map} mapVal
+   * @property map {Datatang.map} mapVal
    */
   set map (mapValue) {
     if (this._mapRenderKey) {

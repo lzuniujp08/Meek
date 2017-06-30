@@ -5,10 +5,20 @@
 import BaseStyle from './BaseStyle'
 
 /**
+ * The polygon style
+ *
+ * 定义多边形样式，多边形样式包括<b>填充样式</b>和<b>边框样式</b>，
+ * 需要分别设置
+ *
  * @class FillStyle
  * @extends BaseStyle
  * @module style
  * @constructor
+ * @example
+ *
+ *     var fillStyle = new Datatang.FillStyle([255,255,255],
+ *         new Datatang.LineStyle([0,0,255],1,1.25),0.5)
+ *
  */
 export default class FillStyle extends BaseStyle {
 
@@ -28,12 +38,17 @@ export default class FillStyle extends BaseStyle {
   }
   
   /**
+   * 边框样式对象
    * @property borderStyle
-   * @type {LineStyle}
+   * @type {Datatang.LineStyle}
    */
   get borderStyle () { return this._borderStyle}
   set borderStyle (value) { return this._borderStyle = value }
   
+  /**
+   *
+   * @returns {FillStyle}
+   */
   clone () {
     return new FillStyle(this.color, this.borderStyle.clone(),
       this.alpha, this.size, this.style)
@@ -42,7 +57,9 @@ export default class FillStyle extends BaseStyle {
 }
 
 /**
+ * 实体填充
  * @static
+ * @final
  * @property SOLID
  * @type {string}
  */

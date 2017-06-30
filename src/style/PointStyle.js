@@ -7,12 +7,18 @@ import BaseStyle from './BaseStyle'
 /**
  * The point style
  *
- * <br/>定义一个点图形的样式
+ * 定义一个点图形的样式
  *
  * @class PointStyle
  * @extends BaseStyle
  * @module style
  * @constructor
+ * @example
+ *
+ *  // 定义一个点，包括外边框的样式
+ *
+ *  var pointStyle = new Datatang.PointStyle(10,[255, 255, 255],1,new Datatang.LineStyle([0, 0, 255],1,1))
+ *
  */
 export default class PointStyle extends BaseStyle {
 
@@ -43,6 +49,7 @@ export default class PointStyle extends BaseStyle {
   }
   
   /**
+   * 大小
    * @property size
    * @type {Number}
    */
@@ -50,6 +57,7 @@ export default class PointStyle extends BaseStyle {
   set size(value){ this._size = value}
   
   /**
+   * X 轴偏移量
    * @property xoffset
    * @type {Number}
    */
@@ -57,6 +65,7 @@ export default class PointStyle extends BaseStyle {
   set xoffset(value){ this._xoffset = value}
   
   /**
+   * Y 轴偏移量
    * @property yoffset
    * @type {Number}
    */
@@ -64,6 +73,7 @@ export default class PointStyle extends BaseStyle {
   set yoffset(value){ this._yoffset = value}
   
   /**
+   * 样式显示的角度
    * @property angle
    * @type {Number}
    */
@@ -71,6 +81,7 @@ export default class PointStyle extends BaseStyle {
   set angle(value){ this._angle = value}
   
   /**
+   * 边框样式
    * @property borderStyle
    * @type {LineStyle}
    */
@@ -80,35 +91,45 @@ export default class PointStyle extends BaseStyle {
 }
 
 /**
+ * 圆形样式
  * @static
+ * @final
  * @property CIRCLE
- * @type {string}
+ * @type {String}
  */
 PointStyle.CIRCLE = 'circle'
 
 /**
+ * 方形样式
  * @static
+ * @final
  * @property SQUARE
- * @type {string}
+ * @type {String}
  */
 PointStyle.SQUARE = 'square'
 
 /**
+ * 十字样式
  * @static
+ * @final
  * @property CROSS
  * @type {string}
  */
 PointStyle.CROSS = 'cross'
 
 /**
+ * X样式
  * @static
+ * @final
  * @property X
  * @type {string}
  */
 PointStyle.X = 'x'
 
 /**
+ * 三角形样式
  * @static
+ * @final
  * @property TRIANGLE
  * @type {string}
  */
