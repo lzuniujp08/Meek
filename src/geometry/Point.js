@@ -142,8 +142,7 @@ export default class Point extends Geometry {
    * @param {Number} offsetY y的偏移量
    * @return {[]}
    */
-  getFormShowPosition (offsetX = 0, offsetY = 0) {
-    offsetY = 10
+  getFormShowPosition (offsetX = 0, offsetY = 10) {
     return [this.x - offsetX, this.y - offsetY]
   }
 

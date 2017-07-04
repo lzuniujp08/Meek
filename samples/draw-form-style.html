@@ -56,7 +56,7 @@
 <div id="map" style="width:1887px;height:952px;background:#b5d0d0"></div>
 
 <div id="popup" class="dt-popup">
-  <a href="#" id="popup-closer" class="dt-popup-closer"></a>
+  <a href="#" id="popup-closer" class="dt-popup-closer" onclick="onFormClosedClick(this)"></a>
   <div id="popup-content">
     <div>当前类型为:
       <span id="gometrytypeSpan"></span>
@@ -64,19 +64,19 @@
 
     <div id="textId">
       <label>显示文本:</label>
-      <input type="input" style="margin-top:10px;width:100px;height:25px;"/>
+      <input type="input" id="textIpt" style="margin-top:10px;width:100px;height:25px;"/>
     </div>
 
     <div id="borderStyleId">
       <label style="float:left;">边框样式</label>
       <label style="float:left;">r:</label>
-      <input type="input" style="float:left;width:30px;height:25px;"/>
+      <input type="input" id="BRIpt" style="float:left;width:30px;height:25px;" value="255"/>
       <label style="float:left;">g:</label>
-      <input type="input" style="float:left;width:30px;height:25px;"/>
+      <input type="input" id="BGIpt" style="float:left;width:30px;height:25px;" value="255"/>
       <label style="float:left;">b:</label>
-      <input type="input" style="float:left;width:30px;height:25px;"/>
+      <input type="input" id="BBIpt" style="float:left;width:30px;height:25px;" value="255"/>
       <label style="float:left;">a:</label>
-      <input type="input" style="float:left;width:30px;height:25px;"/>
+      <input type="input" id="BAIpt" style="float:left;width:30px;height:25px;" />
     </div>
 
     <div id="fillStyleId" style = "clear: both;">
@@ -85,16 +85,16 @@
 
       <label style="float:left;">填充样式</label>
       <label style="float:left;">r:</label>
-      <input type="input" style="float:left;width:30px;height:25px;"/>
+      <input type="input" id="FRIpt" style="float:left;width:30px;height:25px;" value="255"/>
       <label style="float:left;">g:</label>
-      <input type="input" style="float:left;width:30px;height:25px;"/>
+      <input type="input" id="FGIpt" style="float:left;width:30px;height:25px;" value="255"/>
       <label style="float:left;">b:</label>
-      <input type="input" style="float:left;width:30px;height:25px;"/>
+      <input type="input" id="FBIpt" style="float:left;width:30px;height:25px;" value="255"/>
       <label style="float:left;">a:</label>
-      <input type="input" style="float:left;width:30px;height:25px;"/>
+      <input type="input" id="FAIpt" style="float:left;width:30px;height:25px;"/>
     </div>
 
-    <input type="button" value="确定" style="margin-top:10px; width:100px; height:30px;"/>
+    <input type="button" value="确定" style="margin-top:10px; width:100px; height:30px;" onclick="onSubmitClick()"/>
 
   </div>
 </div>

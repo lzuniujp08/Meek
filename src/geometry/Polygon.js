@@ -198,12 +198,13 @@ export default class Polygon extends Geometry {
    * @returns {[*,*]}
    */
   getFormShowPosition (offsetX = 0, offsetY = 0) {
-    let _positions = []
-    const ring = this.getCoordinates()
-    _positions[0] = ring[ring.length - 3][0] - offsetX
-    _positions[1] = ring[ring.length - 3][1] - offsetY
-
-    return _positions
+    const coordinates = this.getCoordinates()
+    if (coordinates.length === 0) {
+      return
+    }
+    
+    const lastPoint = coordinates[coordinates.length - 3]
+    return [lastPoint[0] - offsetX, lastPoint[1] - offsetY]
   }
   
   /**

@@ -228,11 +228,7 @@ export default class Extent extends Geometry {
    * @returns {[*,*]}
    */
   getFormShowPosition (offsetX = 0, offsetY = 0) {
-    let _positions = []
-    _positions[0] = ( this.xmin + this.xmax ) / 2 - offsetX
-    _positions[1] = this.ymin - offsetY
-
-    return _positions
+    return [( this.xmin + this.xmax ) / 2 - offsetX, this.ymin - offsetY]
   }
   
   /**

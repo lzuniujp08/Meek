@@ -52,7 +52,7 @@ export default class TextStyle extends BaseStyle {
      * @private
      * @type {string|undefined}
      */
-    this.font = options.font
+    this.font = options.font || TextStyle.DEFAULT_FONT
   
     /**
      * @private
@@ -76,13 +76,13 @@ export default class TextStyle extends BaseStyle {
      * @private
      * @type {string|undefined}
      */
-    this.textAlign = options.textAlign
+    this.textAlign = options.textAlign || TextStyle.DEFAULT_TEXT_ALIGN
   
     /**
      * @private
      * @type {string|undefined}
      */
-    this.textBaseline = options.textBaseline
+    this.textBaseline = options.textBaseline || TextStyle.DEFAULT_BASE_LINE
   
     /**
      * @private
@@ -226,3 +226,9 @@ export default class TextStyle extends BaseStyle {
  * @final
  */
 TextStyle.DEFAULT_FILL_COLOR = '#333'
+
+TextStyle.DEFAULT_FONT = 'normal 12px Arial'
+
+TextStyle.DEFAULT_TEXT_ALIGN = 'center'
+
+TextStyle.DEFAULT_BASE_LINE = 'middle'

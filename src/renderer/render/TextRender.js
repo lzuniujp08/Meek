@@ -20,11 +20,17 @@ export default class TextRender extends GeometryRender {
    * @param transform
    */
   render (feature, renderStyle, transform) {
+  
+    const textStyle = renderStyle[0].textStyle
+    if (!textStyle.text || textStyle.text === '') {
+      return
+    }
     
     const ctx = this.context
+  
     ctx.save()
-    
     const geometry = feature.geometry
+  
     const coordinates = geometry.getFlatInteriorPoint()
   
     this._pixelCoordinates = []
@@ -32,8 +38,6 @@ export default class TextRender extends GeometryRender {
     const pixelCoordinates = Transform.transform2D(
       coordinates, 0, coordinates.length, 2,
       transform, this._pixelCoordinates)
-    
-    const textStyle = renderStyle[0].textStyle
     
     // set the context text style
     this._setTextStyle(ctx, textStyle)

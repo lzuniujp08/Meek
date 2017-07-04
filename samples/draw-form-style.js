@@ -8,6 +8,8 @@
 var flayer = new Datatang.FeatureLayer()
 
 var container = document.getElementById('popup')
+var closeDom = document.getElementById('popup-closer')
+var popup = document.getElementById('popup')
 var gometrytypeSpan = document.getElementById('gometrytypeSpan')
 
 var extent = [0, 0, 2783, 2125];
@@ -56,13 +58,15 @@ typeSelect.onchange = function() {
   drawTool.drawMode = typeSelect.value
 }
 
+var currentFeature = null
+
 drawTool.addEventListener(Datatang.DrawEvent.EventType.DRAW_END, function(drawEvent){
   var feature = drawEvent.feature
   var geometry = feature.geometry
   
   var position = []
   
-  /*if (geometry.geometryType === Datatang.Geometry.LINE  ) {
+  if (geometry.geometryType === Datatang.Geometry.LINE  ) {
     var coords = geometry.getCoordinates()
     position = coords[coords.length - 1]
   }
@@ -74,13 +78,60 @@ drawTool.addEventListener(Datatang.DrawEvent.EventType.DRAW_END, function(drawEv
   }
   else {
     position = geometry.getFlatInteriorPoint()
-  }*/
+  }
   
-  //overlay.position = position
-  overlay.position = geometry.getFormShowPosition()
-
+  overlay.position = position
+  currentFeature = feature
+  formClose(true)
+  
   gometrytypeSpan.innerHTML = geometry.geometryType
 })
 
+
+function onSubmitClick() {
+  var text = document.getElementById('textIpt').value
+  
+  var brIpt = document.getElementById('BRIpt').value
+  var bgIpt = document.getElementById('BGIpt').value
+  var bbIpt = document.getElementById('BBIpt').value
+  // var baIpt = document.getElementById('BAIpt').value
+  var frIpt = document.getElementById('FRIpt').value
+  var fgIpt = document.getElementById('FGIpt').value
+  var fbIpt = document.getElementById('FBIpt').value
+  // var faIpt = document.getElementById('FAIpt').value
+  
+  var featureStyle = flayer.styleFunction(currentFeature)[0].clone()
+  
+  var textStyle
+  if (!featureStyle.textStyle) {
+    textStyle = new Datatang.TextStyle({
+      text: text,
+      fill: [frIpt, fgIpt, fbIpt],
+      stroke: new Datatang.LineStyle([brIpt, bgIpt, bbIpt],1,1,
+        Datatang.LineStyle.LineCap.ROUND,
+        Datatang.LineStyle.LineJion.ROUND),
+    })
+  } else {
+    textStyle = featureStyle.textStyle.clone()
+    textStyle.text = text
+    textStyle.fill =  [frIpt, fgIpt, fbIpt]
+    textStyle.stroke.color = [brIpt, bgIpt, bbIpt]
+  }
+  
+  featureStyle.textStyle = textStyle
+  
+  currentFeature.style = [featureStyle]
+  
+  formClose(false)
+  map.render()
+}
+
+function formClose(display) {
+  display ? popup.style.display = 'block' : popup.style.display = 'none'
+}
+
+function onFormClosedClick(e){
+  formClose(false)
+}
 
   
