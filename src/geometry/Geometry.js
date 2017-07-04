@@ -82,6 +82,16 @@ export default class Geometry extends BaseObject {
    * @return {Array} 返回坐标数组
    */
   getCoordinates () { return [] }
+
+    /**
+     * 计算表单显示的位置坐标
+     *  Get the geometry position ,then calcalute to show form
+     *  @method getFormShowPosition
+     *  @param {Number} offsetX x的偏移量
+     *  @param {Number} offsetY y的偏移量
+     *  @return {Array} 返回坐标数组
+     */
+    getFormShowPosition (offsetX = 0, offsetY = 0) { return [] }
   
   /**
    * 计算线的平面内点

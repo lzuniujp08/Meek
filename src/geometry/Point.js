@@ -132,7 +132,21 @@ export default class Point extends Geometry {
   getCoordinates () {
     return [this.x, this.y]
   }
-  
+
+  /**
+   * 点的位置就是坐标点的位置减去偏移量的位置
+   *
+   * Get the position of geometry
+   * @method getFormShowPosition
+   * @param {Number} offsetX x的偏移量
+   * @param {Number} offsetY y的偏移量
+   * @return {[]}
+   */
+  getFormShowPosition (offsetX = 0, offsetY = 0) {
+    offsetY = 10
+    return [this.x - offsetX, this.y - offsetY]
+  }
+
   /**
    * set coordinates to point
    * @method setCoordinates

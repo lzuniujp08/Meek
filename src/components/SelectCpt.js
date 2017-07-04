@@ -104,7 +104,8 @@ export default class SelectCpt extends Component {
   selectClean () {
     this._selectLayer.clear()
     this.selectFeatures = []
-    this.forEachStyleRS()
+    Number
+ /*   this.forEachStyleRS()*/
   }
 
   get selectFeatures () { return this._selectFeatures }
@@ -142,22 +143,24 @@ export default class SelectCpt extends Component {
     const layer = this.map.layers[1]
     const features = this.selectFeatures
     features.forEach (function(feature) {
-      let styles = null
+      let styles = []
       if(feature.style){
         styles = feature.style
       }else{
         let styleFunction = layer.styleFunction
         if (styleFunction) {
-          feature.style = styleFunction(feature)
-          styles = feature.style
+          let oldStyle
+          oldStyle = styleFunction(feature)
+          let newStyle = oldStyle[0].clone()
+          styles.push(newStyle)
         }
       }
 
       styles.forEach (function(style){
         if (style instanceof FillStyle) {
           if(fillChanged){return}
-          style.alpha = style.alpha + 0.2
-          style.borderStyle.width = style.borderStyle.width + 2
+          style.alpha = style.alpha + 0.5
+          style.borderStyle.width = style.borderStyle.width + 4
           fillChanged = true
         } else if (style instanceof LineStyle) {
           if(lineChanged){return}
