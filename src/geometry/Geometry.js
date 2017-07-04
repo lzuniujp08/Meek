@@ -82,6 +82,18 @@ export default class Geometry extends BaseObject {
    * @return {Array} 返回坐标数组
    */
   getCoordinates () { return [] }
+
+
+    /**
+     * 计算表单显示的位置坐标
+     *
+     *  drawend geometry show form ,calcalute form position
+     *  @method formShowPosition
+     *  @param {Number} offsetX x的偏移量
+     *  @param {Number} offsetY y的偏移量
+     *  @return {Array} 返回坐标数组
+     */
+    formShowPosition (offsetX = 10, offsetY = 10) { return [] }
   
   /**
    * 计算线的平面内点

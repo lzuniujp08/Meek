@@ -132,6 +132,16 @@ export default class Point extends Geometry {
   getCoordinates () {
     return [this.x, this.y]
   }
+
+  /**
+   * Get the position of geometry
+   * @method formShowPosition
+   * @return {[]}
+   */
+  formShowPosition (offsetX = 10, offsetY = 10) {
+    return [this.x, this.y - offsetY]
+  }
+
   
   /**
    * set coordinates to point

@@ -62,7 +62,7 @@ drawTool.addEventListener(Datatang.DrawEvent.EventType.DRAW_END, function(drawEv
   
   var position = []
   
-  if (geometry.geometryType === Datatang.Geometry.LINE  ) {
+  /*if (geometry.geometryType === Datatang.Geometry.LINE  ) {
     var coords = geometry.getCoordinates()
     position = coords[coords.length - 1]
   }
@@ -74,10 +74,11 @@ drawTool.addEventListener(Datatang.DrawEvent.EventType.DRAW_END, function(drawEv
   }
   else {
     position = geometry.getFlatInteriorPoint()
-  }
+  }*/
   
-  overlay.position = position
-  
+  //overlay.position = position
+  overlay.position = geometry.formShowPosition()
+
   gometrytypeSpan.innerHTML = geometry.geometryType
 })
 

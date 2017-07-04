@@ -142,6 +142,24 @@ export default class Line extends Geometry {
   }
   
   getCoordinates () { return this.path }
+
+
+
+  /**
+   * Get the last position of geometry
+   * @returns {[*,*]}
+   */
+  formShowPosition (offsetX = 10, offsetY = 10) {
+    this._positions = []
+    const ring = this.getCoordinates()
+
+    for (let i = 0, l = ring.length; i < l;  i++) {
+      this._positions[0] = ring[l - 1][0]
+      this._positions[1] = ring[l - 1][1]
+    }
+
+    return this._positions
+  }
   
   /**
    * Set coordinate for line

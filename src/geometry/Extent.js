@@ -217,6 +217,19 @@ export default class Extent extends Geometry {
   
     return this._rings
   }
+
+  /**
+   * Get the position of geometry to Calcaluate get a point to show form
+   * @returns {[*,*]}
+   */
+  formShowPosition (offsetX = 10, offsetY = 10) {
+    this._positions = []
+    this._positions[0] = ( this.xmin + this.xmax ) / 2
+    this._positions[1] = this.ymin
+
+    return this._positions
+  }
+
   
   /**
    * @method setCoordinates

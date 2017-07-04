@@ -189,6 +189,22 @@ export default class Polygon extends Geometry {
   getCoordinates () {
     return this.rings
   }
+
+  /**
+   * Get the last position of geometry
+   * @returns {[*,*]}
+   */
+  formShowPosition (offsetX = 10, offsetY = 10) {
+    this._positions = []
+    const ring = this.getCoordinates()
+
+    for (let i = 0, l = ring.length; i < l;  i++) {
+      this._positions[0] = ring[l - 3][0]
+      this._positions[1] = ring[l - 3][1]
+    }
+
+    return this._positions
+  }
   
   /**
    * @method setCoordinates
