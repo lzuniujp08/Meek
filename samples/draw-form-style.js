@@ -3,50 +3,67 @@
  */
 
 
-window.onload = function () {
   
-  // 将会获取缺省样式
-  var flayer = new Datatang.FeatureLayer()
-  
-  var extent = [0, 0, 2783, 2125];
-  
-  var map = new Datatang.Map({
-    layers: [
-      new Datatang.SingleImageLayer({
-        url: 'source/China_map.jpg',
-        imageExtent: extent,
-        projection: {
-          extent: extent
-        }
-      }),
-      flayer
-    ],
-    target: 'map',
-    view: new Datatang.View({
+// 将会获取缺省样式
+var flayer = new Datatang.FeatureLayer()
+
+var container = document.getElementById('popup')
+var gometrytypeSpan = document.getElementById('gometrytypeSpan')
+
+var extent = [0, 0, 2783, 2125];
+var overlay = new Datatang.Overlay(({
+  element: container,
+  autoPan: true
+}))
+
+var map = new Datatang.Map({
+  layers: [
+    new Datatang.SingleImageLayer({
+      url: 'source/China_map.jpg',
+      imageExtent: extent,
       projection: {
         extent: extent
-      },
-      center: Datatang.ExtentUtil.getCenter(extent),
-      zoom: 2,
-      maxZoom: 8
-    })
-  });
-  
-  // 绘图工具
-  var drawTool = new Datatang.DrawCpt({
-    type: 'point',
-    drawLayer: flayer
+      }
+    }),
+    flayer
+  ],
+  overlays: [overlay],
+  target: 'map',
+  view: new Datatang.View({
+    projection: {
+      extent: extent
+    },
+    center: Datatang.ExtentUtil.getCenter(extent),
+    zoom: 2,
+    maxZoom: 8
   })
-  
-  map.addComponents(drawTool)
-  
-  var typeSelect = document.getElementById('type')
-  
-  /**
-   * Handle change event.
-   */
-  typeSelect.onchange = function() {
-    drawTool.drawMode = typeSelect.value
-  }
-  
+});
+
+// 绘图工具
+var drawTool = new Datatang.DrawCpt({
+  type: 'point',
+  drawLayer: flayer
+})
+
+map.addComponents(drawTool)
+
+var typeSelect = document.getElementById('type')
+
+/**
+ * Handle change event.
+ */
+typeSelect.onchange = function() {
+  drawTool.drawMode = typeSelect.value
 }
+
+drawTool.addEventListener(Datatang.DrawEvent.EventType.DRAW_END, function(drawEvent){
+  var feature = drawEvent.feature
+  var geometry = feature.geometry
+  
+  overlay.position = geometry.getFlatInteriorPoint()
+  
+  gometrytypeSpan.innerHTML = geometry.geometryType
+})
+
+
+  
