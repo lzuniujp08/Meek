@@ -71,7 +71,7 @@ window.onload = function (){
     }else{
 
      selectTool.selectClean()
-      
+
      drawTool.active = true
      drawTool.drawMode = typeSelect.value
      selectTool.active = false
