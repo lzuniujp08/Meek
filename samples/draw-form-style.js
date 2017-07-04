@@ -60,7 +60,22 @@ drawTool.addEventListener(Datatang.DrawEvent.EventType.DRAW_END, function(drawEv
   var feature = drawEvent.feature
   var geometry = feature.geometry
   
-  overlay.position = geometry.getFlatInteriorPoint()
+  var position = []
+  
+  if (geometry.geometryType === Datatang.Geometry.LINE  ) {
+    var coords = geometry.getCoordinates()
+    position = coords[coords.length - 1]
+  }
+  else if (geometry.geometryType === Datatang.Geometry.POLYGON ||
+    geometry.geometryType === Datatang.Geometry.EXTENT ) {
+    var coords = geometry.getCoordinates()
+    position = coords[coords.length - 3]
+  }
+  else {
+    position = geometry.getFlatInteriorPoint()
+  }
+  
+  overlay.position = position
   
   gometrytypeSpan.innerHTML = geometry.geometryType
 })
