@@ -321,18 +321,19 @@ export default class DrawCpt extends Component {
   handleMouseEvent (event) {
     this.freehand_ = false
     let pass = !this.freehand_
-  
+    const eventType = event.type
+    
     event.coordinate = this.coordinateBeyond(event.coordinate)
     
     if (this.freehand_ &&
-      event.type === BrowserEvent.MOUSE_DRAG && this._sketchFeature !== null) {
+      eventType === BrowserEvent.MOUSE_DRAG && this._sketchFeature !== null) {
       this._addToDrawing(event)
       pass = false
     } else
       
-    if (event.type === BrowserEvent.MOUSE_MOVE) {
+    if (eventType === BrowserEvent.MOUSE_MOVE) {
       pass = this._handleMove(event)
-    } else if (event.type === BrowserEvent.DBLCLICK) {
+    } else if (eventType === BrowserEvent.DBLCLICK) {
       pass = false
     }
     

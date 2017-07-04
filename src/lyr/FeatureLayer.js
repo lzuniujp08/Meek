@@ -86,6 +86,8 @@ export default class FeatureLayer extends BaseLayer {
         unlistenByKeyFn(value)
       })
       
+      this._featureChangeKeys.clear()
+      
       this.dispatchEvent(new FeatureEvent(FeatureEvent.EventType.CLEAR))
       this.changed()
     }
