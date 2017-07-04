@@ -205,6 +205,7 @@ export default class Extent extends Geometry {
   }
   
   /**
+   *
    * Get the collection of geometry
    * @returns {[*,*]}
    */
@@ -219,17 +220,20 @@ export default class Extent extends Geometry {
   }
 
   /**
+   * 根据得到的坐标点，计算出表单显示的位置
+   *
    * Get the position of geometry to Calcaluate get a point to show form
+   * @param {Number} offsetX x的偏移量
+   * @param {Number} offsetY y的偏移量
    * @returns {[*,*]}
    */
-  formShowPosition (offsetX = 10, offsetY = 10) {
-    this._positions = []
-    this._positions[0] = ( this.xmin + this.xmax ) / 2
-    this._positions[1] = this.ymin
+  getFormShowPosition (offsetX = 0, offsetY = 0) {
+    let _positions = []
+    _positions[0] = ( this.xmin + this.xmax ) / 2 - offsetX
+    _positions[1] = this.ymin - offsetY
 
-    return this._positions
+    return _positions
   }
-
   
   /**
    * @method setCoordinates

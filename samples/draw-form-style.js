@@ -77,7 +77,7 @@ drawTool.addEventListener(Datatang.DrawEvent.EventType.DRAW_END, function(drawEv
   }*/
   
   //overlay.position = position
-  overlay.position = geometry.formShowPosition()
+  overlay.position = geometry.getFormShowPosition()
 
   gometrytypeSpan.innerHTML = geometry.geometryType
 })

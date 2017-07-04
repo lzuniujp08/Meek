@@ -191,19 +191,19 @@ export default class Polygon extends Geometry {
   }
 
   /**
+   * 得到最后一个点的坐标，显示表单
    * Get the last position of geometry
+   * @param {Number} offsetX x的偏移量
+   * @param {Number} offsetY y的偏移量
    * @returns {[*,*]}
    */
-  formShowPosition (offsetX = 10, offsetY = 10) {
-    this._positions = []
+  getFormShowPosition (offsetX = 0, offsetY = 0) {
+    let _positions = []
     const ring = this.getCoordinates()
+    _positions[0] = ring[ring.length - 3][0] - offsetX
+    _positions[1] = ring[ring.length - 3][1] - offsetY
 
-    for (let i = 0, l = ring.length; i < l;  i++) {
-      this._positions[0] = ring[l - 3][0]
-      this._positions[1] = ring[l - 3][1]
-    }
-
-    return this._positions
+    return _positions
   }
   
   /**
