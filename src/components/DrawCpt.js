@@ -808,7 +808,7 @@ DrawCpt.getDrawMode = function(type) {
  */
 DrawCpt.DrawMode = {
   POINT: 'Point',
-  LINE: 'LineString',
+  LINE: 'Line',
   POLYGON: 'Polygon',
   CIRCLE: 'Circle',
   EXTENT: 'Extent'
