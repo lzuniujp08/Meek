@@ -538,8 +538,8 @@ export default class DrawCpt extends Component {
   
     // 最终放到shource中，形成正式feature
     if (this._drawLayer) {
-      let newFeature = new Feature(geometry)
-      this._drawLayer.addFeatures([newFeature])
+      // let newFeature = new Feature(geometry)
+      this._drawLayer.addFeatures([sketchFeature])
     }
   }
   
