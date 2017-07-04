@@ -66,10 +66,11 @@ drawTool.addEventListener(Datatang.DrawEvent.EventType.DRAW_END, function(drawEv
     var coords = geometry.getCoordinates()
     position = coords[coords.length - 1]
   }
-  else if (geometry.geometryType === Datatang.Geometry.POLYGON ||
-    geometry.geometryType === Datatang.Geometry.EXTENT ) {
+  else if (geometry.geometryType === Datatang.Geometry.POLYGON ) {
     var coords = geometry.getCoordinates()
     position = coords[coords.length - 3]
+  } else if(geometry.geometryType === Datatang.Geometry.EXTENT) {
+    position = [(geometry.xmin + geometry.xmax) / 2,geometry.ymin]
   }
   else {
     position = geometry.getFlatInteriorPoint()
