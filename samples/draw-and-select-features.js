@@ -70,6 +70,8 @@ window.onload = function (){
       modifyTool.active = true
     }else{
 
+     selectTool.selectClean()
+
      drawTool.active = true
      drawTool.drawMode = typeSelect.value
      selectTool.active = false
