@@ -296,7 +296,7 @@ export default class Draw extends Component {
       
       if (geometry) {
         if (mode === Draw.DrawMode.POLYGON) {
-          geometry.setCoordinates(coordinates[0].concat([coordinates[0][0]]))
+          geometry.setCoordinates(coordinates[0])
         } else if(mode === Draw.DrawMode.LINE) {
           geometry.setCoordinates(coordinates)
         } else if(mode === Draw.DrawMode.EXTENT) {
