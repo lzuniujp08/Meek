@@ -41,11 +41,11 @@ import SingleImageLayer from 'lyr/SingleImageLayer'
 import Renderer from 'renderer/Renderer'
 import CanvasRenderer from 'renderer/canvas/CanvasRenderer'
 import Component from 'components/Component'
-import DrawCpt from 'components/DrawCpt'
+import Draw from 'components/Draw'
 import DrawEvent from 'components/DrawEvent'
-import SelectCpt from 'components/SelectCpt'
-import ModifyCpt from 'components/ModifyCpt'
-import DragPanCpt from 'components/DragPanCpt'
+import Select from 'components/Select'
+import Modify from 'components/Modify'
+import DragPan from 'components/DragPan'
 import Kinetic from 'components/Kinetic'
 import MouseWheelZoom from 'components/MouseWheelZoom'
 
@@ -93,7 +93,7 @@ export default {
   Renderer,
   CanvasRenderer,
   Component,
-  DrawCpt,
+  Draw,
   DrawEvent,
   BrowserEvent,
   BrowserEventHandler,
@@ -104,9 +104,9 @@ export default {
   Overlay,
   GeometryUtil,
   ExtentUtil,
-  SelectCpt,
-  ModifyCpt,
-  DragPanCpt,
+  Select,
+  Modify,
+  DragPan,
   Kinetic,
   Obj,
   Math,

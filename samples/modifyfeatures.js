@@ -53,7 +53,7 @@ window.onload = function () {
   
   var selectedFeatures = [new Datatang.Feature(point)]
   
-  var modifyTool = new Datatang.ModifyCpt({
+  var modifyTool = new Datatang.Modify({
     features: selectedFeatures
   });
   

@@ -42,16 +42,16 @@ window.onload = function (){
     })
   })
 
-  drawTool = new Datatang.DrawCpt({
+  drawTool = new Datatang.Draw({
     type: 'point',
     drawLayer: Fortesting
   });
 
-  modifyTool = new Datatang.ModifyCpt({
+  modifyTool = new Datatang.Modify({
     features: Fortesting.features
   });
 
-  selectTool = new Datatang.SelectCpt({
+  selectTool = new Datatang.Select({
     selectMode: Datatang.BrowserEvent.CLICK
   });
 

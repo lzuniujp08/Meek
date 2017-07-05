@@ -9,12 +9,12 @@ import {noModifierKeys} from '../utils/MouseKey'
 import {Coordinate} from '../utils/Coordinate'
 
 /**
- * @class DragPanCpt
+ * @class DragPan
  * @extends Component
  * @module component
  * @constructor
  */
-export default class DragPanCpt extends Component {
+export default class DragPan extends Component {
   
   constructor (options = {}) {
     super()

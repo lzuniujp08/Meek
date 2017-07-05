@@ -47,7 +47,7 @@ window.onload = function () {
     })
   })
   
-  var dragPan = new Datatang.DragPanCpt({
+  var dragPan = new Datatang.DragPan({
     kinetic: new Datatang.Kinetic(-0.005, 0.05, 100)
   })
   

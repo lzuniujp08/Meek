@@ -43,7 +43,7 @@ window.onload = function () {
   selectLayer.addFeatures(features)
   
   // 选择工具
-  var selectTool = new Datatang.SelectCpt({
+  var selectTool = new Datatang.Select({
     selectMode: Datatang.BrowserEvent.SINGLE_CLICK
   })
 

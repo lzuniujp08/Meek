@@ -50,9 +50,9 @@ window.onload = function () {
     })
   });
   
-  var select = new Datatang.SelectCpt()
+  var select = new Datatang.Select()
   
-  var modifyTool = new Datatang.ModifyCpt()
+  var modifyTool = new Datatang.Modify()
   
   // add select-end event linstener
   select.addEventListener(Datatang.SelectEvent.EventType.SELECT, function(event) {

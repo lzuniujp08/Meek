@@ -4,7 +4,7 @@
 
 
 import Kinetic from './Kinetic'
-import DragPanCpt from './DragPanCpt'
+import DragPan from './DragPan'
 import MouseWheelZoom from './MouseWheelZoom'
 
 /**
@@ -19,7 +19,7 @@ export function componentsDefaults (options = {}) {
   
   const dragPan = options.dragPan !== undefined ? options.dragPan : true
   if (dragPan) {
-    components.add(new DragPanCpt({
+    components.add(new DragPan({
       kinetic: kinetic
     }))
   }

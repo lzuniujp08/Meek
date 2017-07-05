@@ -24,13 +24,13 @@ import {closestOnSegment, squaredDistanceToSegment,
 import {noModifierKeys, singleClick} from '../utils/MouseKey'
 
 /**
- * @class ModifyCpt
+ * @class Modify
  * @extends Component
  * @module component
  * @constructor
  * @example
  */
-export default class ModifyCpt extends Component {
+export default class Modify extends Component {
   
   constructor(options = {}) {
     super(options)
@@ -406,7 +406,7 @@ export default class ModifyCpt extends Component {
         this._snapSegments = node
   
         if (node.geometry.geometryType === Geometry.CIRCLE &&
-          node.index === ModifyCpt.MODIFY_SEGMENT_CIRCLE_CIRCUMFERENCE_INDEX) {
+          node.index === Modify.MODIFY_SEGMENT_CIRCLE_CIRCUMFERENCE_INDEX) {
           this._snappedToVertex = true
           this._createOrUpdateVertexFeature(vertex)
         } else {
@@ -517,7 +517,7 @@ export default class ModifyCpt extends Component {
           break
         case Geometry.CIRCLE:
           segment[0] = segment[1] = vertex
-          if (segmentData.index === ModifyCpt.MODIFY_SEGMENT_CIRCLE_CENTER_INDEX) {
+          if (segmentData.index === Modify.MODIFY_SEGMENT_CIRCLE_CENTER_INDEX) {
             this._changingFeature = true
             geometry.setCenter(vertex)
             this._changingFeature = false
@@ -766,7 +766,7 @@ export default class ModifyCpt extends Component {
     if (geometry.geometryType === Geometry.CIRCLE) {
       const circleGeometry = geometry
       
-      if (segmentData.index === ModifyCpt.MODIFY_SEGMENT_CIRCLE_CIRCUMFERENCE_INDEX) {
+      if (segmentData.index === Modify.MODIFY_SEGMENT_CIRCLE_CIRCUMFERENCE_INDEX) {
         const distanceToCenterSquared =
           squaredDistance(circleGeometry.getCenter(), coordinates)
         const distanceToCircumference =
@@ -882,10 +882,10 @@ export default class ModifyCpt extends Component {
  *
  * @type {number}
  */
-ModifyCpt.MODIFY_SEGMENT_CIRCLE_CIRCUMFERENCE_INDEX = 1
+Modify.MODIFY_SEGMENT_CIRCLE_CIRCUMFERENCE_INDEX = 1
 
 /**
  *
  * @type {number}
  */
-ModifyCpt.MODIFY_SEGMENT_CIRCLE_CENTER_INDEX = 0
+Modify.MODIFY_SEGMENT_CIRCLE_CENTER_INDEX = 0

@@ -96,43 +96,43 @@ window.onload = function (){
     })
   })
   // First Components
-  drawTool = new Datatang.DrawCpt({
+  drawTool = new Datatang.Draw({
     type: 'point',
     drawLayer: Fortesting
   });
 
-  modifyTool = new Datatang.ModifyCpt({
+  modifyTool = new Datatang.Modify({
     features: Fortesting.features
   });
 
-  selectTool = new Datatang.SelectCpt({
+  selectTool = new Datatang.Select({
     selectMode: Datatang.BrowserEvent.CLICK
   });
   // Second Components
-  drawTool1 = new Datatang.DrawCpt({
+  drawTool1 = new Datatang.Draw({
     type: 'point',
     drawLayer: Fortesting1
   });
 
-  modifyTool1 = new Datatang.ModifyCpt({
+  modifyTool1 = new Datatang.Modify({
     features: Fortesting1.features
   });
 
-  selectTool1 = new Datatang.SelectCpt({
+  selectTool1 = new Datatang.Select({
     selectMode: Datatang.BrowserEvent.CLICK
   });
 
   // Third Components
-  drawTool2 = new Datatang.DrawCpt({
+  drawTool2 = new Datatang.Draw({
     type: 'point',
     drawLayer: Fortesting2
   });
 
-  modifyTool2 = new Datatang.ModifyCpt({
+  modifyTool2 = new Datatang.Modify({
     features: Fortesting2.features
   });
 
-  selectTool2 = new Datatang.SelectCpt({
+  selectTool2 = new Datatang.Select({
     selectMode: Datatang.BrowserEvent.CLICK
   });
 

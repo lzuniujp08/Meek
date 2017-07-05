@@ -21,24 +21,24 @@ import BrowserEvent from '../meek/BrowserEvent'
 import DrawEvent from './DrawEvent'
 
 /**
- * DrawCpt class is resonsibility to draw geometries.
+ * Draw class is resonsibility to draw geometries.
  *
  * 图形绘制工具，可以绘制点、线、面等图形
  *
- * @class DrawCpt
+ * @class Draw
  * @extends Component
  * @module component
  * @constructor
  * @example
  *
  *      // 实例化绘图工具
- *      var drawTool = new Datatang.DrawCpt({
+ *      var drawTool = new Datatang.Draw({
  *        type: 'point',
  *        drawLayer: new Datatang.FeatureLayer()
  *      })
  *
  */
-export default class DrawCpt extends Component {
+export default class Draw extends Component {
   
   /**
    *
@@ -86,7 +86,7 @@ export default class DrawCpt extends Component {
      * Drawing mode (derivied from geometry type.)
      * @type {*}
      */
-    this.drawMode = DrawCpt.getDrawMode(options.type)
+    this.drawMode = Draw.getDrawMode(options.type)
   
     /**
      * Sketch coordinates. Used when drawing a line or polygon.
@@ -191,7 +191,7 @@ export default class DrawCpt extends Component {
      */
     this._minPoints = options.minPoints ?
       options.minPoints :
-      (this.drawMode === DrawCpt.DrawMode.POLYGON ? 3 : 2)
+      (this.drawMode === Draw.DrawMode.POLYGON ? 3 : 2)
   
     /**
      * @private
@@ -211,7 +211,7 @@ export default class DrawCpt extends Component {
     
     // If finish drawing
     if (this._finishCondition(event)) {
-      if (this.drawMode === DrawCpt.DrawMode.POLYGON) {
+      if (this.drawMode === Draw.DrawMode.POLYGON) {
         const pcoordinates = this._sketchFeature.geometry.getCoordinates()
         if (pcoordinates.length < 5) {
           return
@@ -250,7 +250,7 @@ export default class DrawCpt extends Component {
    * 设置当前绘图的模式，重新赋值将会启动新图形类型的绘制
    *
    * @property drawMode
-   * @type {Datatang.DrawCpt.DrawMode}
+   * @type {Datatang.Draw.DrawMode}
    */
   get drawMode () { return this._drawMode }
   set drawMode (value){
@@ -259,7 +259,7 @@ export default class DrawCpt extends Component {
     this._sketchLineCoords = null
     this._abortDrawing()
   
-    this._minPoints = this._drawMode === DrawCpt.DrawMode.POLYGON ? 3 : 2
+    this._minPoints = this._drawMode === Draw.DrawMode.POLYGON ? 3 : 2
   }
   
   /**
@@ -271,13 +271,13 @@ export default class DrawCpt extends Component {
     let Constructor
     let mode = this.drawMode
   
-    if (mode === DrawCpt.DrawMode.POINT) {
+    if (mode === Draw.DrawMode.POINT) {
       Constructor = Point
-    } else if (mode === DrawCpt.DrawMode.LINE) {
+    } else if (mode === Draw.DrawMode.LINE) {
       Constructor = Line
-    } else if(mode === DrawCpt.DrawMode.POLYGON) {
+    } else if(mode === Draw.DrawMode.POLYGON) {
       Constructor = Polygon
-    } else if (mode === DrawCpt.DrawMode.EXTENT) {
+    } else if (mode === Draw.DrawMode.EXTENT) {
       Constructor = Extent
     }
     
@@ -295,11 +295,11 @@ export default class DrawCpt extends Component {
       let geometry = opt_geometry
       
       if (geometry) {
-        if (mode === DrawCpt.DrawMode.POLYGON) {
+        if (mode === Draw.DrawMode.POLYGON) {
           geometry.setCoordinates(coordinates[0].concat([coordinates[0][0]]))
-        } else if(mode === DrawCpt.DrawMode.LINE) {
+        } else if(mode === Draw.DrawMode.LINE) {
           geometry.setCoordinates(coordinates)
-        } else if(mode === DrawCpt.DrawMode.EXTENT) {
+        } else if(mode === Draw.DrawMode.EXTENT) {
           geometry.setCoordinates(ExtentUtil.boundingExtent(coordinates))
         }
       } else {
@@ -385,13 +385,13 @@ export default class DrawCpt extends Component {
         this._startDrawing(event)
   
         // 点绘制在up的时候结束
-        if (this.drawMode === DrawCpt.DrawMode.POINT) {
+        if (this.drawMode === Draw.DrawMode.POINT) {
           this._finishDrawing()
         }
-      } else if (mode === DrawCpt.DrawMode.CIRCLE ) {
+      } else if (mode === Draw.DrawMode.CIRCLE ) {
         //
         //
-      } else if (mode === DrawCpt.DrawMode.EXTENT) {
+      } else if (mode === Draw.DrawMode.EXTENT) {
         this._finishDrawing()
       }
       else if (this._atFinish(event)) {
@@ -417,15 +417,15 @@ export default class DrawCpt extends Component {
     const _drawMode = this.drawMode
     
     // 构造geometry数据
-    if (_drawMode === DrawCpt.DrawMode.POINT) {
+    if (_drawMode === Draw.DrawMode.POINT) {
       this._sketchCoords = startPoint.slice() // 缓存up的点
-    } else if (_drawMode === DrawCpt.DrawMode.POLYGON ) {
+    } else if (_drawMode === Draw.DrawMode.POLYGON ) {
       this._sketchCoords = [[startPoint.slice(), startPoint.slice()]]
       this._sketchLineCoords = this._sketchCoords[0]// temp line
     } else {
       this._sketchCoords = [startPoint.slice(),startPoint.slice()] // 缓存up的点，最后一个值，用于move的替换
       
-      if (_drawMode === DrawCpt.DrawMode.EXTENT) {
+      if (_drawMode === Draw.DrawMode.EXTENT) {
         this._sketchLineCoords = this._sketchCoords
       }
     }
@@ -460,9 +460,9 @@ export default class DrawCpt extends Component {
     let coordinates = null, last = null
     const mode = this.drawMode
     
-    if (mode === DrawCpt.DrawMode.POINT) {
+    if (mode === Draw.DrawMode.POINT) {
       last = this._sketchCoords
-    } else if (mode === DrawCpt.DrawMode.POLYGON) {
+    } else if (mode === Draw.DrawMode.POLYGON) {
       coordinates = this._sketchCoords[0]
       last = coordinates[coordinates.length - 1]
       if (this._atFinish(event)) {
@@ -486,7 +486,7 @@ export default class DrawCpt extends Component {
     }
     
     let sketchLineGeom
-    if (mode === DrawCpt.DrawMode.EXTENT) {
+    if (mode === Draw.DrawMode.EXTENT) {
       if (!this._sketchLine) {
         this._sketchLine = new Feature(new Line(null))
       }
@@ -515,11 +515,11 @@ export default class DrawCpt extends Component {
     const coordinates = this._sketchCoords
     const geometry = (sketchFeature.geometry)
   
-    if (this.drawMode === DrawCpt.DrawMode.LINE) {
+    if (this.drawMode === Draw.DrawMode.LINE) {
       // remove the redundant last point
       coordinates.pop()
       this.geometryFunction(coordinates, geometry)
-    } else if (this.drawMode === DrawCpt.DrawMode.POLYGON) {
+    } else if (this.drawMode === Draw.DrawMode.POLYGON) {
       // When we finish drawing a polygon on the last point,
       // the last coordinate is duplicated as for LineString
       // we force the replacement by the first point
@@ -572,14 +572,14 @@ export default class DrawCpt extends Component {
     let coordinates,done
     const mode = this.drawMode
     
-    if (mode === DrawCpt.DrawMode.LINE) {
+    if (mode === Draw.DrawMode.LINE) {
       this._finishCoordinate = coordinate.slice()
       coordinates = this._sketchCoords
       coordinates.push(coordinate.slice())
       done = coordinates.length > this._maxPoints
       
       this.geometryFunction(coordinates, geometry)
-    } else if (mode === DrawCpt.DrawMode.POLYGON) {
+    } else if (mode === Draw.DrawMode.POLYGON) {
       coordinates = this._sketchCoords[0]
       coordinates.push(coordinate.slice())
       done = coordinates.length > this._maxPoints
@@ -610,9 +610,9 @@ export default class DrawCpt extends Component {
       let potentiallyDone = false
       let potentiallyFinishCoordinates = [this._finishCoordinate]
       
-      if (this.drawMode === DrawCpt.DrawMode.LINE) {
+      if (this.drawMode === Draw.DrawMode.LINE) {
         potentiallyDone = this._sketchCoords.length > this._minPoints
-      } else if (this.drawMode === DrawCpt.DrawMode.POLYGON) {
+      } else if (this.drawMode === Draw.DrawMode.POLYGON) {
         potentiallyDone = this._sketchCoords[0].length > this._minPoints
         potentiallyFinishCoordinates = [this._sketchCoords[0][0],
           this._sketchCoords[0][this._sketchCoords[0].length - 2]]
@@ -688,7 +688,7 @@ export default class DrawCpt extends Component {
    */
   _undoDrawing () {
     const drawMode = this.drawMode
-    if (drawMode === DrawCpt.DrawMode.LINE ) {
+    if (drawMode === Draw.DrawMode.LINE ) {
       if (this._sketchFeature) {
         const coordinates = this._sketchFeature.geometry.getCoordinates()
         if (coordinates.length > 2) {
@@ -697,7 +697,7 @@ export default class DrawCpt extends Component {
           this._sketchFeature.changed()
         }
       }
-    } else if (drawMode === DrawCpt.DrawMode.POLYGON) {
+    } else if (drawMode === Draw.DrawMode.POLYGON) {
       if (this._sketchFeature) {
         
         const pcoordinates = this._sketchFeature.geometry.getCoordinates()
@@ -776,24 +776,24 @@ export default class DrawCpt extends Component {
  * @param type
  * @returns {*}
  */
-DrawCpt.getDrawMode = function(type) {
+Draw.getDrawMode = function(type) {
   let drawMode = null
   
   switch (type){
   case Geometry.POINT:
   case Geometry.MULTI_POINT:
-    drawMode = DrawCpt.DrawMode.POINT
+    drawMode = Draw.DrawMode.POINT
     break
   case Geometry.LINE:
   case Geometry.MULTI_LINE:
-    drawMode = DrawCpt.DrawMode.LINE
+    drawMode = Draw.DrawMode.LINE
     break
   case Geometry.POLYGON:
   case Geometry.MULTI_POLYGON:
-    drawMode = DrawCpt.DrawMode.POLYGON
+    drawMode = Draw.DrawMode.POLYGON
     break
   case Geometry.EXTENT:
-    drawMode = DrawCpt.DrawMode.EXTENT
+    drawMode = Draw.DrawMode.EXTENT
     break
   }
   
@@ -806,7 +806,7 @@ DrawCpt.getDrawMode = function(type) {
  * cousins.
  * @enum {string}
  */
-DrawCpt.DrawMode = {
+Draw.DrawMode = {
   POINT: 'Point',
   LINE: 'Line',
   POLYGON: 'Polygon',

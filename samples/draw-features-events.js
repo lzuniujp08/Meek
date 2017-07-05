@@ -32,7 +32,7 @@ window.onload = function () {
   });
   
   // 绘图工具
-  var drawTool = new Datatang.DrawCpt({
+  var drawTool = new Datatang.Draw({
     type: 'point',
     drawLayer: flayer
   })

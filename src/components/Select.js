@@ -20,7 +20,7 @@ import SelectEvent from '../components/SelectEvent'
  * By default,selected features are styled differently, so this
  *
  *
- * @class SelectCpt
+ * @class Select
  * @extends Component
  * @module component
  * @constructor
@@ -29,7 +29,7 @@ let hasSelectedStyle = true
 let fillChanged = false
 let pointChanged = false
 let lineChanged = false
-export default class SelectCpt extends Component {
+export default class Select extends Component {
 
   constructor (options = {}) {
     super()
