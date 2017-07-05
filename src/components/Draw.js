@@ -256,20 +256,11 @@ export default class Draw extends Component {
   set drawMode (value){
 
     //judgment the value of drawMode
-    let count = 0
-    for(var val in Draw.DrawMode){
-      if(value.toUpperCase() === val){
-        break
-      }else{
-        count ++
-      }
-    }
-    if(count === 5){
-      this.active = false
-    }else{
+    if(this._existInDrawMode(value)){
       this.active = true
+    }else{
+      this.active = false
     }
-
 
     this._drawMode = value
     
@@ -278,7 +269,20 @@ export default class Draw extends Component {
   
     this._minPoints = this._drawMode === Draw.DrawMode.POLYGON ? 3 : 2
   }
-  
+
+  _existInDrawMode (value){
+    const drawMode = Draw.DrawMode
+    const modeValue = value.toUpperCase()
+
+    for(let val in drawMode){
+      if(modeValue === drawMode[val].toUpperCase()){
+        return  true
+      }
+    }
+
+    return false
+  }
+
   /**
    * 图形生产工厂方法
    * @returns {*} 返回一个geometry对象
