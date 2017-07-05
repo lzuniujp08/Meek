@@ -255,12 +255,7 @@ export default class Draw extends Component {
   get drawMode () { return this._drawMode }
   set drawMode (value){
 
-    //judgment the value of drawMode
-    if(this._existInDrawMode(value)){
-      this.active = true
-    }else{
-      this.active = false
-    }
+    this.active = this._existInDrawMode(value) ? true : false
 
     this._drawMode = value
     
@@ -269,6 +264,13 @@ export default class Draw extends Component {
   
     this._minPoints = this._drawMode === Draw.DrawMode.POLYGON ? 3 : 2
   }
+
+  /**
+   * 判断绘制时传入的绘制类型是否在绘制列表中
+   * @param value
+   * @returns {boolean}
+   * @private
+   */
 
   _existInDrawMode (value){
     const drawMode = Draw.DrawMode
