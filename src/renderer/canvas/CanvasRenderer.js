@@ -2,8 +2,8 @@
 import SingleImageLayer from '../../lyr/SingleImageLayer'
 import FeatureLayer from '../../lyr/FeatureLayer'
 import Renderer from '../Renderer'
-import FeatureLayerRender from '../canvas/FeatureLayerRender'
-import ImageLayerRender from '../canvas/ImageLayerRender'
+import FeatureLayerRenderer from '../canvas/FeatureLayerRenderer'
+import ImageLayerRenderer from '../canvas/ImageLayerRenderer'
 import {createCanvasContext2D} from '../../utils/DomUtil'
 import {Transform} from '../../data/matrix/Transform'
 import {RenderEventType} from '../RenderEventType'
@@ -123,9 +123,9 @@ export default class CanvasRenderer extends Renderer {
    */
   createLayerRenderer(layer){
     if (layer instanceof SingleImageLayer) {
-      return new ImageLayerRender(layer,this.context)
+      return new ImageLayerRenderer(layer,this.context)
     } else if (layer instanceof FeatureLayer) {
-      return new FeatureLayerRender(layer,this.context)
+      return new FeatureLayerRenderer(layer,this.context)
     } else {
       return null
     }
