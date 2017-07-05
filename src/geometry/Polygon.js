@@ -203,7 +203,7 @@ export default class Polygon extends Geometry {
       return
     }
     
-    const lastPoint = coordinates[coordinates.length - 3]
+    const lastPoint = coordinates[coordinates.length - 2]
     return [lastPoint[0] - offsetX, lastPoint[1] - offsetY]
   }
   
