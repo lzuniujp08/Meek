@@ -254,6 +254,8 @@ export default class Draw extends Component {
    */
   get drawMode () { return this._drawMode }
   set drawMode (value){
+
+    //judgment the value of drawMode
     let count = 0
     for(var val in Draw.DrawMode){
       if(value.toUpperCase() === val){
@@ -267,6 +269,7 @@ export default class Draw extends Component {
     }else{
       this.active = true
     }
+
 
     this._drawMode = value
     
