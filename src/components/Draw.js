@@ -254,6 +254,20 @@ export default class Draw extends Component {
    */
   get drawMode () { return this._drawMode }
   set drawMode (value){
+    let count = 0
+    for(var val in Draw.DrawMode){
+      if(value.toUpperCase() === val){
+        break
+      }else{
+        count ++
+      }
+    }
+    if(count === 5){
+      this.active = false
+    }else{
+      this.active = true
+    }
+
     this._drawMode = value
     
     this._sketchLineCoords = null
