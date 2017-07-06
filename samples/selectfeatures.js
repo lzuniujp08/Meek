@@ -22,6 +22,8 @@ window.onload = function () {
   
   // 将会获取缺省样式
   var selectLayer = new Datatang.FeatureLayer()
+  selectLayer.style = createDefaultSelecting()
+  //var selectLayer = createDefaultSelecting()
   
   var mapextent = [0, 0, 1024, 968];
   
@@ -58,4 +60,37 @@ window.onload = function () {
     selectTool.selectMode = typeSelect.value
   }
   
+}
+
+
+
+
+function createDefaultSelecting() {
+  const styles = {}
+  const black = [0, 0, 0]
+  const red = [255, 0, 0]
+  const width = 3
+  const outsideLine = new Datatang.LineStyle(black,1,width + 2,Datatang.LineStyle.LineCap.ROUND,Datatang.LineStyle.LineJion.ROUND)// 外框
+  const insideLine = new Datatang.LineStyle(red,1,width,Datatang.LineStyle.LineCap.ROUND,Datatang.LineStyle.LineJion.ROUND)
+
+  // 面样式
+  styles[Datatang.Geometry.POLYGON] = [
+    new Datatang.FillStyle(black, outsideLine,0.5),
+    new Datatang.FillStyle(black, insideLine,0)
+  ]
+  styles[Datatang.Geometry.MULTI_POLYGON] = styles[Datatang.Geometry.POLYGON]
+  styles[Datatang.Geometry.EXTENT] = styles[Datatang.Geometry.POLYGON]
+
+  // 线样式
+  styles[Datatang.Geometry.LINE] = [
+    outsideLine,// 外框
+    insideLine// 内框
+  ]
+  styles[Datatang.Geometry.MULTI_LINE] = styles[Datatang.Geometry.LINE]
+
+  // 点样式
+  styles[Datatang.Geometry.POINT] = [new Datatang.PointStyle(12,red,1,new Datatang.LineStyle(red,1,1))]
+  styles[Datatang.Geometry.MULTI_POINT] = styles[Datatang.Geometry.POINT]
+
+  return styles
 }

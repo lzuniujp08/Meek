@@ -369,7 +369,7 @@ export default class Map extends BaseObject {
       let layer = layers[i]
       result = layer.forEachFeatureAtPiexl(this._frameState,coordinate,callback,hitTolerance)
       if(result){
-        return callback(result)
+        return callback(result, layer)
       }
     }
     

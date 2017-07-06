@@ -25,10 +25,6 @@ import SelectEvent from '../components/SelectEvent'
  * @module component
  * @constructor
  */
-let hasSelectedStyle = true
-let fillChanged = false
-let pointChanged = false
-let lineChanged = false
 export default class Select extends Component {
 
   constructor (options = {}) {
@@ -36,6 +32,12 @@ export default class Select extends Component {
 
     this._hitTolerance = options.hitTolerance ? options.hitTolerance : 6
 
+    /**
+     * 选择图层是否配置了样式
+     * @type {boolean}
+     * @private
+       */
+    this._hasSelectedStyle = false
 
     /**
      * 初始化草稿图层，用于临时高亮显示绘制的图形
@@ -43,13 +45,13 @@ export default class Select extends Component {
      * @type {FeatureLayer}
      * @private
      */
+    this._selectLayer = new FeatureLayer()
+
     if(options.style){
-      this._selectLayer = new FeatureLayer({
-        style: options.style
-      })
+      this._selectLayer.style = options.style
+      this._hasSelectedStyle = true
     }else{
-      hasSelectedStyle = false
-      this._selectLayer = new FeatureLayer({})
+      this._hasSelectedStyle = false
     }
 
     this._selectFeatures = []
@@ -80,18 +82,28 @@ export default class Select extends Component {
 
     this.selectClean()
 
-    map.forEachFeatureAtPiexl(pixel, (function(features) {
+    map.forEachFeatureAtPiexl(pixel, (function(features, layer) {
       if(features.length > 0){
+
+        // 克隆样式
+        features.forEach( feature => {
+          const styles = layer.styleFunction(feature)
+          const newStyles = []
+          styles.forEach(style => {
+            newStyles.push(style.clone())
+          })
+
+          feature.style = newStyles
+        })
+
+        // 赋值并填充到selectFeatures中
         this.selectFeatures = features
       }
     }).bind(this), hitTolerance)
 
     if (this.selectFeatures.length > 0 ) {
-
-      this.forEachStyle()
+      this._forEachStyle()
       this._selectLayer.addFeatures(this.selectFeatures)
-
-      // dispatch the select event after some features selected successfully
     }
 
     this.dispatchEvent(
@@ -103,9 +115,11 @@ export default class Select extends Component {
    */
   selectClean () {
     this._selectLayer.clear()
+    this.selectFeatures.forEach(feature => {
+      feature.style = undefined
+    })
+
     this.selectFeatures = []
-    Number
- /*   this.forEachStyleRS()*/
   }
 
   get selectFeatures () { return this._selectFeatures }
@@ -133,72 +147,25 @@ export default class Select extends Component {
     this._selectLayer.map = active ? map : null
   }
 
-  /**
-   *
-   */
-  forEachStyle () {
-    if(hasSelectedStyle){
+  _forEachStyle () {
+    if (this._hasSelectedStyle) {
       return
     }
-    const layer = this.map.layers[1]
-    const features = this.selectFeatures
-    features.forEach (function(feature) {
-      let styles = []
-      if(feature.style){
-        styles = feature.style
-      }else{
-        let styleFunction = layer.styleFunction
-        if (styleFunction) {
-          let oldStyle
-          oldStyle = styleFunction(feature)
-          let newStyle = oldStyle[0].clone()
-          styles.push(newStyle)
-        }
-      }
 
-      styles.forEach (function(style){
+    const features = this.selectFeatures
+    features.forEach ( feature => {
+      const styles = feature.style
+      styles.forEach ( style => {
         if (style instanceof FillStyle) {
-          if(fillChanged){return}
-          style.alpha = style.alpha + 0.5
+          style.alpha = style.alpha + 0.3
           style.borderStyle.width = style.borderStyle.width + 4
-          fillChanged = true
         } else if (style instanceof LineStyle) {
-          if(lineChanged){return}
-          style.width = style.width + 5
-          lineChanged = true
+          style.width = style.width + 2
         } else if (style instanceof PointStyle) {
-          if(pointChanged){return}
-          style.size = style.size + 4
-          pointChanged = true
+          style.size = style.size + 3
         }
       })
     })
-  }
-
-  // restore style
-  forEachStyleRS () {
-    if(hasSelectedStyle){
-      return
-    }
-    if(!this.map){
-      return
-    }
-    const layer = this.map.layers[1]
-    if(fillChanged){
-      layer._style.extent[0].alpha = layer._style.extent[0].alpha - 0.2
-      layer._style.extent[0].borderStyle._width = layer._style.extent[0].borderStyle._width  -2
-      fillChanged = false
-    }
-    if(lineChanged){
-      layer._style.line[0]._width = layer._style.line[0]._width - 5
-      lineChanged = false
-    }
-    if(pointChanged){
-      layer._style.point[0].size = layer._style.point[0].size - 4
-      pointChanged = false
-    }
-
-
   }
 
   get map (){ return this._map }

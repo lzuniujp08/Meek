@@ -87,9 +87,15 @@ var typeSelect = document.getElementById('type')
  * Handle change event.
  */
 typeSelect.onchange = function() {
-  select.active = false
-  modifyTool.active = false
-  drawTool.drawMode = typeSelect.value
+  if(typeSelect.value === "None"){
+    drawTool.active = false
+    select.active = true
+    modifyTool.active = true
+  }else {
+    select.active = false
+    modifyTool.active = false
+    drawTool.drawMode = typeSelect.value
+  }
 }
 
 var currentFeature = null
@@ -154,7 +160,7 @@ function onFormClosedClick(e){
 
 
 function onEditBtnClick(){
-  drawTool.active = false
-  select.active = true
+    drawTool.active = false
+    select.active = true
 }
   

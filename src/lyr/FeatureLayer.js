@@ -180,7 +180,7 @@ export default class FeatureLayer extends BaseLayer {
       return feature.geometry.containsXY(piexl[0],piexl[1],{tolerance : tolerance})
     })
     
-    return callback(result)
+    return result
   }
   
   /**
