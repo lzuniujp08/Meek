@@ -70,7 +70,7 @@ function createDefaultSelecting() {
   const black = [0, 0, 0]
   const red = [255, 0, 0]
   const width = 3
-  const outsideLine = new Datatang.LineStyle(black,1,width + 2,Datatang.LineStyle.LineCap.ROUND,Datatang.LineStyle.LineJion.ROUND)// 外框
+  const outsideLine = new Datatang.LineStyle(black,1,width + 5,Datatang.LineStyle.LineCap.ROUND,Datatang.LineStyle.LineJion.ROUND)// 外框
   const insideLine = new Datatang.LineStyle(red,1,width,Datatang.LineStyle.LineCap.ROUND,Datatang.LineStyle.LineJion.ROUND)
 
   // 面样式
