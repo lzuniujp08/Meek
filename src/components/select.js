@@ -64,10 +64,11 @@ export default class Select extends Component {
     this._selectMultiMode = options.selectMultiMode ?
       options.selectMultiMode : function () { return true }
 
-    // add keyboard events
+    /**
+     * listen Ctrl key envet
+     */
     if (options.selectMultiMode) {
-      listen(document, 'keydown',
-        this._handleCtrlKeyDwon, this)
+      listen(document, 'keydown', this._handleCtrlKeyDwon, this)
     }
     if(options.selectMultiMode) {
       listen(document, 'keyup', this._handleCtrlKeyUp, this)
@@ -81,12 +82,22 @@ export default class Select extends Component {
 
   _keyPress () {}
 
+  /**
+   * handle Ctrl key down event
+   * @param event
+   * @private
+   */
   _handleCtrlKeyDwon (event) {
-    // Ctrl button down
     if (this._selectMultiMode(event)) {
       this._multiSelectMode = true
       }
   }
+
+  /**
+   * handle Ctrl key up event
+   * @param event
+   * @private
+   */
   _handleCtrlKeyUp (event) {
     // Ctrl button down
     if (this._selectMultiMode(event)) {

@@ -253,6 +253,10 @@ export default class Overlay extends BaseObject {
         this._rendered.top_ = style.top = top
       }
     }
+    if(this.autoPan){
+      this._panIntoView()
+    }
+
   }
   
   /**
@@ -279,6 +283,10 @@ export default class Overlay extends BaseObject {
     
     const mapRect = this._getRect(map.getTargetElement(), map.size)
     const element = this.popupEelement
+
+    if(element.clientHeight === 0 && element.clientWidth === 0){
+      return
+    }
     const overlayRect = this._getRect(element,
       [outerWidth(element), outerHeight(element)])
     
@@ -381,11 +389,6 @@ export default class Overlay extends BaseObject {
   get position () { return this._position }
   set position (value) {
     this._position = value
-  
-    if (value && this.autoPan) {
-      this._panIntoView()
-    }
-    
     this.updatePixelPosition()
   }
   
