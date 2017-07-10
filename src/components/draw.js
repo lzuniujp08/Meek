@@ -551,9 +551,6 @@ export default class Draw extends Component {
       this.geometryFunction(coordinates, geometry)
     }
   
-    // First dispatch event to allow full set up of feature
-    this.dispatchEvent(new DrawEvent(DrawEvent.EventType.DRAW_END, sketchFeature))
-  
     // Then insert feature
     // if (this._features) {
     //   this.features_.push(sketchFeature)
@@ -564,6 +561,9 @@ export default class Draw extends Component {
       // let newFeature = new Feature(geometry)
       this._drawLayer.addFeatures([sketchFeature])
     }
+  
+    // First dispatch event to allow full set up of feature
+    this.dispatchEvent(new DrawEvent(DrawEvent.EventType.DRAW_END, sketchFeature))
   }
   
   /**
