@@ -42,9 +42,19 @@ window.onload = function (){
     })
   })
 
+  //回车结束
+  var finishCondition = function (event) {
+    return event.keyCode === 13
+  }
+
+  var selectMultiMode = function (event){
+    return event.keyCode === 17
+  }
+
   drawTool = new Datatang.Draw({
     type: 'point',
-    drawLayer: Fortesting
+    drawLayer: Fortesting,
+    finishCondition :finishCondition
   });
 
   modifyTool = new Datatang.Modify({
@@ -52,7 +62,8 @@ window.onload = function (){
   });
 
   selectTool = new Datatang.Select({
-    selectMode: Datatang.BrowserEvent.CLICK
+    selectMode: Datatang.BrowserEvent.CLICK,
+    selectMultiMode: selectMultiMode
   });
 
   map.addComponents(drawTool)
