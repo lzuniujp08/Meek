@@ -14,6 +14,7 @@ import LineStyle from '../style/lineStyle'
 import PointStyle from '../style/pointStyle'
 
 import SelectEvent from '../components/selectEvent'
+import Geometry from '../geometry/geometry'
 
 /**
  * The select component can be used for features selecting.
@@ -25,7 +26,6 @@ import SelectEvent from '../components/selectEvent'
  * @module component
  * @constructor
  */
-window.document.onk
 export default class Select extends Component {
 
   constructor (options = {}) {
@@ -41,6 +41,7 @@ export default class Select extends Component {
     this._hasSelectedStyle = false
 
     this._multiSelectMode = false
+    
     /**
      * 初始化草稿图层，用于临时高亮显示绘制的图形
      *
@@ -49,17 +50,16 @@ export default class Select extends Component {
      */
     this._selectLayer = new FeatureLayer()
 
-    if(options.style){
+    if (options.style) {
       this._selectLayer.style = options.style
       this._hasSelectedStyle = true
-    }else{
+    } else {
       this._hasSelectedStyle = false
     }
 
     this._selectFeatures = []
 
     this.selectMode = options.selectMode ? options.selectMode : BrowserEvent.CLICK
-
 
     this._selectMultiMode = options.selectMultiMode ?
       options.selectMultiMode : function () { return true }
@@ -70,7 +70,7 @@ export default class Select extends Component {
     if (options.selectMultiMode) {
       listen(document, 'keydown', this._handleCtrlKeyDwon, this)
     }
-    if(options.selectMultiMode) {
+    if (options.selectMultiMode) {
       listen(document, 'keyup', this._handleCtrlKeyUp, this)
     }
 
@@ -90,7 +90,7 @@ export default class Select extends Component {
   _handleCtrlKeyDwon (event) {
     if (this._selectMultiMode(event)) {
       this._multiSelectMode = true
-      }
+    }
   }
 
   /**
@@ -114,25 +114,26 @@ export default class Select extends Component {
       return true
     }
 
-    if (this.active === false) {
-      return true
-    }
-
     const map = browserEvent.map
     const pixel = browserEvent.pixel
     const hitTolerance = this._hitTolerance
 
-    if(!this._multiSelectMode){
-      this.selectClean()
+    if (!this._multiSelectMode) {
+      this.clear()
     }
-
 
     map.forEachFeatureAtPiexl(pixel, (function(features, layer) {
       if(features.length > 0){
 
         // 克隆样式
         features.forEach( feature => {
-          const styles = layer.styleFunction(feature)
+          let styles
+          if (feature.style) {
+            styles = feature.style
+          } else {
+            styles = layer.styleFunction(feature)
+          }
+          
           const newStyles = []
           styles.forEach(style => {
             newStyles.push(style.clone())
@@ -151,55 +152,63 @@ export default class Select extends Component {
       this._selectLayer.addFeatures(this.selectFeatures)
     }
 
+    // 派发要素的选择事件
     this.dispatchEvent(
       new SelectEvent(SelectEvent.EventType.SELECT, this.selectFeatures,browserEvent))
-    this._selectMultiMode1 = false
   }
-
+  
   /**
+   * 清空选择的集合
    *
+   * @method clear
    */
-  selectClean () {
+  clear () {
     this._selectLayer.clear()
+    
     this.selectFeatures.forEach(feature => {
       feature.style = undefined
+      feature.delete('hasmutilselected')
     })
 
     this.selectFeatures = []
   }
-
+  
+  /**
+   * 当前选中要素的集合
+   *
+   * @property selectFeatures
+   * @type {Array}
+   */
   get selectFeatures () { return this._selectFeatures }
   set selectFeatures (features) {
     if (features.length === 0 ) {
       this._selectFeatures = []
     } else {
-      features.forEach( feature =>
-        this._selectFeatures.push(feature)
-      )
-    }
-    //执行去重算法
-    if(this._selectFeatures.length > 1){
-      this._selectFeatures = this._deDupeFeatures(this._selectFeatures)
+      features.forEach( feature => {
+        // 去掉重复的
+        if (!this._isInSelectFeatures(feature)) {
+          this._selectFeatures.push(feature)
+        }
+      })
     }
   }
-
+  
   /**
-   * Delete the duplicated Selected Features
-   * @param array
-   * @returns {Array}
+   * 判断当前选中的集合中是否包含指定的feature
+   *
+   * @param feature 传入的feature对象
+   * @returns {boolean} 有就返回true, 无就返回false
    * @private
    */
-  _deDupeFeatures(array) {
-    let n =[]
-    for(let i =0; i< array.length; i++) {
-      if(n.indexOf(array[i])== -1) {
-        // array[i].style = undefined
-        n.push(array[i]);
-      }
-    }
-    return  n
+  _isInSelectFeatures (feature) {
+    const features = this.selectFeatures
+    
+    const result = features.find(function(f){
+      return f.id === feature.id
+    })
+    
+    return result === undefined ? false : true
   }
-
 
   /**
    * Update the drawing state for aborting drawing if active is false
@@ -214,42 +223,54 @@ export default class Select extends Component {
 
     this._selectLayer.map = active ? map : null
   }
-
+  
+  /**
+   *
+   * @private
+   */
   _forEachStyle () {
     if (this._hasSelectedStyle) {
       return
     }
 
     const features = this.selectFeatures
-
     const white = [255, 255, 255]
-    const width = 12
-    features.forEach(feature => {
-      if(feature.geometry.geometryType === 'line'){
-        feature.style.unshift(new Datatang.LineStyle(white,0.5,width))
-      }else{
-        feature.style.unshift(new Datatang.FillStyle(white,new Datatang.LineStyle(white,1,width),0.5))
-      }
-    })
-
 
     features.forEach ( feature => {
-      if(feature.style.length > 2){
-        return
-      }
-      const styles = feature.style
-      styles.forEach ( style => {
-        if (style instanceof FillStyle) {
-          style.alpha = style.alpha + 0.3
-          style.borderStyle.width = style.borderStyle.width + 2
-        } else if (style instanceof LineStyle) {
-          style.width = style.width + 2
-        } else if (style instanceof PointStyle) {
-          style.size = style.size + 2
+      if (!feature.get('hasmutilselected')) {
+        const styles = feature.style
+        const geometryType = feature.geometry.geometryType
+  
+        if (geometryType === Geometry.LINE) {
+          const firstStyle = styles[0]
+          firstStyle.width = firstStyle.width + 2
+    
+          const cloneStyle = firstStyle.clone()
+          cloneStyle.width = cloneStyle.width + 2
+          cloneStyle.color = white
+    
+          feature.style.unshift(cloneStyle)
+        } else if (geometryType === Geometry.POLYGON || geometryType === Geometry.EXTENT ) {
+          const firstStyle = styles[0]
+          firstStyle.borderStyle.width = firstStyle.borderStyle.width + 2
+    
+          const cloneStyle = firstStyle.clone()
+          cloneStyle.alpha = 0.1
+          cloneStyle.borderStyle.width = firstStyle.borderStyle.width + 2
+          cloneStyle.borderStyle.color = white
+          cloneStyle.borderStyle.lineCap = LineStyle.LineCap.ROUND
+          cloneStyle.borderStyle.lineJion = LineStyle.LineJion.ROUND
+    
+          feature.style.unshift(cloneStyle)
+        } else if (geometryType === Geometry.POINT ) {
+          const firstStyle = styles[0]
+          firstStyle.size = firstStyle.size + 3
+          firstStyle.borderStyle.width = firstStyle.borderStyle.width + 1
         }
-      })
+  
+        feature.set('hasmutilselected', true)
+      }
     })
-
   }
 
   get map (){ return this._map }
@@ -271,7 +292,7 @@ export default class Select extends Component {
   set selectMode (value) {
     if (this._selectMode !== value) {
       this._selectMode = value
-      this.selectClean()
+      this.clear()
     }
   }
 
