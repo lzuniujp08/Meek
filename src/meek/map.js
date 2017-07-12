@@ -271,13 +271,26 @@ export default class Map extends BaseObject {
   isRendered () {
     return !!this._frameState
   }
-  
+
+  /**
+   * 当前地图的大小
+   *
+   * @property size
+   * @type {Number}
+   */
   get size () { return this._size }
   set size (value) {
     this._size = value
   }
   
   get components () { return this._components }
+
+  /**
+   * 当前存储在Map中的图层集合
+   *
+   * @property layers
+   * @type {Array}
+   */
   get layers () { return this._layers }
   set layers (value) {
     if (Array.isArray(value)) {
@@ -287,6 +300,10 @@ export default class Map extends BaseObject {
     }
   }
 
+  /**
+   * @property target
+   * @type
+   */
   get target () { return this._target }
   set target (value) {
     this._target = value
@@ -296,22 +313,34 @@ export default class Map extends BaseObject {
     this.updateSize()
     this.render()
   }
-  
+
   /**
+   * 用于添加一个Component的方法接口
    *
-   * @param cpt
+   * @method addComponents
+   * @param cpt {Component} Componnet的一个子类
    */
   addComponents (cpt) {
     this.components.push(cpt)
     cpt.map = this
   }
 
+  /**
+   *
+   * @method addLayer
+   * @param layer
+   */
   addLayer (layer) {
     this.layers.push(layer)
   }
   
   /**
    * Get all the fetures layer from map.
+   *
+   * 获取当前地图中的矢量图层
+   *
+   * @method getFeaturesLayer
+   * @return {Array}
    */
   getFeaturesLayer () {
     return this.layers.filter( layer => {
@@ -335,7 +364,8 @@ export default class Map extends BaseObject {
   
   /**
    *
-   * @returns {*}
+   * @method getTargetElement
+   * @returns {Object}
    */
   getTargetElement () {
     const target = this.target
@@ -350,10 +380,11 @@ export default class Map extends BaseObject {
   
   /**
    *
-   * @param piexl
+   * @method forEachFeatureAtPiexl
+   * @param piexl {Array}
    * @param callback
    * @param tolerance
-   * @returns {*}
+   * @returns {feature}
    */
   forEachFeatureAtPiexl (piexl,callback,tolerance) {
     if (!this._frameState) {
@@ -378,6 +409,7 @@ export default class Map extends BaseObject {
   
   /**
    * Update the map viewport size,this is a recalculation.
+   * @method updateSize
    */
   updateSize () {
     const targetElement = this.getTargetElement()
@@ -402,8 +434,10 @@ export default class Map extends BaseObject {
 
   /**
    * Returns the map pixel position for a browser event relative to the viewport.
+   *
+   * @method getEventPixel
    * @param {Event} event Event.
-   * @return
+   * @return {Array}
    * @api stable
    */
   getEventPixel (event) {
@@ -418,8 +452,10 @@ export default class Map extends BaseObject {
   
   /**
    * Gets the coordinate for a given pixel.
+   *
+   * @method getCoordinateFromPixel
    * @param pixelPoint
-   * @returns {*}
+   * @returns {Array}
    */
   getCoordinateFromPixel (pixelPoint) {
     // console.log('转换到标准坐标')
@@ -434,8 +470,10 @@ export default class Map extends BaseObject {
   /**
    * Get the pixel for a coordinate.  This takes a coordinate in the map view
    * projection and returns the corresponding pixel.
+   *
+   * @method getPixelFromCoordinate
    * @param coordinate
-   * @returns {*}
+   * @returns {Array}
    */
   getPixelFromCoordinate (coordinate) {
     const frameState = this._frameState
@@ -446,10 +484,11 @@ export default class Map extends BaseObject {
     }
   }
   
-  
   /**
    * Parse the options passed inner
+   * @method parseOptionsInner
    * @param options
+   * @static
    * @returns {{rendererClass: CanvasRenderer, components: *, values: Map}}
    */
   static parseOptionsInner (options = {}) {

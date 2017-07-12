@@ -44,11 +44,12 @@ export default class Feature extends BaseObject {
     this.geometry = geometry
   
     /**
-     *
+     * 设置feature属性
      */
     this.initArribute(attributes)
   
     /**
+     * 设置feature样式
      *
      */
     this.style = style
@@ -69,11 +70,20 @@ export default class Feature extends BaseObject {
   _handleGeometryChanged () {
     this.changed()
   }
-  
+
+  /**
+   * @method initArribute
+   * @param attributes
+   */
   initArribute (attributes) {
     this._attributesMap = Obj.objectToMap(attributes)
   }
-  
+
+  /**
+   * @method get
+   * @param property
+   * @return {*}
+   */
   get (property) {
     if ( this._attributesMap.has(property)) {
       return this._attributesMap.get(property)
@@ -81,26 +91,47 @@ export default class Feature extends BaseObject {
     
     return undefined
   }
-  
+
+  /**
+   *
+   * @method set
+   * @param property
+   * @param value
+   * @return {Map.<K, V>}
+   */
   set (property, value) {
     return this._attributesMap.set(property, value)
   }
-  
+
+  /**
+   * @method delete
+   * @param property
+   * @return {boolean}
+   */
   delete (property) {
     return this._attributesMap.delete(property)
   }
-  
+
+  /**
+   * @method forEachAttribute
+   * @param callback
+   */
   forEachAttribute (callback) {
     this._attributesMap.forEach(callback)
   }
-  
+
+  /**
+   * @method has
+   * @param property
+   * @return {boolean}
+   */
   has (property) {
     return this._attributesMap.has(property)
   }
-  
+
   /**
-   *
-   * @returns {*}
+   * @method geometry
+   * @return {*}
    */
   get geometry () { return this._geometry }
   set geometry (value) {
@@ -116,22 +147,27 @@ export default class Feature extends BaseObject {
     }
   }
 
-  // get attributes () { return this._attributes }
-  // set attributes (value) {
-  //   this._attributes = value
-  // }
-  
+  /**
+   * @method styleFunction
+   * @return {*|undefined}
+   */
   get styleFunction () { return this._styleFunction }
   set styleFunction (value) {
     this._styleFunction = value
   }
-  
+
+  /**
+   * @method style
+   * @return {*}
+   */
   get style () { return this._style }
   set style (value) { this._style = value }
 
   /**
    * 设置图层的透明度
    * 将会触发map的重绘事件
+   *
+   * @method display
    * @param value
    */
   get display () { return this._display }
@@ -144,6 +180,8 @@ export default class Feature extends BaseObject {
   
   /**
    * Clone the attribute map and return a new map
+   *
+   * @method cloneAttributesMap
    * @returns {Map}
    */
   cloneAttributesMap () {
@@ -160,6 +198,8 @@ export default class Feature extends BaseObject {
   
   /**
    * Clone a feature
+   *
+   * @method clone
    * @returns {Feature}
    */
   clone () {

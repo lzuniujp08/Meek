@@ -161,14 +161,14 @@ export default class Overlay extends BaseObject {
   }
   
   /**
-   *
+   * @method render
    */
   render () {
     this.updatePixelPosition()
   }
   
   /**
-   *
+   * @method updatePixelPosition
    */
   updatePixelPosition () {
     const map = this.map
@@ -186,7 +186,7 @@ export default class Overlay extends BaseObject {
   }
   
   /**
-   *
+   *@method updateRenderedPosition
    * @param pixel
    * @param mapSize
    */
@@ -256,7 +256,7 @@ export default class Overlay extends BaseObject {
   }
   
   /**
-   *
+   * @method setVisible
    * @param visible
    */
   setVisible (visible) {
@@ -324,7 +324,14 @@ export default class Overlay extends BaseObject {
       }
     }
   }
-  
+
+  /**
+   *
+   * @param element
+   * @param size
+   * @return {*[]}
+   * @private
+   */
   _getRect (element, size) {
     const box = element.getBoundingClientRect()
     const offsetX = box.left + window.pageXOffset
@@ -336,16 +343,28 @@ export default class Overlay extends BaseObject {
       offsetY + size[1]
     ]
   }
-  
+
+  /**
+   * @property voerlayId
+   * @return {number|string|undefined}
+   */
   get voerlayId () { return this._voerlayId }
-  
+
+  /**
+   * @property popupEelement
+   * @return {*}
+   */
   get popupEelement () { return this._popupEelement }
   set popupEelement (value) {
     this._popupEelement = value
   
     this._setElement()
   }
-  
+
+  /**
+   *
+   * @private
+   */
   _setElement () {
     removeChildren(this._element)
     const pelement = this.popupEelement
@@ -353,7 +372,11 @@ export default class Overlay extends BaseObject {
       this._element.appendChild(pelement)
     }
   }
-  
+
+  /**
+   * @property map
+   * @return {undefined|*}
+   */
   get map () { return this._map }
   set map (value) {
     this._map = value
@@ -371,13 +394,21 @@ export default class Overlay extends BaseObject {
       }
     }
   }
-  
+
+  /**
+   * @property offset
+   * @return {*|undefined}
+   */
   get offset () { return this._offset }
   set offset (value) {
     this._offset = value
     this.updatePixelPosition()
   }
-  
+
+  /**
+   * @property position
+   * @return {undefined|*}
+   */
   get position () { return this._position }
   set position (value) {
     this._position = value
@@ -388,7 +419,11 @@ export default class Overlay extends BaseObject {
     
     this.updatePixelPosition()
   }
-  
+
+  /**
+   * @property positioning
+   * @return {undefined|*}
+   */
   get positioning () { return this._positioning }
   set positioning (value) {
     this._positioning = value

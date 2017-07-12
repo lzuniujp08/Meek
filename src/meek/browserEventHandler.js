@@ -15,7 +15,10 @@ export default class BrowserEventHandler extends BaseObject {
 
     this.map = map
 
-    
+    /**
+     *
+     * @private
+     */
     this._element = element
   
     /**
@@ -53,6 +56,10 @@ export default class BrowserEventHandler extends BaseObject {
     this._registerSource()
   }
 
+  /**
+   *
+   * @private
+   */
   _registerSource () {
     // console.log('注册鼠标事件')
     const events = this.getEvents()
@@ -60,10 +67,21 @@ export default class BrowserEventHandler extends BaseObject {
         listen(this._element, eventName, this._mapping[eventName], this))
   }
 
+  /**
+   * 得到事件
+   *
+   * @method getEvents
+   * @return {Array}
+   */
   getEvents () {
     return Object.keys(this._mapping)
   }
 
+  /**
+   *
+   * @param e
+   * @private
+   */
   _mousedown (e) {
     let event = new BrowserEvent(this.map, e, BrowserEvent.MOUSE_DOWN)
     this.dispatchEvent(event)
@@ -72,6 +90,11 @@ export default class BrowserEventHandler extends BaseObject {
     this._down = e
   }
 
+  /**
+   *
+   * @param e
+   * @private
+   */
   _mousemove (e) {
   
     let event = new BrowserEvent(this.map, e, BrowserEvent.MOUSE_MOVE)
@@ -90,6 +113,11 @@ export default class BrowserEventHandler extends BaseObject {
     }
   }
 
+  /**
+   *
+   * @param e
+   * @private
+   */
   _mouseup (e) {
     let event = new BrowserEvent(this.map, e, BrowserEvent.MOUSE_UP)
     this.dispatchEvent(event)
@@ -102,16 +130,31 @@ export default class BrowserEventHandler extends BaseObject {
     this._down = null
   }
 
+  /**
+   *
+   * @param e
+   * @private
+   */
   _mouseover (e) {
     let event = new BrowserEvent(this.map, e,BrowserEvent.MOUSE_OVER)
     this.dispatchEvent(event)
   }
 
+  /**
+   *
+   * @param e
+   * @private
+   */
   _mouseout (e) {
     let event = new BrowserEvent(this.map, e, BrowserEvent.MOUSE_OUT)
     this.dispatchEvent(event)
   }
-  
+
+  /**
+   *
+   * @param event
+   * @private
+   */
   _emulateClick (event) {
     let newEvent = new BrowserEvent(this.map,event,BrowserEvent.CLICK)
     this.dispatchEvent(newEvent)
@@ -131,7 +174,13 @@ export default class BrowserEventHandler extends BaseObject {
       }.bind(this), 250)
     }
   }
-  
+
+  /**
+   *
+   * @param event
+   * @return {boolean}
+   * @private
+   */
   _isMoving (event) {
     if (this._down === null) {
       return false

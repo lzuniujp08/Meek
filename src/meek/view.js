@@ -235,7 +235,7 @@ export default class View extends BaseObject {
   }
   
   /**
-   *
+   * @method getViewState
    * @returns {{center: (ArrayBuffer|*|Array.<T>|Blob|string), resolution: *, rotation: *}}
    */
   getViewState () {
@@ -251,7 +251,7 @@ export default class View extends BaseObject {
   }
   
   /**
-   *
+   * @method constrainResolution
    * @param resolution
    * @param opt_delta
    * @param opt_direction
@@ -264,10 +264,10 @@ export default class View extends BaseObject {
   }
   
   /**
-   *
+   * @method calculateCenterZoom
    * @param resolution
    * @param anchor
-   * @returns {*}
+   * @returns {Array}
    */
   calculateCenterZoom (resolution, anchor) {
     let center
@@ -285,40 +285,59 @@ export default class View extends BaseObject {
   }
   
   /**
-   *
+   * @method constrainCenter
    * @param center
-   * @returns {*}
+   * @returns {Boolean}
    */
   constrainCenter (center) {
     this._constraints.center = center
     this._center = center
     return true
   }
-  
-  
+
+  /**
+   * @property center
+   * @return {*}
+   */
   get center () { return this._center }
   set center ( value ) {
     this.constrainCenter(value)
     this.changed()
   }
-  
+
+  /**
+   * @property resolution
+   * @return {*}
+   */
   get resolution () { return this._resolution }
   set resolution (value){
     this._resolution = value
   
     this.changed()
   }
-  
+
+  /**
+   * @property rotation
+   * @return {*}
+   */
   get rotation () { return this._rotation }
   set rotation (value){
     this._rotation = value
   }
-  
+
+  /**
+   * @property dataExtent
+   * @return {*}
+   */
   get dataExtent () { return this._dataExtent }
   set dataExtent (value) {
     this._dataExtent = value
   }
-  
+
+  /**
+   * @property minResolution
+   * @return {number}
+   */
   get minResolution () { return this._minResolution }
   get maxResolution () { return this._maxResolution }
 }

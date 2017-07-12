@@ -19,7 +19,7 @@ import {squaredDistance} from './support/geometryUtil'
  * @constructor
  * @example
  *
- *  var point = new Datatang.Point(100, 100)
+ *    var point = new Datatang.Point(100, 100)
  */
 export default class Point extends Geometry {
 
