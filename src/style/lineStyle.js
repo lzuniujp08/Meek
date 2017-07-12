@@ -74,9 +74,16 @@ export default class LineStyle extends BaseStyle {
   get miterLimit () { return this._miterLimit }
   
   clone () {
-    return new LineStyle(this.color, this.alpha, this.width,
+    const newStyle = new LineStyle(this.color, this.alpha, this.width,
       this.style, this.lineCap, this.lineJion, this.miterLimit)
+
+    if (this.textStyle) {
+      newStyle.textStyle = this.textStyle.clone()
+    }
+
+    return newStyle
   }
+
 }
 
 /**

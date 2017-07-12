@@ -44,8 +44,14 @@ export default class PointStyle extends BaseStyle {
   }
   
   clone () {
-    return new PointStyle(this.size, this.color, this.alpha,
+    const newStyle = new PointStyle(this.size, this.color, this.alpha,
        this.borderStyle.clone(), this.xoffset, this.yoffset, this.angle, this.style)
+
+    if (this.textStyle) {
+      newStyle.textStyle = this.textStyle
+    }
+
+    return newStyle
   }
   
   /**
