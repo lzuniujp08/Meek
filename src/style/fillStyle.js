@@ -31,7 +31,7 @@ export default class FillStyle extends BaseStyle {
    * @param alpha 免得填充透明度
    * @param borderStyle LineStyle对象，指定面样式的边框对象属性
    */
-  constructor (color = [255,255,255], borderStyle = null,alpha = 1,style = FillStyle.SOLID) {
+  constructor (color = [255,255,255], borderStyle = null, alpha = 1, style = FillStyle.SOLID) {
     super(color, style, alpha)
 
     this._borderStyle = borderStyle
@@ -50,8 +50,14 @@ export default class FillStyle extends BaseStyle {
    * @returns {FillStyle}
    */
   clone () {
-    return new FillStyle(this.color, this.borderStyle.clone(),
-      this.alpha, this.size, this.style)
+    const newStyle = new FillStyle(this.color, this.borderStyle.clone(),
+      this.alpha, this.style)
+    
+    if (this.textStyle) {
+      newStyle.textStyle = this.textStyle.clone()
+    }
+    
+    return newStyle
   }
   
 }
