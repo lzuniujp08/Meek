@@ -54,7 +54,6 @@ drawTool.addEventListener(Datatang.DrawEvent.EventType.DRAW_END, function(drawEv
   
   var differenceResult = g1.difference(g2)
   
-  
   var geometries = []
   if (differenceResult.geometries) {
     geometries = differenceResult.geometries
@@ -74,10 +73,6 @@ drawTool.addEventListener(Datatang.DrawEvent.EventType.DRAW_END, function(drawEv
   
     var clipedPolygon = new Datatang.Polygon()
     clipedPolygon.setCoordinates(newCoords)
-  
-    // var clipedFeature = new Datatang.Feature(clipedPolygon, {},
-    //   [new Datatang.FillStyle([255,255,255],
-    //     new Datatang.LineStyle([255,0,0],1,6),0.5)] )
   
     var clipedFeature = new Datatang.Feature(clipedPolygon)
   
