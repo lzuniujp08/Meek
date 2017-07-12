@@ -61,6 +61,8 @@ import Map from 'meek/map'
 import View from 'meek/view'
 import Overlay from 'meek/overlay'
 
+import GeoJSON from 'data/json/geojson'
+
 export default {
   Config,
   Coordinate,
@@ -110,5 +112,6 @@ export default {
   Kinetic,
   Obj,
   Math,
-  MouseWheelZoom
+  MouseWheelZoom,
+  GeoJSON
 }
