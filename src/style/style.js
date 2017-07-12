@@ -24,14 +24,15 @@ Style.defaultFunction = function () {
     
     // 面样式 polygon style
     Style._default[Geometry.POLYGON] = [
-      new FillStyle(white,new LineStyle(blue,1,1.25),0.5)
+      new FillStyle(white, new LineStyle(blue, 1, 1.25), 0.5)
     ]
+    
     // same as polygon style
     Style._default[Geometry.EXTENT] = Style._default[Geometry.POLYGON]
   
     // 线样式 line style
     Style._default[Geometry.LINE] = [
-      new LineStyle(blue,1,width,LineStyle.LineCap.ROUND,LineStyle.LineJion.ROUND)// 内框
+      new LineStyle(blue, 1, width, LineStyle.LineCap.ROUND, LineStyle.LineJion.ROUND)// 内框
     ]
   
     // 点样式 point style
