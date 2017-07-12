@@ -1,6 +1,7 @@
 var drawTool,
   selectTool,
-  modifyTool;
+  modifyTool,
+  flag = false;
 window.onload = function () {
   var Fortesting = new Datatang.FeatureLayer()
   var extent = [0, 0, 1280, 800]
@@ -49,6 +50,8 @@ window.onload = function () {
   map.addComponents(modifyTool)
   selectTool.active = false
   modifyTool.active = false
+
+  //选择需要画的图形类别
   var typeSelect = document.getElementsByClassName('btn-tool')
   for (var i = 0, ii = typeSelect.length; i < ii; i++) {
     typeSelect[i].onclick = function () {
@@ -59,8 +62,7 @@ window.onload = function () {
         selectTool.active = true
         modifyTool.active = true
       } else {
-
-        selectTool.selectClean()
+        selectTool.clear()
 
         drawTool.active = true
         drawTool.drawMode = val
@@ -70,49 +72,12 @@ window.onload = function () {
     }
   }
 
-
-// add select-end event linstener
-  selectTool.addEventListener(Datatang.SelectEvent.EventType.SELECT, function (event) {
-    var features = event.selectedFeatures
-    if (features.length === 0) {
-      return
-    }
-
-    var feature = features[0]
-    var geometry = feature.geometry
-
-    overlay.position = geometry.getFormShowPosition()
-    document.getElementById('J_tree_view').value = 1
-    currentFeature = feature
-    formClose(true)
-
-    gometrytypeSpan.innerHTML = geometry.geometryType
-
-
-  })
-
-  selectTool.addEventListener(Datatang.SelectEvent.EventType.SELECT, function (event) {
-    modifyTool.features = event.selectedFeatures
-  })
-
-  /** ondrawend **/
-  var currentFeature = null
-
-  drawTool.addEventListener(Datatang.DrawEvent.EventType.DRAW_END, function (drawEvent) {
-    var feature = drawEvent.feature
-    var geometry = feature.geometry
-
-    overlay.position = geometry.getFormShowPosition()
-    currentFeature = feature
-    formClose(true)
-
-    gometrytypeSpan.innerHTML = geometry.geometryType
-  })
-
+  //表单显示隐藏
   function formClose(display) {
     display ? J_mark_form.style.display = 'block' : J_mark_form.style.display = 'none'
   }
 
+  //表单提交
   var J_form_submit = document.getElementById('J_form_submit')
   J_form_submit.onclick = function () {
     var text = document.getElementById('J_tree_view').value
@@ -140,6 +105,121 @@ window.onload = function () {
 
     formClose(false)
     map.render()
+  }
+
+
+// add select-end event linstener
+  selectTool.addEventListener(Datatang.SelectEvent.EventType.SELECT, function (event) {
+    var features = event.selectedFeatures
+    if (features.length === 0) {
+      return
+    }
+
+    var feature = features[0]
+    var geometry = feature.geometry
+
+    overlay.position = geometry.getFormShowPosition()
+    document.getElementById('J_tree_view').value = 1
+    currentFeature = feature
+    formClose(true)
+
+    gometrytypeSpan.innerHTML = geometry.geometryType
+
+
+  })
+
+  selectTool.addEventListener(Datatang.SelectEvent.EventType.SELECT, function (event) {
+    modifyTool.features = event.selectedFeatures
+  })
+
+  // 多边形
+  var rings = [[100,180],[290,500],[455, 620], [600,680],[800,680],[100,180]]
+  var polygon1 = new Datatang.Polygon(rings)
+  var feature1 = new Datatang.Feature(polygon1)
+
+  Fortesting.addFeature(feature1)
+  //end
+
+  /** ondrawend **/
+  var currentFeature = null
+
+  var clip = document.getElementById('clip')
+  clip.onclick = function () {
+    if (flag === true) {
+      flag = false
+    }else{
+      flag = true
+    }
+  }
+
+  drawTool.addEventListener(Datatang.DrawEvent.EventType.DRAW_END, function (drawEvent) {
+    var feature = drawEvent.feature
+
+    //////////////////
+    if (flag && feature.geometry.geometryType === 'polygon') {
+      var g1 = convertToJstsGeometry(feature.geometry)
+      var g2 = convertToJstsGeometry(polygon1)
+
+      var differenceResult = g1.difference(g2)
+
+      var geometries = []
+      if (differenceResult.geometries) {
+        geometries = differenceResult.geometries
+      } else {
+        geometries.push({shell: differenceResult.shell})
+      }
+
+      for (var i = 0; i < geometries.length; i++) {
+        var geometryItem = geometries[i]
+
+        var coords = geometryItem.shell.points.coordinates
+
+        var newCoords = []
+        coords.forEach(function (g) {
+          newCoords.push([g.x, g.y])
+        })
+
+        var clipedPolygon = new Datatang.Polygon()
+        clipedPolygon.setCoordinates(newCoords)
+
+        var clipedFeature = new Datatang.Feature(clipedPolygon)
+
+        Fortesting.addFeature(clipedFeature)
+        Fortesting.removeFeature(feature)
+      }
+    }else{
+
+      /////////////////
+      var geometry = feature.geometry
+
+      overlay.position = geometry.getFormShowPosition()
+      currentFeature = feature
+      formClose(true)
+
+      gometrytypeSpan.innerHTML = geometry.geometryType
+    }
+
+  })
+
+  var geometryFactory = null;
+  function convertToJstsGeometry(geometry) {
+    if (geometryFactory === null) {
+      geometryFactory = new jsts.geom.GeometryFactory();
+    }
+
+    return convertToPolygon(geometry)
+  }
+
+  function convertToPolygon (polygon) {
+    const linearRings = polygon.getCoordinates()
+
+
+    var coordinates = []
+    linearRings.forEach(function(point){
+      coordinates.push(new jsts.geom.Coordinate(point[0], point[1]))
+    })
+
+    return geometryFactory.createPolygon(coordinates)
   }
 
 }
