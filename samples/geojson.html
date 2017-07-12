@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+<div id="map" style="width:1887px;height:900px;background:#b5d0d0"></div>
+
+<form class="form-inline">
+  <label>选择绘图类型 &nbsp;</label>
+  <select id="type">
+    <option value="Point">point</option>
+    <option value="Line">line</option>
+    <option value="Polygon">polygon</option>
+    <option value="Extent">rectangle</option>
+    <option value="None">None</option>
+  </select>
+</form>
+
+<button style="width:50px;height:25px;" onclick="onClick();">生成</button>
+
+<script src="../dist/meek.js"></script>
+<script src="geojson.js"></script>
+</body>
+</html>
