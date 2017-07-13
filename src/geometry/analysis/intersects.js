@@ -5,14 +5,25 @@
 import Geometry from '../../geometry/geometry'
 import {ExtentUtil} from '../support/extentUtil'
 
-
+/**
+ *
+ * @param geometry1
+ * @param geometry2
+ * @returns {boolean}
+ */
 export default function intersects (geometry1, geometry2) {
   if ( (geometry1 === null || geometry1 === undefined ) ||
        (geometry2 === null || geometry2 === undefined )) {
     return false
   }
   
-  if (!ExtentUtil.containsExtent(geometry1.extent, geometry2.extent)) {
+  
+  const extent1 = geometry1.extent
+  const extent2 = geometry2.extent
+  if (!ExtentUtil.intersects([extent1.xmin, extent1.ymin,
+                              extent1.xmax, extent1.ymax],
+      [extent2.xmin, extent2.ymin,
+       extent2.xmax, extent2.ymax])) {
     return false
   }
   
@@ -21,12 +32,12 @@ export default function intersects (geometry1, geometry2) {
   let result = false
   switch (geometryType) {
   case Geometry.POINT :
-    result = pointIntersectsGeometry (geometry1, geometry2)
+    result = pointIntersectsGeometry(geometry1, geometry2)
     break
   case Geometry.LINE :
-    result = lineIntersectsGeometry (geometry1, geometry2)
-    
-    
+  case Geometry.POLYGON:
+  case Geometry.EXTENT:
+    result = lineIntersectsGeometry(geometry1, geometry2)
   }
   
   return result
@@ -54,18 +65,15 @@ const lineIntersectsGeometry = function (line, geometry) {
   case Geometry.POINT:
     return line.containsXY(geometry.x, geometry.y)
   case Geometry.LINE:
-    return intersectsByLinearRings (line.getCoordinates(), geometry.getCoordinates())
   case Geometry.POLYGON:
-    return intersectsByPolygon (line.getCoordinates(), geometry.getCoordinates())
+  case Geometry.EXTENT:
+    return intersectsByPolygon(line.getCoordinates(), geometry.getCoordinates())
   }
 }
 
 
 const intersectsByPolygon = function (polygon1LinearRings, polygon2LinearRings) {
-  let intersect = false
-  
-  intersect = intersectsByLinearRings(polygon1LinearRings, polygon2LinearRings)
-  
+  let intersect = intersectsByLinearRings(polygon1LinearRings, polygon2LinearRings)
   if (!intersect) {
     // check if this poly contains points of the ring/linestring
     for (let i = 0, len = polygon2LinearRings.length; i < len; ++i) {
@@ -136,6 +144,7 @@ const getSortedSegments = function (points) {
   for(let i = 0; i < numSeg; ++i) {
     point1 = points[i]
     point2 = points[i + 1]
+    
     if (point1.x < point2.x) {
       segments[i] = {
         x1: point1.x,
@@ -196,6 +205,7 @@ const segmentsIntersect = function (seg1, seg2, options) {
       }
     }
   }
+  
   if (tolerance) {
     let dist
     if (intersection) {
@@ -209,6 +219,7 @@ const segmentsIntersect = function (seg1, seg2, options) {
           for (let j = 1; j < 3; ++j) {
             x = seg['x' + j]
             y = seg['y' + j]
+            
             dist = Math.sqrt(
               Math.pow(x - intersection.x, 2) +
               Math.pow(y - intersection.y, 2)
