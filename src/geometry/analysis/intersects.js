@@ -17,13 +17,12 @@ export default function intersects (geometry1, geometry2) {
     return false
   }
   
-  
   const extent1 = geometry1.extent
   const extent2 = geometry2.extent
-  if (!ExtentUtil.intersects([extent1.xmin, extent1.ymin,
-                              extent1.xmax, extent1.ymax],
-      [extent2.xmin, extent2.ymin,
-       extent2.xmax, extent2.ymax])) {
+  const ext1Arr = [extent1.xmin, extent1.ymin, extent1.xmax, extent1.ymax]
+  const ext2Arr = [extent2.xmin, extent2.ymin, extent2.xmax, extent2.ymax]
+  
+  if (!ExtentUtil.intersects(ext1Arr, ext2Arr)) {
     return false
   }
   
@@ -141,23 +140,24 @@ const intersectsByLinearRings = function (LinearRing1, LinearRings2) {
 const getSortedSegments = function (points) {
   const numSeg = points.length - 1
   let segments = new Array(numSeg), point1, point2
-  for(let i = 0; i < numSeg; ++i) {
+  
+  for (let i = 0; i < numSeg; ++i) {
     point1 = points[i]
     point2 = points[i + 1]
     
     if (point1.x < point2.x) {
       segments[i] = {
-        x1: point1.x,
-        y1: point1.y,
-        x2: point2.x,
-        y2: point2.y
+        x1: point1[0],
+        y1: point1[1],
+        x2: point2[0],
+        y2: point2[1]
       }
     } else {
       segments[i] = {
-        x1: point2.x,
-        y1: point2.y,
-        x2: point1.x,
-        y2: point1.y
+        x1: point2[0],
+        y1: point2[1],
+        x2: point1[0],
+        y2: point1[1]
       }
     }
   }
@@ -277,8 +277,9 @@ const containsPointByLinearRing = function (point, LinearRing) {
   }
   
   const digs = 14
-  const px = approx(point.x, digs)
-  const py = approx(point.y, digs)
+  const px = approx(point[0], digs)
+  const py = approx(point[1], digs)
+  
   function getX(y, x1, y1, x2, y2) {
     return (y - y2) * ((x2 - x1) / (y2 - y1)) + x2
   }
@@ -289,11 +290,11 @@ const containsPointByLinearRing = function (point, LinearRing) {
   
   for (let i = 0; i < numSeg; ++i) {
     start = LinearRing[i]
-    x1 = approx(start.x, digs)
-    y1 = approx(start.y, digs)
+    x1 = approx(start[0], digs)
+    y1 = approx(start[1], digs)
     end = LinearRing[i + 1]
-    x2 = approx(end.x, digs)
-    y2 = approx(end.y, digs)
+    x2 = approx(end[0], digs)
+    y2 = approx(end[1], digs)
     
     if (y1 == y2) {
       // horizontal edge

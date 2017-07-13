@@ -57,6 +57,7 @@ var feature = new Datatang.Feature(polygon)
 
 flayer.addFeature(feature)
 
+var infoDom = document.getElementById('info')
 draw.addEventListener(Datatang.DrawEvent.EventType.DRAW_END, function(e){
   var feature = e.feature
   
@@ -65,13 +66,12 @@ draw.addEventListener(Datatang.DrawEvent.EventType.DRAW_END, function(e){
   
   var result = Datatang.intersects(geometry, polygon)
   if(result) {
-    info = '相交！'
+    info = '相交'
   } else {
     info = '不相交'
   }
   
-  
-  
-  alert(info)
+  infoDom.innerText = '图形ID为：' + geometry.id + '与存在图形ID：' + polygon.id + '的结果： ' + info
   
 })
+
