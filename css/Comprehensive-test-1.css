@@ -418,6 +418,7 @@
   margin-left: -17px;
 }
 .modifyStyle{
-  background: red;
-  color: white;
+  background: #0070cc !important;
+  border-color: #0070cc !important;
+  color: white !important;
 }
