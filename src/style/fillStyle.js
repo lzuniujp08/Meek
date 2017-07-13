@@ -54,7 +54,7 @@ export default class FillStyle extends BaseStyle {
       this.alpha, this.style)
     
     if (this.textStyle) {
-      newStyle.textStyle = this.textStyle.clone()
+      newStyle.textStyle = this.textStyle
     }
     
     return newStyle

@@ -78,7 +78,7 @@ export default class LineStyle extends BaseStyle {
       this.style, this.lineCap, this.lineJion, this.miterLimit)
 
     if (this.textStyle) {
-      newStyle.textStyle = this.textStyle.clone()
+      newStyle.textStyle = this.textStyle
     }
 
     return newStyle
