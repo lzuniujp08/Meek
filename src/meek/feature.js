@@ -67,7 +67,7 @@ export default class Feature extends BaseObject {
      * @type {boolean}
      * @private
      */
-    this.textDisplay = ture
+    this.textDisplay = true
   
   }
   
