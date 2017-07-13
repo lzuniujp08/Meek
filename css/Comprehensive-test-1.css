@@ -417,3 +417,7 @@
 .effective-form > .form-group > .radio > .radio-inline > input[type=radio] {
   margin-left: -17px;
 }
+.modifyStyle{
+  background: red;
+  color: white;
+}

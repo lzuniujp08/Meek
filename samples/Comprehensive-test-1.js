@@ -7,6 +7,9 @@ window.onload = function () {
   var extent = [0, 0, 1280, 800]
 
   var container = document.getElementById('J_mark_form')
+  var typeSelect = document.getElementsByClassName('btn-tool')
+  var J_form_submit = document.getElementById('J_form_submit')
+  var J_form_cancel = document.getElementById('J_form_cancel')
 
   var overlay = new Datatang.Overlay(({
     element: container,
@@ -52,7 +55,6 @@ window.onload = function () {
   modifyTool.active = false
 
   //选择需要画的图形类别
-  var typeSelect = document.getElementsByClassName('btn-tool')
   for (var i = 0, ii = typeSelect.length; i < ii; i++) {
     typeSelect[i].onclick = function () {
 
@@ -77,8 +79,14 @@ window.onload = function () {
     display ? J_mark_form.style.display = 'block' : J_mark_form.style.display = 'none'
   }
 
+  //点击表单上的叉，隐藏表单
+  J_form_cancel.onclick = function() {
+    overlay.position = undefined
+    J_form_cancel.blur()
+    return false
+  }
+
   //表单提交
-  var J_form_submit = document.getElementById('J_form_submit')
   J_form_submit.onclick = function () {
     var text = document.getElementById('J_tree_view').value
     var featureStyle = Fortesting.styleFunction(currentFeature)[0].clone()
@@ -95,7 +103,7 @@ window.onload = function () {
     } else {
       textStyle = featureStyle.textStyle.clone()
       textStyle.text = text,
-        textStyle.fill = [0, 0, 0]
+      textStyle.fill = [0, 0, 0]
       textStyle.stroke.color = [255, 255, 255]
     }
 
@@ -105,10 +113,11 @@ window.onload = function () {
 
     formClose(false)
     map.render()
+    document.getElementById('J_tree_view').value = ''
   }
 
 
-// add select-end event linstener
+// 表单编辑事件
   selectTool.addEventListener(Datatang.SelectEvent.EventType.SELECT, function (event) {
     var features = event.selectedFeatures
     if (features.length === 0) {
@@ -119,32 +128,57 @@ window.onload = function () {
     var geometry = feature.geometry
 
     overlay.position = geometry.getFormShowPosition()
-    document.getElementById('J_tree_view').value = 1
+    document.getElementById('J_tree_view').value = features[0].style[0].textStyle.text
     currentFeature = feature
     formClose(true)
 
     gometrytypeSpan.innerHTML = geometry.geometryType
-
-
   })
 
   selectTool.addEventListener(Datatang.SelectEvent.EventType.SELECT, function (event) {
     modifyTool.features = event.selectedFeatures
   })
 
-  // 多边形
-  var rings = [[100,180],[290,500],[455, 620], [600,680],[800,680],[100,180]]
+  // 多边形 start
+  var rings = [[500,280],[190,400],[55, 520], [600,600],[500,280]]
   var polygon1 = new Datatang.Polygon(rings)
   var feature1 = new Datatang.Feature(polygon1)
 
   Fortesting.addFeature(feature1)
-  //end
+  //多边形 end
 
   /** ondrawend **/
   var currentFeature = null
 
+  //dom
+  function hasClass(obj, cls) {
+    return obj.className.match(new RegExp('(\\s|^)' + cls + '(\\s|$)'));
+  }
+
+  function addClass(obj, cls) {
+    if (!hasClass(obj, cls)) obj.className += " " + cls;
+  }
+
+  function removeClass(obj, cls) {
+    if (hasClass(obj, cls)) {
+      var reg = new RegExp('(\\s|^)' + cls + '(\\s|$)');
+      obj.className = obj.className.replace(reg, ' ');
+    }
+  }
+
+  function toggleClass(obj,cls){
+    if(hasClass(obj,cls)){
+      removeClass(obj, cls);
+    }else{
+      addClass(obj, cls);
+    }
+  }
+
+  //判断拆分状态值
   var clip = document.getElementById('clip')
   clip.onclick = function () {
+    var test = document.getElementById('clip')
+    toggleClass(test,'modifyStyle')
     if (flag === true) {
       flag = false
     }else{
@@ -152,6 +186,7 @@ window.onload = function () {
     }
   }
 
+  //feature绘制结束
   drawTool.addEventListener(Datatang.DrawEvent.EventType.DRAW_END, function (drawEvent) {
     var feature = drawEvent.feature
 
