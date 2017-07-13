@@ -38,6 +38,18 @@ var drawTool = new Datatang.Draw({
 
 map.addComponents(drawTool)
 
+
+var select = new Datatang.Select({
+  features: featureLayer
+})
+
+
+var selectedFeature = null
+select.addEventListener(Datatang.SelectEvent.EventType.SELECT, function(e){
+  var features = e.selectedFeatures
+  selectedFeature = features
+})
+
 // 多边形
 var rings = [[800,580],[490,600],[255, 820], [1000,1000],[800,580]]
 var polygon = new Datatang.Polygon(rings)
@@ -102,6 +114,15 @@ function convertToPolygon (polygon) {
   })
   
   return geometryFactory.createPolygon(coordinates)
+}
+
+
+function onDrawClick () {
+  drawTool.drawMode = Datatang.Draw.DrawMode.POLYGON
+}
+
+function onSplitClick () {
+  drawTool.drawMode = Datatang.Draw.DrawMode.LINE
 }
 
 
