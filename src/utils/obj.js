@@ -27,12 +27,6 @@ export default class Obj {
     }
   }
   
-  
-  var obj = {
-    id : 1,
-    num: '3434'
-  }
-  
   /**
    * Convert an object to a map instance
    * @param obj
