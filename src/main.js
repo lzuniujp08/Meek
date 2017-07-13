@@ -63,6 +63,8 @@ import Overlay from 'meek/overlay'
 
 import GeoJSON from 'data/json/geojson'
 
+import intersects from 'geometry/analysis/intersects'
+
 export default {
   Config,
   Coordinate,
@@ -113,5 +115,6 @@ export default {
   Obj,
   Math,
   MouseWheelZoom,
-  GeoJSON
+  GeoJSON,
+  intersects
 }
