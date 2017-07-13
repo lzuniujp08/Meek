@@ -8,6 +8,7 @@ import Polygon from '../../geometry/polygon'
 import Line from '../../geometry/line'
 import Extent from '../../geometry/extent'
 import Feature from '../../meek/feature'
+import Obj from '../../utils/obj'
 
 /**
  *
@@ -64,18 +65,21 @@ export default class GeoJSON {
    * 将 Feature 集合写入到 GeoJSON 的格式对象中
    *
    * @static
+   * @method write
    * @param features Feature 集合
    * @returns {Object} 返回 GeoJSON 格式的数据
    */
   static write (features) {
     const featuresArr = []
+    
     features.forEach( feature => {
       featuresArr.push({
         type: 'Feature',
         geometry: {
           type: GeoJSON.getGeoJSONGeometryType(feature.geometry),
           coordinates: feature.geometry.getCoordinates()
-        }
+        },
+        properties: Obj.mapToObject(feature._attributesMap)
       })
     })
     
