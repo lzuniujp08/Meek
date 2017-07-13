@@ -175,6 +175,7 @@ export default class Feature extends BaseObject {
     if (this._display !== value) {
       this._display = value
       // 需要触动绘制事件派发
+      this.changed()
     }
   }
   

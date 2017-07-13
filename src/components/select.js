@@ -273,8 +273,12 @@ export default class Select extends Component {
           feature.style.push(zeroStyle)
 
         } else if (geometryType === Geometry.POINT ) {
-          const zeroStyle = styles[0].clone()
           const firstStyle = styles[0]
+
+          if ( firstStyle.borderStyle.width > 2 ) {
+            return
+          }
+
           firstStyle.size = firstStyle.size + 3
           firstStyle.borderStyle.width = firstStyle.borderStyle.width + 1
         }

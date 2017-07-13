@@ -288,15 +288,18 @@ export default class FeatureLayer extends BaseLayer {
     const createOrUpdate = ExtentUtil.createOrUpdate
     const newFeatures = []
     features.forEach(feature => {
-      const geometryExtent = feature.geometry.extent
-      const extentArr = createOrUpdate(geometryExtent.xmin,
-        geometryExtent.ymin, geometryExtent.xmax, geometryExtent.ymax)
-      
-      if (intersects(extentArr, extent)) {
-        newFeatures.push(feature)
+      // 判断图形是否显示
+      if (feature.display) {
+        const geometryExtent = feature.geometry.extent
+        const extentArr = createOrUpdate(geometryExtent.xmin,
+          geometryExtent.ymin, geometryExtent.xmax, geometryExtent.ymax)
+
+        if (intersects(extentArr, extent)) {
+          newFeatures.push(feature)
+        }
       }
     })
-    
+
     return newFeatures
   }
   
