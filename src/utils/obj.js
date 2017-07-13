@@ -27,6 +27,12 @@ export default class Obj {
     }
   }
   
+  
+  var obj = {
+    id : 1,
+    num: '3434'
+  }
+  
   /**
    * Convert an object to a map instance
    * @param obj
@@ -41,5 +47,30 @@ export default class Obj {
     
     return map
   }
+  
+  /**
+   *
+   * Convert a map object to object
+   *
+   * @static
+   * @method mapToObject
+   * @param map {Map} 传入的 Map 的对象
+   * @returns {Object} 装换成后的 Object 的对象
+   */
+  static mapToObject (map) {
+    // 合法性判断
+    if (map === undefined || map === null) {
+      return {}
+    }
+    
+    let object
+    map.forEach(function(key, value, map){
+      object[key] = value
+    })
+    
+    return object
+  }
+  
+  
 }
 
