@@ -47,6 +47,7 @@ export default class Feature extends BaseObject {
      * 设置feature属性
      */
     this.initArribute(attributes)
+
   
     /**
      * 设置feature样式
@@ -60,6 +61,13 @@ export default class Feature extends BaseObject {
      * @private
      */
     this.display = true
+
+    /**
+     * 设置feature的标签是否显示
+     * @type {boolean}
+     * @private
+     */
+    this.textDisplay = ture
   
   }
   
@@ -172,6 +180,22 @@ export default class Feature extends BaseObject {
    */
   get display () { return this._display }
   set display (value) {
+    if (this._display !== value) {
+      this._display = value
+      // 需要触动绘制事件派发
+      this.changed()
+    }
+  }
+
+  /**
+   * 设置标签是否显示
+   * 将会触发map的重绘事件
+   *
+   * @method textDisplay
+   * @param value
+   */
+  get textDisplay () { return this.textDisplay }
+  set textDisplay (value) {
     if (this._display !== value) {
       this._display = value
       // 需要触动绘制事件派发
