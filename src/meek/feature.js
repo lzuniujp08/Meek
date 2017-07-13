@@ -20,35 +20,35 @@ import {EventType} from '../meek/eventType'
  */
 export default class Feature extends BaseObject {
 
-  constructor (geometry, attributes = {}, style) {
+  constructor(geometry, attributes = {}, style) {
     super()
-  
+
     /**
      *
      * @type {undefined}
      * @private
      */
     this._styleFunction = undefined
-  
+
     /**
      *
      * @type {null}
      * @private
      */
     this._geometryChangeKey = null
-    
-  
+
+
     /**
      *
      */
     this.geometry = geometry
-  
+
     /**
      * 设置feature属性
      */
     this.initArribute(attributes)
 
-  
+
     /**
      * 设置feature样式
      *
@@ -68,14 +68,14 @@ export default class Feature extends BaseObject {
      * @private
      */
     this.textDisplay = true
-  
+
   }
-  
+
   /**
    *
    * @private
    */
-  _handleGeometryChanged () {
+  _handleGeometryChanged() {
     this.changed()
   }
 
@@ -83,7 +83,7 @@ export default class Feature extends BaseObject {
    * @method initArribute
    * @param attributes
    */
-  initArribute (attributes) {
+  initArribute(attributes) {
     this._attributesMap = Obj.objectToMap(attributes)
   }
 
@@ -92,11 +92,11 @@ export default class Feature extends BaseObject {
    * @param property
    * @return {*}
    */
-  get (property) {
-    if ( this._attributesMap.has(property)) {
+  get(property) {
+    if (this._attributesMap.has(property)) {
       return this._attributesMap.get(property)
     }
-    
+
     return undefined
   }
 
@@ -107,7 +107,7 @@ export default class Feature extends BaseObject {
    * @param value
    * @return {Map.<K, V>}
    */
-  set (property, value) {
+  set(property, value) {
     return this._attributesMap.set(property, value)
   }
 
@@ -116,7 +116,7 @@ export default class Feature extends BaseObject {
    * @param property
    * @return {boolean}
    */
-  delete (property) {
+  delete(property) {
     return this._attributesMap.delete(property)
   }
 
@@ -124,7 +124,7 @@ export default class Feature extends BaseObject {
    * @method forEachAttribute
    * @param callback
    */
-  forEachAttribute (callback) {
+  forEachAttribute(callback) {
     this._attributesMap.forEach(callback)
   }
 
@@ -133,7 +133,7 @@ export default class Feature extends BaseObject {
    * @param property
    * @return {boolean}
    */
-  has (property) {
+  has(property) {
     return this._attributesMap.has(property)
   }
 
@@ -141,15 +141,18 @@ export default class Feature extends BaseObject {
    * @method geometry
    * @return {*}
    */
-  get geometry () { return this._geometry }
-  set geometry (value) {
+  get geometry() {
+    return this._geometry
+  }
+
+  set geometry(value) {
     if (value) {
       this._geometry = value
-  
+
       if (this._geometryChangeKey) {
         unlistenByKey(this._geometryChangeKey)
       }
-  
+
       this._geometryChangeKey = listen(value,
         EventType.CHANGE, this._handleGeometryChanged, this)
     }
@@ -159,8 +162,11 @@ export default class Feature extends BaseObject {
    * @method styleFunction
    * @return {*|undefined}
    */
-  get styleFunction () { return this._styleFunction }
-  set styleFunction (value) {
+  get styleFunction() {
+    return this._styleFunction
+  }
+
+  set styleFunction(value) {
     this._styleFunction = value
   }
 
@@ -168,8 +174,13 @@ export default class Feature extends BaseObject {
    * @method style
    * @return {*}
    */
-  get style () { return this._style }
-  set style (value) { this._style = value }
+  get style() {
+    return this._style
+  }
+
+  set style(value) {
+    this._style = value
+  }
 
   /**
    * 设置图层的透明度
@@ -178,8 +189,11 @@ export default class Feature extends BaseObject {
    * @method display
    * @param value
    */
-  get display () { return this._display }
-  set display (value) {
+  get display() {
+    return this._display
+  }
+
+  set display(value) {
     if (this._display !== value) {
       this._display = value
       // 需要触动绘制事件派发
@@ -194,10 +208,10 @@ export default class Feature extends BaseObject {
    * @method textDisplay
    * @param value
    */
-  get textDisplay () { return this.textDisplay }
+  get textDisplay () { return this._textDisplay }
   set textDisplay (value) {
-    if (this._display !== value) {
-      this._display = value
+    if (this._textDisplay !== value) {
+      this._textDisplay = value
       // 需要触动绘制事件派发
       this.changed()
     }
