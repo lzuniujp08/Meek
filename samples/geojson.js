@@ -71,6 +71,11 @@ function getJSON () {
             1017.8061523437498,
             1019.015625
           ]
+        },
+        "properties" : {
+          "uuid":'12124542ewrwefsfre',
+          "test": 1,
+          "num":12
         }
       },
       {

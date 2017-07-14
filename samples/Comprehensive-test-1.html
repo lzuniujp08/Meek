@@ -6,20 +6,8 @@
   <link rel="stylesheet" href="../css/bootstrap.min.css">
   <link rel="stylesheet" href="../css/dt.css">
   <link rel="stylesheet" href="../css/Comprehensive-test-1.css">
-  <style>
-    .draw-wrapper > .draw-tool > .btn-group {
-      margin-right: 20px;
-    }
-    .btn i {
-      margin-right: 5px;
-    }
-    #gometrytypeSpan{
-       padding-left: 5px;
-    }
-  </style>
 </head>
 <body>
-
 
 <div class="draw-tool">
   <div class="btn-group" id="draw-group">
@@ -34,40 +22,29 @@
    <a href="javascript:;" class="btn btn-default" id="clip"> 拆分</a>
  </div>
 
-  <!--<div class="btn-group">
-    <a href="javascript:;" class="btn btn-danger btn-clear"><i class="icon icon-clear"></i> 清空</a>
-  </div>-->
+  <div class="btn-group">
+    <a href="javascript:;" class="btn btn-danger btn-clear" id="btnClear"><i class="icon icon-clear"></i> 清空</a>
+  </div>
 
-  <!--<div class="btn-group btn-toggle-group">
+  <div class="btn-group btn-toggle-group">
     <div class="btn-group">
-      <a href="javascript:;" class="btn btn-default btn-toggle" data-status="false">
+      <a href="javascript:;" class="btn btn-default btn-toggle" id="sHidegly" data-status="false">
         <i class="glyphicon glyphicon-eye-close"></i> 隐藏图形
       </a>
     </div>
     <div class="btn-group">
-      <a href="javascript:;" class="btn btn-default btn-tags" data-status="false"><i class="glyphicon glyphicon-eye-close"></i> 隐藏标签</a>
+      <a href="javascript:;" class="btn btn-default btn-tags" id="sHidetag" data-status="false">
+        <i class="glyphicon glyphicon-eye-close"></i> 隐藏标签</a>
     </div>
-  </div>-->
+  </div>
+
+  <div class="pull-right btn-group">
+    <a href="javascript:;" class="btn btn-success btn-save btn-freeze" id ="saveData" data-tool="save">保存</a>
+  </div>
 
 </div>
 
 <div id="map" style="width:1440px;height:500px;background:#eee"></div>
-
-
-<!-- 有效/无效表单 -->
-<div id="J_effective_form" class="effective-form">
-  <div class="form-group">
-    <label>是否有效：</label>
-    <div class="radio">
-      <label class="radio-inline">
-        <input type="radio" name="effective" id="effective" value="1" checked="checked"> 有效
-      </label>
-      <label class="radio-inline">
-        <input type="radio" name="effective" id="inEffective" value="2"> 无效
-      </label>
-    </div>
-  </div>
-</div>
 
 <!-- 表单 -->
 <form id="J_mark_form" class="draw-form" role="form" method="POST" novalidate="novalidate">
@@ -120,8 +97,32 @@
   </div>
 </form>
 
+<!-- 统计-->
+<div id="staticContainer"></div>
+
+<!-- 导航 -->
+<div class="draw-nav">
+  <ul class="clearfix" id="cloth-area">
+  </ul>
+</div>
+
+<!-- 有效/无效表单 -->
+<div id="J_effective_form" class="effective-form">
+  <div class="form-group">
+    <label>是否有效：</label>
+    <div class="radio">
+      <label class="radio-inline">
+        <input type="radio" name="effective" id="effective" value="1" checked="checked"> 有效
+      </label>
+      <label class="radio-inline">
+        <input type="radio" name="effective" id="inEffective" value="2"> 无效
+      </label>
+    </div>
+  </div>
+</div>
+
 <script src="../dist/meek.js"></script>
-<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jsts/1.2.0/jsts.min.js"></script>
+<script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/jsts/1.2.0/jsts.min.js"></script>
 <script src="Comprehensive-test-1.js"></script>
 </body>
 </html>
