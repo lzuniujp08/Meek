@@ -37,6 +37,11 @@ FeatureEvent.EventType = {
   /**
    * Triggered when all features are removed.
    */
-  CLEAR: 'clear'
+  CLEAR: 'clear',
+  
+  /**
+   * Triggered when the feature collection has been changed.
+   */
+  FEATURE_COLLECTION_CHANGED: 'featurecollectionchanged'
   
 }

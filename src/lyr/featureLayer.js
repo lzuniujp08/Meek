@@ -89,6 +89,7 @@ export default class FeatureLayer extends BaseLayer {
       this._featureChangeKeys.clear()
       
       this.dispatchEvent(new FeatureEvent(FeatureEvent.EventType.CLEAR))
+      this.dispatchEvent(FeatureEvent.EventType.FEATURE_COLLECTION_CHANGED)
       this.changed()
     }
   }
@@ -106,6 +107,7 @@ export default class FeatureLayer extends BaseLayer {
     }
     
     this._addFeaturesInner(features)
+    this.dispatchEvent(FeatureEvent.EventType.FEATURE_COLLECTION_CHANGED)
     this.changed()
   }
   
@@ -156,6 +158,7 @@ export default class FeatureLayer extends BaseLayer {
     }
     
     this._addFeaturesInner([feature])
+    this.dispatchEvent(FeatureEvent.EventType.FEATURE_COLLECTION_CHANGED)
     this.changed()
   }
   
@@ -228,6 +231,7 @@ export default class FeatureLayer extends BaseLayer {
       this._featureChangeKeys.delete(featureId)
       
       this.dispatchEvent(new FeatureEvent(FeatureEvent.EventType.REMOVE_FEATURE, feature))
+      this.dispatchEvent(FeatureEvent.EventType.FEATURE_COLLECTION_CHANGED)
       this.changed()
     }
   }
@@ -250,7 +254,6 @@ export default class FeatureLayer extends BaseLayer {
   _handleFeatureChange () {
     this.changed()
   }
-  
   
   set style (value) {
     this._style = value !== undefined ? value : Style.defaultFunction()
