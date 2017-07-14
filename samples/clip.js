@@ -64,9 +64,6 @@ function getIntersectFeatures (feature, targetLayer) {
   return results
 }
 
-// drawTool.addEventListener(Datatang.DrawEvent.EventType.DRAW_START,function(drawEvent){
-//   select.active = false
-// })
 
 drawTool.addEventListener(Datatang.DrawEvent.EventType.DRAW_END, function(drawEvent){
   var drawFeature = drawEvent.feature
@@ -79,6 +76,9 @@ drawTool.addEventListener(Datatang.DrawEvent.EventType.DRAW_END, function(drawEv
   drawTool.active = false
   
   var jCutGeometry = convertToJstsGeometry(drawFeature.geometry)
+  if (isLineSplit) {
+    jCutGeometry = jCutGeometry.buffer(0.0002)
+  }
   
   var jGeometrys = []
   intersectedFeatures.forEach(function(f){
@@ -88,7 +88,11 @@ drawTool.addEventListener(Datatang.DrawEvent.EventType.DRAW_END, function(drawEv
   var cutGeometry = null
   for (var i = 0, len = jGeometrys.length; i < len ; i++) {
     try{
-      cutGeometry = jCutGeometry.difference(jGeometrys[i])
+      if (isLineSplit) {
+        cutGeometry = jGeometrys[i].difference(jCutGeometry)
+      } else {
+        cutGeometry = jCutGeometry.difference(jGeometrys[i])
+      }
     }catch(e){
       console.log('something is wrong')
     }
@@ -97,10 +101,6 @@ drawTool.addEventListener(Datatang.DrawEvent.EventType.DRAW_END, function(drawEv
       jCutGeometry = cutGeometry
     }
   }
-  
-  
-  // var g1 = convertToJstsGeometry(drawFeature.geometry)
-  // var g2 = convertToJstsGeometry(polygon)
   
   var differenceResult = cutGeometry
   
@@ -127,6 +127,11 @@ drawTool.addEventListener(Datatang.DrawEvent.EventType.DRAW_END, function(drawEv
     
       var clipedFeature = new Datatang.Feature(clipedPolygon)
     
+      
+      if (isLineSplit) {
+        featureLayer.removeFeature(intersectedFeatures[0])
+      }
+      
       featureLayer.addFeature(clipedFeature)
       featureLayer.removeFeature(drawFeature)
     }
@@ -143,12 +148,26 @@ function convertToJstsGeometry(geometry) {
     geometryFactory = new jsts.geom.GeometryFactory();
   }
   
-  return convertToPolygon(geometry)
+  if (geometry.geometryType === Datatang.Geometry.POLYGON) {
+    return convertToPolygon(geometry)
+  } else if (geometry.geometryType === Datatang.Geometry.LINE ) {
+    return convertToLine(geometry)
+  }
+}
+
+function convertToLine (line) {
+  const linearRings = line.getCoordinates()
+  
+  var coordinates = []
+  linearRings.forEach(function(point){
+    coordinates.push(new jsts.geom.Coordinate(point[0], point[1]))
+  })
+  
+  return geometryFactory.createLineString(coordinates)
 }
 
 function convertToPolygon (polygon) {
   const linearRings = polygon.getCoordinates()
-  
   
   var coordinates = []
   linearRings.forEach(function(point){
@@ -163,10 +182,18 @@ function onDrawClick () {
   drawTool.active = true
   select.active = false
   drawTool.drawMode = Datatang.Draw.DrawMode.POLYGON
+  
+  isLineSplit = false
 }
 
+
+var isLineSplit = false
 function onSplitClick () {
   drawTool.drawMode = Datatang.Draw.DrawMode.LINE
+  drawTool.active = true
+  select.active = false
+  
+  isLineSplit = true
 }
 
 
