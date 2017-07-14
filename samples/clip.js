@@ -5,13 +5,12 @@
 
 var featureLayer = new Datatang.FeatureLayer()
 
-
 // 初始化map、view和layer
-var mapextent = [0, 0, 2783, 2125];
+var mapextent = [0, 0, 1024, 968];
 var map = new Datatang.Map({
   layers: [
     new Datatang.SingleImageLayer({
-      url: 'source/China_map.jpg',
+      url: 'source/online_communities.png',
       imageExtent: mapextent,
       projection: {
         extent: mapextent
@@ -37,18 +36,13 @@ var drawTool = new Datatang.Draw({
 })
 
 map.addComponents(drawTool)
-
+drawTool.active = false
 
 var select = new Datatang.Select({
-  features: featureLayer
+  selectMode: Datatang.BrowserEvent.MOUSE_MOVE
 })
 
-
-var selectedFeature = null
-select.addEventListener(Datatang.SelectEvent.EventType.SELECT, function(e){
-  var features = e.selectedFeatures
-  selectedFeature = features
-})
+map.addComponents(select)
 
 // 多边形
 var rings = [[800,580],[490,600],[255, 820], [1000,1000],[800,580]]
@@ -58,38 +52,86 @@ var feature = new Datatang.Feature(polygon)
 featureLayer.addFeature(feature)
 
 
+function getIntersectFeatures (feature, targetLayer) {
+  var allFeatures = targetLayer.features
+  
+  var results = allFeatures.filter(function(f){
+    return f.id !== feature.id &&
+           f.geometryType !== Datatang.Geometry.POINT &&
+           Datatang.intersects(f.geometry, feature.geometry)
+  })
+  
+  return results
+}
+
+// drawTool.addEventListener(Datatang.DrawEvent.EventType.DRAW_START,function(drawEvent){
+//   select.active = false
+// })
+
 drawTool.addEventListener(Datatang.DrawEvent.EventType.DRAW_END, function(drawEvent){
   var drawFeature = drawEvent.feature
-  
-  var g1 = convertToJstsGeometry(drawFeature.geometry)
-  var g2 = convertToJstsGeometry(polygon)
-  
-  var differenceResult = g1.difference(g2)
-  
-  var geometries = []
-  if (differenceResult.geometries) {
-    geometries = differenceResult.geometries
-  } else {
-    geometries.push({shell : differenceResult.shell})
+  var intersectedFeatures = getIntersectFeatures(drawFeature, featureLayer)
+  if (intersectedFeatures.length === 0) {
+    return
   }
- 
-  for (var i = 0; i < geometries.length ; i ++) {
-    var geometryItem = geometries[i]
+  
+  select.active = true
+  drawTool.active = false
+  
+  var jCutGeometry = convertToJstsGeometry(drawFeature.geometry)
+  
+  var jGeometrys = []
+  intersectedFeatures.forEach(function(f){
+    jGeometrys.push(convertToJstsGeometry(f.geometry))
+  })
+  
+  var cutGeometry = null
+  for (var i = 0, len = jGeometrys.length; i < len ; i++) {
+    try{
+      cutGeometry = jCutGeometry.difference(jGeometrys[i])
+    }catch(e){
+      console.log('something is wrong')
+    }
     
-    var coords = geometryItem.shell.points.coordinates
+    if (cutGeometry) {
+      jCutGeometry = cutGeometry
+    }
+  }
   
-    var newCoords = []
-    coords.forEach(function(g){
-      newCoords.push([g.x, g.y])
-    })
   
-    var clipedPolygon = new Datatang.Polygon()
-    clipedPolygon.setCoordinates(newCoords)
+  // var g1 = convertToJstsGeometry(drawFeature.geometry)
+  // var g2 = convertToJstsGeometry(polygon)
   
-    var clipedFeature = new Datatang.Feature(clipedPolygon)
+  var differenceResult = cutGeometry
   
-    featureLayer.addFeature(clipedFeature)
-    featureLayer.removeFeature(drawFeature)
+  try{
+    var geometries = []
+    if (differenceResult.geometries) {
+      geometries = differenceResult.geometries
+    } else {
+      geometries.push({shell : differenceResult.shell})
+    }
+  
+    for (var i = 0; i < geometries.length ; i ++) {
+      var geometryItem = geometries[i]
+    
+      var coords = geometryItem.shell.points.coordinates
+    
+      var newCoords = []
+      coords.forEach(function(g){
+        newCoords.push([g.x, g.y])
+      })
+    
+      var clipedPolygon = new Datatang.Polygon()
+      clipedPolygon.setCoordinates(newCoords)
+    
+      var clipedFeature = new Datatang.Feature(clipedPolygon)
+    
+      featureLayer.addFeature(clipedFeature)
+      featureLayer.removeFeature(drawFeature)
+    }
+  }catch(e){
+    
   }
   
 })
@@ -118,6 +160,8 @@ function convertToPolygon (polygon) {
 
 
 function onDrawClick () {
+  drawTool.active = true
+  select.active = false
   drawTool.drawMode = Datatang.Draw.DrawMode.POLYGON
 }
 
