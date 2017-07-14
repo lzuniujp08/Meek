@@ -1,9 +1,11 @@
 var drawTool,
   selectTool,
   modifyTool,
-  flag = false;
+  flag = false,
+  currentFeature,
+  PainerList;
 window.onload = function () {
-  var Fortesting = new Datatang.FeatureLayer()
+  var featureLayer = new Datatang.FeatureLayer()
   var extent = [0, 0, 1280, 800]
 
   var container = document.getElementById('J_mark_form')
@@ -24,7 +26,7 @@ window.onload = function () {
         extent: extent
       }
     }),
-      Fortesting
+      featureLayer
     ],
     overlays: [overlay],
     target: 'map',
@@ -37,17 +39,18 @@ window.onload = function () {
       maxZoom: 8
     })
   })
+
   drawTool = new Datatang.Draw({
     type: 'point',
-    drawLayer: Fortesting
+    drawLayer: featureLayer
   });
   modifyTool = new Datatang.Modify({
-    features: Fortesting.features
+    features: featureLayer.features
   });
-
   selectTool = new Datatang.Select({
     selectMode: Datatang.BrowserEvent.CLICK
   });
+
   map.addComponents(drawTool)
   map.addComponents(selectTool)
   map.addComponents(modifyTool)
@@ -79,17 +82,20 @@ window.onload = function () {
     display ? J_mark_form.style.display = 'block' : J_mark_form.style.display = 'none'
   }
 
-  //点击表单上的叉，隐藏表单
+  //表单取消
   J_form_cancel.onclick = function() {
     overlay.position = undefined
     J_form_cancel.blur()
+    console.log(featureLayer)
+    //featureLayer.features.splice(featureLayer.features[featureLayer.features.length],1)
+    featureLayer.removeFeature(currentFeature)
     return false
   }
 
   //表单提交
   J_form_submit.onclick = function () {
     var text = document.getElementById('J_tree_view').value
-    var featureStyle = Fortesting.styleFunction(currentFeature)[0].clone()
+    var featureStyle = featureLayer.styleFunction(currentFeature)[0].clone()
 
     var textStyle
     if (!featureStyle.textStyle) {
@@ -115,7 +121,6 @@ window.onload = function () {
     map.render()
     document.getElementById('J_tree_view').value = ''
   }
-
 
 // 表单编辑事件
   selectTool.addEventListener(Datatang.SelectEvent.EventType.SELECT, function (event) {
@@ -144,11 +149,10 @@ window.onload = function () {
   var polygon1 = new Datatang.Polygon(rings)
   var feature1 = new Datatang.Feature(polygon1)
 
-  Fortesting.addFeature(feature1)
+  featureLayer.addFeature(feature1)
   //多边形 end
 
   /** ondrawend **/
-  var currentFeature = null
 
   //dom
   function hasClass(obj, cls) {
@@ -189,6 +193,7 @@ window.onload = function () {
   //feature绘制结束
   drawTool.addEventListener(Datatang.DrawEvent.EventType.DRAW_END, function (drawEvent) {
     var feature = drawEvent.feature
+    currentFeature = feature
 
     //////////////////
     if (flag && feature.geometry.geometryType === 'polygon') {
@@ -219,21 +224,18 @@ window.onload = function () {
 
         var clipedFeature = new Datatang.Feature(clipedPolygon)
 
-        Fortesting.addFeature(clipedFeature)
-        Fortesting.removeFeature(feature)
+        featureLayer.addFeature(clipedFeature)
+        featureLayer.removeFeature(feature)
       }
     }else{
-
       /////////////////
       var geometry = feature.geometry
-
       overlay.position = geometry.getFormShowPosition()
       currentFeature = feature
       formClose(true)
 
       gometrytypeSpan.innerHTML = geometry.geometryType
     }
-
   })
 
   var geometryFactory = null;
@@ -256,5 +258,158 @@ window.onload = function () {
 
     return geometryFactory.createPolygon(coordinates)
   }
+
+  //清空功能
+  var btn_clear = document.getElementById('btnClear')
+  btn_clear.onclick = function () {
+    featureLayer.clear()
+  }
+
+  //显示隐藏图形
+  var sHidegly = document.getElementById('sHidegly')
+  sHidegly.onclick = function () {
+    if(this.text.replace(/(^\s*)|(\s*$)/g,"") == "隐藏图形"){
+      this.text = '显示图形'
+      this.innerHTML = '<i class="glyphicon glyphicon-eye-open"></i> 显示图形'
+      var features = featureLayer.features
+      features.forEach (function (item) {
+        item.display = false
+      })
+    }else{
+      this.text = '隐藏图形'
+      this.innerHTML = '<i class="glyphicon glyphicon-eye-close"></i> 隐藏图形'
+      var features = featureLayer.features
+      features.forEach (function (item) {
+        item.display = true
+      })
+    }
+
+  }
+
+  //显示隐藏标签
+  var sHidetag = document.getElementById('sHidetag')
+  sHidetag.onclick = function () {
+    if(this.text.replace(/(^\s*)|(\s*$)/g,"") == "隐藏标签"){
+      this.text = '显示标签'
+      this.innerHTML = '<i class="glyphicon glyphicon-eye-open"></i> 显示标签'
+      var features = featureLayer.features
+      features.forEach (function (item) {
+        item.textDisplay = false
+      })
+    }else{
+      this.text = '隐藏标签'
+      this.innerHTML = '<i class="glyphicon glyphicon-eye-close"></i> 隐藏标签'
+      var features = featureLayer.features
+      features.forEach (function (item) {
+        item.textDisplay = true
+      })
+    }
+
+  }
+
+  //保存数据到数据库
+  var saveData = document.getElementById('saveData')
+  saveData.onclick = function () {
+    var features = featureLayer.features
+    var result = Datatang.GeoJSON.write(features)
+    console.log(JSON.stringify(result))
+  }
+
+
+  var sumCategory = function () {
+    var categorylist = {},
+      J_count_total = 0,
+      J_count_totalRects = 0,
+      J_count_totalPolygons = 0,
+      J_count_totalLines = 0,
+      J_count_totalPoints = 0;
+    var curPainterList = featureLayer.features;
+    if(curPainterList !== undefined && curPainterList !== null){
+      curPainterList.forEach(function(item){
+        var category = item.geometry.geometryType;
+        switch(category){
+          case "extent":
+            J_count_totalRects++;
+            break;
+          case "polygon":
+            J_count_totalPolygons++;
+            break;
+          case "line":
+            J_count_totalLines++;
+            break;
+          case "point":
+            J_count_totalPoints++;
+            break;
+          default:
+            break;
+        }
+      });
+    }
+    J_count_total = J_count_totalPoints + J_count_totalLines + J_count_totalPolygons + J_count_totalRects
+
+    categorylist = {
+      J_count_total: {
+        title: "图形总数",
+        value: J_count_total
+      },
+      J_count_totalRects: {
+        title: "矩形总数",
+        value: J_count_totalRects
+      },
+      J_count_totalPolygons: {
+        title: "多边形总数",
+        value: J_count_totalPolygons
+      },
+      J_count_totalLines: {
+        title: "线总数",
+        value: J_count_totalLines
+      },
+      J_count_totalPoints: {
+        title: "点总数",
+        value: J_count_totalPoints
+      }
+    };
+    return categorylist;
+  }
+
+  //统计图形个类别框数
+  var doStatic = function () {
+    var categorylist = sumCategory()
+    var $staticContainer = document.getElementById('staticContainer')
+    var template = '<p class="item"><span class="key">  {0:key}</span><span class="value">{1:value}</span></p>'
+    var html = '';
+
+    for (key in categorylist) {
+      html += template.replace('{0:key}', categorylist[key].title + "： ").replace("{1:value}", categorylist[key].value || 0);
+    }
+
+    $staticContainer.innerHTML = html
+  }
+
+  //feature 集合变化时，统计feature
+  featureLayer.addEventListener(Datatang.FeatureEvent.EventType.FEATURE_COLLECTION_CHANGED, function () {
+    doStatic()
+    bindJson()
+  })
+
+  //导航
+  var bindJson = function () {
+    document.getElementById('cloth-area').innerHTML = ''
+    PainerList = featureLayer.features
+
+    PainerList.forEach(function(obj, index) {
+      document.getElementById('cloth-area').innerHTML += '<li id="J_navitem_' +  obj.id + '" class="nav-item" data-status="false">' +
+        '<span class="index">' + (index + 1) + '</span>' +
+        '<span class="sep"> - </span>' +
+        '<span class="title">' + obj.id + '</span>' +
+        '<span class="close">x</span>' +
+        '</li>';
+    });
+  }
+
+  //初始化
+  doStatic()
+  bindJson()
+
 
 }
