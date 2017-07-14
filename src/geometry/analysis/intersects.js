@@ -6,7 +6,9 @@ import Geometry from '../../geometry/geometry'
 import {ExtentUtil} from '../support/extentUtil'
 
 /**
+ * 判断任意图形是否相交
  *
+ * @method intersects
  * @param geometry1
  * @param geometry2
  * @returns {boolean}
