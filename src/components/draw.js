@@ -469,10 +469,10 @@ export default class Draw extends Component {
     
     // 派发绘制开始事件
     // Trigger the draw-strat event
-    this.dispatchEvent(new Drawevent(DrawEvent.EventType.DRAW_START, this._sketchFeature))
+    this.dispatchEvent(new DrawEvent(DrawEvent.EventType.DRAW_START, this._sketchFeature))
   }
   
-  /**
+  /**e
    * Modify the drawingE
    * @param event
    * @private
