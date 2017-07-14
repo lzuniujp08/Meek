@@ -4,7 +4,7 @@
 
 
 import {binarySearch, numberSafeCompareFunction} from '../../utils/array'
-import {linearRingsContainsXY} from '../support/geometryUtil'
+import {linearRingsContainsXY} from '../support/geometryutil'
 import {lerp} from '../../utils/math'
 
 

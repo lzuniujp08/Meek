@@ -2,8 +2,8 @@
  * Created by zypc on 2016/11/15.
  */
 
-import BaseObject from '../core/baseObject'
-import BrowserEvent from '../meek/browserEvent'
+import BaseObject from '../core/baseobject'
+import BrowserEvent from '../meek/browserevent'
 import Obj from '../utils/obj'
 
 /**

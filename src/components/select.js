@@ -3,17 +3,17 @@
  */
 
 import Component from './component'
-import BrowserEvent from '../meek/browserEvent'
-import FeatureLayer from '../lyr/featureLayer'
-import {listen, unlistenByKey} from '../core/eventManager'
-import {EventType} from '../meek/eventType'
+import BrowserEvent from '../meek/browserevent'
+import FeatureLayer from '../lyr/featurelayer'
+import {listen, unlistenByKey} from '../core/eventmanager'
+import {EventType} from '../meek/eventtype'
 import {Style} from '../style/style'
 
-import FillStyle from '../style/fillStyle'
-import LineStyle from '../style/lineStyle'
-import PointStyle from '../style/pointStyle'
+import FillStyle from '../style/fillstyle'
+import LineStyle from '../style/linestyle'
+import PointStyle from '../style/pointstyle'
 
-import SelectEvent from '../components/selectEvent'
+import SelectEvent from '../components/selectevent'
 import Geometry from '../geometry/geometry'
 
 /**

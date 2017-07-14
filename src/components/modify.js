@@ -4,24 +4,24 @@
 
 import Component from './component'
 
-import BrowserEvent from '../meek/browserEvent'
+import BrowserEvent from '../meek/browserevent'
 import Geometry from '../geometry/geometry'
 import Point from '../geometry/point'
 
-import {listen, unlistenByKey} from '../core/eventManager'
-import {EventType} from '../meek/eventType'
+import {listen, unlistenByKey} from '../core/eventmanager'
+import {EventType} from '../meek/eventtype'
 
-import ModifyEvent from './modifyEvent'
+import ModifyEvent from './modifyevent'
 
 import Feature from '../meek/feature'
-import FeatureLayer from '../lyr/featureLayer'
+import FeatureLayer from '../lyr/featurelayer'
 import {Style} from '../style/style'
-import {ExtentUtil} from '../geometry/support/extentUtil'
+import {ExtentUtil} from '../geometry/support/extentutil'
 
 import {closestOnSegment, squaredDistanceToSegment,
-        squaredDistance, distance} from '../geometry/support/geometryUtil'
+        squaredDistance, distance} from '../geometry/support/geometryutil'
 
-import {noModifierKeys, singleClick} from '../utils/mouseKey'
+import {noModifierKeys, singleClick} from '../utils/mousekey'
 
 /**
  * @class Modify

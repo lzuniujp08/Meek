@@ -4,8 +4,8 @@
 
 import Component from './component'
 
-import BrowserEvent from '../meek/browserEvent'
-import {noModifierKeys} from '../utils/mouseKey'
+import BrowserEvent from '../meek/browserevent'
+import {noModifierKeys} from '../utils/mousekey'
 import {Coordinate} from '../utils/coordinate'
 
 /**

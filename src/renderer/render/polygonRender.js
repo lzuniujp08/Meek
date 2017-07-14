@@ -1,7 +1,7 @@
 /**
  * Created by zhangyong on 2017/3/20.
  */
-import GeometryRender from '../render/geomertyRender'
+import GeometryRender from '../render/geomertyrender'
 import {Transform} from '../../data/matrix/transform'
 import {colorToString} from '../../utils/helpers'
 import Extent from '../../geometry/extent'

@@ -1,15 +1,15 @@
 
-import SingleImageLayer from '../../lyr/singleImageLayer'
-import FeatureLayer from '../../lyr/featureLayer'
+import SingleImageLayer from '../../lyr/singleimagelayer'
+import FeatureLayer from '../../lyr/featurelayer'
 import Renderer from '../renderer'
-import FeatureLayerRenderer from '../canvas/featureLayerRenderer'
-import ImageLayerRenderer from '../canvas/imageLayerRenderer'
-import {createCanvasContext2D} from '../../utils/domUtil'
+import FeatureLayerRenderer from '../canvas/featurelayerrenderer'
+import ImageLayerRenderer from '../canvas/imagelayerrenderer'
+import {createCanvasContext2D} from '../../utils/domutil'
 import {Transform} from '../../data/matrix/transform'
-import {RenderEventType} from '../renderEventType'
+import {RenderEventType} from '../rendereventtype'
 import {stableSort} from '../../utils/array'
 
-import RenderEvent from '../renderEvent'
+import RenderEvent from '../renderevent'
 
 
 /**

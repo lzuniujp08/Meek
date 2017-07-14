@@ -1,10 +1,10 @@
 
-import BaseLayer from './baseLayer'
+import BaseLayer from './baselayer'
 import {Style} from '../style/style'
-import {ExtentUtil} from '../geometry/support/extentUtil'
-import FeatureEvent from '../meek/featureEvent'
-import {EventType} from '../meek/eventType'
-import {listen, unlistenByKey} from '../core/eventManager'
+import {ExtentUtil} from '../geometry/support/extentutil'
+import FeatureEvent from '../meek/featureevent'
+import {EventType} from '../meek/eventtype'
+import {listen, unlistenByKey} from '../core/eventmanager'
 
 /**
  * @class FeatureLayer

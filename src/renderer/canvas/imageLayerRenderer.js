@@ -2,10 +2,10 @@
  * Created by zhangyong on 2017/3/20.
  */
 
-import LayerRenderer from '../../renderer/canvas/layerRenderer'
+import LayerRenderer from '../../renderer/canvas/layerrenderer'
 
 import {Transform} from '../../data/matrix/transform'
-import {ExtentUtil} from '../../geometry/support/extentUtil'
+import {ExtentUtil} from '../../geometry/support/extentutil'
 
 export default class ImageLayerRenderer extends LayerRenderer {
   constructor (layer) {

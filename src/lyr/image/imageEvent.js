@@ -2,7 +2,7 @@
  * Created by zhangyong on 2017/6/6.
  */
 
-import BaseEvent from '../../core/baseEvent'
+import BaseEvent from '../../core/baseevent'
 
 export default class ImageEvent extends BaseEvent {
   constructor (type, image) {

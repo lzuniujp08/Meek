@@ -3,7 +3,7 @@
  */
 
 import Geometry from '../../geometry/geometry'
-import {ExtentUtil} from '../support/extentUtil'
+import {ExtentUtil} from '../support/extentutil'
 
 /**
  * 判断任意图形是否相交

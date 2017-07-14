@@ -4,8 +4,8 @@
 
 import Geometry from './geometry'
 import Extent from './extent'
-import {ExtentUtil} from './support/extentUtil'
-import {squaredDistance} from './support/geometryUtil'
+import {ExtentUtil} from './support/extentutil'
+import {squaredDistance} from './support/geometryutil'
 
 
 /**

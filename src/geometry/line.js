@@ -5,7 +5,7 @@
 import Geometry from './geometry'
 import Extent from './extent'
 
-import {squaredSegmentDistance} from './support/geometryUtil'
+import {squaredSegmentDistance} from './support/geometryutil'
 import {lineString} from './support/interpolate'
 
 /**

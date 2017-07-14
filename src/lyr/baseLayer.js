@@ -2,9 +2,9 @@
  * Created by zypc on 2016/11/15.
  */
 
-import BaseObject from '../core/baseObject'
-import {listen, unlistenByKey} from '../core/eventManager'
-import {EventType} from '../meek/eventType'
+import BaseObject from '../core/baseobject'
+import {listen, unlistenByKey} from '../core/eventmanager'
+import {EventType} from '../meek/eventtype'
 
 /**
  * @class BaseLayer

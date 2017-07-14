@@ -4,8 +4,8 @@
 
 
 import Kinetic from './kinetic'
-import DragPan from './dragPan'
-import MouseWheelZoom from './mouseWheelZoom'
+import DragPan from './dragpan'
+import MouseWheelZoom from './mousewheelzoom'
 
 /**
  *

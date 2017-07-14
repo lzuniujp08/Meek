@@ -2,11 +2,11 @@
  * Created by zhangyong on 2017/6/26.
  */
 
-import BaseObject from '../core/baseObject'
-import {listen} from '../core/eventManager'
-import {RenderEventType} from '../renderer/renderEventType'
-import {ExtentUtil} from '../geometry/support/extentUtil'
-import {outerWidth, outerHeight, removeChildren} from '../utils/domUtil'
+import BaseObject from '../core/baseobject'
+import {listen} from '../core/eventmanager'
+import {RenderEventType} from '../renderer/rendereventtype'
+import {ExtentUtil} from '../geometry/support/extentutil'
+import {outerWidth, outerHeight, removeChildren} from '../utils/domutil'
 
 /**
  * @class Overlay

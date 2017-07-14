@@ -2,7 +2,7 @@
  * Created by zhangyong on 2017/6/27.
  */
 
-import BaseEvent from '../core/baseEvent'
+import BaseEvent from '../core/baseevent'
 
 /**
  * @class RenderEvent

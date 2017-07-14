@@ -1,5 +1,5 @@
 
-import BaseObject from '../core/baseObject'
+import BaseObject from '../core/baseobject'
 
 export default class Kinetic extends BaseObject{
   
