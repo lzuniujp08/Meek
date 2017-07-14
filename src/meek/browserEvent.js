@@ -2,7 +2,7 @@
  * Created by zypc on 2016/12/4.
  */
 
-import BaseObject from '../core/baseObject'
+import BaseObject from '../core/baseobject'
 
 /**
  *

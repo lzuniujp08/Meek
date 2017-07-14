@@ -2,7 +2,7 @@
  * Created by zypc on 2016/11/15.
  */
 
-import BaseStyle from './baseStyle'
+import BaseStyle from './basestyle'
 
 /**
  * The line style

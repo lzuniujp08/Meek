@@ -2,7 +2,7 @@
  * Created by zhangyong on 2017/6/13.
  */
 
-import BaseObject from '../core/baseObject'
+import BaseObject from '../core/baseobject'
 
 /**
  * Abstract base class; normally only used for createing subclasses and not

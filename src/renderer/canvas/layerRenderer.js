@@ -2,14 +2,14 @@
  * Created by zhangyong on 2017/3/20.
  */
 
-import BaseObject from '../../core/baseObject'
+import BaseObject from '../../core/baseobject'
 import {Transform} from '../../data/matrix/transform'
-import {ExtentUtil} from '../../geometry/support/extentUtil'
-import {ImageState} from '../../lyr/image/imageState'
-import {EventType} from '../../meek/eventType'
+import {ExtentUtil} from '../../geometry/support/extentutil'
+import {ImageState} from '../../lyr/image/imagestate'
+import {EventType} from '../../meek/eventtype'
 import {Canvas} from '../../utils/canvas'
 
-import {listen} from '../../core/eventManager'
+import {listen} from '../../core/eventmanager'
 
 export default class LayerRenderer extends BaseObject {
   

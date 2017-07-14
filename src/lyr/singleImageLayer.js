@@ -2,16 +2,16 @@
  * Created by zypc on 2016/11/15.
  */
 
-import BaseLayer from './baseLayer'
-import SingleImage from '../lyr/image/singleImage'
+import BaseLayer from './baselayer'
+import SingleImage from '../lyr/image/singleimage'
 
-import {listen} from '../core/eventManager'
-import {createCanvasContext2D} from '../utils/domUtil'
-import ImageEvent from '../lyr/image/imageEvent'
+import {listen} from '../core/eventmanager'
+import {createCanvasContext2D} from '../utils/domutil'
+import ImageEvent from '../lyr/image/imageevent'
 
-import {EventType} from '../meek/eventType'
-import {ImageState} from '../lyr/image/imageState'
-import {ExtentUtil} from '../geometry/support/extentUtil'
+import {EventType} from '../meek/eventtype'
+import {ImageState} from '../lyr/image/imagestate'
+import {ExtentUtil} from '../geometry/support/extentutil'
 
 /**
  * @class SingleImageLayer

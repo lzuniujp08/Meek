@@ -2,7 +2,7 @@
  * Created by zhangyong on 2017/5/22.
  */
 
-import BaseEvent from '../core/baseEvent'
+import BaseEvent from '../core/baseevent'
 
 /**
  * The DrawEvent will emitted while geometrys on drawing end.

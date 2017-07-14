@@ -2,8 +2,8 @@
  * Created by zhangyong on 2017/3/23.
  */
 
-import BaseObject from '../core/baseObject'
-import {ExtentUtil} from '../geometry/support/extentUtil'
+import BaseObject from '../core/baseobject'
+import {ExtentUtil} from '../geometry/support/extentutil'
 import {Config} from '../meek/config'
 
 /**

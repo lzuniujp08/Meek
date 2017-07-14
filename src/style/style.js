@@ -3,9 +3,9 @@
  */
 
 import Geometry from '../geometry/geometry'
-import FillStyle from './fillStyle'
-import LineStyle from './lineStyle'
-import PointStyle from './pointStyle'
+import FillStyle from './fillstyle'
+import LineStyle from './linestyle'
+import PointStyle from './pointstyle'
 
 export const Style = {}
 

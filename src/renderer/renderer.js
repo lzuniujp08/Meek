@@ -3,7 +3,7 @@
  */
 
 
-import BaseObject from '../core/baseObject'
+import BaseObject from '../core/baseobject'
 
 /**
  * 地图渲染器基类，

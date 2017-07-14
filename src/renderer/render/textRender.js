@@ -2,7 +2,7 @@
  * Created by zhangyong on 2017/3/24.
  */
 
-import GeometryRender from './geomertyRender'
+import GeometryRender from './geomertyrender'
 import {Transform} from '../../data/matrix/transform'
 import {colorToString} from '../../utils/helpers'
 

@@ -6,19 +6,19 @@ import Component from './component'
 
 import {Style} from '../style/style'
 
-import FeaureLayer from '../lyr/featureLayer'
+import FeaureLayer from '../lyr/featurelayer'
 import Feature from '../meek/feature'
 import Geometry from '../geometry/geometry'
 import Point from '../geometry/point'
 import Line from '../geometry/line'
 import Polygon from '../geometry/polygon'
 import Extent from '../geometry/extent'
-import {ExtentUtil} from '../geometry/support/extentUtil'
-import {listen, unlistenByKey} from '../core/eventManager'
-import {EventType} from '../meek/eventType'
-import BrowserEvent from '../meek/browserEvent'
+import {ExtentUtil} from '../geometry/support/extentutil'
+import {listen, unlistenByKey} from '../core/eventmanager'
+import {EventType} from '../meek/eventtype'
+import BrowserEvent from '../meek/browserevent'
 
-import DrawEvent from './drawEvent'
+import DrawEvent from './drawevent'
 
 /**
  * Draw class is resonsibility to draw geometries.
@@ -469,11 +469,11 @@ export default class Draw extends Component {
     
     // 派发绘制开始事件
     // Trigger the draw-strat event
-    this.dispatchEvent(new DrawEvent(DrawEvent.EventType.DRAW_START, this._sketchFeature))
+    this.dispatchEvent(new Drawvent(DrawEvent.EventType.DRAW_START, this._sketchFeature))
   }
   
   /**
-   * Modify the drawing
+   * Modify the drawingE
    * @param event
    * @private
    */

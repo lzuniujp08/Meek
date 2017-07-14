@@ -2,7 +2,7 @@
  * Created by zhangyong on 2017/3/20.
  */
 
-import BaseObject from '../../core/baseObject'
+import BaseObject from '../../core/baseobject'
 import {equals} from '../../utils/array'
 import {Transform} from '../../data/matrix/transform'
 

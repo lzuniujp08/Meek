@@ -3,7 +3,7 @@
  */
 
 import Geometry from './geometry'
-import {ExtentUtil} from './support/extentUtil'
+import {ExtentUtil} from './support/extentutil'
 
 /**
  * Extent geometry.

@@ -2,19 +2,19 @@
  * Created by zypc on 2016/11/15.
  */
 
-import BaseObject from '../core/baseObject'
-import CanvasRenderer from '../renderer/canvas/canvasRenderer'
-import BrowserEventHandler from './browserEventHandler'
-import BrowserEvent from './browserEvent'
+import BaseObject from '../core/baseobject'
+import CanvasRenderer from '../renderer/canvas/canvasrenderer'
+import BrowserEventHandler from './browsereventhandler'
+import BrowserEvent from './browserevent'
 import View from './view'
-import {BaseEvent} from '../core/baseEvent'
+import {BaseEvent} from '../core/baseevent'
 
-import FeatureLayer from '../lyr/featureLayer'
-import {listen} from '../core/eventManager'
+import FeatureLayer from '../lyr/featurelayer'
+import {listen} from '../core/eventmanager'
 import {Transform} from '../data/matrix/transform'
-import {EventType} from '../meek/eventType'
-import {ExtentUtil} from '../geometry/support/extentUtil'
-import {componentsDefaults} from '../components/componentDefaults'
+import {EventType} from '../meek/eventtype'
+import {ExtentUtil} from '../geometry/support/extentutil'
+import {componentsDefaults} from '../components/componentdefaults'
 
 
 /**

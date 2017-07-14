@@ -2,10 +2,10 @@
  * Created by zypc on 2016/11/15.
  */
 
-import BaseObject from '../core/baseObject'
+import BaseObject from '../core/baseobject'
 import Obj from '../utils/obj'
-import {listen, unlistenByKey} from '../core/eventManager'
-import {EventType} from '../meek/eventType'
+import {listen, unlistenByKey} from '../core/eventmanager'
+import {EventType} from '../meek/eventtype'
 
 /**
  * The feature class is intent to represent geographic features,with a geometry ,a style and

@@ -3,12 +3,12 @@
  */
 
 import Component from './component'
-import BrowserEvent from '../meek/browserEvent'
+import BrowserEvent from '../meek/browserevent'
 
 
 import {Config} from '../meek/config'
 
-import {mouseWheel} from '../utils/mouseKey'
+import {mouseWheel} from '../utils/mousekey'
 import {clamp} from '../utils/math'
 
 /**

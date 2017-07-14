@@ -2,13 +2,13 @@
  * Created by zhangyong on 2017/6/6.
  */
 
-import BaseImage from '../../core/baseImage'
-import {ImageState} from './imageState'
+import BaseImage from '../../core/baseimage'
+import {ImageState} from './imagestate'
 import Obj from '../../utils/obj'
-import {ExtentUtil} from '../../geometry/support/extentUtil'
-import {EventType} from '../../meek/eventType'
+import {ExtentUtil} from '../../geometry/support/extentutil'
+import {EventType} from '../../meek/eventtype'
 
-import {listenOnce, unlistenByKey} from '../../core/eventManager'
+import {listenOnce, unlistenByKey} from '../../core/eventmanager'
 import {getUid} from '../../utils/counter'
 
 export default class SingleImage extends BaseImage {

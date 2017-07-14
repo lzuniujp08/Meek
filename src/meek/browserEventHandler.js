@@ -3,10 +3,10 @@
  */
 
 
-import BaseObject from '../core/baseObject'
-import {listen} from '../core/eventManager'
-import BrowserEvent from './browserEvent'
-import {EventType} from './eventType'
+import BaseObject from '../core/baseobject'
+import {listen} from '../core/eventmanager'
+import BrowserEvent from './browserevent'
+import {EventType} from './eventtype'
 
 export default class BrowserEventHandler extends BaseObject {
 

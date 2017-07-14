@@ -1,8 +1,8 @@
 /**
  * Created by zypc on 2016/11/13.
  */
-import BaseObject from '../core/baseObject'
-import {ExtentUtil} from './support/extentUtil'
+import BaseObject from '../core/baseobject'
+import {ExtentUtil} from './support/extentutil'
 
 /**
  *

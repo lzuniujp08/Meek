@@ -3,15 +3,15 @@
  */
 
 
-import LayerRenderer from '../../renderer/canvas/layerRenderer'
+import LayerRenderer from '../../renderer/canvas/layerrenderer'
 
-import PointRender from '../render/pointRender'
-import LineRender from '../render/lineRender'
-import PolygonRender from '../render/polygonRender'
-import TextRender from '../render/textRender'
+import PointRender from '../render/pointrender'
+import LineRender from '../render/linerender'
+import PolygonRender from '../render/polygonrender'
+import TextRender from '../render/textrender'
 
 import {Transform} from '../../data/matrix/transform'
-import {ExtentUtil} from '../../geometry/support/extentUtil'
+import {ExtentUtil} from '../../geometry/support/extentutil'
 
 export default class FeatureLayerRenderer extends LayerRenderer {
   

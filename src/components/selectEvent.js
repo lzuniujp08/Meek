@@ -2,7 +2,7 @@
  * Created by zhangyong on 2017/5/25.
  */
 
-import BaseEvent from '../core/baseEvent'
+import BaseEvent from '../core/baseevent'
 
 export default class SelectEvent extends BaseEvent {
   

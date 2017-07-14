@@ -2,8 +2,8 @@
  * Created by zhangyong on 2017/6/12.
  */
 
-import BaseStyle from './baseStyle'
-import FillStyle from './fillStyle'
+import BaseStyle from './basestyle'
+import FillStyle from './fillstyle'
 
 /**
  * The text style for geometrys

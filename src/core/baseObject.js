@@ -4,7 +4,7 @@
 
 import Event from './event'
 import {getUid} from '../utils/counter'
-import {EventType} from '../meek/eventType'
+import {EventType} from '../meek/eventtype'
 
 /**
  * The BaseObject is a base class that only can be inherited, not be instanced.<br/>
