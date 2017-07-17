@@ -2,8 +2,7 @@ var drawTool,
   selectTool,
   modifyTool,
   flag = false,
-  currentFeature,
-  PainerList;
+  currentFeature;
 window.onload = function () {
   var featureLayer = new Datatang.FeatureLayer()
   var extent = [0, 0, 1280, 800]
@@ -12,6 +11,7 @@ window.onload = function () {
   var typeSelect = document.getElementsByClassName('btn-tool')
   var J_form_submit = document.getElementById('J_form_submit')
   var J_form_cancel = document.getElementById('J_form_cancel')
+  var J_form_close = document.getElementById('J_form_close')
 
   var overlay = new Datatang.Overlay(({
     element: container,
@@ -82,13 +82,21 @@ window.onload = function () {
     display ? J_mark_form.style.display = 'block' : J_mark_form.style.display = 'none'
   }
 
+  //表单右上角叉号
+  J_form_close.onclick = function() {
+    overlay.position = undefined
+    J_form_cancel.blur()
+    featureLayer.removeFeature(currentFeature)
+    return false
+  }
+
   //表单取消
   J_form_cancel.onclick = function() {
     overlay.position = undefined
     J_form_cancel.blur()
-    console.log(featureLayer)
-    //featureLayer.features.splice(featureLayer.features[featureLayer.features.length],1)
-    featureLayer.removeFeature(currentFeature)
+    if(currentFeature.get('name') === undefined){
+      featureLayer.removeFeature(currentFeature)
+    }
     return false
   }
 
@@ -233,7 +241,10 @@ window.onload = function () {
       /////////////////
       var geometry = feature.geometry
       overlay.position = geometry.getFormShowPosition()
+      var features = featureLayer.features
+      var currentIndex = currentFeature.index !== undefined ? currentFeature.index : features.length
       currentFeature = feature
+      currentFeature.set('index',currentIndex)
       formClose(true)
 
       gometrytypeSpan.innerHTML = geometry.geometryType
@@ -317,7 +328,6 @@ window.onload = function () {
     console.log(JSON.stringify(result))
   }
 
-
   var sumCategory = function () {
     var categorylist = {},
       J_count_total = 0,
@@ -397,27 +407,43 @@ window.onload = function () {
   //导航
   var bindJson = function () {
     document.getElementById('cloth-area').innerHTML = ''
-    PainerList = featureLayer.features
+    var features = featureLayer.features
 
-    PainerList.forEach(function(obj, index) {
-      var title
-      if(obj.style != undefined){
-       title = obj.style[0]._textStyle.text
-      }else{
-        title = obj.id
-      }
-      document.getElementById('cloth-area').innerHTML += '<li id="J_navitem_' +  obj.id + '" class="nav-item" data-status="false">' +
-        '<span class="index">' + (index + 1) + '</span>' +
+    features.forEach(function(obj, index) {
+
+      //获得属性
+      var title = obj.get('name')
+      index = obj.get('index') ? obj.get('index') : index + 1
+
+      document.getElementById('cloth-area').innerHTML += '<li id="J_navitem_' +  obj.id + '" class="nav-item" data-index = '+ index + ' data-status="false">' +
+        '<span class="index">' + index + '</span>' +
         '<span class="sep"> - </span>' +
         '<span class="title">' + title + '</span>' +
         '<span class="close">x</span>' +
         '</li>';
     });
+
+    //绑定导航删除事件
+    $('#cloth-area').find('.nav-item > .close').bind('click', function (e) {
+      e.stopPropagation();
+      var index = $(this).parent('.nav-item').data('index');
+      var features = featureLayer.features;
+      var filters = features.filter(function (item) {
+        return item.get('index') === index;
+      });
+
+      var currentItem = undefined;
+      if (filters.length > 0) {
+        currentItem = filters[0];
+      }else{
+        alert('没有index，无法删除')
+      }
+      featureLayer.removeFeature(currentItem)
+    })
+
   }
 
   //初始化
   doStatic()
   bindJson()
-
-
 }
