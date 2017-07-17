@@ -57,8 +57,8 @@ export default class Obj {
       return {}
     }
     
-    let object
-    map.forEach(function(key, value, map){
+    let object = {}
+    map.forEach(function(value, key, map){
       object[key] = value
     })
     

@@ -2,7 +2,8 @@ var drawTool,
   selectTool,
   modifyTool,
   flag = false,
-  currentFeature;
+  currentFeature,
+  PainerList;
 window.onload = function () {
   var featureLayer = new Datatang.FeatureLayer()
   var extent = [0, 0, 1280, 800]
@@ -11,7 +12,6 @@ window.onload = function () {
   var typeSelect = document.getElementsByClassName('btn-tool')
   var J_form_submit = document.getElementById('J_form_submit')
   var J_form_cancel = document.getElementById('J_form_cancel')
-  var J_form_close = document.getElementById('J_form_close')
 
   var overlay = new Datatang.Overlay(({
     element: container,
@@ -82,21 +82,13 @@ window.onload = function () {
     display ? J_mark_form.style.display = 'block' : J_mark_form.style.display = 'none'
   }
 
-  //表单右上角叉号
-  J_form_close.onclick = function() {
-    overlay.position = undefined
-    J_form_cancel.blur()
-    featureLayer.removeFeature(currentFeature)
-    return false
-  }
-
   //表单取消
   J_form_cancel.onclick = function() {
     overlay.position = undefined
     J_form_cancel.blur()
-    if(currentFeature.get('name') === undefined){
-      featureLayer.removeFeature(currentFeature)
-    }
+    console.log(featureLayer)
+    //featureLayer.features.splice(featureLayer.features[featureLayer.features.length],1)
+    featureLayer.removeFeature(currentFeature)
     return false
   }
 
@@ -402,21 +394,18 @@ window.onload = function () {
     bindJson()
   })
 
-  //导航删除
-  var deleteNav = function () {
-    console.log('aaaa')
-  }
-
   //导航
   var bindJson = function () {
     document.getElementById('cloth-area').innerHTML = ''
-    var features = featureLayer.features
+    PainerList = featureLayer.features
 
-    features.forEach(function(obj, index) {
-
-      //获得属性
-      var title = obj.get('name')
-
+    PainerList.forEach(function(obj, index) {
+      var title
+      if(obj.style != undefined){
+       title = obj.style[0]._textStyle.text
+      }else{
+        title = obj.id
+      }
       document.getElementById('cloth-area').innerHTML += '<li id="J_navitem_' +  obj.id + '" class="nav-item" data-status="false">' +
         '<span class="index">' + (index + 1) + '</span>' +
         '<span class="sep"> - </span>' +
@@ -424,10 +413,7 @@ window.onload = function () {
         '<span class="close">x</span>' +
         '</li>';
     });
-
-
   }
-
 
   //初始化
   doStatic()
