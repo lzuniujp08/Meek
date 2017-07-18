@@ -3,7 +3,7 @@
  */
 
 
-  
+
 // 将会获取缺省样式
 var flayer = new Datatang.FeatureLayer()
 
@@ -59,17 +59,17 @@ select.addEventListener(Datatang.SelectEvent.EventType.SELECT, function(event) {
   if (features.length === 0) {
     return
   }
-  
+
   var feature = features[0]
   var geometry = feature.geometry
-  
+
   overlay.position = geometry.getFormShowPosition()
   currentFeature = feature
   formClose(true)
-  
+
   gometrytypeSpan.innerHTML = geometry.geometryType
-  
-  
+
+
 })
 
 var modifyTool = new Datatang.Modify()
@@ -103,18 +103,18 @@ var currentFeature = null
 drawTool.addEventListener(Datatang.DrawEvent.EventType.DRAW_END, function(drawEvent){
   var feature = drawEvent.feature
   var geometry = feature.geometry
-  
+
   overlay.position = geometry.getFormShowPosition()
   currentFeature = feature
   formClose(true)
-  
+
   gometrytypeSpan.innerHTML = geometry.geometryType
 })
 
 
 function onSubmitClick() {
   var text = document.getElementById('textIpt').value
-  
+
   var brIpt = document.getElementById('BRIpt').value
   var bgIpt = document.getElementById('BGIpt').value
   var bbIpt = document.getElementById('BBIpt').value
@@ -123,11 +123,11 @@ function onSubmitClick() {
   var fgIpt = document.getElementById('FGIpt').value
   var fbIpt = document.getElementById('FBIpt').value
   // var faIpt = document.getElementById('FAIpt').value
-  
-  var featureStyle = flayer.styleFunction(currentFeature)[0].clone()
-  
+
+  var featureStyle = currentFeature.displayText
+
   var textStyle
-  if (!featureStyle.textStyle) {
+  if (!featureStyle) {
     textStyle = new Datatang.TextStyle({
       text: text,
       fill: [frIpt, fgIpt, fbIpt],
@@ -136,16 +136,16 @@ function onSubmitClick() {
         Datatang.LineStyle.LineJion.ROUND),
     })
   } else {
-    textStyle = featureStyle.textStyle.clone()
+    textStyle = featureStyle.clone()
     textStyle.text = text
     textStyle.fill =  [frIpt, fgIpt, fbIpt]
     textStyle.stroke.color = [brIpt, bgIpt, bbIpt]
   }
-  
-  featureStyle.textStyle = textStyle
-  
-  currentFeature.style = [featureStyle]
-  
+
+  featureStyle = textStyle
+
+  currentFeature.displayText = featureStyle
+
   formClose(false)
   map.render()
 }
@@ -160,7 +160,6 @@ function onFormClosedClick(e){
 
 
 function onEditBtnClick(){
-    drawTool.active = false
-    select.active = true
+  drawTool.active = false
+  select.active = true
 }
-  

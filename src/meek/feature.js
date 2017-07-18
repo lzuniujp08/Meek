@@ -20,7 +20,7 @@ import {EventType} from '../meek/eventtype'
  */
 export default class Feature extends BaseObject {
 
-  constructor(geometry, attributes = {}, style) {
+  constructor(geometry, attributes = {}, style, displayText) {
     super()
 
     /**
@@ -54,6 +54,12 @@ export default class Feature extends BaseObject {
      *
      */
     this.style = style
+
+    /**
+     * 设置feature文本
+     *
+     */
+    this.displayText = displayText
 
     /**
      * 设置feature是否显示
@@ -183,6 +189,18 @@ export default class Feature extends BaseObject {
   }
 
   /**
+   * @method text
+   * @return {*}
+   */
+  get displayText() {
+    return this._displayText
+  }
+
+  set displayText(value) {
+    this._displayText = value
+  }
+
+  /**
    * 设置图层的透明度
    * 将会触发map的重绘事件
    *
@@ -216,7 +234,7 @@ export default class Feature extends BaseObject {
       this.changed()
     }
   }
-  
+
   /**
    * Clone the attribute map and return a new map
    *
@@ -231,10 +249,10 @@ export default class Feature extends BaseObject {
         newMap.set(key, value)
       }
     }
-    
+
     return newMap
   }
-  
+
   /**
    * Clone a feature
    *
@@ -250,12 +268,12 @@ export default class Feature extends BaseObject {
       } else {
         style = this.style.clone()
       }
-      
+
       renderStyleArr = [style]
     }
-    
+
     return new Feature(this.geometry.clone(),
-      this.cloneAttributesMap(), renderStyleArr)
+      this.cloneAttributesMap(), renderStyleArr, this.displayText.clone())
   }
 }
 

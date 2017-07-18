@@ -166,11 +166,7 @@ export default class Select extends Component {
     this._selectLayer.clear()
     
     this.selectFeatures.forEach(feature => {
-
-      if (feature.style.length >= 2 ) {
-        feature.style.splice(0,2)
-      }
-
+      feature.style = undefined
       feature.delete('hasmutilselected')
     })
 
@@ -246,7 +242,6 @@ export default class Select extends Component {
         const geometryType = feature.geometry.geometryType
   
         if (geometryType === Geometry.LINE) {
-          const zeroStyle = styles[0].clone()
           const firstStyle = styles[0]
           firstStyle.width = firstStyle.width + 2
     
@@ -255,10 +250,8 @@ export default class Select extends Component {
           cloneStyle.color = white
 
           feature.style.unshift(cloneStyle)
-          feature.style.push(zeroStyle)
 
         } else if (geometryType === Geometry.POLYGON || geometryType === Geometry.EXTENT ) {
-          const zeroStyle = styles[0].clone()
           const firstStyle = styles[0]
           firstStyle.borderStyle.width = firstStyle.borderStyle.width + 2
     
@@ -270,15 +263,9 @@ export default class Select extends Component {
           cloneStyle.borderStyle.lineJion = LineStyle.LineJion.ROUND
     
           feature.style.unshift(cloneStyle)
-          feature.style.push(zeroStyle)
 
         } else if (geometryType === Geometry.POINT ) {
           const firstStyle = styles[0]
-
-          if ( firstStyle.borderStyle.width > 2 ) {
-            return
-          }
-
           firstStyle.size = firstStyle.size + 3
           firstStyle.borderStyle.width = firstStyle.borderStyle.width + 1
         }

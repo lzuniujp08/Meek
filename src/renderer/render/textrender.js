@@ -21,7 +21,7 @@ export default class TextRender extends GeometryRender {
    */
   render (feature, renderStyle, transform) {
   
-    const textStyle = renderStyle[0].textStyle
+    const textStyle = feature.displayText
     if (!textStyle.text || textStyle.text === '') {
       return
     }
@@ -46,7 +46,7 @@ export default class TextRender extends GeometryRender {
     const offsetY = textStyle.offsetY - 10
     const stroke = textStyle.stroke ? true : false
     const fill = textStyle.fill ? true : false
-    const text = feature.get('name')
+    const text = textStyle.text
   
     let x = pixelCoordinates[0] + offsetX
     let y = pixelCoordinates[1] + offsetY
