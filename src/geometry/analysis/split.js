@@ -4,8 +4,17 @@
 
 
 import {ExtentUtil} from '../../geometry/support/extentutil'
+import Polygon from '../../geometry/polygon'
 
-
+/**
+ *
+ * 使用直线来切割多边形
+ *
+ * @method splitPolygonByLine
+ * @param polygon 被切割多边形
+ * @param line 切割直线
+ * @returns {Array}
+ */
 export default function splitPolygonByLine(polygon, line) {
   
   const polygonCoordinates = polygon.getCoordinates()
@@ -13,12 +22,18 @@ export default function splitPolygonByLine(polygon, line) {
   
   // 找到直线和面的相交点
   const dividedPointList = findIntersectionPoints(polygonCoordinates, lineCoordinates)
+  
+  // 0交点或者交点为奇数，则认为非法输入
+  if (dividedPointList.length === 0 || dividedPointList.length % 2 === 1) {
+    return []
+  }
+  
   const firstPoint = lineCoordinates[0]
   const endPoint = lineCoordinates[1]
   
-  // 插入分割点
+  // 安装顺序插入分割点到分割多边形顶多序列中
   const vertexListAfterDivide = insertDividePointsToCoordinates(dividedPointList, polygonCoordinates)
-  console.log('after insert:' + vertexListAfterDivide)
+  // console.log('after insert:' + vertexListAfterDivide)
   
   // 找到左右测的坐标集合
   const groupsLeftRigthArr = sortCoordinatesByLineDirection(vertexListAfterDivide, lineCoordinates, dividedPointList)
@@ -26,14 +41,12 @@ export default function splitPolygonByLine(polygon, line) {
   const leftSideVertexSet = groupsLeftRigthArr.left
   const rightSideVertexSet = groupsLeftRigthArr.right
   
-  console.log('left vertexs:' + leftSideVertexSet)
-  console.log('right vertexs:' + rightSideVertexSet)
-  
+  // 将分割点安装与起始点距离远近排序
   const sortedDividedPointList = dividedPointList.sort(function(point1, point2){
     return distance(point1.point, {x:firstPoint[0],y:firstPoint[1]}) - distance(point2.point, {x:firstPoint[0],y:firstPoint[1]})
   })
   
-  // 求直线的斜率
+  // 求直线的方向
   const k = (endPoint[1] - firstPoint[1])
   
   const insertedEdgeLeft = []
@@ -49,15 +62,26 @@ export default function splitPolygonByLine(polygon, line) {
       insertedEdgeLeft.push([firstPoint, secodePoint])
       insertedEdgeRight.push([secodePoint, firstPoint])
     }
-    
   }
   
+  // 重塑多边形
   const afterUnionLeft = union(leftSideVertexSet, insertedEdgeLeft, vertexListAfterDivide)
   const afterUnionRight = union(rightSideVertexSet, insertedEdgeRight, vertexListAfterDivide)
   
-  console.log(afterUnionLeft)
-  console.log(afterUnionRight)
+  const featureCollection = []
+  const allSplitCoordinates = afterUnionLeft.concat(afterUnionRight)
   
+  // 生成多边形对象
+  allSplitCoordinates.forEach(arr => {
+    arr.forEach(coords => {
+      featureCollection.push(new Polygon().setCoordinates(coords))
+    })
+  })
+  
+  // console.log(afterUnionLeft)
+  // console.log(afterUnionRight)
+  
+  return featureCollection
 }
 
 const distance = function(p1, p2) {
