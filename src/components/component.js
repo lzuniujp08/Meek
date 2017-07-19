@@ -99,6 +99,7 @@ export default class Component extends BaseObject {
   handleMouseEvent (browserEvent) {
     let stopEvent = false
     this._updateTrackedPointers(browserEvent)
+
     if (this.handlingDownUpSequence) {
       if (browserEvent.type === BrowserEvent.MOUSE_DRAG) {
         this._handleDragEvent(browserEvent)
