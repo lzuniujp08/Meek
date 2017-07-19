@@ -179,8 +179,11 @@ export default class Draw extends Component {
      * @type {number}
      * @private
      */
-    this._maxPoints = options.maxPoints ?
-        options.maxPoints : Infinity
+    this._maxLinePoints = options.maxLinePoints ?
+        options.maxLinePoints : Infinity
+
+    this._maxPolygonPoints = options.maxPolygonPoints ?
+      options.maxPolygonPoints : Infinity
   
     /**
      * The number of points that must be drawn before a polygon ring or line
@@ -599,13 +602,13 @@ export default class Draw extends Component {
       this._finishCoordinate = coordinate.slice()
       coordinates = this._sketchCoords
       coordinates.push(coordinate.slice())
-      done = coordinates.length > this._maxPoints
+      done = coordinates.length > this._maxLinePoints
       
       this.geometryFunction(coordinates, geometry)
     } else if (mode === Draw.DrawMode.POLYGON) {
       coordinates = this._sketchCoords[0]
       coordinates.push(coordinate.slice())
-      done = coordinates.length > this._maxPoints
+      done = coordinates.length > this._maxPolygonPoints
       
       if (done) {
         this._finishCoordinate = coordinates[0]
