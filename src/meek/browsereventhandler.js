@@ -2,9 +2,8 @@
  * Created by zypc on 2016/11/21.
  */
 
-
 import BaseObject from '../core/baseobject'
-import {listen} from '../core/eventmanager'
+import {listen, unlistenByKey} from '../core/eventmanager'
 import BrowserEvent from './browserevent'
 import {EventType} from './eventtype'
 
@@ -34,6 +33,12 @@ export default class BrowserEventHandler extends BaseObject {
      */
     this._down = null
   
+    /**
+     *
+     * @type {Array}
+     * @private
+     */
+    this._dragListenerKeys = []
   
     /**
      *
@@ -88,6 +93,15 @@ export default class BrowserEventHandler extends BaseObject {
   
     this._dragging = false
     this._down = e
+    
+    if (this._dragListenerKeys.length === 0) {
+      const documentDom = document
+  
+      this._dragListenerKeys.push(
+        listen(documentDom, BrowserEvent.MOUSE_MOVE, this._mousemove, this),
+        listen(documentDom, BrowserEvent.MOUSE_UP, this._mouseup, this)
+      )
+    }
   }
 
   /**
@@ -125,7 +139,9 @@ export default class BrowserEventHandler extends BaseObject {
     if (!this._dragging) {
       this._emulateClick(this._down)
     }
-    
+  
+    this._dragListenerKeys.forEach(unlistenByKey)
+    this._dragListenerKeys.length = 0
     this._dragging = false
     this._down = null
   }
