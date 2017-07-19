@@ -20,7 +20,7 @@ import {EventType} from '../meek/eventtype'
  */
 export default class Feature extends BaseObject {
 
-  constructor(geometry, attributes = {}, style, displayText) {
+  constructor(geometry, attributes = {}, displayText, style) {
     super()
 
     /**

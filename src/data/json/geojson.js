@@ -9,6 +9,7 @@ import Line from '../../geometry/line'
 import Extent from '../../geometry/extent'
 import Feature from '../../meek/feature'
 import Obj from '../../utils/obj'
+import TextStyle from'../../style/textstyle'
 
 /**
  *
@@ -49,8 +50,18 @@ export default class GeoJSON {
           if (featureObj.properties) {
             propertiesObj = featureObj.properties
           }
+
+          let title = featureObj.title
+          let textStyle = new TextStyle({
+            text: title,
+            fill: [255, 255, 0],
+            stroke: new Datatang.LineStyle([255, 255, 0],1,0.5,
+              Datatang.LineStyle.LineCap.ROUND,
+              Datatang.LineStyle.LineJion.ROUND),
+          })
+
           
-          const feature = new Feature(geometry, propertiesObj)
+          const feature = new Feature(geometry, propertiesObj,textStyle)
   
           features.push(feature)
         }
@@ -79,7 +90,9 @@ export default class GeoJSON {
           type: GeoJSON.getGeoJSONGeometryType(feature.geometry),
           coordinates: feature.geometry.getCoordinates()
         },
-        properties: Obj.mapToObject(feature._attributesMap)
+        properties: Obj.mapToObject(feature._attributesMap),
+
+        title: feature.displayText.text
       })
     })
     
