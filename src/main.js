@@ -64,6 +64,8 @@ import Overlay from 'meek/overlay'
 import GeoJSON from 'data/json/geojson'
 
 import intersects from 'geometry/analysis/intersects'
+import splitPolygonByLine from 'geometry/analysis/split'
+
 
 export default {
   Config,
@@ -116,5 +118,6 @@ export default {
   Math,
   MouseWheelZoom,
   GeoJSON,
-  intersects
+  intersects,
+  splitPolygonByLine
 }
