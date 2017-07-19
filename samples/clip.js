@@ -76,9 +76,6 @@ drawTool.addEventListener(Datatang.DrawEvent.EventType.DRAW_END, function(drawEv
   drawTool.active = false
   
   var jCutGeometry = convertToJstsGeometry(drawFeature.geometry)
-  if (isLineSplit) {
-    jCutGeometry = jCutGeometry.buffer(0.0002)
-  }
   
   var jGeometrys = []
   intersectedFeatures.forEach(function(f){
@@ -88,11 +85,7 @@ drawTool.addEventListener(Datatang.DrawEvent.EventType.DRAW_END, function(drawEv
   var cutGeometry = null
   for (var i = 0, len = jGeometrys.length; i < len ; i++) {
     try{
-      if (isLineSplit) {
-        cutGeometry = jGeometrys[i].difference(jCutGeometry)
-      } else {
-        cutGeometry = jCutGeometry.difference(jGeometrys[i])
-      }
+      cutGeometry = jCutGeometry.difference(jGeometrys[i])
     }catch(e){
       console.log('something is wrong')
     }
@@ -127,11 +120,6 @@ drawTool.addEventListener(Datatang.DrawEvent.EventType.DRAW_END, function(drawEv
     
       var clipedFeature = new Datatang.Feature(clipedPolygon)
     
-      
-      if (isLineSplit) {
-        featureLayer.removeFeature(intersectedFeatures[0])
-      }
-      
       featureLayer.addFeature(clipedFeature)
       featureLayer.removeFeature(drawFeature)
     }
@@ -182,19 +170,9 @@ function onDrawClick () {
   drawTool.active = true
   select.active = false
   drawTool.drawMode = Datatang.Draw.DrawMode.POLYGON
-  
-  isLineSplit = false
 }
 
 
-var isLineSplit = false
-function onSplitClick () {
-  drawTool.drawMode = Datatang.Draw.DrawMode.LINE
-  drawTool.active = true
-  select.active = false
-  
-  isLineSplit = true
-}
 
 
 
