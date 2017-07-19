@@ -110,7 +110,7 @@ export default class Draw extends Component {
         options.finishCondition : function () { return true }
         
     /**
-     *
+     * undo the last point when press some button for drawing Line or Polygon
      * @type {Function}
      * @private
      */
@@ -130,6 +130,11 @@ export default class Draw extends Component {
      * @private
      */
     this._sketchLayer = new FeaureLayer({name: 'sketch layer for draw component'})
+
+    /**
+     * get the defaut draw style
+     * @type {Function}
+     */
     this._sketchLayer.style = this.getDefaultStyleFunction()
   
     /**
@@ -174,7 +179,7 @@ export default class Draw extends Component {
         options.snapTolerance : 12
   
     /**
-     * The number of points that can be drawn before a polygon ring or line string
+     * The number of points that can be drawn before line string
      * is finished. The default is no restriction.
      * @type {number}
      * @private
@@ -182,6 +187,11 @@ export default class Draw extends Component {
     this._maxLinePoints = options.maxLinePoints ?
         options.maxLinePoints : Infinity
 
+    /**
+     * The max points number of polygon
+     * @type {number}
+     * @private
+     */
     this._maxPolygonPoints = options.maxPolygonPoints ?
       options.maxPolygonPoints : Infinity
   
@@ -340,7 +350,7 @@ export default class Draw extends Component {
   }
   
   /**
-   *
+   * handle mouse event
    * @param event
    * @returns {*|boolean}
    */
@@ -475,7 +485,7 @@ export default class Draw extends Component {
     this.dispatchEvent(new DrawEvent(DrawEvent.EventType.DRAW_START, this._sketchFeature))
   }
   
-  /**e
+  /**
    * Modify the drawingE
    * @param event
    * @private
