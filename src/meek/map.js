@@ -443,7 +443,8 @@ export default class Map extends BaseObject {
   getEventPixel (event) {
     // 获取viewport元素在浏览器视图窗口总的位置(left,top,bottom,right)
     const viewportPosition = this.viewport.getBoundingClientRect()
-    const eventPosition = event.changedTouches ? event.changedTouches[0] : event
+    // const eventPosition = event.changedTouches ? event.changedTouches[0] : event
+    const eventPosition = event
     return [
       eventPosition.clientX - viewportPosition.left,
       eventPosition.clientY - viewportPosition.top
