@@ -42,9 +42,25 @@ var draw = new Datatang.Draw({
   drawLayer: featureLayer
 })
 
+var select = new Datatang.Select({
+  selectMode: Datatang.BrowserEvent.MOUSE_MOVE
+})
+
+map.addComponents(select)
+
 map.addComponents(draw)
 draw.addEventListener(Datatang.DrawEvent.EventType.DRAW_END, function(drawEvent){
-  var feature = drawEvent.feature
+  var linefeature = drawEvent.feature
   
-  Datatang.splitPolygonByLine(polygon, feature.geometry)
+  var featureCollection = Datatang.splitPolygonByLine(polygon, linefeature.geometry)
+  
+  var splitFeatures = []
+  featureCollection.forEach(function(polygon){
+    splitFeatures.push(new Datatang.Feature(polygon))
+  })
+  
+  featureLayer.addFeatures(splitFeatures)
+  featureLayer.removeFeature(linefeature)
+  featureLayer.removeFeature(feature)
+  
 })

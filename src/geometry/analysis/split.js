@@ -73,9 +73,9 @@ export default function splitPolygonByLine(polygon, line) {
   
   // 生成多边形对象
   allSplitCoordinates.forEach(arr => {
-    arr.forEach(coords => {
-      featureCollection.push(new Polygon().setCoordinates(coords))
-    })
+    const polygon = new Polygon()
+    polygon.setCoordinates(arr)
+    featureCollection.push(polygon)
   })
   
   // console.log(afterUnionLeft)
