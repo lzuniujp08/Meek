@@ -46,22 +46,15 @@ export default function splitPolygonByLine(polygon, line) {
     return distance(point1.point, {x:firstPoint[0],y:firstPoint[1]}) - distance(point2.point, {x:firstPoint[0],y:firstPoint[1]})
   })
   
-  // 求直线的方向
-  const k = (endPoint[1] - firstPoint[1])
-  
+  // 将分割点边化，因分割线绘制方向的不同，左侧分割边和右侧分割边的方向相反
   const insertedEdgeLeft = []
   const insertedEdgeRight = []
   for (let i = 0, len = sortedDividedPointList.length; i < len; i += 2) {
     const firstPoint = [sortedDividedPointList[i].point.x, sortedDividedPointList[i].point.y]
     const secodePoint = [sortedDividedPointList[i + 1].point.x, sortedDividedPointList[i + 1].point.y]
-    
-    if (k > 0) {
-      insertedEdgeRight.push([firstPoint, secodePoint])
-      insertedEdgeLeft.push([secodePoint, firstPoint])
-    } else {
-      insertedEdgeLeft.push([firstPoint, secodePoint])
-      insertedEdgeRight.push([secodePoint, firstPoint])
-    }
+  
+    insertedEdgeLeft.push([firstPoint, secodePoint])
+    insertedEdgeRight.push([secodePoint, firstPoint])
   }
   
   // 重塑多边形
