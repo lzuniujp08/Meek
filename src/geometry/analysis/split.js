@@ -125,10 +125,15 @@ const union = function(sideVertexSet, divPoints, vertexListAfterDivide) {
   const getTheSecodeDivPoint = function(firstDivPoint) {
     const _divPoints = divPoints
     for(let i = 0, len = _divPoints.length ;i < len ; i++) {
-      const itemPoint = _divPoints[i][0]
+      let itemPoint = _divPoints[i][0]
       
       if (itemPoint[0] === firstDivPoint[0] && itemPoint[1] === firstDivPoint[1]) {
         return _divPoints[i][1]
+      }
+  
+      itemPoint =  _divPoints[i][1]
+      if (itemPoint[0] === firstDivPoint[0] && itemPoint[1] === firstDivPoint[1]) {
+        return _divPoints[i][0]
       }
     }
     
