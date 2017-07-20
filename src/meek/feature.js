@@ -218,11 +218,11 @@ export default class Feature extends BaseObject {
     const white = [255, 255, 255]
 
     if (this._styleHighLight) {
-      const styles = this.style[0].clone()
+      const styles = this.style
       const geometryType = this.geometry.geometryType
 
       if (geometryType === Geometry.LINE) {
-        const firstStyle = styles
+        const firstStyle = styles[0]
         firstStyle.width = firstStyle.width + 2
 
         const cloneStyle = firstStyle.clone()
@@ -232,7 +232,7 @@ export default class Feature extends BaseObject {
         this.style.unshift(cloneStyle)
 
       } else if (geometryType === Geometry.POLYGON || geometryType === Geometry.EXTENT ) {
-        const firstStyle = styles
+        const firstStyle = styles[0]
         firstStyle.borderStyle.width = firstStyle.borderStyle.width + 2
 
         const cloneStyle = firstStyle.clone()
@@ -245,7 +245,7 @@ export default class Feature extends BaseObject {
         this.style.unshift(cloneStyle)
 
       } else if (geometryType === Geometry.POINT ) {
-        const firstStyle = styles
+        const firstStyle = styles[0]
         firstStyle.size = firstStyle.size + 3
         firstStyle.borderStyle.width = firstStyle.borderStyle.width + 1
       }

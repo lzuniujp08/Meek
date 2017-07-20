@@ -145,6 +145,7 @@ function onSubmitClick() {
   featureStyle.textStyle = textStyle
   currentFeature.displayText = text
   currentFeature.style = [featureStyle]
+  currentFeature.styleHighLight = true
 
 
   formClose(false)
