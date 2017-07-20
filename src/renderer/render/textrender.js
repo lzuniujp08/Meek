@@ -25,6 +25,7 @@ export default class TextRender extends GeometryRender {
     let textStyle = renderStyle[0].textStyle
 
     if(!feature.displayText){
+      
       return
     }
     const displayText = String(feature.displayText)
@@ -32,8 +33,9 @@ export default class TextRender extends GeometryRender {
     if(!textStyle){
       textStyle = new TextStyle({
         text: displayText,
-        fill: [255, 255, 0],
-        stroke: new Datatang.LineStyle([255, 255, 0],1,0.5,
+        scale: 10,
+        fill: [0, 0, 255],
+        stroke: new Datatang.LineStyle([255, 255, 255],1,2,
           Datatang.LineStyle.LineCap.ROUND,
           Datatang.LineStyle.LineJion.ROUND),
       })
