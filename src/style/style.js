@@ -24,7 +24,7 @@ Style.defaultFunction = function () {
     
     // 面样式 polygon style
     Style._default[Geometry.POLYGON] = [
-      new FillStyle(white, new LineStyle(blue, 1, 1.25), 0.5)
+      new FillStyle(white, new LineStyle(blue, 1, 1.25), 0.2)
     ]
     
     // same as polygon style

@@ -256,7 +256,7 @@ export default class Select extends Component {
           firstStyle.borderStyle.width = firstStyle.borderStyle.width + 2
     
           const cloneStyle = firstStyle.clone()
-          cloneStyle.alpha = 0.1
+          cloneStyle.alpha = 0
           cloneStyle.borderStyle.width = firstStyle.borderStyle.width + 2
           cloneStyle.borderStyle.color = white
           cloneStyle.borderStyle.lineCap = LineStyle.LineCap.ROUND
