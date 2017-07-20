@@ -57,7 +57,7 @@ Style.createDefaultEditing = function () {
   styles[Geometry.POLYGON] = [
     new FillStyle(white,// 填充
     new LineStyle(blue,1,1)// 边框
-    ,0.5)
+    ,0.2)
   ]
   styles[Geometry.MULTI_POLYGON] = styles[Geometry.POLYGON]
   styles[Geometry.EXTENT] = styles[Geometry.POLYGON]
