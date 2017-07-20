@@ -124,10 +124,10 @@ function onSubmitClick() {
   var fbIpt = document.getElementById('FBIpt').value
   // var faIpt = document.getElementById('FAIpt').value
 
-  var featureStyle = currentFeature.displayText
+  var featureStyle = flayer.styleFunction(currentFeature)[0].clone()
 
   var textStyle
-  if (!featureStyle) {
+  if (!featureStyle.textStyle) {
     textStyle = new Datatang.TextStyle({
       text: text,
       fill: [frIpt, fgIpt, fbIpt],
@@ -136,15 +136,16 @@ function onSubmitClick() {
         Datatang.LineStyle.LineJion.ROUND),
     })
   } else {
-    textStyle = featureStyle.clone()
+    textStyle = featureStyle.textStyle.clone()
     textStyle.text = text
     textStyle.fill =  [frIpt, fgIpt, fbIpt]
     textStyle.stroke.color = [brIpt, bgIpt, bbIpt]
   }
 
-  featureStyle = textStyle
+  featureStyle.textStyle = textStyle
+  currentFeature.displayText = text
+  currentFeature.style = [featureStyle]
 
-  currentFeature.displayText = featureStyle
 
   formClose(false)
   map.render()

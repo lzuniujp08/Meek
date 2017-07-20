@@ -172,7 +172,7 @@ export default class FeatureLayerRenderer extends LayerRenderer {
       /**
        * Render text
        */
-      if (feature.displayText && feature.textDisplay) {
+      if (feature.textDisplay) {
 
         this._textRender.render(feature, renderStyle, transform)
       }

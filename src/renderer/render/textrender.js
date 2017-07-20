@@ -5,6 +5,7 @@
 import GeometryRender from './geomertyrender'
 import {Transform} from '../../data/matrix/transform'
 import {colorToString} from '../../utils/helpers'
+import TextStyle from '../../style/textstyle'
 
 export default class TextRender extends GeometryRender {
   
@@ -21,10 +22,26 @@ export default class TextRender extends GeometryRender {
    */
   render (feature, renderStyle, transform) {
   
-    const textStyle = feature.displayText
-    if (!textStyle.text || textStyle.text === '') {
+    let textStyle = renderStyle[0].textStyle
+
+    if(!feature.displayText){
       return
     }
+    const displayText = String(feature.displayText)
+
+    if(!textStyle){
+      textStyle = new TextStyle({
+        text: displayText,
+        fill: [255, 255, 0],
+        stroke: new Datatang.LineStyle([255, 255, 0],1,0.5,
+          Datatang.LineStyle.LineCap.ROUND,
+          Datatang.LineStyle.LineJion.ROUND),
+      })
+    }
+
+    // if (!textStyle.text || textStyle.text === '') {
+    //   return
+    // }
     
     const ctx = this.context
   
