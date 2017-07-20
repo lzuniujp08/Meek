@@ -52,16 +52,8 @@ export default class GeoJSON {
           }
 
           let title = featureObj.title
-          let textStyle = new TextStyle({
-            text: title,
-            fill: [255, 255, 0],
-            stroke: new Datatang.LineStyle([255, 255, 0],1,0.5,
-              Datatang.LineStyle.LineCap.ROUND,
-              Datatang.LineStyle.LineJion.ROUND),
-          })
 
-          
-          const feature = new Feature(geometry, propertiesObj,textStyle)
+          const feature = new Feature(geometry, propertiesObj,title)
   
           features.push(feature)
         }
@@ -92,7 +84,7 @@ export default class GeoJSON {
         },
         properties: Obj.mapToObject(feature._attributesMap),
 
-        title: feature.displayText.text
+        title: feature.displayText
       })
     })
     
