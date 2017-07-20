@@ -224,10 +224,11 @@ export default class TextStyle extends BaseStyle {
  * @type {String}
  * @static
  * @final
+ *
  */
 TextStyle.DEFAULT_FILL_COLOR = '#333'
 
-TextStyle.DEFAULT_FONT = 'normal 12px Arial'
+TextStyle.DEFAULT_FONT = 'bold 12px Arial'
 
 TextStyle.DEFAULT_TEXT_ALIGN = 'center'
 
