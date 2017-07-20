@@ -6,6 +6,8 @@ import BaseObject from '../core/baseobject'
 import Obj from '../utils/obj'
 import {listen, unlistenByKey} from '../core/eventmanager'
 import {EventType} from '../meek/eventtype'
+import Geometry from '../geometry/geometry'
+import LineStyle from '../style/linestyle'
 
 /**
  * The feature class is intent to represent geographic features,with a geometry ,a style and
@@ -74,6 +76,13 @@ export default class Feature extends BaseObject {
      * @private
      */
     this.textDisplay = true
+
+    /**
+     * 设置feature的样式是否高亮
+     * @type {boolean}
+     * @private
+     */
+    this.styleHighLight = false
 
   }
 
@@ -199,6 +208,52 @@ export default class Feature extends BaseObject {
   set displayText(value) {
     this._displayText = value
   }
+
+  get styleHighLight() {
+    return this._styleHighLight
+  }
+
+  set styleHighLight(value) {
+    this._styleHighLight = value
+    const white = [255, 255, 255]
+
+    if (this._styleHighLight) {
+      const styles = this.style[0].clone()
+      const geometryType = this.geometry.geometryType
+
+      if (geometryType === Geometry.LINE) {
+        const firstStyle = styles
+        firstStyle.width = firstStyle.width + 2
+
+        const cloneStyle = firstStyle.clone()
+        cloneStyle.width = cloneStyle.width + 2
+        cloneStyle.color = white
+
+        this.style.unshift(cloneStyle)
+
+      } else if (geometryType === Geometry.POLYGON || geometryType === Geometry.EXTENT ) {
+        const firstStyle = styles
+        firstStyle.borderStyle.width = firstStyle.borderStyle.width + 2
+
+        const cloneStyle = firstStyle.clone()
+        cloneStyle.alpha = 0
+        cloneStyle.borderStyle.width = firstStyle.borderStyle.width + 2
+        cloneStyle.borderStyle.color = white
+        cloneStyle.borderStyle.lineCap = LineStyle.LineCap.ROUND
+        cloneStyle.borderStyle.lineJion = LineStyle.LineJion.ROUND
+
+        this.style.unshift(cloneStyle)
+
+      } else if (geometryType === Geometry.POINT ) {
+        const firstStyle = styles
+        firstStyle.size = firstStyle.size + 3
+        firstStyle.borderStyle.width = firstStyle.borderStyle.width + 1
+      }
+
+    }
+    this.changed()
+   }
+
 
   /**
    * 设置图层的透明度
