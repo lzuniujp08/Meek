@@ -47,14 +47,13 @@ var select = new Datatang.Select({
 })
 
 map.addComponents(select)
-
 map.addComponents(draw)
+
 draw.addEventListener(Datatang.DrawEvent.EventType.DRAW_END, function(drawEvent){
   var feature = drawEvent.feature
   var drawGeometry = feature.geometry
   
   var arr = getIntersectFeatures(feature, featureLayer)
-  console.log('相交个数：' + arr.length)
   
   var becutedGeometry = polybool(drawGeometry)
   
@@ -77,12 +76,10 @@ draw.addEventListener(Datatang.DrawEvent.EventType.DRAW_END, function(drawEvent)
   
   featureLayer.addFeatures(featureCollection)
   featureLayer.removeFeature(feature)
-  
 })
 
 
 function polybool(geometry) {
-  
   var coords = geometry.getCoordinates()
   var poly1 = {
     regions: [

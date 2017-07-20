@@ -564,14 +564,9 @@ export default class Draw extends Component {
       this.geometryFunction(coordinates, geometry)
     }
   
-    // Then insert feature
-    // if (this._features) {
-    //   this.features_.push(sketchFeature)
-    // }
-  
     // 最终放到shource中，形成正式feature
     if (this._drawLayer) {
-      // let newFeature = new Feature(geometry)
+      sketchFeature.style = undefined
       this._drawLayer.addFeatures([sketchFeature])
     }
   

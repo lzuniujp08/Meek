@@ -48,4 +48,9 @@ window.onload = function () {
     drawTool.drawMode = typeSelect.value
   }
   
+  drawTool.addEventListener(Datatang.DrawEvent.EventType.DRAW_END, function(e){
+    var feature = e.feature
+    feature.displayText = '测试测试'
+  })
+  
 }

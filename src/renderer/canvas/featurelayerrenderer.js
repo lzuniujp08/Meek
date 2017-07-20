@@ -165,6 +165,9 @@ export default class FeatureLayerRenderer extends LayerRenderer {
         }
       }
       
+      // 应用图层样式
+      feature.style = renderStyle
+      
       let geomertyRender = this._getGeometryRender(feature.geometry)
       this._resetRender(geomertyRender)
       geomertyRender.render(feature, renderStyle, transform)
