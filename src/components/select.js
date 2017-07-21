@@ -166,7 +166,13 @@ export default class Select extends Component {
     this._selectLayer.clear()
     
     this.selectFeatures.forEach(feature => {
-      feature.style = undefined
+      if (feature.get('_originStyle')) {
+        const originStyle = feature.get('_originStyle')
+        feature.style = [originStyle]
+        
+        feature.delete('_originStyle')
+      }
+      
       feature.delete('hasmutilselected')
     })
 
@@ -240,6 +246,8 @@ export default class Select extends Component {
       if (!feature.get('hasmutilselected')) {
         const styles = feature.style
         const geometryType = feature.geometry.geometryType
+  
+        feature.set('_originStyle', styles[0].clone())
   
         if (geometryType === Geometry.LINE) {
           const firstStyle = styles[0]
