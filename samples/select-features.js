@@ -22,7 +22,7 @@ window.onload = function () {
   
   // 将会获取缺省样式
   var selectLayer = new Datatang.FeatureLayer()
-  selectLayer.style = createDefaultSelecting()
+  // selectLayer.style = createDefaultSelecting()
   //var selectLayer = createDefaultSelecting()
   
   var mapextent = [0, 0, 1024, 968];

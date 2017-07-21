@@ -214,25 +214,41 @@ export default class Feature extends BaseObject {
   }
 
   set styleHighLight(value) {
+    if (this._styleHighLight === value) {
+      return
+    }
+    
     this._styleHighLight = value
+  
+    if (this.style === undefined) {
+      return
+    }
+    
     const white = [255, 255, 255]
+    const newStyles = []
+    
+    for (let i = 0,len = this.style.length; i < len; i++) {
+      const s = this.style[i]
+      newStyles.push(s.clone())
+    }
 
     if (this._styleHighLight) {
-      const styles = this.style
+      this.set('_originStyle', this.style)
+      
       const geometryType = this.geometry.geometryType
 
       if (geometryType === Geometry.LINE) {
-        const firstStyle = styles[0]
+        const firstStyle = newStyles[0]
         firstStyle.width = firstStyle.width + 2
 
         const cloneStyle = firstStyle.clone()
         cloneStyle.width = cloneStyle.width + 2
         cloneStyle.color = white
-
-        this.style.unshift(cloneStyle)
+  
+        newStyles.unshift(cloneStyle)
 
       } else if (geometryType === Geometry.POLYGON || geometryType === Geometry.EXTENT ) {
-        const firstStyle = styles[0]
+        const firstStyle = newStyles[0]
         firstStyle.borderStyle.width = firstStyle.borderStyle.width + 2
 
         const cloneStyle = firstStyle.clone()
@@ -241,18 +257,23 @@ export default class Feature extends BaseObject {
         cloneStyle.borderStyle.color = white
         cloneStyle.borderStyle.lineCap = LineStyle.LineCap.ROUND
         cloneStyle.borderStyle.lineJion = LineStyle.LineJion.ROUND
-
-        this.style.unshift(cloneStyle)
+  
+        newStyles.unshift(cloneStyle)
 
       } else if (geometryType === Geometry.POINT ) {
-        const firstStyle = styles[0]
+        const firstStyle = newStyles[0]
         firstStyle.size = firstStyle.size + 3
         firstStyle.borderStyle.width = firstStyle.borderStyle.width + 1
       }
 
+      this.style = newStyles
+    } else {
+      this.style = this.get('_originStyle')
+      this.delete('_originStyle')
     }
+    
     this.changed()
-   }
+  }
 
 
   /**

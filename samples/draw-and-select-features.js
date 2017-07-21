@@ -54,6 +54,10 @@ window.onload = function (){
     drawLayer: Fortesting,
     finishCondition :finishCondition
   });
+  
+  drawTool.addEventListener(Datatang.DrawEvent.EventType.DRAW_END, function(e){
+    polyF = e.feature
+  })
 
   modifyTool = new Datatang.Modify({
     features: Fortesting.features
@@ -87,5 +91,14 @@ window.onload = function (){
      modifyTool.active = false
     }
   }
+}
 
+var polyF
+
+function onDrawClick () {
+  if(polyF.styleHighLight) {
+    polyF.styleHighLight = false
+  }else{
+    polyF.styleHighLight = true
+  }
 }

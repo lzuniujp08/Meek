@@ -166,13 +166,7 @@ export default class Select extends Component {
     this._selectLayer.clear()
     
     this.selectFeatures.forEach(feature => {
-      if (feature.get('_originStyle')) {
-        const originStyle = feature.get('_originStyle')
-        feature.style = [originStyle]
-        
-        feature.delete('_originStyle')
-      }
-      
+      feature.styleHighLight = false
       feature.delete('hasmutilselected')
     })
 
@@ -240,44 +234,9 @@ export default class Select extends Component {
     }
 
     const features = this.selectFeatures
-    const white = [255, 255, 255]
-
     features.forEach ( feature => {
       if (!feature.get('hasmutilselected')) {
-        const styles = feature.style
-        const geometryType = feature.geometry.geometryType
-  
-        feature.set('_originStyle', styles[0].clone())
-  
-        if (geometryType === Geometry.LINE) {
-          const firstStyle = styles[0]
-          firstStyle.width = firstStyle.width + 2
-    
-          const cloneStyle = firstStyle.clone()
-          cloneStyle.width = cloneStyle.width + 2
-          cloneStyle.color = white
-
-          feature.style.unshift(cloneStyle)
-
-        } else if (geometryType === Geometry.POLYGON || geometryType === Geometry.EXTENT ) {
-          const firstStyle = styles[0]
-          firstStyle.borderStyle.width = firstStyle.borderStyle.width + 2
-    
-          const cloneStyle = firstStyle.clone()
-          cloneStyle.alpha = 0
-          cloneStyle.borderStyle.width = firstStyle.borderStyle.width + 2
-          cloneStyle.borderStyle.color = white
-          cloneStyle.borderStyle.lineCap = LineStyle.LineCap.ROUND
-          cloneStyle.borderStyle.lineJion = LineStyle.LineJion.ROUND
-    
-          feature.style.unshift(cloneStyle)
-
-        } else if (geometryType === Geometry.POINT ) {
-          const firstStyle = styles[0]
-          firstStyle.size = firstStyle.size + 3
-          firstStyle.borderStyle.width = firstStyle.borderStyle.width + 1
-        }
-  
+        feature.styleHighLight = true
         feature.set('hasmutilselected', true)
       }
     })
