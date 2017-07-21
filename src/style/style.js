@@ -70,7 +70,7 @@ Style.createDefaultEditing = function () {
   styles[Geometry.MULTI_LINE] = styles[Geometry.LINE]
   
   // 点样式
-  styles[Geometry.POINT] = [new PointStyle(12,blue,1,new LineStyle(white,1,1))]
+  styles[Geometry.POINT] = [new PointStyle(10,blue,1,new LineStyle(white,1,1))]
   styles[Geometry.MULTI_POINT] = styles[Geometry.POINT]
   
   return styles
