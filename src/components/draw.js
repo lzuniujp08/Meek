@@ -800,6 +800,15 @@ export default class Draw extends Component {
   
   get drawLayer () { return this._drawLayer }
   
+  get active () { return this._active }
+  set active (value) {
+    this._active = value
+    if (this._active === false) {
+      this._sketchLayer.clear()
+      this._sketchPoint = null
+    }
+  }
+  
 }
 
 /**
