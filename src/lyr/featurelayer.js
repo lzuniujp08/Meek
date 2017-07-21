@@ -97,6 +97,18 @@ export default class FeatureLayer extends BaseLayer {
   get features () { return this._features }
   
   /**
+   *
+   * @param id
+   * @returns {*|{ID, TAG, NAME, CLASS}|T}
+   */
+  findFeature (id) {
+    const features = this.features
+    return features.find(f => {
+      return f.id === id
+    })
+  }
+  
+  /**
    * Add features to the layer then the change event will be dispached
    * @param features
    * @returns {boolean}
