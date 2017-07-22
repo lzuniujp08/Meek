@@ -25,6 +25,10 @@ export default class GeoJSON {
    */
   static read (json) {
     const features = []
+
+    if(!json) {
+      return
+    }
     const featuresObj = json.features
     featuresObj.forEach( featureObj => {
       if (featureObj.type === 'Feature') {
