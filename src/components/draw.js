@@ -224,12 +224,14 @@ export default class Draw extends Component {
     
     // If finish drawing
     if (this._finishCondition(event)) {
-      if (this.drawMode === Draw.DrawMode.POLYGON) {
-        const pcoordinates = this._sketchFeature.geometry.getCoordinates()
-        if (pcoordinates.length < 5) {
-          return
-        }
-      }
+
+      //注释掉测试代码
+      // if (this.drawMode === Draw.DrawMode.POLYGON) {
+      //   const pcoordinates = this._sketchFeature.geometry.getCoordinates()
+      //   if (pcoordinates.length < 5) {
+      //     return
+      //   }
+      // }
       
       this._finishDrawing()
     }
