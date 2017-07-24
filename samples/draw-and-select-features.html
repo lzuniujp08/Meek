@@ -6,7 +6,7 @@
 </head>
 <body>
 <div id = "map" style = "width: 1280px; heigth:900px;background: #7b98bc"></div>
-<from class = "form-inline">
+<from class = "form-inline" style = "position: absolute; top: 10px">
   <lable1>选择绘图类型 &nbsp;</lable1>
   <select id="type">
     <option value = "Point">点</option>
@@ -15,6 +15,8 @@
     <option value = "Extent">矩形</option>
     <option value = "None">None</option>
   </select>
+  <button style="width:100px;height:30px;" onclick="onZoominClick()" id = "onZoominClick">放大</button>
+  <button style="width:100px;height:30px;" onclick="onZoomoutClick()" id = "onZoomoutClcik">缩小</button>
 </from>
 
 <button style="width:100px;height:30px;" onclick="onDrawClick()">高亮</button>

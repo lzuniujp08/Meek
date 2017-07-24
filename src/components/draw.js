@@ -223,11 +223,33 @@ export default class Draw extends Component {
   _handleKeyboardEvent (event) {
     
     // If finish drawing
+
     if (this._finishCondition(event)) {
 
+      /**
+       * 判断多边形的顶点是否小于4个（正常多边形3个顶点，首尾相接多一个顶点），小于4个不是多边形，return
+       */
+
       if (this.drawMode === Draw.DrawMode.POLYGON) {
-        const pcoordinates = this._sketchFeature.geometry.getCoordinates()
+        if( this._sketchFeature === null) {
+          return
+        }
+        let pcoordinates = this._sketchFeature.geometry.getCoordinates()
         if (pcoordinates.length < 4) {
+          return
+        }
+      }
+
+      /**
+       * 判断线的顶点是否小于2个，小于2个不是线段，return
+       */
+
+      if (this.drawMode === Draw.DrawMode.LINE) {
+        if( this._sketchFeature === null) {
+          return
+        }
+        let pcoordinates = this._sketchFeature.geometry.getCoordinates()
+        if (pcoordinates.length <= 2) {
           return
         }
       }

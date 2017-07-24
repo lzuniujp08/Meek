@@ -21,7 +21,7 @@ export default class Component extends BaseObject {
     super()
   
     /**
-     *
+     *if this.active equal false, current componet's features is turned off
      * @type {boolean}
      */
     this.active = true
@@ -93,7 +93,7 @@ export default class Component extends BaseObject {
   
   
   /**
-   * Handles the browser event and then may call into the subclass functions.
+   * Handles the mouse event and then may call into the subclass functions.
    * @param browserEvent
    */
   handleMouseEvent (browserEvent) {
@@ -101,17 +101,22 @@ export default class Component extends BaseObject {
     this._updateTrackedPointers(browserEvent)
 
     if (this.handlingDownUpSequence) {
+
       if (browserEvent.type === BrowserEvent.MOUSE_DRAG) {
         this._handleDragEvent(browserEvent)
+
       } else if (browserEvent.type === BrowserEvent.MOUSE_UP) {
+
         const handledUp = this._handleUpEvent(browserEvent)
         this.handlingDownUpSequence = handledUp && this.targetPointers.length > 0
       }
     } else {
       if (browserEvent.type === BrowserEvent.MOUSE_DOWN) {
+
         const handled = this._handleDownEvent(browserEvent)
         this.handlingDownUpSequence = handled
         stopEvent = this.shouldStopEvent(handled)
+
       } else if (browserEvent.type === BrowserEvent.MOUSE_MOVE) {
         this._handleMoveEvent(browserEvent)
       }
@@ -157,7 +162,7 @@ export default class Component extends BaseObject {
   /**
    *
    * @param view
-   * @param delta
+   * @param delta (if delta's value equal 1, Zoomin; equal -1, Zoomout)
    * @param opt_anchor
    * @param opt_duration
    */
@@ -226,7 +231,7 @@ export default class Component extends BaseObject {
   }
   
   /**
-   *
+   * 坐标自检测，如果有小于0的坐标，修正为0，如果有大于最大值的坐标，修正为最大值
    * @param coordinate
    * @returns {Array}
    */
