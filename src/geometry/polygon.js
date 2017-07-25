@@ -233,6 +233,14 @@ export default class Polygon extends Geometry {
    * @returns {Polygon}
    */
   clone () {
-    return new Polygon(this.getCoordinates())
+    const newCoordinates = []
+    this.getCoordinates().forEach( coords => {
+      newCoordinates.push([coords[0],coords[1]])
+    })
+    
+    const newPolygon = new Polygon()
+    newPolygon.setCoordinates(newCoordinates)
+    
+    return newPolygon
   }
 }
