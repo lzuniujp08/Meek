@@ -329,6 +329,7 @@ export default class Overlay extends BaseObject {
         // })
         
         map.view.center = map.getCoordinateFromPixel(newCenterPx)
+        this.autoPan = false
       }
     }
   }
