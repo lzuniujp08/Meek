@@ -39,7 +39,6 @@ var map = new Datatang.Map({
 // 绘图工具
 var draw = new Datatang.Draw({
   type: 'line',
-  maxLinePoints: 2,
   drawLayer: featureLayer
 })
 
@@ -53,12 +52,15 @@ map.addComponents(draw)
 draw.addEventListener(Datatang.DrawEvent.EventType.DRAW_END, function(drawEvent){
   var linefeature = drawEvent.feature
   
-  var featureCollection = Datatang.splitPolygonByLine(polygon, linefeature.geometry)
+  var featureCollection = Datatang.splitPolygonByPolyline(polygon, linefeature.geometry)
   
   if (featureCollection.length === 0) {
-    alert('分割失败！')
+    alert('分割失败，请重新分割！')
+    featureLayer.removeFeature(linefeature)
     return
   }
+  
+  console.log('共切出来：' + featureCollection.length)
   
   var splitFeatures = []
   featureCollection.forEach(function(polygon){
@@ -68,5 +70,4 @@ draw.addEventListener(Datatang.DrawEvent.EventType.DRAW_END, function(drawEvent)
   featureLayer.addFeatures(splitFeatures)
   featureLayer.removeFeature(linefeature)
   featureLayer.removeFeature(feature)
-  
 })
