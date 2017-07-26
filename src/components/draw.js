@@ -41,7 +41,7 @@ import DrawEvent from './drawevent'
 export default class Draw extends Component {
   
   /**
-   *
+   * 构造函数
    * @param options
    */
   constructor (options = {}) {

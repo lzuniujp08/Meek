@@ -21,7 +21,7 @@ export default class Component extends BaseObject {
     super()
   
     /**
-     *if this.active equal false, current componet's features is turned off
+     * 当前组件开关，默认为ture，设置为false时，则关闭当前组件的功能
      * @type {boolean}
      */
     this.active = true
@@ -93,7 +93,7 @@ export default class Component extends BaseObject {
   
   
   /**
-   * Handles the mouse event and then may call into the subclass functions.
+   * 处理鼠标的各种事件
    * @param browserEvent
    */
   handleMouseEvent (browserEvent) {
@@ -126,7 +126,7 @@ export default class Component extends BaseObject {
   }
   
   /**
-   *
+   * 根据浏览器鼠标操作事件的类型返回true或false
    * @param browserEvent
    * @returns {boolean}
    * @private
@@ -140,7 +140,7 @@ export default class Component extends BaseObject {
   }
   
   /**
-   *
+   * 处理浏览器鼠标操作事件
    * @param browserEvent
    * @private
    */
@@ -160,9 +160,9 @@ export default class Component extends BaseObject {
   }
   
   /**
-   *
-   * @param view
-   * @param delta (if delta's value equal 1, Zoomin; equal -1, Zoomout)
+   * 根据Delta值进行视图缩放，Delta等于1时固定放大，等于-1时固定缩小
+   * @param view(当前视图)
+   * @param delta
    * @param opt_anchor
    * @param opt_duration
    */
@@ -187,7 +187,7 @@ export default class Component extends BaseObject {
   }
   
   /**
-   *
+   * 没有限制条件的缩放
    * @param view
    * @param resolution
    * @param opt_anchor
@@ -219,7 +219,7 @@ export default class Component extends BaseObject {
   }
   
   /**
-   *
+   * 获取当前标注视图的坐标范围(标注的图片的像素)
    * @returns {*|null}
    */
   getViewDataExtent () {
