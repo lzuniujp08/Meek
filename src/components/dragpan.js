@@ -68,28 +68,28 @@ export default class DragPan extends Component {
     
   }
   
-  /**
-   * Handles the browser event and then may call into the subclass functions.
-   * @param browserEvent
-   */
-  // handleMouseEvent (browserEvent) {
-  //   if (!(browserEvent instanceof BrowserEvent)) {
-  //     return true
-  //   }
-  //
-  //   this._updateTrackedPointers(browserEvent)
-  //
-  //   let type = browserEvent.type
-  //   if (type === BrowserEvent.MOUSE_DOWN) {
-  //     this._handleDownEvent(browserEvent)
-  //   } else if (type === BrowserEvent.MOUSE_UP){
-  //     // this._handleUpEvent(browserEvent)
-  //   } else if (type === BrowserEvent.MOUSE_DRAG) {
-  //     this._handleDragEvent(browserEvent)
-  //   }
-  //
-  //   return true
-  // }
+  // /**
+  //  * Handles the browser event and then may call into the subclass functions.
+  //  * @param browserEvent
+  //  */
+  // // handleMouseEvent (browserEvent) {
+  // //   if (!(browserEvent instanceof BrowserEvent)) {
+  // //     return true
+  // //   }
+  // //
+  // //   this._updateTrackedPointers(browserEvent)
+  // //
+  // //   let type = browserEvent.type
+  // //   if (type === BrowserEvent.MOUSE_DOWN) {
+  // //     this._handleDownEvent(browserEvent)
+  // //   } else if (type === BrowserEvent.MOUSE_UP){
+  // //     // this._handleUpEvent(browserEvent)
+  // //   } else if (type === BrowserEvent.MOUSE_DRAG) {
+  // //     this._handleDragEvent(browserEvent)
+  // //   }
+  // //
+  // //   return true
+  // // }
   
   
   /**
@@ -127,11 +127,12 @@ export default class DragPan extends Component {
   }
   
   /**
-   * Handle the drag event
-   * Center of the view will be changed
+   * 处理图片拖动事件
    * @param browserEvent
    * @private
    */
+  // Handle the drag event
+  // Center of the view will be changed
   _handleDragEvent (browserEvent) {
     const targetPointers = this.targetPointers
     const centroid = this.centroid(targetPointers)
@@ -163,7 +164,7 @@ export default class DragPan extends Component {
   }
   
   /**
-   * Calculate a center point
+   * 计算视图的中心点
    * @param pointerEvents
    * @returns {[*,*]}
    */

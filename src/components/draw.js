@@ -69,40 +69,40 @@ export default class Draw extends Component {
     this._drawLayer = options.drawLayer ? options.drawLayer : null
   
     /**
-     * Keep the point while mouse pressing down
+     * 记录鼠标按下时的坐标点
      * @type {null}
      * @private
      */
     this._downPointPx = null
   
     /**
-     * Finish coordinate for the feature ( first point for polygons, last point for line)
+     * 图形绘制结束事件
      * @type {null}
      * @private
      */
     this._finishCoordinate = null
   
     /**
-     * Drawing mode (derivied from geometry type.)
+     * 当前的绘图模式(点、线、多边形、矩形)
      * @type {*}
      */
     this.drawMode = Draw.getDrawMode(options.type)
   
     /**
-     * Sketch coordinates. Used when drawing a line or polygon.
+     * 绘制多边形、线段时的临时坐标数据
      * @type
      * @private
      */
     this._sketchCoords = null
   
     /**
-     * Sketch line. Used when drawing polygon.
+     * 绘制多边的临时线段
      * @private
      */
     this._sketchLine = null
   
     /**
-     * A function to decide if a potential finish coordinate is permissable
+     * 绘制完成时的结束条件(监听快捷键/最后一个点重复等)
      * @private
      * @type
      */
@@ -110,7 +110,7 @@ export default class Draw extends Component {
         options.finishCondition : function () { return true }
         
     /**
-     * undo the last point when press some button for drawing Line or Polygon
+     * 撤销的条件(监听快捷键)
      * @type {Function}
      * @private
      */
@@ -132,34 +132,35 @@ export default class Draw extends Component {
     this._sketchLayer = new FeaureLayer({name: 'sketch layer for draw component'})
 
     /**
-     * get the defaut draw style
+     * 获取默认绘制渲染样式
      * @type {Function}
      */
     this._sketchLayer.style = this.getDefaultStyleFunction()
   
     /**
-     * Sketch point.
+     * 绘制点的临时数据
      * @type {null}
      * @private
      */
     this._sketchPoint = null
   
     /**
-     * Sketch feature drawed on temp layer
+     * 临时Feature
      * @type {null}
      * @private
      */
     this._sketchFeature = null
   
     /**
-     * The function that can build a geometry by the passed geometry type.
+     * 通过geometry的类型去构建一个geometry
      * @type {null}
      * @private
      */
+    // The function that can build a geometry by the passed geometry type.
     this._geometryFunction = null
   
     /**
-     * Sketch line coordinates. Used when drawing a polygon or circle.
+     * 临时的线段坐标数据
      * @private
      */
     this._sketchLineCoords = null
@@ -179,8 +180,7 @@ export default class Draw extends Component {
         options.snapTolerance : 12
   
     /**
-     * The number of points that can be drawn before line string
-     * is finished. The default is no restriction.
+     * 绘制线段时的最多点限制，默认没有限制
      * @type {number}
      * @private
      */
@@ -188,7 +188,7 @@ export default class Draw extends Component {
         options.maxLinePoints : Infinity
 
     /**
-     * The max points number of polygon
+     * 绘制多边形时的顶点限制，默认没有限制
      * @type {number}
      * @private
      */
@@ -196,9 +196,7 @@ export default class Draw extends Component {
       options.maxPolygonPoints : Infinity
   
     /**
-     * The number of points that must be drawn before a polygon ring or line
-     * string can be finished.  The default is 3 for polygon rings and 2 for
-     * line strings.
+     * 绘制线段的最少点为2，多边形为3
      * @type {number}
      * @private
      */
@@ -216,7 +214,7 @@ export default class Draw extends Component {
   }
   
   /**
-   * Handler the keyboard event
+   * 处理键盘事件
    * @param event
    * @private
    */
@@ -374,6 +372,7 @@ export default class Draw extends Component {
   
   /**
    * handle mouse event
+   * 处理鼠标事件
    * @param event
    * @returns {*|boolean}
    */
@@ -417,6 +416,7 @@ export default class Draw extends Component {
   
   /**
    * Handle down events
+   * 鼠标按下时，获取当前坐标点
    * @param {BrowserEvent} event A up event.
    * @returns {boolean}
    * @private
@@ -428,6 +428,7 @@ export default class Draw extends Component {
   
   /**
    * Handle up events.
+   * 处理鼠标弹起事件
    * @param {BrowserEvent} event
    * @private
    */
@@ -563,6 +564,7 @@ export default class Draw extends Component {
   
   /**
    * Stop drawing and add the sketch feature to the target layer.
+   * 绘制完成
    * @private
    */
   _finishDrawing () {
@@ -599,6 +601,7 @@ export default class Draw extends Component {
   
   /**
    * Stop drawing without adding the sketch feature to the sketch layer
+   * 停止绘制，不会添加临时feature
    * @returns {Feature|null|_Feature2.default}
    * @private
    */
@@ -867,6 +870,8 @@ Draw.getDrawMode = function(type) {
 /**
  * Draw mode.  This collapses multi-part geometry types with their single-part
  * cousins.
+ *
+ * 绘制模式：点、线、面、矩形(circle暂时不支持)
  * @enum {string}
  */
 Draw.DrawMode = {
