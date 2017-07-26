@@ -42,6 +42,8 @@ export default class Draw extends Component {
   
   /**
    * 构造函数
+   *
+   * @constructor constructor
    * @param options
    */
   constructor (options = {}) {
@@ -61,8 +63,10 @@ export default class Draw extends Component {
     this._mapRenderKey = null
     
     /**
-     * 绘制作用图层
+     * 绘制作用图层;
      * 需要给绘制工具一个绘制的图层
+     *
+     * @property drawLayer
      * @type {null}
      * @private
      */
@@ -70,6 +74,9 @@ export default class Draw extends Component {
   
     /**
      * 记录鼠标按下时的坐标点
+     *
+     * @property downPointPx
+     *
      * @type {null}
      * @private
      */
@@ -77,6 +84,8 @@ export default class Draw extends Component {
   
     /**
      * 图形绘制结束事件
+     *
+     * @property finishCoordinate
      * @type {null}
      * @private
      */
@@ -84,12 +93,16 @@ export default class Draw extends Component {
   
     /**
      * 当前的绘图模式(点、线、多边形、矩形)
+     *
+     * @property drawMode
      * @type {*}
      */
     this.drawMode = Draw.getDrawMode(options.type)
   
     /**
      * 绘制多边形、线段时的临时坐标数据
+     *
+     * @property sketchCoords
      * @type
      * @private
      */
@@ -97,20 +110,28 @@ export default class Draw extends Component {
   
     /**
      * 绘制多边的临时线段
+     *
+     * @property sketchLine
+     * @type {null}
      * @private
      */
     this._sketchLine = null
   
     /**
      * 绘制完成时的结束条件(监听快捷键/最后一个点重复等)
+     *
+     * @property finishCondition
+     * @type {null}
      * @private
-     * @type
+     *
      */
     this._finishCondition = options.finishCondition ?
         options.finishCondition : function () { return true }
         
     /**
-     * 撤销的条件(监听快捷键)
+     * 撤销方式(监听快捷键)
+     *
+     * @property undoCondition
      * @type {Function}
      * @private
      */
@@ -126,6 +147,7 @@ export default class Draw extends Component {
     /**
      * 初始化草稿图层，用于临时显示绘制的图形
      *
+     * @property sketchLayer
      * @type {FeatureLayer}
      * @private
      */
@@ -133,12 +155,17 @@ export default class Draw extends Component {
 
     /**
      * 获取默认绘制渲染样式
+     *
+     * @property sketchLayer
+     * @private
      * @type {Function}
      */
     this._sketchLayer.style = this.getDefaultStyleFunction()
   
     /**
      * 绘制点的临时数据
+     *
+     * @property sketchPoint
      * @type {null}
      * @private
      */
@@ -146,6 +173,8 @@ export default class Draw extends Component {
   
     /**
      * 临时Feature
+     *
+     * @property sketchFeature
      * @type {null}
      * @private
      */
@@ -153,6 +182,8 @@ export default class Draw extends Component {
   
     /**
      * 通过geometry的类型去构建一个geometry
+     *
+     * @property eometryFunction
      * @type {null}
      * @private
      */
@@ -161,11 +192,16 @@ export default class Draw extends Component {
   
     /**
      * 临时的线段坐标数据
+     *
+     * @property sketchLineCoords
+     * @type {null}
      * @private
      */
     this._sketchLineCoords = null
   
     /**
+     *
+     * @property freehand
      * @type {boolean}
      * @private
      */
@@ -173,6 +209,8 @@ export default class Draw extends Component {
   
     /**
      * Pixel distance for snapping.
+     *
+     * @property snapTolerance
      * @type {number}
      * @private
      */
@@ -181,6 +219,8 @@ export default class Draw extends Component {
   
     /**
      * 绘制线段时的最多点限制，默认没有限制
+     *
+     * @property maxLinePoints
      * @type {number}
      * @private
      */
@@ -189,6 +229,8 @@ export default class Draw extends Component {
 
     /**
      * 绘制多边形时的顶点限制，默认没有限制
+     *
+     * @property maxPolygonPoints
      * @type {number}
      * @private
      */
@@ -197,6 +239,8 @@ export default class Draw extends Component {
   
     /**
      * 绘制线段的最少点为2，多边形为3
+     *
+     * @property minPoints
      * @type {number}
      * @private
      */
@@ -214,8 +258,11 @@ export default class Draw extends Component {
   }
   
   /**
-   * 处理键盘事件
-   * @param event
+   * 处理绘制结束事件
+   *
+   * @method handleKeyboardEvent
+   * @type {Function}
+   * @param event {event}
    * @private
    */
   _handleKeyboardEvent (event) {
@@ -268,6 +315,8 @@ export default class Draw extends Component {
    *
    * @property geometryFunction
    * @type {Function}
+   * @retruns geometryFunction {Function}
+   *
    */
   get geometryFunction () {
     if(!this._geometryFunction){
@@ -283,6 +332,7 @@ export default class Draw extends Component {
    *
    * 设置当前绘图的模式，重新赋值将会启动新图形类型的绘制
    *
+   * @type {Function}
    * @property drawMode
    * @type {Datatang.Draw.DrawMode}
    */
@@ -301,7 +351,9 @@ export default class Draw extends Component {
 
   /**
    * 判断绘制时传入的绘制类型是否在绘制列表中
-   * @param value
+   *
+   * @method existInDrawMode
+   * @param value {String}
    * @returns {boolean}
    * @private
    */
@@ -321,8 +373,11 @@ export default class Draw extends Component {
 
   /**
    * 图形生产工厂方法
+   *
+   * @method geometryFactory
    * @returns {*} 返回一个geometry对象
    * @private
+   *
    */
   _geometryFactory () {
     let Constructor
@@ -343,6 +398,8 @@ export default class Draw extends Component {
   
   /**
    * 设置缺省 geometryfunction
+   *
+   * @method initGeometryFunction
    * @returns {function(*, *)}
    * @private
    */
@@ -372,8 +429,11 @@ export default class Draw extends Component {
   
   /**
    * handle mouse event
+   *
    * 处理鼠标事件
-   * @param event
+   *
+   * @method handleMouseEvent
+   * @param event {event}
    * @returns {*|boolean}
    */
   handleMouseEvent (event) {
@@ -400,6 +460,10 @@ export default class Draw extends Component {
   
   /**
    * Handle move events
+   *
+   * 处理移动事件
+   *
+   * @method handleMove
    * @param {BrowserEvent} event A move event.
    * @return {boolean} Pass the event to other compoments.
    * @private
@@ -416,8 +480,11 @@ export default class Draw extends Component {
   
   /**
    * Handle down events
+   *
    * 鼠标按下时，获取当前坐标点
-   * @param {BrowserEvent} event A up event.
+   *
+   * @method handleDownEvent
+   * @param event {BrowserEvent} event A up event.
    * @returns {boolean}
    * @private
    */
@@ -428,8 +495,11 @@ export default class Draw extends Component {
   
   /**
    * Handle up events.
+   *
    * 处理鼠标弹起事件
-   * @param {BrowserEvent} event
+   *
+   * @method handleUpEvent
+   * @param event {BrowserEvent} event
    * @private
    */
   _handleUpEvent (event) {
@@ -465,9 +535,12 @@ export default class Draw extends Component {
   }
   
   /**
-   * 启动绘制，生成feature
    * Start the drawing
-   * @param {BrowserEvent} event
+   *
+   * 启动绘制，生成feature
+   *
+   * @method startDrawing
+   * @param event {BrowserEvent} event
    * @private
    */
   _startDrawing (event) {
@@ -510,7 +583,9 @@ export default class Draw extends Component {
   }
   
   /**
-   * Modify the drawingE
+   * Modify the drawing
+   *
+   *
    * @param event
    * @private
    */
@@ -564,7 +639,10 @@ export default class Draw extends Component {
   
   /**
    * Stop drawing and add the sketch feature to the target layer.
+   *
    * 绘制完成
+   *
+   * @method finishDrawing
    * @private
    */
   _finishDrawing () {
@@ -601,7 +679,10 @@ export default class Draw extends Component {
   
   /**
    * Stop drawing without adding the sketch feature to the sketch layer
+   *
    * 停止绘制，不会添加临时feature
+   *
+   * @method abortDrawing
    * @returns {Feature|null|_Feature2.default}
    * @private
    */
@@ -620,6 +701,7 @@ export default class Draw extends Component {
   
   /**
    * Add a new coordinate to the drawing
+   *
    * @param event
    * @private
    */
@@ -698,7 +780,11 @@ export default class Draw extends Component {
   
   /**
    * Create or update the sketch point
-   * @param event
+   *
+   * 创建或更新临时点
+   *
+   * @method updateSketchPoint
+   * @param event {BrowserEvent} event
    * @private
    */
   _updateSketchPoint (event) {

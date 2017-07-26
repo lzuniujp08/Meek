@@ -99,7 +99,7 @@ export default class Component extends BaseObject {
    * 处理鼠标事件
    *
    * @method handleMouseEvent
-   * @param browserEvent {event}
+   * @param browserEvent {browserEvent}
    *
    * @returns {Boolean}
    */
@@ -137,7 +137,7 @@ export default class Component extends BaseObject {
    * 根据浏览器鼠标操作事件的类型返回true或false
    *
    * @method isPointerDraggingEvent
-   * @param browserEvent {event}
+   * @param browserEvent {browserEvent}
    *
    * @returns {boolean}
    * @private
@@ -156,7 +156,7 @@ export default class Component extends BaseObject {
    *
    * @method updateTrackedPointers
    *
-   * @param browserEvent {event}
+   * @param browserEvent {browserEvent}
    * @private
    */
   _updateTrackedPointers (browserEvent) {

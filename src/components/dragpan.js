@@ -9,13 +9,21 @@ import {noModifierKeys} from '../utils/mousekey'
 import {Coordinate} from '../utils/coordinate'
 
 /**
+ * 拖动事件处理类
+ *
  * @class DragPan
  * @extends Component
  * @module component
  * @constructor
  */
 export default class DragPan extends Component {
-  
+
+  /**
+   * 构造函数
+   *
+   * @constructor
+   * @param options
+   */
   constructor (options = {}) {
     super()
   
@@ -93,7 +101,10 @@ export default class DragPan extends Component {
   
   
   /**
-   * @param {ol.MapBrowserPointerEvent} mapBrowserEvent Event.
+   * 处理
+   *
+   *
+   * @param browserEvent {ol.MapBrowserPointerEvent} mapBrowserEvent Event.
    * @return {boolean} Start drag sequence?
    * @this {ol.interaction.DragPan}
    * @private
@@ -127,8 +138,12 @@ export default class DragPan extends Component {
   }
   
   /**
+   * Handle the drag event
+   *
    * 处理图片拖动事件
-   * @param browserEvent
+   *
+   * @method handleDragEvent
+   * @param browserEvent {browserEvent}
    * @private
    */
   // Handle the drag event
@@ -165,7 +180,9 @@ export default class DragPan extends Component {
   
   /**
    * 计算视图的中心点
-   * @param pointerEvents
+   *
+   * @method centroid
+   * @param pointerEvents {pointerEvents}
    * @returns {[*,*]}
    */
   centroid (pointerEvents) {
