@@ -22,6 +22,8 @@ export default class Component extends BaseObject {
   
     /**
      * 当前组件开关，默认为ture，设置为false时，则关闭当前组件的功能
+     *
+     * @property active
      * @type {boolean}
      */
     this.active = true
@@ -93,8 +95,13 @@ export default class Component extends BaseObject {
   
   
   /**
-   * 处理鼠标的各种事件
-   * @param browserEvent
+   *
+   * 处理鼠标事件
+   *
+   * @method handleMouseEvent
+   * @param browserEvent {event}
+   *
+   * @returns {Boolean}
    */
   handleMouseEvent (browserEvent) {
     let stopEvent = false
@@ -126,8 +133,12 @@ export default class Component extends BaseObject {
   }
   
   /**
+   *
    * 根据浏览器鼠标操作事件的类型返回true或false
-   * @param browserEvent
+   *
+   * @method isPointerDraggingEvent
+   * @param browserEvent {event}
+   *
    * @returns {boolean}
    * @private
    */
@@ -140,8 +151,12 @@ export default class Component extends BaseObject {
   }
   
   /**
+   *
    * 处理浏览器鼠标操作事件
-   * @param browserEvent
+   *
+   * @method updateTrackedPointers
+   *
+   * @param browserEvent {event}
    * @private
    */
   _updateTrackedPointers (browserEvent) {
@@ -160,11 +175,16 @@ export default class Component extends BaseObject {
   }
   
   /**
+   *
    * 根据Delta值进行视图缩放，Delta等于1时固定放大，等于-1时固定缩小
-   * @param view(当前视图)
-   * @param delta
-   * @param opt_anchor
-   * @param opt_duration
+   *
+   * @method zoomByDelta
+   *
+   * @param view {Object}
+   * @param delta {Number}
+   * @param opt_anchor {Number}
+   * @param opt_duration {Number}
+   *
    */
   zoomByDelta (view, delta, opt_anchor, opt_duration) {
     const currentResolution = view.resolution
@@ -187,11 +207,15 @@ export default class Component extends BaseObject {
   }
   
   /**
-   * 没有限制条件的缩放
-   * @param view
-   * @param resolution
-   * @param opt_anchor
-   * @param opt_duration
+   *
+   * 根据resolytion进行缩放
+   *
+   * @method zoomWithoutConstraints
+   *
+   * @param view {Object}
+   * @param resolution {Number}
+   * @param opt_anchor {Number}
+   * @param opt_duration {Number}
    */
   zoomWithoutConstraints (view, resolution, opt_anchor, opt_duration) {
     if (resolution) {
@@ -220,6 +244,9 @@ export default class Component extends BaseObject {
   
   /**
    * 获取当前标注视图的坐标范围(标注的图片的像素)
+   *
+   * @method getViewDataExtent
+   *
    * @returns {*|null}
    */
   getViewDataExtent () {
@@ -231,8 +258,12 @@ export default class Component extends BaseObject {
   }
   
   /**
+   *
    * 坐标自检测，如果有小于0的坐标，修正为0，如果有大于最大值的坐标，修正为最大值
-   * @param coordinate
+   *
+   * @method coordinateBeyond
+   * @param coordinate {Array}
+   *
    * @returns {Array}
    */
   coordinateBeyond (coordinate) {
@@ -278,7 +309,7 @@ export default class Component extends BaseObject {
   }
   
   /**
-   *
+   * @method
    * @param handled
    * @returns {*}
    * @private
