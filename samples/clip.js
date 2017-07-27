@@ -57,8 +57,8 @@ function getIntersectFeatures (feature, targetLayer) {
   
   var results = allFeatures.filter(function(f){
     return f.id !== feature.id &&
-           f.geometryType !== Datatang.Geometry.POINT &&
-           Datatang.intersects(f.geometry, feature.geometry)
+      f.geometryType !== Datatang.Geometry.POINT &&
+      Datatang.intersects(f.geometry, feature.geometry)
   })
   
   return results
@@ -104,22 +104,22 @@ drawTool.addEventListener(Datatang.DrawEvent.EventType.DRAW_END, function(drawEv
     } else {
       geometries.push({shell : differenceResult.shell})
     }
-  
+    
     for (var i = 0; i < geometries.length ; i ++) {
       var geometryItem = geometries[i]
-    
+      
       var coords = geometryItem.shell.points.coordinates
-    
+      
       var newCoords = []
       coords.forEach(function(g){
         newCoords.push([g.x, g.y])
       })
-    
+      
       var clipedPolygon = new Datatang.Polygon()
       clipedPolygon.setCoordinates(newCoords)
-    
+      
       var clipedFeature = new Datatang.Feature(clipedPolygon)
-    
+      
       featureLayer.addFeature(clipedFeature)
       featureLayer.removeFeature(drawFeature)
     }
