@@ -45,7 +45,7 @@ window.onload = function () {
         extent: mapextent
       },
       center: Datatang.ExtentUtil.getCenter(mapextent),
-      zoom: 2,
+      zoom: 1,
       maxZoom: 8
     })
   });

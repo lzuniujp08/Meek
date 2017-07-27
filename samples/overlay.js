@@ -54,7 +54,7 @@ var map = new Datatang.Map({
 map.addEventListener('singleclick', function(evt) {
   var coordinate = evt.coordinate;
   
-  content.innerHTML = '<p>You clicked here:</p><code>' + coordinate[0] +',' + coordinate[1] +
+  content.innerHTML = '<p>Coordiante:</p><code>' + coordinate[0] +',' + coordinate[1] +
     '</code>';
   
   overlay.position = coordinate

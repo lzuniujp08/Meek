@@ -7,10 +7,10 @@ var rings = [[800,580],[490,600],[255, 820],
   [1000,1000],[255,1100,],[1200,1200],[800,580]]
 var polygon = new Datatang.Polygon(rings)
 
-var feature = new Datatang.Feature(polygon)
+var feature1 = new Datatang.Feature(polygon)
 
 var featureLayer = new Datatang.FeatureLayer()
-featureLayer.addFeature(feature)
+featureLayer.addFeature(feature1)
 
 // 初始化map、view和layer
 var mapextent = [0, 0, 2783, 2125];
@@ -59,7 +59,7 @@ draw.addEventListener(Datatang.DrawEvent.EventType.DRAW_END, function(drawEvent)
   
   arr.forEach(function(fea){
     var theGeometry = polybool(fea.geometry)
-    becutedGeometry = PolyBool.difference(becutedGeometry, theGeometry)
+    becutedGeometry = PolyBool.difference(theGeometry, becutedGeometry)
   })
   
   console.log(becutedGeometry)
@@ -71,11 +71,11 @@ draw.addEventListener(Datatang.DrawEvent.EventType.DRAW_END, function(drawEvent)
     var g = new Datatang.Polygon()
     g.setCoordinates(re)
     featureCollection.push(new Datatang.Feature(g))
-    
   })
   
   featureLayer.addFeatures(featureCollection)
   featureLayer.removeFeature(feature)
+  featureLayer.removeFeature(feature1)
 })
 
 

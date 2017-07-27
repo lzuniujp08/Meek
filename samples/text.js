@@ -27,10 +27,10 @@ window.onload = function () {
   var extent = new Datatang.Extent(1500, 1500, 2000, 2000)
   
   var features = [
-    new Datatang.Feature(point,{'name': '北京站'})
-    ,new Datatang.Feature(line,{'name': '京广高铁'})
-    ,new Datatang.Feature(polygon, {'name': '此处是中国西部地区面积很大的三江源湿地'})
-    ,new Datatang.Feature(extent, {'name': '第51区域'})
+    new Datatang.Feature(point, null, '北京站')
+    ,new Datatang.Feature(line, null, '京广高铁')
+    ,new Datatang.Feature(polygon, null, '此处是中国西部地区面积很大的三江源湿地')
+    ,new Datatang.Feature(extent, null, '第51区域')
   ]
   
   
@@ -141,7 +141,7 @@ window.onload = function () {
 function getText(feature, resolution, dom) {
   var type = dom.text.value;
   var maxResolution = dom.maxreso.value;
-  var text = feature.get('name');
+  var text = feature.displayText
   
   if (resolution > maxResolution) {
     text = '';
