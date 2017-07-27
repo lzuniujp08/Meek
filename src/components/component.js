@@ -14,7 +14,7 @@ import Obj from '../utils/obj'
  * @class Component
  * @extends BaseObject
  * @module component
- * @constructor
+ *
  */
 export default class Component extends BaseObject {
   constructor (options = {}) {

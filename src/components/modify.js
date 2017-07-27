@@ -43,6 +43,8 @@ export default class Modify extends Component {
   
     /**
      * The features array is to modify
+     *
+     * @property features
      * @type {Array}
      * @private
      */
