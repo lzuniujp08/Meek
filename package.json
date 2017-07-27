@@ -1,6 +1,6 @@
 {
   "name": "meek",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "description": "A draw lib base on ES6 ",
   "main":"./dist/meek.js",
   "scripts": {
