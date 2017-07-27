@@ -91,6 +91,28 @@ window.onload = function (){
       modifyTool.active = false
     }
   }
+
+  var onZoominClick = document.getElementById('onZoominClick')
+
+  onZoominClick.onclick = function() {
+    const delta = 1
+    let view = drawTool.map.view
+    let opt_anchor = view.center
+    const opt_duration = 250
+    drawTool.zoomByDelta(view,delta,opt_anchor,opt_duration)
+  }
+
+
+
+  var onZoomoutClcik = document.getElementById('onZoomoutClcik')
+
+  onZoomoutClcik.onclick = function() {
+    const delta = -1
+    let view = drawTool.map.view
+    let opt_anchor = view.center
+    const opt_duration = 250
+    drawTool.zoomByDelta(view,delta,opt_anchor,opt_duration)
+  }
 }
 
 var polyF

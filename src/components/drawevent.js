@@ -6,6 +6,12 @@ import BaseEvent from '../core/baseevent'
 
 /**
  * The DrawEvent will emitted while geometrys on drawing end.
+ *
+ * @class drawevent
+ * @extends BaseObject
+ * @module component
+ *
+ *
  */
 export default class DrawEvent extends BaseEvent {
   
