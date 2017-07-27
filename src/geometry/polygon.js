@@ -98,7 +98,7 @@ export default class Polygon extends Geometry {
    * @param opt
    * @returns {boolean}
    */
-  containsXY (x, y, opt) {
+  containsXY (x, y) {
     const px = x
     const py = y
     let flag = false

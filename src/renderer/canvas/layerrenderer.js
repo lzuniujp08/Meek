@@ -128,20 +128,31 @@ export default class LayerRenderer extends BaseObject {
   get context () {return this._context}
   
   /**
-   * 渲染准备工作
-   * 1、找到渲染器
-   * 2、转换坐标系统
-   * 3、
+   *
+   * @param frameStateOpt
    */
-  prepareFrame () {}
+  prepareFrame (frameStateOpt) {}// eslint-disable-line no-unused-vars
   
   /**
    *
+   * @param frameStateOpt
+   * @param context
    */
-  composeFrame () {}
+  composeFrame (frameStateOpt, context) {}// eslint-disable-line no-unused-vars
   
-  postCompose (context, frameState, optTransform) {}
+  /**
+   *
+   * @param context
+   * @param frameState
+   * @param optTransform
+   */
+  postCompose (context, frameState, optTransform){} // eslint-disable-line no-unused-vars
   
-  preCompose (context, frameState, optTransform) {}
-  
+  /**
+   *
+   * @param context
+   * @param frameState
+   * @param optTransform
+   */
+  preCompose (context, frameState, optTransform){} // eslint-disable-line no-unused-vars
 }

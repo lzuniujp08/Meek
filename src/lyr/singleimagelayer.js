@@ -97,7 +97,7 @@ export default class SingleImageLayer extends BaseLayer {
    * Get the image dom
    * @inheritDoc
    */
-  getImageInternal (extent, resolution, pixelRatio, projection) {
+  getImageInternal (extent) {
     if (ExtentUtil.intersects(extent, this.singleImage.extent)) {
       return this.singleImage
     }

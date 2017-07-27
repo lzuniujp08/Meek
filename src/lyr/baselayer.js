@@ -93,7 +93,7 @@ export default class BaseLayer extends BaseObject {
     }
   }
   
-  loadFeature (extent) {
+  loadFeature () {
     return this.features
   }
 }

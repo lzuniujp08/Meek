@@ -17,7 +17,7 @@ import Obj from '../utils/obj'
  *
  */
 export default class Component extends BaseObject {
-  constructor (options = {}) {
+  constructor () {
     super()
   
     /**

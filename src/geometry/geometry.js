@@ -52,6 +52,34 @@ export default class Geometry extends BaseObject {
   get extent () { return this._extent }
   
   /**
+   * 获取图形是否是逆时针
+   * @property anticlockwise
+   * @type {boolean}
+   */
+  get anticlockwise () {
+    const geometryType = this.geometryType
+    const coordinates = this.getCoordinates()
+  
+    let fp, sp, f1, f2, f3
+    
+    if (geometryType === Geometry.LINE ) {
+      f1 = [0, 0]
+      f2 = coordinates[0]
+      f3 = coordinates[1]
+    } else if ( geometryType === Geometry.POLYGON ||
+                geometryType === Geometry.EXTENT ) {
+      f1 = coordinates[0]
+      f2 = coordinates[1]
+      f3 = coordinates[2]
+    }
+  
+    fp = [f2[0] - f1[0], f2[1] - f1[1]]
+    sp = [f3[0] - f2[0], f3[1] - f2[1]]
+    
+    return fp[0] * sp[1] - sp[0] * fp[1] < 0
+  }
+  
+  /**
    * Check if the passed point is contained in extent <br/>
    *
    * 判断传入的点坐标是否在图形内

@@ -2,17 +2,6 @@
  * Created by zhangyong on 2017/5/23.
  */
 
-
-/**
- * Calculate the index of the given point in geometry coordinates
- * @param geometry
- * @param coordinates
- */
-export function getCoordinateIndex (geometry, coordinate) {
-  
-}
-
-
 /**
  * Calculate the distance between two points, and then determine
  * if two points get intersecting
@@ -99,12 +88,12 @@ export function squaredDistanceToSegment (coordinate, segment) {
   return squaredDistance(coordinate[0], coordinate[1], closestCoordinate[0], closestCoordinate[1])
 }
 
-
-export function pointIntersectPolygon (pointA, polygon, tolerance) {
-  
-}
-
-
+/**
+ *
+ * @param coordinate1
+ * @param coordinate2
+ * @returns {boolean}
+ */
 export function equals (coordinate1, coordinate2) {
   let equals = true
   for (let i = coordinate1.length - 1; i >= 0; --i) {

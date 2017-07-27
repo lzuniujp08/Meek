@@ -7,8 +7,6 @@ import CanvasRenderer from '../renderer/canvas/canvasrenderer'
 import BrowserEventHandler from './browsereventhandler'
 import BrowserEvent from './browserevent'
 import View from './view'
-import {BaseEvent} from '../core/baseevent'
-
 import FeatureLayer from '../lyr/featurelayer'
 import {listen} from '../core/eventmanager'
 import {Transform} from '../data/matrix/transform'

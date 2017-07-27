@@ -5,7 +5,6 @@
 import BaseObject from '../core/baseobject'
 import {listen, unlistenByKey} from '../core/eventmanager'
 import BrowserEvent from './browserevent'
-import {EventType} from './eventtype'
 
 export default class BrowserEventHandler extends BaseObject {
 

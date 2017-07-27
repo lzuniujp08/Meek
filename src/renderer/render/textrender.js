@@ -6,6 +6,7 @@ import GeometryRender from './geomertyrender'
 import {Transform} from '../../data/matrix/transform'
 import {colorToString} from '../../utils/helpers'
 import TextStyle from '../../style/textstyle'
+import LineStyle from '../../style/linestyle'
 
 export default class TextRender extends GeometryRender {
   
@@ -35,9 +36,9 @@ export default class TextRender extends GeometryRender {
         text: displayText,
         scale: 10,
         fill: [0, 0, 255],
-        stroke: new Datatang.LineStyle([255, 255, 255],1,2,
-          Datatang.LineStyle.LineCap.ROUND,
-          Datatang.LineStyle.LineJion.ROUND),
+        stroke: new LineStyle([255, 255, 255],1,2,
+          LineStyle.LineCap.ROUND,
+          LineStyle.LineJion.ROUND),
       })
     }
 

@@ -4,7 +4,6 @@
 import GeometryRender from '../render/geomertyrender'
 import {Transform} from '../../data/matrix/transform'
 import {colorToString} from '../../utils/helpers'
-import Extent from '../../geometry/extent'
 
 export default class PolygonRender extends GeometryRender {
   

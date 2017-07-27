@@ -3,8 +3,6 @@
  */
 
 import Component from './component'
-
-import BrowserEvent from '../meek/browserevent'
 import {noModifierKeys} from '../utils/mousekey'
 import {Coordinate} from '../utils/coordinate'
 
@@ -111,8 +109,8 @@ export default class DragPan extends Component {
    */
   _handleDownEvent (browserEvent) {
     if (this.targetPointers.length > 0 && this._condition(browserEvent)) {
-      const map = browserEvent.map
-      const view = map.view
+      // const map = browserEvent.map
+      // const view = map.view
       this.lastCentroid = null
       
       // if (!this.handlingDownUpSequence) {

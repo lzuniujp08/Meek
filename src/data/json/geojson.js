@@ -9,7 +9,6 @@ import Line from '../../geometry/line'
 import Extent from '../../geometry/extent'
 import Feature from '../../meek/feature'
 import Obj from '../../utils/obj'
-import TextStyle from'../../style/textstyle'
 
 /**
  *

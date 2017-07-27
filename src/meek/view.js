@@ -109,12 +109,9 @@ export default class View extends BaseObject {
    * @returns {Function}
    * @private
    */
-  _createCenterConstraint (options) {
-    if (options.extent !== undefined) {
-    } else {
-      return function (center) {
-        return center
-      }
+  _createCenterConstraint () {
+    return function (center) {
+      return center
     }
   }
   

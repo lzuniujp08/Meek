@@ -8,13 +8,7 @@ import FeatureLayer from '../lyr/featurelayer'
 import {listen, unlistenByKey} from '../core/eventmanager'
 import {EventType} from '../meek/eventtype'
 import {Style} from '../style/style'
-
-import FillStyle from '../style/fillstyle'
-import LineStyle from '../style/linestyle'
-import PointStyle from '../style/pointstyle'
-
 import SelectEvent from '../components/selectevent'
-import Geometry from '../geometry/geometry'
 
 /**
  * The select component can be used for features selecting.

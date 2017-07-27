@@ -68,18 +68,22 @@ const lineIntersectsGeometry = function (line, geometry) {
   case Geometry.LINE:
   case Geometry.POLYGON:
   case Geometry.EXTENT:
-    return intersectsByPolygon(line.getCoordinates(), geometry.getCoordinates())
+    return intersectsByPolygon(line, geometry)
   }
 }
 
 
-const intersectsByPolygon = function (polygon1LinearRings, polygon2LinearRings) {
+const intersectsByPolygon = function (line, geometry) {
+  const polygon1LinearRings = line.getCoordinates()
+  const polygon2LinearRings = geometry.getCoordinates()
+  
   let intersect = intersectsByLinearRings(polygon1LinearRings, polygon2LinearRings)
+  
   if (!intersect) {
     // check if this poly contains points of the ring/linestring
-    for (let i = 0, len = polygon2LinearRings.length; i < len; ++i) {
-      const point = polygon2LinearRings[i]
-      intersect = containsPointByLinearRing(point, polygon1LinearRings)
+    for (let i = 0, len = polygon1LinearRings.length; i < len; ++i) {
+      const point = polygon1LinearRings[i]
+      intersect = geometry.containsXY(point[0], point[1])
       if (intersect) {
         break
       }
@@ -265,88 +269,6 @@ const segmentsIntersect = function (seg1, seg2, options) {
   return intersection
 }
 
-// LinearRing : array[pt]
-// point : {x:1,y:2}
-const containsPointByLinearRing = function (point, LinearRing) {
-  
-  //limitSigDigs
-  function approx(num, sig) {
-    let fig = 0
-    if (sig > 0) {
-      fig = parseFloat(num.toPrecision(sig))
-    }
-    return fig
-  }
-  
-  const digs = 14
-  const px = approx(point[0], digs)
-  const py = approx(point[1], digs)
-  
-  function getX(y, x1, y1, x2, y2) {
-    return (y - y2) * ((x2 - x1) / (y2 - y1)) + x2
-  }
-  
-  const numSeg = LinearRing.length - 1
-  let start, end, x1, y1, x2, y2, cx
-  let crosses = 0
-  
-  for (let i = 0; i < numSeg; ++i) {
-    start = LinearRing[i]
-    x1 = approx(start[0], digs)
-    y1 = approx(start[1], digs)
-    end = LinearRing[i + 1]
-    x2 = approx(end[0], digs)
-    y2 = approx(end[1], digs)
-    
-    if (y1 == y2) {
-      // horizontal edge
-      if (py == y1) {
-        // point on horizontal line
-        if (x1 <= x2 && (px >= x1 && px <= x2) || // right or vert
-          x1 >= x2 && (px <= x1 && px >= x2)) { // left or vert
-          // point on edge
-          crosses = -1
-          break
-        }
-      }
-      // ignore other horizontal edges
-      continue
-    }
-    cx = approx(getX(py, x1, y1, x2, y2), digs)
-    if (cx == px) {
-      // point on line
-      if (y1 < y2 && (py >= y1 && py <= y2) || // upward
-        y1 > y2 && (py <= y1 && py >= y2)) { // downward
-        // point on edge
-        crosses = -1
-        break
-      }
-    }
-    
-    if (cx <= px) {
-      // no crossing to the right
-      continue
-    }
-    
-    if (x1 != x2 && (cx < Math.min(x1, x2) || cx > Math.max(x1, x2))) {
-      // no crossing
-      continue
-    }
-    
-    if (y1 < y2 && (py >= y1 && py < y2) || // upward
-      y1 > y2 && (py < y1 && py >= y2)) { // downward
-      ++crosses
-    }
-  }
-  
-  const contained = (crosses == -1) ?
-    // on edge
-    1 :
-    // even (out) or odd (in)
-    !!(crosses & 1)
-  
-  return contained
-}
 
 const distanceToSegment = function (point, segment) {
   let result = distanceSquaredToSegment(point, segment)

@@ -324,8 +324,8 @@ export default class Modify extends Component {
     const vertexFeature = this._vertexFeature
     
     if (vertexFeature) {
-      const geometry = vertexFeature.geometry
-      const vertex = geometry.getCoordinates()
+      // const geometry = vertexFeature.geometry
+      // const vertex = geometry.getCoordinates()
       const insertVertices = [this._snapSegments]
       if (insertVertices.length) {
         this._willModifyFeatures(evt)

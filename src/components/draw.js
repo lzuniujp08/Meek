@@ -3,9 +3,7 @@
  */
 
 import Component from './component'
-
 import {Style} from '../style/style'
-
 import FeaureLayer from '../lyr/featurelayer'
 import Feature from '../meek/feature'
 import Geometry from '../geometry/geometry'
@@ -15,9 +13,7 @@ import Polygon from '../geometry/polygon'
 import Extent from '../geometry/extent'
 import {ExtentUtil} from '../geometry/support/extentutil'
 import {listen, unlistenByKey} from '../core/eventmanager'
-import {EventType} from '../meek/eventtype'
 import BrowserEvent from '../meek/browserevent'
-
 import DrawEvent from './drawevent'
 
 /**
