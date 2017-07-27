@@ -11,6 +11,8 @@ if (process.env.npm_lifecycle_event === 'release') {
     compress: {warnings: false},
     output: {comments: false}
   }))
+  
+  webpackConfig.devtool = null
 } else {
   webpackConfig.plugins.push(new Clean(['dist'], {verbose: false}))
 }
