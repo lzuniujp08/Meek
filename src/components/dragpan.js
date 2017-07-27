@@ -9,13 +9,21 @@ import {noModifierKeys} from '../utils/mousekey'
 import {Coordinate} from '../utils/coordinate'
 
 /**
+ * 拖动事件处理类
+ *
  * @class DragPan
  * @extends Component
  * @module component
  * @constructor
  */
 export default class DragPan extends Component {
-  
+
+  /**
+   * 构造函数
+   *
+   * @constructor
+   * @param options
+   */
   constructor (options = {}) {
     super()
   
@@ -68,32 +76,35 @@ export default class DragPan extends Component {
     
   }
   
-  /**
-   * Handles the browser event and then may call into the subclass functions.
-   * @param browserEvent
-   */
-  // handleMouseEvent (browserEvent) {
-  //   if (!(browserEvent instanceof BrowserEvent)) {
-  //     return true
-  //   }
-  //
-  //   this._updateTrackedPointers(browserEvent)
-  //
-  //   let type = browserEvent.type
-  //   if (type === BrowserEvent.MOUSE_DOWN) {
-  //     this._handleDownEvent(browserEvent)
-  //   } else if (type === BrowserEvent.MOUSE_UP){
-  //     // this._handleUpEvent(browserEvent)
-  //   } else if (type === BrowserEvent.MOUSE_DRAG) {
-  //     this._handleDragEvent(browserEvent)
-  //   }
-  //
-  //   return true
-  // }
+  // /**
+  //  * Handles the browser event and then may call into the subclass functions.
+  //  * @param browserEvent
+  //  */
+  // // handleMouseEvent (browserEvent) {
+  // //   if (!(browserEvent instanceof BrowserEvent)) {
+  // //     return true
+  // //   }
+  // //
+  // //   this._updateTrackedPointers(browserEvent)
+  // //
+  // //   let type = browserEvent.type
+  // //   if (type === BrowserEvent.MOUSE_DOWN) {
+  // //     this._handleDownEvent(browserEvent)
+  // //   } else if (type === BrowserEvent.MOUSE_UP){
+  // //     // this._handleUpEvent(browserEvent)
+  // //   } else if (type === BrowserEvent.MOUSE_DRAG) {
+  // //     this._handleDragEvent(browserEvent)
+  // //   }
+  // //
+  // //   return true
+  // // }
   
   
   /**
-   * @param {ol.MapBrowserPointerEvent} mapBrowserEvent Event.
+   * 处理
+   *
+   *
+   * @param browserEvent {ol.MapBrowserPointerEvent} mapBrowserEvent Event.
    * @return {boolean} Start drag sequence?
    * @this {ol.interaction.DragPan}
    * @private
@@ -128,10 +139,15 @@ export default class DragPan extends Component {
   
   /**
    * Handle the drag event
-   * Center of the view will be changed
-   * @param browserEvent
+   *
+   * 处理图片拖动事件
+   *
+   * @method handleDragEvent
+   * @param browserEvent {browserEvent}
    * @private
    */
+  // Handle the drag event
+  // Center of the view will be changed
   _handleDragEvent (browserEvent) {
     const targetPointers = this.targetPointers
     const centroid = this.centroid(targetPointers)
@@ -163,8 +179,10 @@ export default class DragPan extends Component {
   }
   
   /**
-   * Calculate a center point
-   * @param pointerEvents
+   * 计算视图的中心点
+   *
+   * @method centroid
+   * @param pointerEvents {pointerEvents}
    * @returns {[*,*]}
    */
   centroid (pointerEvents) {
