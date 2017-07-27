@@ -79,6 +79,7 @@ window.onload = function (){
   typeSelect.onchange = function(){
     if(typeSelect.value === "None"){
       drawTool.active = false
+      drawTool.display = false
       selectTool.active = true
       modifyTool.active = true
     }else{
