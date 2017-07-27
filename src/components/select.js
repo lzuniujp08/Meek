@@ -32,23 +32,46 @@ import SelectEvent from '../components/selectevent'
  */
 export default class Select extends Component {
 
+  /**
+   * 构造函数
+   *
+   * @constructor constructor
+   * @param options
+   */
+
   constructor (options = {}) {
     super()
 
+    /**
+     * 当前鼠标点与图形之间的误差距离，小于该值则可已选中图形
+     *
+     * @property hitTolerance
+     * @type {number}
+     * @private
+     */
     this._hitTolerance = options.hitTolerance ? options.hitTolerance : 6
 
     /**
      * 选择图层是否配置了样式
+     *
      * @type {boolean}
      * @private
        */
     this._hasSelectedStyle = false
 
+    /**
+     * 多选模式，默认为false
+     *
+     * @property multiSelectMode
+     * @type {boolean}
+     * @private
+     */
     this._multiSelectMode = false
     
     /**
-     * 初始化草稿图层，用于临时高亮显示绘制的图形
+     * 初始化草稿图层，用于临时高亮显示选中的图形
      *
+     * @property selectLayer
      * @type {FeatureLayer}
      * @private
      */
@@ -60,9 +83,21 @@ export default class Select extends Component {
     } else {
       this._hasSelectedStyle = false
     }
-
+    /**
+     * 选中图形的feature集合
+     *
+     * @property selectFeatures
+     * @type {Array}
+     * @private
+     */
     this._selectFeatures = []
 
+    /**
+     * 选中的模式，默认为单击选中
+     *
+     * @property selectMode
+     * @type {string}
+     */
     this.selectMode = options.selectMode ? options.selectMode : BrowserEvent.CLICK
 
     this._selectMultiMode = options.selectMultiMode ?
@@ -88,6 +123,10 @@ export default class Select extends Component {
 
   /**
    * handle Ctrl key down event
+   *
+   * 处理Ctrt键按下事件
+   *
+   * @method handleCtrlKeyDwon
    * @param event
    * @private
    */
@@ -99,6 +138,9 @@ export default class Select extends Component {
 
   /**
    * handle Ctrl key up event
+   *
+   * 处理Ctrl键弹起事件
+   *
    * @param event
    * @private
    */
@@ -111,7 +153,11 @@ export default class Select extends Component {
 
   /**
    * Handler mouse event
-   * @param browserEvent
+   *
+   * 处理鼠标事件
+   * handleMouseEvent
+   * @method
+   * @param browserEvent {browserEvent}
    */
   handleMouseEvent (browserEvent) {
     if (!this._condition(browserEvent)) {

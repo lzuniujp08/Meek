@@ -58,7 +58,7 @@ export default class Modify extends Component {
     this._features = []
     
     /**
-     * 当前鼠标点与图形之间的误差距离，小于该值后立即捕捉标注数据，
+     * 当前鼠标点与图形之间的误差距离，小于该值后立即捕捉标注数据
      *
      * @property pixelTolerance
      * @type {number}
@@ -156,7 +156,9 @@ export default class Modify extends Component {
   
   
     /**
-     * The over layer is resonsible for modified features highlight
+     * 初始化草稿图层，用于临时高亮显示编辑的图形
+     *
+     * @property overLayer
      * @type {FeatureLayer}
      * @private
      */
