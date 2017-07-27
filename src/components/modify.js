@@ -24,11 +24,18 @@ import {closestOnSegment, squaredDistanceToSegment,
 import {noModifierKeys, singleClick} from '../utils/mousekey'
 
 /**
+ * 编辑模式，启动后可以编辑图形
+ *
  * @class Modify
  * @extends Component
  * @module component
  * @constructor
  * @example
+ *
+ *      // 实例化编辑工具
+ *      var modifyTool = new Datatang.Modify({
+ *        features: selectedFeaturs
+ *      })
  */
 export default class Modify extends Component {
   
@@ -42,7 +49,7 @@ export default class Modify extends Component {
     })
   
     /**
-     * The features array is to modify
+     * 可以编辑的feature集合
      *
      * @property features
      * @type {Array}
@@ -51,7 +58,9 @@ export default class Modify extends Component {
     this._features = []
     
     /**
+     * 当前鼠标点与图形之间的误差距离，小于该值后立即捕捉标注数据，
      *
+     * @property pixelTolerance
      * @type {number}
      * @private
      */
@@ -59,7 +68,9 @@ export default class Modify extends Component {
         options.pixelTolerance : 10
   
     /**
+     * 可以整体移动图形，矩形默认可以整体移动
      *
+     * @property movableGeometrys
      * @type {[*]}
      * @private
      */
@@ -234,6 +245,10 @@ export default class Modify extends Component {
   
   /**
    * Handle the mouse events emitted from map.
+   *
+   * 处理鼠标事件
+   *
+   * @method handleMouseEvent
    * @param browserEvent
    * @returns {boolean}
    */
@@ -269,6 +284,9 @@ export default class Modify extends Component {
   
   /**
    * Removes the vertex currently being pointed.
+   *
+   *
+   * @method removePoint
    * @return {boolean} True when a vertex was removed.
    * @api
    */
@@ -363,6 +381,10 @@ export default class Modify extends Component {
   
   /**
    * Handle pointer move event
+   *
+   * 处理点移动事件
+   *
+   * @method handlePointerMove
    * @param evt
    * @private
    */

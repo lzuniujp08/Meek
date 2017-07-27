@@ -14,11 +14,21 @@ import SelectEvent from '../components/selectevent'
  * The select component can be used for features selecting.
  * By default,selected features are styled differently, so this
  *
+ * 图形选择模式，可以选中已经绘制完成的图形
  *
  * @class Select
  * @extends Component
  * @module component
  * @constructor
+ * @example
+ *
+ *      // 实例化选择工具
+ *      selectTool = new Datatang.Select({
+ *       selectMode: Datatang.BrowserEvent.CLICK,
+ *       selectMultiMode: selectMultiMode
+ *      });
+ *
+ *
  */
 export default class Select extends Component {
 
