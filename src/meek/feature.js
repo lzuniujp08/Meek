@@ -99,6 +99,10 @@ export default class Feature extends BaseObject {
    * @param attributes
    */
   initArribute(attributes) {
+    if (!(attributes instanceof Object)) {
+      attributes = {}
+    }
+    
     this._attributesMap = Obj.objectToMap(attributes)
   }
 
