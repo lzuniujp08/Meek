@@ -7,13 +7,6 @@ module.exports = {
     new webpack.DefinePlugin({
       VERSION: JSON.stringify(require('./package.json').version)
     })
-    // ,
-    // new webpack.optimize.UglifyJsPlugin({
-    //   compress: {
-    //     warnings: false,
-    //     drop_console: true
-    //   },
-    // })
   ],
   module: {
     loaders: [
