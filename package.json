@@ -1,12 +1,14 @@
 {
   "name": "meek",
   "version": "1.0.0",
-  "description": "A draw lib base on ES6 ",
+  "description": "A draw library based on ES6 ",
   "main":"./dist/meek.js",
   "scripts": {
+    "release": "node_modules/.bin/webpack --progress -d --optimize-mangle --optimize-dedupe --optimize-occurence-order --output-filename meek.min.js",
     "build": "node_modules/.bin/webpack --progress",
     "watch": "node_modules/.bin/webpack --progress --watch"
   },
+  "author": "zybear",
   "dependencies": {
     "babel-preset-stage-2": "^6.18.0",
     "express": "^4.14.0",
