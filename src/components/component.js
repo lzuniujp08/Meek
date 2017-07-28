@@ -272,7 +272,7 @@ export default class Component extends BaseObject {
    *
    * @method coordinateBeyond
    * @param coordinate {Array} 坐标点{x,y}
-   * @returns newCoordinate {Array}
+   * @returns {Array} new Coordinate
    */
   coordinateBeyond (coordinate) {
     if (coordinate === undefined) {
@@ -328,7 +328,7 @@ export default class Component extends BaseObject {
 
 
   /**
-   * map读写器.
+   * map读写器, 读取设置当前map
    *
    * @type {Function}
    * @property map
@@ -338,7 +338,7 @@ export default class Component extends BaseObject {
   set map (value) { this._map = value }
 
   /**
-   * active读写器
+   * active读写器, 读取设置active
    *
    * @type {Function}
    * @property active
