@@ -13,14 +13,12 @@ import BaseObject from '../core/baseobject'
  * @class BaseImage
  * @extends BaseObject
  * @module core
- *
+ * @constructor
  */
 export default class BaseImage extends BaseObject {
   
   /**
    * Create a BaseImage
-   *
-   * @constructor
    * @param extent the extent of layer
    * @param resolution the resolution of layer
    * @param pixelRatio the pixel ratio
@@ -33,35 +31,30 @@ export default class BaseImage extends BaseObject {
     super()
   
     /**
-     * @property attributions
      * @type {Object}
      * @private
      */
     this._attributions = attributions
   
     /**
-     * @property extent
      * @type {Object}
      * @private
      */
     this._extent = extent
   
     /**
-     * @property pixelRatio
      * @type {Number}
      * @private
      */
     this._pixelRatio = pixelRatio
   
     /**
-     * @property resolution
      * @type {Number}
      * @private
      */
     this._resolution = resolution
   
     /**
-     * @property state
      * @type {Number}
      * @private
      */
@@ -69,10 +62,8 @@ export default class BaseImage extends BaseObject {
   }
   
   /**
-   * return the attributions of layer
-   *
+   * return the attributions of layer <br/>
    * 返回图层的属性
-   *
    * @property attributions
    * @type Object
    */
@@ -81,10 +72,8 @@ export default class BaseImage extends BaseObject {
   }
   
   /**
-   * return the extent of layer
-   *
+   * return the extent of layer<br/>
    * 返回图层的视图范围
-   *
    * @property extent
    * @type Object
    */
@@ -93,21 +82,17 @@ export default class BaseImage extends BaseObject {
   }
   
   /**
-   * return the DOM image
-   *
+   * return the DOM image<br/>
    * 返回DOM对象
-   *
-   * @param optContext {Object}
+   * @param optContext options
    * @method getDomImage
    * @abstract
    */
   getDomImage (optContext) { return optContext }
   
   /**
-   * return the pixel ratio
-   *
+   * return the pixel ratio<br/>
    * 返回像素因数
-   *
    * @property pixelRatio
    * @type Number
    */
@@ -116,10 +101,8 @@ export default class BaseImage extends BaseObject {
   }
   
   /**
-   * return the resolution of layer
-   *
+   * return the resolution of layer<br/>
    * 返回图层的分辨率
-   *
    * @property resolution
    * @type Number
    */
@@ -133,10 +116,8 @@ export default class BaseImage extends BaseObject {
   }
   
   /**
-   * return the state of layer loading
-   *
+   * return the state of layer loading <br/>
    * 获取图片下载状态
-   *
    * @property state
    * @type Number
    */
@@ -148,10 +129,8 @@ export default class BaseImage extends BaseObject {
   }
   
   /**
-   * Load not yet loaded URI.
-   *
+   * Load not yet loaded URI. <br/>
    * 抽象方法，下载图片
-   *
    * @abstract
    * @method load
    */
