@@ -583,7 +583,7 @@ export default class Draw extends Component {
    * Modify the drawing
    *
    *
-   * @param event
+   * @param event {Event}
    * @private
    */
   _modifyDrawing (event) {
@@ -736,6 +736,7 @@ export default class Draw extends Component {
   
   /**
    * Determine if an event is within the snapping tolerance of the start coord.
+   *
    * @param event
    * @returns {boolean}
    * @private
@@ -800,6 +801,8 @@ export default class Draw extends Component {
   
   /**
    * Redraw the sketch featrues.
+   *
+   * @method updateSketchFeatures
    * @private
    */
   _updateSketchFeatures () {
@@ -824,6 +827,8 @@ export default class Draw extends Component {
   
   /**
    * Undo the drawing
+   *
+   * @method undoDrawing
    * @private
    */
   _undoDrawing () {
@@ -856,6 +861,8 @@ export default class Draw extends Component {
   /**
    * Map setter.
    * It will add an event listener of map rendering.
+   *
+   *
    * @property map {Datatang.map} mapVal
    */
   set map (mapValue) {
@@ -876,6 +883,8 @@ export default class Draw extends Component {
   
   /**
    * Update the drawing state for aborting drawing if active is false
+   *
+   * @method updateState
    * @private
    */
   _updateState () {
@@ -890,6 +899,8 @@ export default class Draw extends Component {
   
   /**
    * Get the default style which will be used while a feature is drawn
+   *
+   * @method getDefaultStyleFunction
    * @returns {Function}
    */
   getDefaultStyleFunction () {
@@ -922,6 +933,8 @@ export default class Draw extends Component {
 
 /**
  * The static fucntion is responsibility to get the current draw mode
+ *
+ * @method getDrawMode
  * @param type
  * @returns {*}
  */

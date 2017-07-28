@@ -12,13 +12,22 @@ import {mouseWheel} from '../utils/mousekey'
 import {clamp} from '../utils/math'
 
 /**
+ * 鼠标滚轮缩放基类
+ *
+ *
  * @class MouseWheelZoom
  * @extends Component
  * @module component
  * @constructor
  */
 export default class MouseWheelZoom extends Component {
-  
+
+  /**
+   * 构造函数
+   *
+   * @constructor
+   * @param options
+   */
   constructor (options = {}){
     
     super()
@@ -131,6 +140,8 @@ export default class MouseWheelZoom extends Component {
   
   /**
    * Zoom to the map
+   *
+   * @method handleWheelZoom
    * @param map
    * @private
    */

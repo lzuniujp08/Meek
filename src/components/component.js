@@ -68,12 +68,14 @@ export default class Component extends BaseObject {
       options.handleMouseEvent : this.handleMouseEvent
   
     /**
+     *
      * @private
      */
     this._handleDownEvent = options.handleDownEvent ?
       options.handleDownEvent : function () { return false }
   
     /**
+     *
      * @private
      */
     this._handleDragEvent = options.handleDragEvent ?
@@ -312,7 +314,7 @@ export default class Component extends BaseObject {
    * @method shouldStopEvent
    * @param handled
    * @returns {*}
-   * @private
+   *
    */
   shouldStopEvent (handled) {
     return handled
@@ -321,6 +323,8 @@ export default class Component extends BaseObject {
 
   /**
    * The map getter and setter.
+   *
+   * It will add an event listener of map rendering.
    *
    * @type {Function}
    * @property map

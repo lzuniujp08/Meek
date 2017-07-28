@@ -12,9 +12,9 @@ import SelectEvent from '../components/selectevent'
 
 /**
  * The select component can be used for features selecting.
- * By default,selected features are styled differently, so this
+ * By default,selected features are styled differently
  *
- * 图形选择模式，可以选中已经绘制完成的图形
+ * 图形选择模式
  *
  * @class Select
  * @extends Component
@@ -224,7 +224,7 @@ export default class Select extends Component {
   }
   
   /**
-   * 当前选中要素的集合
+   * 当前选中feature的集合的 getter and
    *
    * @property selectFeatures
    * @type {Array}
@@ -246,8 +246,8 @@ export default class Select extends Component {
   /**
    * 判断当前选中的集合中是否包含指定的feature
    *
-   * @param feature 传入的feature对象
-   * @returns {boolean} 有就返回true, 无就返回false
+   * @param feature
+   * @returns {Boolean}
    * @private
    */
   _isInSelectFeatures (feature) {
@@ -262,6 +262,8 @@ export default class Select extends Component {
 
   /**
    * Update the drawing state for aborting drawing if active is false
+   *
+   * @method updateState
    * @private
    */
   _updateState () {
@@ -275,7 +277,9 @@ export default class Select extends Component {
   }
   
   /**
+   * 高亮显示选中图形
    *
+   * @method forEachStyle
    * @private
    */
   _forEachStyle () {
@@ -292,6 +296,12 @@ export default class Select extends Component {
     })
   }
 
+  /**
+   * Map getter and setter.
+   * It will add an event listener of map rendering.
+   *
+   * @property map {Datatang.map} mapVal
+   */
   get map (){ return this._map }
   set map (map) {
     if (this._mapRenderKey) {
@@ -317,6 +327,8 @@ export default class Select extends Component {
 
   /**
    * Get the default style which will be used while a feature is drawn
+   *
+   * @method getDefaultStyleFunction
    * @returns {Function}
    */
   getDefaultStyleFunction () {

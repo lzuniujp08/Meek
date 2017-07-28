@@ -38,7 +38,13 @@ import {noModifierKeys, singleClick} from '../utils/mousekey'
  *      })
  */
 export default class Modify extends Component {
-  
+
+  /**
+   * 构造函数
+   *
+   * @constructor constructor
+   * @param options
+   */
   constructor(options = {}) {
     super(options)
     
@@ -80,6 +86,7 @@ export default class Modify extends Component {
   
     /**
      *
+     * @property hasMoveableGeometrys
      * @type {boolean}
      * @private
      */
@@ -115,27 +122,29 @@ export default class Modify extends Component {
     
     /**
      * Determine if should snap to vertexs of gemetry
+     *
+     * @property snappedToVertex
      * @type {boolean}
      * @private
      */
     this._snappedToVertex = false
   
     /**
-     *
+     * @property vertexSegments
      * @type {null}
      * @private
      */
     this._vertexSegments = null
   
     /**
-     *
+     * @property snapSegments
      * @type {null}
      * @private
      */
     this._snapSegments = null
   
     /**
-     *
+     * @vertexFeature
      * @type {null}
      * @private
      */
@@ -173,7 +182,7 @@ export default class Modify extends Component {
     this._dragSegments = []
   
     /**
-     *
+     * @property modified
      * @type {boolean}
      * @private
      */
@@ -189,20 +198,22 @@ export default class Modify extends Component {
     /**
      * Tracks if the next `singleclick` event should be ignored to prevent
      * accidental deletion right after vertex creation.
+     *
+     * @property ignoreNextSingleClick
      * @type {boolean}
      * @private
      */
     this._ignoreNextSingleClick = false
   
     /**
-     *
+     * @property shouldAddToVertexs
      * @type {boolean}
      * @private
      */
     this._shouldAddToVertexs = false
   
     /**
-     *
+     * @property insertVertices
      * @type {Array}
      * @private
      */
@@ -210,6 +221,8 @@ export default class Modify extends Component {
   
     /**
      * Keep the mouse-down point
+     *
+     * @property downPoint
      * @type {null}
      * @private
      */
@@ -217,6 +230,8 @@ export default class Modify extends Component {
   
     /**
      * Keep the current moved geometry
+     *
+     * @property currentMovedGeometry
      * @type {null}
      * @private
      */
@@ -225,6 +240,8 @@ export default class Modify extends Component {
   
   /**
    * Features getter and setter
+   *
+   * @property features
    * @returns {null|*}
    */
   get features () { return this._features }
@@ -308,7 +325,7 @@ export default class Modify extends Component {
   }
   
   /**
-   *
+   * @method compareIndexes
    * @param a
    * @param b
    * @returns {number}
@@ -319,7 +336,7 @@ export default class Modify extends Component {
   }
   
   /**
-   *
+   * @method willModifyFeatures
    * @param event
    * @private
    */
@@ -333,7 +350,9 @@ export default class Modify extends Component {
   
   /**
    * Handle poiner mouse down event
-   * @param evt
+   *
+   * @method handleDownEvent
+   * @param evt {Event}
    * @private
    */
   _handleDownEvent (evt) {
@@ -387,7 +406,7 @@ export default class Modify extends Component {
    * 处理点移动事件
    *
    * @method handlePointerMove
-   * @param evt
+   * @param evt {Event}
    * @private
    */
   _handlePointerMove (evt) {
@@ -398,8 +417,9 @@ export default class Modify extends Component {
   
   /**
    *
-   * @param pixel
-   * @param map
+   * @method
+   * @param pixel {Array}
+   * @param map {map}
    * @private
    */
   _handlePointerAtPixel (pixel, map) {
@@ -470,7 +490,9 @@ export default class Modify extends Component {
   
   /**
    * Handle mouse drag event.
-   * @param evt
+   *
+   * @method handleDragEvent
+   * @param evt {Event}
    * @private
    */
   _handleDragEvent (evt) {
@@ -585,8 +607,8 @@ export default class Modify extends Component {
   }
   
   /**
-   *
-   * @param evt
+   * @method handleUpEvent
+   * @param evt {Event}
    * @returns {boolean}
    * @private
    */
@@ -703,9 +725,11 @@ export default class Modify extends Component {
   /**
    * Calcalute geometrys within the current extent
    * TODO 将来需要优化计算视图范围内的图形
-   * @param geometry
-   * @param pixelCoordinate
-   * @param tolarance
+   *
+   * @method getInExtent
+   * @param geometry {Array}
+   * @param pixelCoordinate {Array}
+   * @param tolarance {Number}
    * @returns {Array}
    * @private
    */
@@ -768,9 +792,9 @@ export default class Modify extends Component {
   }
   
   /**
-   *
-   * @param geometry
-   * @param coordinates
+   * @method setGeometryCoordinates
+   * @param geometry {Object}
+   * @param coordinates {Array}
    * @private
    */
   _setGeometryCoordinates (geometry, coordinates) {
@@ -780,8 +804,9 @@ export default class Modify extends Component {
   }
   
   /**
+   * @method pointDistanceToSegment
    *
-   * @param coordinates
+   * @param coordinates {Array}
    * @param segmentData
    * @returns {number}
    * @private
@@ -806,7 +831,7 @@ export default class Modify extends Component {
   }
   
   /**
-   *
+   * @method closestOnSegment
    * @param coordinate
    * @param segmentData
    * @returns {*}
@@ -832,7 +857,9 @@ export default class Modify extends Component {
   /**
    * Create or update the vertex feature while snapping a point
    * on the edge of geometry
-   * @param point
+   *
+   * @method createOrUpdateVertexFeature
+   * @param point {Array}
    * @private
    */
   _createOrUpdateVertexFeature (point) {
@@ -850,6 +877,8 @@ export default class Modify extends Component {
   
   /**
    * Get the default geometry style
+   *
+   * @method getDefaultStyleFunction
    * @returns {Function}
    */
   getDefaultStyleFunction () {
@@ -883,10 +912,12 @@ export default class Modify extends Component {
     
     this._active = isActive
   }
-  
+
   /**
+   * Map getter and setter.
+   * It will add an event listener of map rendering.
    *
-   * @returns {*}
+   * @property map {Datatang.map} mapVal
    */
   get map () {return this._map}
   set map (map) {
