@@ -24,6 +24,7 @@ export const Transform = {
   
   /**
    * 恒等矩阵
+   *
    * Create an identity（恒等） transform.
    * @return {!Transform} Identity transform.
    */
@@ -33,6 +34,7 @@ export const Transform = {
   
   /**
    * Resets the given transform to an identity（恒等） transform.
+   *
    * @param {!Transform} transform Transform.
    * @return {!Transform} Transform.
    */
@@ -71,8 +73,10 @@ export const Transform = {
   
   /**
    * 矩阵相乘
+   *
    * Multiply（相乘） the underlying matrices of two transforms and return the result in
    * the first transform.
+   *
    * @param {!Transform} transform1 Transform parameters of matrix 1.
    * @param {!Transform} transform2 Transform parameters of matrix 2.
    * @return {!Transform} transform1 multiplied with transform2.
@@ -103,6 +107,7 @@ export const Transform = {
   
   /**
    * Set the transform components a-f on a given transform.
+   *
    * @param {!Transform} transform Transform.
    * @param {number} a The a component of the transform.
    * @param {number} b The b component of the transform.
@@ -124,6 +129,7 @@ export const Transform = {
   
   /**
    * Set transform on one matrix from another matrix.
+   *
    * @param {!Transform} transform1 Matrix to set transform to.
    * @param {!Transform} transform2 Matrix to set transform from.
    * @return {!Transform} transform1 with transform from transform2 applied.
@@ -159,8 +165,10 @@ export const Transform = {
   },
   
   /**
-   * 矩阵旋转
    * Applies rotation to the given transform.
+   *
+   * 矩阵旋转
+   *
    * @param {!Transform} transform Transform.
    * @param {number} angle Angle in radians.
    * @return {!Transform} The rotated transform.
@@ -172,8 +180,10 @@ export const Transform = {
   },
   
   /**
+   *  Applies scale to a given transform.
+   *
    * 矩阵缩放
-   * Applies scale to a given transform.
+   *
    * @param {!Transform} transform Transform.
    * @param {number} x Scale factor x.
    * @param {number} y Scale factor y.
@@ -185,8 +195,10 @@ export const Transform = {
   },
   
   /**
-   * 矩阵转换
    * Applies translation to the given transform.
+   *
+   * 矩阵转换
+   *
    * @param {!Transform} transform Transform.
    * @param {number} dx Translation x.
    * @param {number} dy Translation y.
@@ -198,9 +210,11 @@ export const Transform = {
   },
   
   /**
-   * 复杂矩形运算
    * Creates a composite transform given an initial translation, scale, rotation, and
    * final translation (in that order only, not commutative).
+   *
+   * 复杂矩形运算
+   *
    * @param {!Transform} transform The transform (will be modified in place).
    * @param {number} dx1 Initial translation x.
    * @param {number} dy1 Initial translation y.
@@ -225,6 +239,7 @@ export const Transform = {
   
   /**
    * Invert the given transform.
+   *
    * @param {!Transform} transform Transform.
    * @return {!Transform} Inverse of the transform.
    */
@@ -249,8 +264,10 @@ export const Transform = {
   },
   
   /**
-   * 行列式
    * Returns the determinant of the given matrix.
+   *
+   * 行列式
+   *
    * @param {!Transform} mat Matrix.
    * @return {number} Determinant.
    */

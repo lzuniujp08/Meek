@@ -19,6 +19,7 @@ export default class GeoJSON {
    * 解析 GeoJSON 并返回 Feature 的集合
    *
    * @static
+   * @method read
    * @param json geojson格式的数据
    * @returns {Array} 返回 features 的集合
    */
@@ -98,7 +99,10 @@ export default class GeoJSON {
   }
   
   /**
+   * 获取Geometry的类型
    *
+   * @static
+   * @method getGeoJSONGeometryType
    * @param geometry
    * @returns {*}
    */

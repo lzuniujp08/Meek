@@ -7,9 +7,10 @@ import {getUid} from '../utils/counter'
 import {EventType} from '../meek/eventtype'
 
 /**
- * The BaseObject is a base class that only can be inherited, not be instanced.<br/>
+ * The BaseObject is a base class that only can be inherited, not be instanced.
  *
- * 对象基类，所有子类原则上要继承该类。<br/>
+ * 对象基类，所有子类原则上要继承该类。
+ *
  * 该类提供一个 id 和一个 revision,id 作为类的唯一标示
  *
  * @class BaseObject
@@ -21,6 +22,9 @@ export default class BaseObject extends Event {
 
   /**
    * Create a BaseObject
+   *
+   * 构造函数
+   *
    * @consructor
    */
   constructor () {
@@ -28,14 +32,16 @@ export default class BaseObject extends Event {
   
     /**
      * ID
-     * @type {number}
+     *
+     * @property id
+     * @type {Number}
      * @private
      */
     this._id = getUid()
   
     /**
-     *
-     * @type {number}
+     * @property revision
+     * @type {Number}
      * @private
      */
     this._revision = 0
@@ -43,8 +49,9 @@ export default class BaseObject extends Event {
   
   /**
    * Dispatch a 'change' event and the map will render the frame.
-   * <br/>
+   *
    * 此方法用于派发map渲染事件
+   *
    * @example this.changed() | super.changed()
    *
    * @method changed
@@ -55,8 +62,10 @@ export default class BaseObject extends Event {
   }
 
   /**
-   * get the id value <br/>
+   * get the id value
+   *
    * ID属性，用于获取该对象的ID编号
+   *
    * @property id
    * @type Number
    */
@@ -66,7 +75,9 @@ export default class BaseObject extends Event {
   
   /**
    * get the revision value
-   * <br/>地图渲染的版本号
+   *
+   * 地图渲染的版本号
+   *
    * @property revision
    * @type Number
    * @returns {number} the revision id

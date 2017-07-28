@@ -6,6 +6,8 @@ export const ExtentUtil = {}
 
 /**
  * Create an empty extent.
+ *
+ * @method createEmpty
  * @returns {[*,*,*,*]}
  */
 ExtentUtil.createEmpty = function () {
@@ -14,11 +16,12 @@ ExtentUtil.createEmpty = function () {
 
 /**
  * Create or update an extent.
- * @param minX
- * @param minY
- * @param maxX
- * @param maxY
- * @param opt_extent
+ *
+ * @param minX {Number}
+ * @param minY {Number}
+ * @param maxX {Number}
+ * @param maxY {Number}
+ * @param opt_extent {Array}
  * @returns {*}
  */
 ExtentUtil.createOrUpdate = function(minX, minY, maxX, maxY, opt_extent) {
