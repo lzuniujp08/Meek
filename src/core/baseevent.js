@@ -34,7 +34,7 @@ export default class BaseEvent {
      * 事件标示
      * @example'mousedown' | 'mousemove' | 'click'
      *
-     * <br/>The event type.
+     * The event type.
      * @type {string}
      * @property type
      */

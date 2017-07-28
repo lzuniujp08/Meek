@@ -9,7 +9,7 @@ import Obj from '../utils/obj'
 /**
  * Abstract base class,represent a base componnet whcih should be inhrited
  *
- * <br/> 定义组件基础类
+ * 定义组件基础类
  *
  * @class Component
  * @extends BaseObject
@@ -29,27 +29,27 @@ export default class Component extends BaseObject {
     this.active = true
   
     /**
-     *
+     * @property mapRenderKey
      * @type {null}
      * @private
      */
     this._mapRenderKey = null
   
     /**
-     *
+     * @property targetPointers
      * @type {null}
      */
     this.targetPointers = null
   
     /**
-     *
+     * @property trackedPointers
      * @type {{}}
      * @private
      */
     this._trackedPointers = {}
   
     /**
-     *
+     * @property handlingDownUpSequence
      * @type {boolean}
      */
     this.handlingDownUpSequence = false
@@ -57,7 +57,7 @@ export default class Component extends BaseObject {
   }
   
   /**
-   *
+   * @method applyHandleEventOption
    * @param options
    */
   applyHandleEventOption (options) {
@@ -208,7 +208,7 @@ export default class Component extends BaseObject {
   
   /**
    *
-   * 根据resolytion进行缩放
+   * 根据resolution进行缩放
    *
    * @method zoomWithoutConstraints
    *
@@ -309,7 +309,7 @@ export default class Component extends BaseObject {
   }
   
   /**
-   * @method
+   * @method shouldStopEvent
    * @param handled
    * @returns {*}
    * @private
@@ -317,6 +317,15 @@ export default class Component extends BaseObject {
   shouldStopEvent (handled) {
     return handled
   }
+
+
+  /**
+   * The map getter and setter.
+   *
+   * @type {Function}
+   * @property map
+   * @type {Datatang.map}
+   */
     
   get map () { return this._map }
   set map (value) { this._map = value }

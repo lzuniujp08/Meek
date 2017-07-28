@@ -52,7 +52,7 @@ export default class Draw extends Component {
     })
     
     /**
-     *
+     * @property mapRenderKey
      * @type {null}
      * @private
      */
@@ -245,6 +245,7 @@ export default class Draw extends Component {
       (this.drawMode === Draw.DrawMode.POLYGON ? 3 : 2)
   
     /**
+     * @property freehandCondition
      * @private
      * @type
      */

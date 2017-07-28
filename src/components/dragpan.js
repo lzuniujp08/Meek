@@ -32,34 +32,39 @@ export default class DragPan extends Component {
     })
     
     /**
-     *
+     * @property tragetPointers
      * @type {Array}
      */
     this.targetPointers = []
   
     /**
-     *
+     * @property lastCentroid
      * @type {null}
      */
     this.lastCentroid = null
   
     /**
+     * @property kinetic
      * @private
      * @type {ol.Kinetic|undefined}
      */
     this._kinetic = options.kinetic
   
     /**
+     * @property lastCentroid
      * @type {ol.Pixel}
      */
     this.lastCentroid = null
   
     /**
+     * @property lastPointersCount
+     * @private
      * @type {number}
      */
     this._lastPointersCount = null
   
     /**
+     * @property conidtion
      * @private
      * @type {ol.EventsConditionType}
      */
@@ -67,6 +72,7 @@ export default class DragPan extends Component {
       options.condition : noModifierKeys
   
     /**
+     * @property noKinetic
      * @private
      * @type {boolean}
      */
@@ -99,12 +105,11 @@ export default class DragPan extends Component {
   
   
   /**
-   * 处理
+   * 处理browserEvent
    *
-   *
-   * @param browserEvent {ol.MapBrowserPointerEvent} mapBrowserEvent Event.
+   * @param browserEvent {BrowserPointerEvent} mapBrowserEvent Event.
    * @return {boolean} Start drag sequence?
-   * @this {ol.interaction.DragPan}
+   * @this {DragPan}
    * @private
    */
   _handleDownEvent (browserEvent) {
