@@ -5,7 +5,7 @@
 export const ExtentUtil = {}
 
 /**
- * Create an empty extent.
+ * 创建一个空矩形
  *
  * @method createEmpty
  * @returns {[*,*,*,*]}
@@ -15,8 +15,9 @@ ExtentUtil.createEmpty = function () {
 }
 
 /**
- * Create or update an extent.
+ * 创建或更新矩形
  *
+ * @method createOrUpdate
  * @param minX {Number}
  * @param minY {Number}
  * @param maxX {Number}
@@ -37,7 +38,9 @@ ExtentUtil.createOrUpdate = function(minX, minY, maxX, maxY, opt_extent) {
 }
 
 /**
- * Get the center coordinate of an extent
+ * 获取矩形的中心点
+ *
+ * @method getCenter
  * @param extent
  * @returns {[*,*]}
  */
@@ -82,7 +85,9 @@ ExtentUtil.boundingExtentFromTwoPoints = function (point1, point2) {
 }
 
 /**
- * Build an extent that includes all given coordinates.
+ * 通过坐标数据构建矩形
+ *
+ * @method boundingExtent
  * @param extent
  * @param coordinate
  */
@@ -118,9 +123,11 @@ ExtentUtil.boundingSimpleExtent = function (coordinates) {
 }
 
 /**
- * Combine an extent from the given coordinates.
- * @param extent
- * @param coordinate
+ * 通过坐标更新矩形
+ *
+ * @method extendCoordinate
+ * @param extent {Geometry}
+ * @param coordinate {Array}
  */
 ExtentUtil.extendCoordinate = function(extent, coordinate) {
   if (coordinate[0] < extent[0]) {
@@ -142,8 +149,10 @@ ExtentUtil.extendCoordinate = function(extent, coordinate) {
 
 
 /**
- * Get the bottom right coordinate of an extent
- * @param extent
+ * 获取矩形右侧线段坐标
+ *
+ * getBottomRight
+ * @param extent {Geometry}
  * @returns {[*,*]}
  */
 ExtentUtil.getBottomRight = function (extent) {
@@ -152,8 +161,10 @@ ExtentUtil.getBottomRight = function (extent) {
 
 
 /**
- * Get the bottom left coordinate of an extent
- * @param extent
+ * 获取矩形左侧线段坐标
+ *
+ * getBottomLef
+ * @param extent {Geometry}
  * @returns {[*,*]}
  */
 ExtentUtil.getBottomLeft = function (extent) {
@@ -163,7 +174,7 @@ ExtentUtil.getBottomLeft = function (extent) {
 
 /**
  * Get the top right coordinate of an extent
- * @param extent
+ * extent
  * @returns {[*,*]}
  */
 ExtentUtil.getTopRight = function (extent) {
@@ -173,7 +184,7 @@ ExtentUtil.getTopRight = function (extent) {
 
 /**
  * Get the top left coordinate of an extent
- * @param extent
+ *  extent
  * @returns {[*,*]}
  */
 ExtentUtil.getTopLeft = function (extent) {
@@ -181,9 +192,12 @@ ExtentUtil.getTopLeft = function (extent) {
 }
 
 /**
- * Check if a passed point is contained or on the edge of the extent.
- * @param extent
- * @param point
+ * 判断点是否在矩形上
+ *
+ * @method containsPoint
+ * @param extent {Geometry}
+ * @param point {Array}
+ * @returns {Boolean}
  */
 ExtentUtil.containsPoint = function(extent, point){
   const x = point[0]
@@ -243,29 +257,35 @@ ExtentUtil.minMaxToRing = function (xmin, ymin, xmax, ymax) {
 }
 
 /**
- * Get the height of an extent
- * @param extent
- * @returns {number}
+ * 获取图形的高
+ *
+ * @method getHeight
+ * @param extent {Geometry}
+ * @returns {Number}
  */
 ExtentUtil.getHeight = function(extent) {
   return extent[3] - extent[1]
 }
 
 /**
- * Get the width of an extent
- * @param extent
- * @returns {number}
+ * 获取图形的宽
+ *
+ * @method getWidth
+ * @param extent {Geometry}
+ * @returns {Number}
  */
 ExtentUtil.getWidth = function(extent) {
   return extent[2] - extent[0]
 }
 
 /**
+ * 矩形坐标点更新
  *
- * @param geometry
- * @param newCoordinates
+ * @method updateExtent
+ * @param geometry {Geometry}
+ * @param newCoordinates {Array}
  * @param dragSegments
- * @returns {*|*}
+ * @returns {Array}
  */
 ExtentUtil.updateExtent = function (geometry, newCoordinates, dragSegments) {
   const dragSegment = dragSegments[0]
@@ -356,10 +376,12 @@ ExtentUtil.getIntersection = function(extent1, extent2, opt_extent) {
 }
 
 /**
- * Detemine if one extent intersects another.
- * @param extent1
- * @param extent2
- * @returns {boolean}
+ * 判断两个矩形是否相交
+ *
+ * @method intersects
+ * @param extent1 {Geometry}
+ * @param extent2 {Geometry}
+ * @returns {Boolean}
  */
 ExtentUtil.intersects = function(extent1, extent2) {
   return extent1[0] <= extent2[2] &&
@@ -369,10 +391,12 @@ ExtentUtil.intersects = function(extent1, extent2) {
 }
 
 /**
+ * 判断矩形是否包含在另一个矩形中
  *
+ * @method containsExtent
  * @param extent1
  * @param extent2
- * @returns {boolean}
+ * @returns {Boolean}
  */
 ExtentUtil.containsExtent = function(extent1, extent2) {
   return extent1[0] <= extent2[0] &&

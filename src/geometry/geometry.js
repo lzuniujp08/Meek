@@ -5,9 +5,6 @@ import BaseObject from '../core/baseobject'
 import {ExtentUtil} from './support/extentutil'
 
 /**
- *
- * Abstract base calss is for vector geometries.<br/>
- *
  * 图形基础类，不能直接实例化改类，只能继承和扩展，并实现该类定义的接口
  *
  * @class Geometry
@@ -26,26 +23,23 @@ export default class Geometry extends BaseObject {
     this._extent = null
   
     /**
-     *
      * @type {number}
      */
     this.stride = 2
   }
 
   /**
-   * return the type of goemetry <br/>
-   *
    * 获取图形的类型
    *
    * @property geometryType
-   * @type String
+   * @type {String}
    */
   get geometryType () {return Geometry.UNDEFINED}
 
   /**
-   * Get an extent of the geometry <br/>
    * 获取图形的最小外接矩形(MBR-Minimum Bounding Rectangle)
    * 除去点意外，任何图形都有最小外接矩形
+   *
    * @property extent
    * @type {Datatang.Extent}
    */
@@ -53,8 +47,9 @@ export default class Geometry extends BaseObject {
   
   /**
    * 获取图形是否是逆时针
+   *
    * @property anticlockwise
-   * @type {boolean}
+   * @type {Boolean}
    */
   get anticlockwise () {
     const geometryType = this.geometryType
@@ -80,8 +75,6 @@ export default class Geometry extends BaseObject {
   }
   
   /**
-   * Check if the passed point is contained in extent <br/>
-   *
    * 判断传入的点坐标是否在图形内
    *
    * @method pointInExtent
@@ -93,18 +86,18 @@ export default class Geometry extends BaseObject {
   }
   
   /**
+   * 判断是否相交
    *
-   * @method intersect
-   * @param geomtry
-   * @returns {boolean}
+   * intersect
+   * @param geomtry {Geometry}
+   * @returns {Boolean}
    */
   intersect (geomtry) { // eslint-disable-line no-unused-vars
     return false
   }
   
   /**
-   * Get the geometry coordinates
-   * <br/> 获取图形的坐标信息
+   * 获取图形的坐标信息
    * @abstract
    * @method getCoordinates
    * @return {Array} 返回坐标数组
@@ -113,8 +106,6 @@ export default class Geometry extends BaseObject {
 
   /**
    * 计算表单显示的坐标
-   *
-   *  Calculate a point for displaying Form
    *
    *  @method getFormShowPosition
    *  @param {Number} offsetX 表单显示的 x 偏移量, 默认为 0
@@ -129,15 +120,15 @@ export default class Geometry extends BaseObject {
   
   /**
    * 计算线的平面内点
-   * <br> Calcaluate the interior point
+   *
    * @method getFlatInteriorPoint
    * @returns {Array}
    */
   getFlatInteriorPoint () { return [] }
   
   /**
-   * Check if contains a point
-   * <br/> 判断当前图形是否包含一个点
+   * 判断当前图形是否包含一个点
+   *
    * @abstract
    * @method containsXY
    * @param x {Number} x 坐标信息
@@ -147,8 +138,8 @@ export default class Geometry extends BaseObject {
   containsXY (x, y) { return true } // eslint-disable-line no-unused-vars
   
   /**
-   * Move the geometry
-   * <br/> 移动改图形，移动图形，需要传递x，y的移动量
+   * 移动改图形，移动图形，需要传递x，y的移动量
+   *
    * @method move
    * @abstract
    * @param x {Number} x 坐标信息
@@ -158,6 +149,7 @@ export default class Geometry extends BaseObject {
   
   /**
    * 定义对图形本身的缩放方法
+   *
    * @method scale
    * @abstract
    * @param scale {Number} 缩放比率
@@ -167,6 +159,7 @@ export default class Geometry extends BaseObject {
   
   /**
    * 定义图形本身的旋转方法
+   *
    * @method rotate
    * @abstract
    * @param angle {Number} 旋转的角度
@@ -176,6 +169,7 @@ export default class Geometry extends BaseObject {
   
   /**
    * 创建一个简化后的图形副本
+   *
    * @method simplify
    * @abstract
    * @param tolerance {Number} 阈值
@@ -184,6 +178,7 @@ export default class Geometry extends BaseObject {
  
   /**
    * 将图形转换成json格式
+   *
    * @method toJSON
    * @abstrct
    */
@@ -191,6 +186,7 @@ export default class Geometry extends BaseObject {
   
   /**
    * 克隆一个图形副本
+   *
    * @method clone
    * @abstract
    */
@@ -199,6 +195,7 @@ export default class Geometry extends BaseObject {
 
 /**
  * 点类型
+ *
  * @property POINT
  * @static
  * @final
@@ -208,6 +205,7 @@ Geometry.POINT = 'point'
 
 /**
  * 多点类型
+ *
  * @property MULTI_POINT
  * @static
  * @final
@@ -217,6 +215,7 @@ Geometry.MULTI_POINT = 'multi_point'
 
 /**
  * 线类型
+ *
  * @property LINE
  * @static
  * @final
@@ -226,6 +225,7 @@ Geometry.LINE = 'line'
 
 /**
  * 多线类型
+ *
  * @property MULTI_LINE
  * @static
  * @final
@@ -235,6 +235,7 @@ Geometry.MULTI_LINE = 'multi_line'
 
 /**
  * 多边形类型
+ *
  * @property POLYGON
  * @static
  * @final
@@ -244,6 +245,7 @@ Geometry.POLYGON = 'polygon'
 
 /**
  * 多个多边形类型
+ *
  * @property MULTI_POLYGON
  * @static
  * @final
@@ -253,6 +255,7 @@ Geometry.MULTI_POLYGON = 'multi_polygon'
 
 /**
  * 矩形类型
+ *
  * @property EXTENT
  * @static
  * @final
@@ -262,6 +265,7 @@ Geometry.EXTENT = 'extent'
 
 /**
  * 圆类型
+ *
  * @property CIRCLE
  * @static
  * @final
@@ -271,6 +275,7 @@ Geometry.CIRCLE = 'circle'
 
 /**
  * 未定义
+ *
  * @property UNDEFINED
  * @static
  * @final

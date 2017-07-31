@@ -9,8 +9,6 @@ import {squaredSegmentDistance} from './support/geometryutil'
 import {lineString} from './support/interpolate'
 
 /**
- * Line geometry
- *
  * 定义线类和数据结构
  *
  * @class Line
@@ -27,6 +25,7 @@ export default class Line extends Geometry {
   
   /**
    * Create a line geometry
+   * @constructor
    * @param path
    */
   constructor (path) {
@@ -40,7 +39,9 @@ export default class Line extends Geometry {
 
   /**
    * 获取图形的最小外接矩形(MBR-Minimum Bounding Rectangle)
-   * @returns {null} 返回对象的最小外接矩形
+   *
+   * @returns {Object} 返回对象的最小外接矩形
+   *
    */
   get extent () {
     const me = this
@@ -65,6 +66,8 @@ export default class Line extends Geometry {
   }
   
   /**
+   * 线段读写器
+   *
    * @property path
    * @returns
    */
@@ -75,9 +78,11 @@ export default class Line extends Geometry {
   }
   
   /**
+   * 添加线段
+   *
    * @method addPath
    * @deprecated
-   * @param coordinates
+   * @param coordinates {Array}
    */
   addPath (coordinates) {
     this.path.push(coordinates)
@@ -87,6 +92,7 @@ export default class Line extends Geometry {
   
   /**
    * 遍历每一条边
+   *
    * @method forEachSegment
    * @param callback {callback}
    * @param opt
@@ -123,7 +129,7 @@ export default class Line extends Geometry {
   
   /**
    * 计算线的平面内点
-   * <br> Calcaluate the interior point
+   *
    * @method getFlatInteriorPoint
    * @returns {Array}
    */
@@ -146,7 +152,7 @@ export default class Line extends Geometry {
 
   /**
    * 得到最后一个点的坐标，显示表单
-   * Get the last position of geometry
+   *
    * @param {Number} offsetX x的偏移量
    * @param {Number} offsetY y的偏移量
    * @returns {[*,*]}
@@ -163,9 +169,10 @@ export default class Line extends Geometry {
   }
   
   /**
-   * Set coordinate for line
+   * 设置坐标数据
+   *
    * @method setCoordinates
-   * @param coords
+   * @param coords {Array}
    */
   setCoordinates (coords) {
     this.path = coords
@@ -176,7 +183,6 @@ export default class Line extends Geometry {
   /**
    * 根据坐标点，计算改点的下标
    *
-   * Get index in line coordinates by gived point
    * @method getCoordinateIndex
    * @param coord
    * @returns {*|number}
@@ -188,7 +194,9 @@ export default class Line extends Geometry {
   }
   
   /**
-   * Clone a line
+   * 克隆线段
+   *
+   * @method clone
    * @returns {Line} new line
    */
   clone () {

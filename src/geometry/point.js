@@ -9,8 +9,6 @@ import {squaredDistance} from './support/geometryutil'
 
 
 /**
- * Point geometry. <br/>
- *
  * 定义点类和数据结构
  *
  * @class Point
@@ -38,12 +36,14 @@ export default class Point extends Geometry {
 
   /**
    * 获取对象的几何类型
+   *
    * @protected
    */
   get geometryType () { return Geometry.POINT }
 
   /**
    * 获取点的最小外接矩形
+   *
    * @note 点是没有最小外接矩形
    * @returns {null}
    */
@@ -58,6 +58,7 @@ export default class Point extends Geometry {
 
   /**
    * 获取 X 坐标值
+   *
    * @property x
    * @type x {number}
    */
@@ -66,6 +67,7 @@ export default class Point extends Geometry {
   
   /**
    * 获取 Y 坐标值
+   *
    * @property y
    * @type {number}
    */
@@ -74,6 +76,7 @@ export default class Point extends Geometry {
 
   /**
    * 根据x,y的偏移量得到点
+   *
    * @method offset
    * @param nx x轴偏移量
    * @param ny y轴偏移量
@@ -84,7 +87,7 @@ export default class Point extends Geometry {
   }
   
   /**
-   * @method containsXY
+   * containsXY
    * @param x
    * @param y
    * @param opt
@@ -104,6 +107,7 @@ export default class Point extends Geometry {
 
   /**
    * 更新x,y坐标值
+   *
    * @method update
    * @param nx x新值
    * @param ny y新值
@@ -117,7 +121,8 @@ export default class Point extends Geometry {
   
   /**
    *
-   * @method getFlatInteriorPoint
+   *
+   * getFlatInteriorPoint
    * @returns {[]}
    */
   getFlatInteriorPoint () {
@@ -125,9 +130,10 @@ export default class Point extends Geometry {
   }
   
   /**
-   * Get the collection of geometry
+   * 获取点的坐标
+   *
    * @method getCoordinates
-   * @returns {[]}
+   * @returns {Array}
    */
   getCoordinates () {
     return [this.x, this.y]
@@ -136,7 +142,6 @@ export default class Point extends Geometry {
   /**
    * 点的位置就是坐标点的位置减去偏移量的位置
    *
-   * Get the position of geometry
    * @method getFormShowPosition
    * @param {Number} offsetX x的偏移量
    * @param {Number} offsetY y的偏移量
@@ -147,7 +152,8 @@ export default class Point extends Geometry {
   }
 
   /**
-   * set coordinates to point
+   * 设置点的坐标
+   *
    * @method setCoordinates
    * @param coordinates
    */
@@ -157,7 +163,7 @@ export default class Point extends Geometry {
   }
   
   /**
-   * @method getCoordinateIndex
+   * getCoordinateIndex
    * @returns {number}
    */
   getCoordinateIndex () {
@@ -165,9 +171,10 @@ export default class Point extends Geometry {
   }
   
   /**
-   * Determine if two objects should be equal <br/>
    * 判断两个图形对象是否相等
+   *
    * 判断标准：该图形的所有顶点值是否一致
+   *
    * @method equal
    * @param geometry
    * @return {Boolean}
@@ -182,7 +189,9 @@ export default class Point extends Geometry {
   }
   
   /**
-   * Clone a point
+   * 克隆点
+   *
+   * @method clone
    * @returns {Point}
    */
   clone () {

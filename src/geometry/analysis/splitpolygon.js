@@ -11,8 +11,8 @@ import Polygon from '../../geometry/polygon'
  * 暂时只支持不带洞的多边形的分割
  *
  * @method splitPolygonByLine
- * @param polygon 被切割多边形
- * @param line 切割直线
+ * @param polygon {Geometry} 被切割多边形
+ * @param line {Geometry} 切割直线
  * @returns {Array}
  */
 export default function splitPolygonByPolyline(polygon, line) {
@@ -188,8 +188,7 @@ const renewal = function(vertexListAfterDivide, allPartsScliedFromLineCoords) {
   
     return false
   }
-  
-  
+
   for (; i < len - 1; i++) {
     const fPoint = vertexListAfterDivide[i]
     // 如果是普通点

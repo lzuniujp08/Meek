@@ -2,11 +2,9 @@
  * Created by zypc on 2016/11/13.
  */
 
+ // The event processor for all subclasss, which can allow subclass
+ // to handle event dispatching and listening.This is the top level class
 /**
- *
- * The event processor for all subclasss, which can allow subclass
- * to handle event dispatching and listening.This is the top level class
- *
  * 顶层事件处理器类,让子类具备事件的监听和派发
  *
  * @class Event
@@ -18,7 +16,7 @@ export default class Event {
   
   /**
    * Event's constructor
-   * @method constructor
+   * @constructor constructor
    */
   constructor () {
     this._pendingRemovals = {}
@@ -30,8 +28,6 @@ export default class Event {
   }
   
   /**
-   * Get all listeners by the passed event type
-   *
    * 根据事件标识获取对应标识的方法列表
    *
    * @method getListeners
@@ -43,8 +39,6 @@ export default class Event {
   }
   
   /**
-   * Determine if exist the listeners by the event type
-   *
    * 判断是否含有对应事件标识的监听
    *
    * @method hasListener
@@ -54,10 +48,8 @@ export default class Event {
   hasListener (optType) {
     return optType ? optType in this._listeners : Object.keys(this._listeners).length > 0
   }
-  
+
   /**
-   * Remove the event listener
-   *
    * 移除事件监听
    *
    * @method removeEventListener
@@ -83,8 +75,6 @@ export default class Event {
   }
   
   /**
-   * Add the event listener by given event type and handler function
-   *
    * 添加事件监听,需要指定事件标示和处理方法
    *
    * @example
@@ -106,8 +96,6 @@ export default class Event {
   }
   
   /**
-   * Dispatch a event by the event type
-   *
    * 事件派发
    *
    * @example

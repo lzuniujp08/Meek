@@ -9,8 +9,6 @@ import {linearRings} from './support/interpolate'
 import {linearRingsAreOriented,orientLinearRings} from './support/orient'
 
 /**
- * Polygon geometry <br/>
- *
  * 面类和数据结构
  *
  * 多边形是<b>闭合数据结构</b>，所有首尾点必须相同。
@@ -45,7 +43,10 @@ export default class Polygon extends Geometry {
   /**
    * 获取图形的最小外接矩形(MBR-Minimum Bounding Rectangle)
    * 可用来对图形进行拖动、旋转、缩放
+   *
+   * @method extent
    * @abstrct function
+   * @returns {Extent}
    */
   get extent () {
     if (this._extent === null) {
@@ -76,13 +77,17 @@ export default class Polygon extends Geometry {
 
   /**
    * 获取对象的几何类型
+   *
+   * @method geometryType
    * @abstrct function
+   * @returns {String}
    */
   get geometryType () { return Geometry.POLYGON }
 
   /**
    * 设置多边形的边，如果设置了边，则需要重新计算
    * 外接矩形
+   *
    * @property rings
    */
   get rings () { return this._rings }
@@ -92,8 +97,11 @@ export default class Polygon extends Geometry {
   }
   
   /**
-   * @
-   * @param ring
+   * 多边形添加线段
+   *
+   * @method addRing
+   * @param ring {Array}
+   *
    */
   addRing (ring) {
     this.rings.push(ring)
@@ -101,11 +109,12 @@ export default class Polygon extends Geometry {
   }
   
   /**
-   * Detemine if a point is contained in this polygon
-   * @param x
-   * @param y
-   * @param opt
-   * @returns {boolean}
+   * 判断点是否在多边形上
+   *
+   * @method containsXY
+   * @param x {Number}
+   * @param y {Number}
+   * @returns {Boolean}
    */
   containsXY (x, y) {
     const coords = this.getCoordinates()
@@ -133,10 +142,11 @@ export default class Polygon extends Geometry {
   
   /**
    * 判断 x 和 y 的值是否在环内
-   * @param x
-   * @param y
-   * @param ring
-   * @returns {boolean}
+   *
+   * @param x {Number}
+   * @param y {Number}
+   * @param ring {Array}
+   * @returns {Boolean}
    * @private
    */
   _inOneRing (x, y, ring) {
@@ -178,7 +188,7 @@ export default class Polygon extends Geometry {
   }
   
   /**
-   * @method getFlatInteriorPoint
+   * getFlatInteriorPoint
    * @returns {*}
    */
   getFlatInteriorPoint () {
@@ -192,7 +202,7 @@ export default class Polygon extends Geometry {
   }
   
   /**
-   * @method getOrientedFlatCoordinates
+   * getOrientedFlatCoordinates
    * @returns {*}
    */
   getOrientedFlatCoordinates () {
@@ -221,7 +231,9 @@ export default class Polygon extends Geometry {
   }
   
   /**
-   * Get the collection of geometry
+   * 获取多边形坐标
+   *
+   * @method getCoordinates
    * @returns {[*,*]}
    */
   getCoordinates () {
@@ -230,7 +242,7 @@ export default class Polygon extends Geometry {
 
   /**
    * 得到最后一个点的坐标，显示表单
-   * Get the last position of geometry
+   *
    * @param {Number} offsetX x的偏移量
    * @param {Number} offsetY y的偏移量
    * @returns {[*,*]}
@@ -246,6 +258,8 @@ export default class Polygon extends Geometry {
   }
   
   /**
+   * 设置多边形的坐标
+   *
    * @method setCoordinates
    * @param coords
    */
@@ -257,7 +271,7 @@ export default class Polygon extends Geometry {
   }
   
   /**
-   * @method getCoordinateIndex
+   * getCoordinateIndex
    * @param coord
    * @returns {*|number}
    */
@@ -283,7 +297,9 @@ export default class Polygon extends Geometry {
   }
   
   /**
+   * 克隆多边形
    *
+   * @method clone
    * @returns {Polygon}
    */
   clone () {

@@ -6,8 +6,6 @@ import Geometry from './geometry'
 import {ExtentUtil} from './support/extentutil'
 
 /**
- * Extent geometry.
- *
  * 矩形类和数据结构
  *
  * @class Extent
@@ -21,11 +19,13 @@ import {ExtentUtil} from './support/extentutil'
 export default class Extent extends Geometry {
 
   /**
-   * 构建一个extent对象
-   * @param xmin
-   * @param ymin
-   * @param xmax
-   * @param ymax
+   * 构造函数，构建一个extent对象
+   *
+   * @param xmin {Number}
+   * @param ymin {Number}
+   * @param xmax {Number}
+   * @param ymax {Number}
+   *
    */
   constructor (xmin = 0, ymin = 0, xmax = 0, ymax = 0) {
     super()
@@ -38,10 +38,17 @@ export default class Extent extends Geometry {
     this._rings = []
   }
 
+  /**
+   * 获取Geometry的类型
+   *
+   * @property geometryType
+   * @returns {String}
+   */
   get geometryType () { return Geometry.EXTENT }
 
   /**
    * 计算x轴的中心坐标
+   *
    * @property centerX
    * @type {Number}
    */
@@ -49,6 +56,7 @@ export default class Extent extends Geometry {
 
   /**
    * 计算Y轴的中心坐标
+   *
    * @property centerY
    * @type {Number}
    */
@@ -56,6 +64,7 @@ export default class Extent extends Geometry {
 
   /**
    * 计算最小外接矩形的宽
+   *
    * @property width
    * @returns {Number}
    */
@@ -63,6 +72,7 @@ export default class Extent extends Geometry {
 
   /**
    * 计算最小外接矩形的高
+   *
    * @property height
    * @returns {Number}
    */
@@ -70,11 +80,15 @@ export default class Extent extends Geometry {
 
   /**
    * 获取最小外接矩形本对象
+   *
+   * @property extent
+   * @returns {Object} extent
    */
   get extent () { return this }
   
   /**
    * X 轴最小值
+   *
    * @property xmin
    * @type {Number}
    */
@@ -83,6 +97,7 @@ export default class Extent extends Geometry {
   
   /**
    * Y 轴最小值
+   *
    * @property ymin
    * @type {Number}
    */
@@ -91,6 +106,7 @@ export default class Extent extends Geometry {
   
   /**
    * X 轴最大值
+   *
    * @property xmax
    * @type {Number}
    */
@@ -99,6 +115,7 @@ export default class Extent extends Geometry {
   
   /**
    * X 轴最大值
+   *
    * @property ymax
    * @type {Number}
    */
@@ -107,16 +124,18 @@ export default class Extent extends Geometry {
   
   
   /**
-   * Check if contains a point
-   * @param x
-   * @param y
+   * 判断点是否在矩形内
+   *
+   * @method containsXY
+   * @param x {Number}
+   * @param y {Number}
    */
   containsXY (x, y) {
     return ExtentUtil.containsPoint(this, [x, y])
   }
   
   /**
-   * @method getFlatInteriorPoint
+   * getFlatInteriorPoint
    * @returns {[*,*]}
    */
   getFlatInteriorPoint () {
@@ -124,9 +143,11 @@ export default class Extent extends Geometry {
   }
   
   /**
-   * Move the goemetry by the given x and y
-   * @param x
-   * @param y
+   * 移动矩形通过x，y值
+   *
+   * @method move
+   * @param x {Number}
+   * @param y {Number}
    */
   move (x = 0, y = 0, opts) {
     const coordinate = this.getCoordinates()
@@ -180,6 +201,9 @@ export default class Extent extends Geometry {
   /**
    * 设置多边形的边，如果设置了边，则需要重新计算
    * 外接矩形
+   *
+   * @method rings
+   * @returns {Array}
    */
   get rings () {
     if (this._rings.length === 0) {
@@ -190,11 +214,7 @@ export default class Extent extends Geometry {
     
     return this._rings
   }
-  
-  /**
-   *
-   * @param value
-   */
+
   set rings (value) {
     this._rings = value
     let extentArr = ExtentUtil.boundingSimpleExtent(value)
@@ -205,8 +225,9 @@ export default class Extent extends Geometry {
   }
   
   /**
+   * 获取图形的坐标数据
    *
-   * Get the collection of geometry
+   * @method getCoordinates
    * @returns {[*,*]}
    */
   getCoordinates () {
@@ -222,7 +243,6 @@ export default class Extent extends Geometry {
   /**
    * 根据得到的坐标点，计算出表单显示的位置
    *
-   * Get the position of geometry to Calcaluate get a point to show form
    * @param {Number} offsetX x的偏移量
    * @param {Number} offsetY y的偏移量
    * @returns {[*,*]}
@@ -232,6 +252,8 @@ export default class Extent extends Geometry {
   }
   
   /**
+   * 设置坐标数据
+   *
    * @method setCoordinates
    * @param coordinates
    */
@@ -247,9 +269,9 @@ export default class Extent extends Geometry {
   
   /**
    * 获取点位于图形坐标点的下标
-   * Get index in this coordinates by given coordinate
+   *
    * @method getCoordinateIndex
-   * @param coord
+   * @param coord {Array}
    * @returns {Number}
    */
   getCoordinateIndex (coord) {
@@ -259,7 +281,9 @@ export default class Extent extends Geometry {
   }
   
   /**
-   * Clone an extent
+   * 克隆矩形框
+   *
+   * @method clone
    * @returns {Extent}
    */
   clone () {

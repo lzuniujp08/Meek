@@ -12,7 +12,7 @@ import {ExtentUtil} from '../support/extentutil'
  * @method intersects
  * @param geometry1
  * @param geometry2
- * @returns {boolean}
+ * @returns {Boolean}
  */
 export default function intersects (geometry1, geometry2) {
   if ( (geometry1 === null || geometry1 === undefined ) ||

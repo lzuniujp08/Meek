@@ -11,7 +11,7 @@ import Obj from '../utils/obj'
  * @method getListeners
  * @param target
  * @param type
- * @returns {undefined}
+ * @returns {Undefined}
  */
 export function getListeners (target, type) {
   const listenerMap = target.ol_lm
@@ -43,9 +43,8 @@ const removeListeners = function (target, type) {
 }
 
 /**
- * Unlisten events listeners by the passed key
- *
  * 移除该事件标识下全部事件监听
+ *
  * @method unlistenByKey
  * @param key {String} 事件标示
  */
@@ -128,7 +127,7 @@ const getListenerMap = function (target) {
  * @param target {Object} 监听对象
  * @param type {String} 事件标识
  * @param listener {Array} 事件响应函数列表
- * @param optThis {this} 可选
+ * @param optThis {This} 可选
  * @param optOnce
  * @returns {Array}
  */
@@ -162,8 +161,6 @@ export function listen (target, type, listener, optThis, optOnce) {
 }
 
 /**
- * Only listen event once
- *
  * 对事件只是监听一次
  *
  * @method listenOnce

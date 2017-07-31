@@ -1,15 +1,12 @@
 /**
  * Created by zhangyong on 2017/5/22.
  */
-
+//  The BaseEvent is a base class, all event dinfined in library should inherit this.
+//
+// The sub event class can define it's own property ,
+//
+//  which can be passed to other event Listener via event dispatch.
 /**
- * The BaseEvent is a base class, all event dinfined in library should inherit this.
- *
- * The sub event class can define it's own property ,
- *
- * which can be passed to other event Listener via event dispatch.
- *
- *
  * 定义事件模型基类，自定义事件必须继承该类。
  *
  * 事件类及其继承者用于事件传递、数据传送和信息通告。
@@ -22,7 +19,7 @@
 export default class BaseEvent {
   
   /**
-   * Create a BaseEvent
+   * 构造函数
    *
    * @constructor
    * @param type
@@ -42,15 +39,12 @@ export default class BaseEvent {
      *
      * @example'mousedown' | 'mousemove' | 'click'
      *
-     * The event type.
-     * @type {string}
+     * @type {String}
      * @property type
      */
     this.type = type
   
     /**
-     * The event target.
-     *
      * 事件源
      *
      * @type {Object}
@@ -62,7 +56,6 @@ export default class BaseEvent {
 }
 
 /**
- * stop propagation from dom event
  *
  * 用于阻止事件的冒泡
  *
@@ -76,7 +69,6 @@ BaseEvent.stopPropagation = function(evt) {
 
 
 /**
- * Prevent the default action from browser
  *
  * 用于阻止浏览器的默认行为
  *

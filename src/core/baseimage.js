@@ -3,10 +3,9 @@
  */
 
 import BaseObject from '../core/baseobject'
-
+ // The base class to represent a generic layer image,it has some basic properties.
+ // such as extent,resolution,state
 /**
- * The base class to represent a generic layer image,it has some basic properties.
- * such as extent,resolution,state<br/>
  *
  * 基础图片图层类，定义了一些用于加载图片的必要信息
  *
@@ -18,7 +17,9 @@ import BaseObject from '../core/baseobject'
 export default class BaseImage extends BaseObject {
   
   /**
-   * Create a BaseImage
+   * 构造函数Create a BaseImage
+   *
+   * @constructor
    * @param extent the extent of layer
    * @param resolution the resolution of layer
    * @param pixelRatio the pixel ratio
@@ -62,49 +63,49 @@ export default class BaseImage extends BaseObject {
   }
   
   /**
-   * return the attributions of layer <br/>
    * 返回图层的属性
+   *
    * @property attributions
-   * @type Object
+   * @type {Object}
    */
   get attributions () {
     return this._attributions
   }
   
   /**
-   * return the extent of layer<br/>
    * 返回图层的视图范围
+   *
    * @property extent
-   * @type Object
+   * @type {Object}
    */
   get extent () {
     return this._extent
   }
   
   /**
-   * return the DOM image<br/>
    * 返回DOM对象
-   * @param optContext options
+   *
+   * @param optContext {Object}
    * @method getDomImage
    * @abstract
    */
   getDomImage (optContext) { return optContext }
   
   /**
-   * return the pixel ratio<br/>
    * 返回像素因数
+   *
    * @property pixelRatio
-   * @type Number
+   * @type {Number}
    */
   get pixelRatio () {
     return this._pixelRatio
   }
   
   /**
-   * return the resolution of layer<br/>
-   * 返回图层的分辨率
+   * 分辨率读写器,返回图层的分辨率
+   *
    * @property resolution
-   * @type Number
+   * @type {Number}
    */
   get resolution () {
     return this._resolution
@@ -116,10 +117,10 @@ export default class BaseImage extends BaseObject {
   }
   
   /**
-   * return the state of layer loading <br/>
    * 获取图片下载状态
+   *
    * @property state
-   * @type Number
+   * @type {Number}
    */
   get state () { return this._state }
   set state (value) {
@@ -129,8 +130,9 @@ export default class BaseImage extends BaseObject {
   }
   
   /**
-   * Load not yet loaded URI. <br/>
+   *
    * 抽象方法，下载图片
+   *
    * @abstract
    * @method load
    */

@@ -3,13 +3,13 @@
  */
 
 /**
- * Calculate the distance between two points, and then determine
- * if two points get intersecting
+ * 判断两个点是否相交
  *
+ * @method pointIntersectPoint
  * @param pointA
  * @param pointB
- * @param tolerance
- * @returns {boolean}
+ * @param tolerance {Number}
+ * @returns {Boolean}
  */
 export function pointIntersectPoint (pointA, pointB, tolerance) {
   const toleranceDistance = tolerance ? tolerance : 2
@@ -23,10 +23,13 @@ export function pointIntersectPoint (pointA, pointB, tolerance) {
 }
 
 /**
- * Detemin if the point is clo
+ * 判断点是否与线相交
+ *
+ * @method pointIntersectLine
  * @param pointA
  * @param line
- * @param tolerance
+ * @param tolerance {Number}
+ * @returns {Boolean}
  */
 export function pointIntersectLine (pointA, line, tolerance) {
   const path = line.path
@@ -89,10 +92,12 @@ export function squaredDistanceToSegment (coordinate, segment) {
 }
 
 /**
+ * 判断两个坐标是否相等
  *
+ * @method equals
  * @param coordinate1
  * @param coordinate2
- * @returns {boolean}
+ * @returns {Boolean}
  */
 export function equals (coordinate1, coordinate2) {
   let equals = true
@@ -107,12 +112,14 @@ export function equals (coordinate1, coordinate2) {
 }
 
 /**
- * Return the square of the distance between the points
+ * 计算两点之间的距离的平方
+ *
+ * @method squaredDistance
  * @param x1
  * @param y1
  * @param x2
  * @param y2
- * @returns {number} squared distance
+ * @returns {Number} squared distance
  */
 export function squaredDistance (x1, y1, x2, y2) {
   const dx = x2 - x1
@@ -121,10 +128,12 @@ export function squaredDistance (x1, y1, x2, y2) {
 }
 
 /**
- * Calculate the distance between two points
+ * 计算两点之间的距离
+ *
+ * @method distance
  * @param coord1
  * @param coord2
- * @returns {number}
+ * @returns {Number}
  */
 export function distance (coord1, coord2) {
   return Math.sqrt(squaredDistance(coord1[0], coord1[1], coord2[0], coord2[1]))
@@ -132,9 +141,9 @@ export function distance (coord1, coord2) {
 
 /**
  *
- * @param coordinate
+ * @param coordinate {Array}
  * @param segment
- * @returns {[*,*]}
+ * @returns {Array}
  */
 export function closestOnSegment (coordinate, segment) {
   const x0 = coordinate[0]
@@ -174,7 +183,7 @@ export function closestOnSegment (coordinate, segment) {
  * @param stride
  * @param x
  * @param y
- * @returns {boolean}
+ * @returns {oolean}
  */
 export function linearRingsContainsXY (flatCoordinates, offset, ends, stride, x, y) {
   if (ends.length === 0) {
