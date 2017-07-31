@@ -59,7 +59,7 @@ draw.addEventListener(Datatang.DrawEvent.EventType.DRAW_END, function(drawEvent)
   
   arr.forEach(function(fea){
     var theGeometry = polybool(fea.geometry)
-    becutedGeometry = PolyBool.difference(theGeometry, becutedGeometry)
+    becutedGeometry = PolyBool.xor(theGeometry, becutedGeometry)
   })
   
   console.log(becutedGeometry)

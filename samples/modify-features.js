@@ -9,16 +9,36 @@ window.onload = function () {
   var line = new Datatang.Line()
   line.path = path
   
-  var rings = [[500,400],[490,478],[350,350],[500,400]]
+  var rings = [[[500,400],[490,478],[350,350],[500,400]]]
   var polygon = new Datatang.Polygon(rings)
   
   var extent = new Datatang.Extent(1100, 300, 1400, 600)
-
   var extent1 = new Datatang.Extent(100, 300, 200, 600)
+  
+  var holeRings = [
+    // 外环
+    [
+      [100, 600], [50, 680],
+      [100, 760], [200, 690],
+      [150, 580], [100, 600]
+    ],
+    // 洞1
+    [
+      [100, 640], [140, 650],
+      [120, 680], [100, 640]
+    ],
+    // 洞2
+    [
+      [100, 690], [140, 700],
+      [120, 720], [100, 690]
+    ]
+  ]
+  var holePolygon = new Datatang.Polygon(holeRings)
   
   var features = [new Datatang.Feature(point),
     new Datatang.Feature(line),
     new Datatang.Feature(polygon),
+    new Datatang.Feature(holePolygon),
     new Datatang.Feature(extent),
     new Datatang.Feature(extent1)
   ]
@@ -71,7 +91,7 @@ window.onload = function () {
     } else if (value === 'line') {
       modifyTool.features = [new Datatang.Feature(line)]
     } else if (value === 'polygon') {
-      modifyTool.features = [new Datatang.Feature(polygon)]
+      modifyTool.features = [new Datatang.Feature(holePolygon)]
     } else if (value === 'extent') {
       modifyTool.features = [new Datatang.Feature(extent)]
     }
