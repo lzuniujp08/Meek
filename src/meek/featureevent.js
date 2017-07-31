@@ -5,7 +5,11 @@
 import BaseEvent from '../core/baseevent'
 
 /**
+ * FeatureEvent类
  *
+ * @class FeatureEvent
+ * @extends baseevent
+ * @module meek
  */
 export default class FeatureEvent extends BaseEvent {
   

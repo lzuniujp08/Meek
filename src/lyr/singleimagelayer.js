@@ -14,6 +14,8 @@ import {ImageState} from '../lyr/image/imagestate'
 import {ExtentUtil} from '../geometry/support/extentutil'
 
 /**
+ * SingleImageLayer
+ *
  * @class SingleImageLayer
  * @extends BaseObject
  * @module layer
@@ -22,7 +24,7 @@ import {ExtentUtil} from '../geometry/support/extentutil'
 export default class SingleImageLayer extends BaseLayer {
   
   /**
-   *
+   * @constructor
    * @param options
    */
   constructor (options = {}) {
@@ -65,17 +67,32 @@ export default class SingleImageLayer extends BaseLayer {
   }
   
   /**
+   * 设置图片链接
    *
-   * @param url
+   * @method imageSrc
+   * @param url {String}
+   *
    */
   set imageSrc (url) {
     this._singleImage._src = url
     this._singleImage.domImage = new Image()
     this._singleImage.state = ImageState.IDLE
   }
-  
+
+  /**
+   * 获取singleImage
+   *
+   * @property singleImage
+   * @returns {SingleImage}
+   */
   get singleImage () { return this._singleImage }
-  
+
+  /**
+   * 属性读写器
+   *
+   * @property attributions
+   * @param value
+   */
   set attributions(value){
     this._attributes = value
   }
@@ -94,7 +111,7 @@ export default class SingleImageLayer extends BaseLayer {
   }
   
   /**
-   * Get the image dom
+   * 获取图片的Dom
    * @inheritDoc
    */
   getImageInternal (extent) {

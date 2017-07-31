@@ -6,7 +6,6 @@ import BaseStyle from './basestyle'
 import FillStyle from './fillstyle'
 
 /**
- * The text style for geometrys
  *
  * 定义文本样式
  *
@@ -113,6 +112,7 @@ export default class TextStyle extends BaseStyle {
   
   /**
    * 要显示的文本
+   *
    * @property text
    * @type {Stirng}
    */
@@ -121,6 +121,7 @@ export default class TextStyle extends BaseStyle {
   
   /**
    * 显示的字体
+   *
    * @property font
    * @type {Stirng}
    */
@@ -129,6 +130,7 @@ export default class TextStyle extends BaseStyle {
   
   /**
    * 旋转的角度
+   *
    * @property rotation
    * @type {Stirng}
    */
@@ -136,6 +138,8 @@ export default class TextStyle extends BaseStyle {
   set rotation (value) { this._rotation = value }
   
   /**
+   * 旋转视图
+   *
    * @property rotateWithView
    * @type {Stirng}
    */
@@ -144,6 +148,7 @@ export default class TextStyle extends BaseStyle {
   
   /**
    * 缩放比例
+   *
    * @property scale
    * @type {Stirng}
    */
@@ -152,6 +157,7 @@ export default class TextStyle extends BaseStyle {
   
   /**
    * 字体
+   *
    * @property textAlign
    * @type {Stirng}
    */
@@ -159,6 +165,8 @@ export default class TextStyle extends BaseStyle {
   set textAlign (value) { this._textAlign = value }
   
   /**
+   * 字体线
+   *
    * @property textBaseline
    * @type {Stirng}
    */
@@ -167,6 +175,7 @@ export default class TextStyle extends BaseStyle {
   
   /**
    * 字体颜色
+   *
    * @property fill
    * @type {Stirng}
    */
@@ -174,7 +183,9 @@ export default class TextStyle extends BaseStyle {
   set fill (value) { this._fill = value }
   
   /**
-   * @property stroke
+   * 字体线的样式
+   *
+   * property stroke
    * @type {Stirng}
    */
   get stroke () { return this._stroke }
@@ -182,6 +193,7 @@ export default class TextStyle extends BaseStyle {
   
   /**
    * 字体x轴偏移
+   *
    * @property offsetX
    * @type {Stirng}
    */
@@ -190,6 +202,7 @@ export default class TextStyle extends BaseStyle {
   
   /**
    * 字体y轴偏移
+   *
    * @property offsetY
    * @type {Stirng}
    */
@@ -197,7 +210,9 @@ export default class TextStyle extends BaseStyle {
   set offsetY (value) { this._offsetY = value }
   
   /**
-   * Clone a text style
+   * 克隆字体样式
+   *
+   * @method clone
    * @returns {TextStyle}
    */
   clone () {

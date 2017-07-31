@@ -5,8 +5,6 @@
 import BaseStyle from './basestyle'
 
 /**
- * The point style
- *
  * 定义一个点图形的样式
  *
  * @class PointStyle
@@ -24,6 +22,8 @@ export default class PointStyle extends BaseStyle {
 
   /**
    * 构建一个点样式对象
+   *
+   * @constructor
    * @param style 点样式，{circle|square|cross|x|triangle}其中的一种
    * @param size 点的大小，默认15
    * @param color
@@ -42,7 +42,13 @@ export default class PointStyle extends BaseStyle {
     this._angle = angle
     this._borderStyle = borderStyle
   }
-  
+
+  /**
+   * 克隆点的样式
+   *
+   * @method clone
+   * @returns {PointStyle}
+   */
   clone () {
     const newStyle = new PointStyle(this.size, this.color, this.alpha,
        this.borderStyle.clone(), this.xoffset, this.yoffset, this.angle, this.style)
@@ -56,6 +62,7 @@ export default class PointStyle extends BaseStyle {
   
   /**
    * 大小
+   *
    * @property size
    * @type {Number}
    */
@@ -64,6 +71,7 @@ export default class PointStyle extends BaseStyle {
   
   /**
    * X 轴偏移量
+   *
    * @property xoffset
    * @type {Number}
    */
@@ -72,6 +80,7 @@ export default class PointStyle extends BaseStyle {
   
   /**
    * Y 轴偏移量
+   *
    * @property yoffset
    * @type {Number}
    */
@@ -80,6 +89,7 @@ export default class PointStyle extends BaseStyle {
   
   /**
    * 样式显示的角度
+   *
    * @property angle
    * @type {Number}
    */
@@ -88,6 +98,7 @@ export default class PointStyle extends BaseStyle {
   
   /**
    * 边框样式
+   *
    * @property borderStyle
    * @type {LineStyle}
    */
@@ -98,6 +109,7 @@ export default class PointStyle extends BaseStyle {
 
 /**
  * 圆形样式
+ *
  * @static
  * @final
  * @property CIRCLE
@@ -107,6 +119,7 @@ PointStyle.CIRCLE = 'circle'
 
 /**
  * 方形样式
+ *
  * @static
  * @final
  * @property SQUARE
@@ -116,6 +129,7 @@ PointStyle.SQUARE = 'square'
 
 /**
  * 十字样式
+ *
  * @static
  * @final
  * @property CROSS
@@ -125,6 +139,7 @@ PointStyle.CROSS = 'cross'
 
 /**
  * X样式
+ *
  * @static
  * @final
  * @property X
@@ -134,6 +149,7 @@ PointStyle.X = 'x'
 
 /**
  * 三角形样式
+ *
  * @static
  * @final
  * @property TRIANGLE

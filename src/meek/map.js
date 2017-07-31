@@ -16,6 +16,8 @@ import {componentsDefaults} from '../components/componentdefaults'
 
 
 /**
+ * Map类
+ *
  * @class Map
  * @extends BaseObject
  * @module meek
@@ -23,6 +25,11 @@ import {componentsDefaults} from '../components/componentdefaults'
  */
 export default class Map extends BaseObject {
 
+  /**
+   * @constructor
+   *
+   * @param options
+   */
   constructor (options) {
     super()
 
@@ -119,8 +126,10 @@ export default class Map extends BaseObject {
   }
 
   /**
-   * 设置map的父容器
+   * 设置map的父容器,
    * 所有的图层对象、组件对象的父容器
+   *
+   * @method createViewport
    * @private
    */
   _createViewport () {
@@ -135,25 +144,33 @@ export default class Map extends BaseObject {
   }
   
   /**
-   * overlayContainer getter
+   * 获取overlay的容器
+   *
+   * @property overlayContainer
    * @returns {Element|*}
    */
   get overlayContainer () { return this._overlayContainer }
   
   /**
-   * overlayContainerStopEvent getter
+   * 获取overlay容器的结束事件
+   *
+   * @property overlayContainerStopEvent
    * @returns {Element|*}
    */
   get overlayContainerStopEvent () { return this._overlayContainerStopEvent }
   
   /**
-   * viewport getter
+   * 获取viewport
+   *
+   * @property viewport
    * @returns {Element|*}
    */
   get viewport () { return this._viewport }
 
   /**
    * 地图渲染器对象;默认渲染方式为canvas方式
+   *
+   * @method createRenderer
    * @private
    */
   _createRenderer () {
@@ -162,7 +179,10 @@ export default class Map extends BaseObject {
 
   /**
    * 创建浏览器事件的监听器
+   *
    * 浏览器事件包括{mousedown|mousemove|mouseup|mouseover|mouseup}
+   *
+   * @method createBrowserEventHandler
    * @private
    */
   _createBrowserEventHandler () {
@@ -215,7 +235,9 @@ export default class Map extends BaseObject {
   }
   
   /**
-   * Render map frame
+   * 渲染map
+   *
+   * @method renderFrame
    * @private
    */
   _renderFrame () {
@@ -246,7 +268,9 @@ export default class Map extends BaseObject {
   }
   
   /**
-   * Render function
+   * 执行渲染
+   *
+   * @method render
    */
   render () {
     if (this._animationDelayKey === undefined) {
@@ -263,24 +287,32 @@ export default class Map extends BaseObject {
   }
   
   /**
+   * 是否渲染
    *
-   * @returns {boolean}
+   * @method isRendered
+   * @returns {Boolean}
    */
   isRendered () {
     return !!this._frameState
   }
 
   /**
-   * 当前地图的大小
+   * Size读写器,当前地图的大小
    *
    * @property size
-   * @type {Number}
+   * @returns {Number}
    */
   get size () { return this._size }
   set size (value) {
     this._size = value
   }
-  
+
+  /**
+   * 获取组件
+   *
+   * @method components
+   * @returns {Array}
+   */
   get components () { return this._components }
 
   /**
@@ -299,6 +331,8 @@ export default class Map extends BaseObject {
   }
 
   /**
+   * target 读写器
+   *
    * @property target
    * @type
    */
@@ -324,6 +358,7 @@ export default class Map extends BaseObject {
   }
 
   /**
+   * 添加layer
    *
    * @method addLayer
    * @param layer
@@ -333,8 +368,6 @@ export default class Map extends BaseObject {
   }
   
   /**
-   * Get all the fetures layer from map.
-   *
    * 获取当前地图中的矢量图层
    *
    * @method getFeaturesLayer
@@ -362,7 +395,7 @@ export default class Map extends BaseObject {
   
   /**
    *
-   * @method getTargetElement
+   * getTargetElement
    * @returns {Object}
    */
   getTargetElement () {
@@ -377,12 +410,13 @@ export default class Map extends BaseObject {
   }
   
   /**
+   * 遍历鼠标点位置的所有feature
    *
    * @method forEachFeatureAtPiexl
    * @param piexl {Array}
    * @param callback
    * @param tolerance
-   * @returns {feature}
+   * @returns {eature}
    */
   forEachFeatureAtPiexl (piexl,callback,tolerance) {
     if (!this._frameState) {
@@ -406,7 +440,8 @@ export default class Map extends BaseObject {
   }
   
   /**
-   * Update the map viewport size,this is a recalculation.
+   * 更新map viewport的大小
+   *
    * @method updateSize
    */
   updateSize () {
@@ -431,7 +466,7 @@ export default class Map extends BaseObject {
   }
 
   /**
-   * Returns the map pixel position for a browser event relative to the viewport.
+   * 获取当前视图鼠标的坐标
    *
    * @method getEventPixel
    * @param {Event} event Event.
@@ -450,10 +485,10 @@ export default class Map extends BaseObject {
   }
   
   /**
-   * Gets the coordinate for a given pixel.
+   * 把坐标数据转换到标准坐标系中
    *
    * @method getCoordinateFromPixel
-   * @param pixelPoint
+   * @param pixelPoint {Array}
    * @returns {Array}
    */
   getCoordinateFromPixel (pixelPoint) {
@@ -470,7 +505,7 @@ export default class Map extends BaseObject {
    * Get the pixel for a coordinate.  This takes a coordinate in the map view
    * projection and returns the corresponding pixel.
    *
-   * @method getPixelFromCoordinate
+   * getPixelFromCoordinate
    * @param coordinate
    * @returns {Array}
    */
@@ -485,7 +520,7 @@ export default class Map extends BaseObject {
   
   /**
    * Parse the options passed inner
-   * @method parseOptionsInner
+   * parseOptionsInner
    * @param options
    * @static
    * @returns {{rendererClass: CanvasRenderer, components: *, values: Map}}

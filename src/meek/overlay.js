@@ -9,13 +9,19 @@ import {ExtentUtil} from '../geometry/support/extentutil'
 import {outerWidth, outerHeight, removeChildren} from '../utils/domutil'
 
 /**
+ * Overlay类
+ *
  * @class Overlay
  * @extends BaseObject
  * @module meek
  * @constructor
  */
 export default class Overlay extends BaseObject {
-  
+
+  /**
+   * @constructor
+   * @param options
+   */
   constructor (options = {}) {
     super()
   
@@ -59,7 +65,7 @@ export default class Overlay extends BaseObject {
      * @private
      * @type {number|string|undefined}
      */
-    this._voerlayId = options.id
+    this._overlay = options.id
   
     /**
      * @private
@@ -161,6 +167,8 @@ export default class Overlay extends BaseObject {
   }
   
   /**
+   * 执行渲染
+   *
    * @method render
    */
   render () {
@@ -168,6 +176,8 @@ export default class Overlay extends BaseObject {
   }
   
   /**
+   * 更新鼠标点的位置信息
+   *
    * @method updatePixelPosition
    */
   updatePixelPosition () {
@@ -186,9 +196,11 @@ export default class Overlay extends BaseObject {
   }
   
   /**
-   *@method updateRenderedPosition
-   * @param pixel
-   * @param mapSize
+   * 更新渲染视图位置
+   *
+   * @method updateRenderedPosition
+   * @param pixel {Array}
+   * @param mapSize {Number}
    */
   updateRenderedPosition (pixel, mapSize) {
     const style = this._element.style
@@ -260,6 +272,8 @@ export default class Overlay extends BaseObject {
   }
   
   /**
+   * 设置是否可见
+   *
    * @method setVisible
    * @param visible
    */
@@ -271,7 +285,9 @@ export default class Overlay extends BaseObject {
   }
   
   /**
+   * 表单自动适应视图范围
    *
+   * @method panIntoView
    * @private
    */
   _panIntoView () {
@@ -354,12 +370,16 @@ export default class Overlay extends BaseObject {
   }
 
   /**
-   * @property voerlayId
+   * 获取overlayId
+   *
+   * @property overlayId
    * @return {number|string|undefined}
    */
-  get voerlayId () { return this._voerlayId }
+  get overlayId () { return this._overlayId }
 
   /**
+   * 获取表单元素
+   *
    * @property popupEelement
    * @return {*}
    */
@@ -382,9 +402,13 @@ export default class Overlay extends BaseObject {
     }
   }
 
+
   /**
+   * map读写器, 读取设置当前map
+   *
+   * @type {Function}
    * @property map
-   * @return {undefined|*}
+   * @type {Datatang.map}
    */
   get map () { return this._map }
   set map (value) {
@@ -405,6 +429,8 @@ export default class Overlay extends BaseObject {
   }
 
   /**
+   * 偏移量读写器
+   *
    * @property offset
    * @return {*|undefined}
    */
@@ -415,6 +441,8 @@ export default class Overlay extends BaseObject {
   }
 
   /**
+   * 鼠标点位置读写器
+   *
    * @property position
    * @return {undefined|*}
    */
@@ -425,7 +453,9 @@ export default class Overlay extends BaseObject {
   }
 
   /**
-   * @property positioning
+   *
+   *
+   * positioning
    * @return {undefined|*}
    */
   get positioning () { return this._positioning }

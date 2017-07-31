@@ -5,7 +5,7 @@
 import BaseObject from '../core/baseobject'
 
 /**
- *
+ * BrowserEvent
  *
  * @class BrowserEvent
  * @extends BaseObject
@@ -14,6 +14,12 @@ import BaseObject from '../core/baseobject'
  */
 export default class BrowserEvent extends BaseObject {
 
+  /**
+   * @constructor
+   * @param map
+   * @param oriEvent
+   * @param eventTyle
+   */
   constructor (map, oriEvent, eventTyle) {
     super()
 
@@ -63,6 +69,7 @@ export default class BrowserEvent extends BaseObject {
   
   /**
    * 阻止当前事件在DOM树上冒泡
+   *
    * @method stopPropagation
    */
   stopPropagation () {
@@ -70,41 +77,37 @@ export default class BrowserEvent extends BaseObject {
   }
   
 }
-
+// The single click is different form double click,which
+// consider as two click heppen during 250ms.
 /**
- * The single click is different form double click,which
- * consider as two click heppen during 250ms.
- *
  * 鼠标在一段时间内单击标识
  *
  * @property SINGLE_CLICK
  * @static
  * @final
- * @type {string}
+ * @type {String}
  */
 BrowserEvent.SINGLE_CLICK = 'singleclick'
 
 /**
- * A click with no draging.
  *
  * 鼠标单击事件标识
  *
  * @property CLICK
  * @static
  * @final
- * @type {string}
+ * @type {String}
  */
 BrowserEvent.CLICK = 'click'
 
 /**
- * A real double click
  *
  * 鼠标双击事件标识
  *
  * @property DBLCLICK
  * @static
  * @final
- * @type {string}
+ * @type {String}
  */
 BrowserEvent.DBLCLICK = 'dblclick'
 
@@ -114,7 +117,7 @@ BrowserEvent.DBLCLICK = 'dblclick'
  * @property MOUSE_DRAG
  * @static
  * @final
- * @type {string}
+ * @type {String}
  */
 BrowserEvent.MOUSE_DRAG = 'mousedrag'
 
@@ -124,7 +127,7 @@ BrowserEvent.MOUSE_DRAG = 'mousedrag'
  * @property MOUSE_DOWN
  * @static
  * @final
- * @type {string}
+ * @type {String}
  */
 BrowserEvent.MOUSE_DOWN = 'mousedown'
 
@@ -144,7 +147,7 @@ BrowserEvent.MOUSE_MOVE = 'mousemove'
  * @property MOUSE_UP
  * @static
  * @final
- * @type {string}
+ * @type {String}
  */
 BrowserEvent.MOUSE_UP = 'mouseup'
 
@@ -154,7 +157,7 @@ BrowserEvent.MOUSE_UP = 'mouseup'
  * @property MOUSE_OVER
  * @static
  * @final
- * @type {string}
+ * @type {String}
  */
 BrowserEvent.MOUSE_OVER = 'mouseover'
 
@@ -164,7 +167,7 @@ BrowserEvent.MOUSE_OVER = 'mouseover'
  * @property MOUSE_OUT
  * @static
  * @final
- * @type {string}
+ * @type {String}
  */
 BrowserEvent.MOUSE_OUT = 'mouseout'
 
@@ -174,7 +177,7 @@ BrowserEvent.MOUSE_OUT = 'mouseout'
  * @property WHEEL
  * @static
  * @final
- * @type {string}
+ * @type {String}
  */
 BrowserEvent.WHEEL = 'wheel'
 
@@ -184,6 +187,6 @@ BrowserEvent.WHEEL = 'wheel'
  * @property MOUSE_WHEEL
  * @static
  * @final
- * @type {string}
+ * @type {String}
  */
 BrowserEvent.MOUSE_WHEEL = 'mousewheel'

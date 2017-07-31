@@ -34,6 +34,7 @@ export default class DrawEvent extends BaseEvent {
 
 /**
  * 定义绘制工具的事件类型
+ *
  * @type {{DRAW_START: string, DRAW_END: string}}
  */
 DrawEvent.EventType = {

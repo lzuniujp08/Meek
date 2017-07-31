@@ -7,7 +7,9 @@ import {EventType} from '../meek/eventtype'
 import {listen, unlistenByKey} from '../core/eventmanager'
 
 /**
- * @class FeatureLayer
+ * FeatureLayer
+ *
+ * class FeatureLayer
  * @extends BaseObject
  * @module layer
  * @constructor
@@ -56,8 +58,10 @@ export default class FeatureLayer extends BaseLayer {
     }
   
     /**
+     * zIndex
      *
-     * @type {number}
+     * @property zIndex
+     * @type {Number}
      */
     this.zIndex = options.zIndex || 2
   
@@ -73,7 +77,9 @@ export default class FeatureLayer extends BaseLayer {
   }
   
   /**
-   * Clear all feature in collection
+   * 清除所有features
+   *
+   * @method clear
    */
   clear () {
     if (this._features.length !== 0) {
@@ -94,12 +100,18 @@ export default class FeatureLayer extends BaseLayer {
     }
   }
 
+  /**
+   * 获取features
+   *
+   * @returns {Array}
+   */
   get features () { return this._features }
   
   /**
+   * 通过id查找feature
    *
    * @param id
-   * @returns {*|{ID, TAG, NAME, CLASS}|T}
+   * @returns {Boolean}
    */
   findFeature (id) {
     const features = this.features
@@ -109,9 +121,11 @@ export default class FeatureLayer extends BaseLayer {
   }
   
   /**
-   * Add features to the layer then the change event will be dispached
-   * @param features
-   * @returns {boolean}
+   * 向layer中添加features
+   *
+   * @method addFeatures
+   * @param {Object} features
+   * @returns {Boolean}
    */
   addFeatures (features) {
     if (!Array.isArray(features)) {
@@ -124,9 +138,10 @@ export default class FeatureLayer extends BaseLayer {
   }
   
   /**
+   * 判断feature是否存在
    *
    * @param feature
-   * @returns {boolean}
+   * @returns {Boolean}
    */
   hasFeature (feature) {
     if (feature === null || feature === undefined) {
@@ -143,8 +158,9 @@ export default class FeatureLayer extends BaseLayer {
   }
   
   /**
-   * Put features to the layer collection and then
-   * dispacth a feature event.
+   * 添加feature到layer的集合中，并派发feature事件
+   *
+   * addFeaturesInner
    * @param features
    * @private
    */
@@ -160,9 +176,11 @@ export default class FeatureLayer extends BaseLayer {
   }
   
   /**
-   * Add a feature to collection
+   * 添加feature到layer的集合中
+   *
+   * @method addFeature
    * @param feature
-   * @returns {boolean}
+   * @returns {Boolean}
    */
   addFeature (feature) {
     if (!feature) {
@@ -175,11 +193,13 @@ export default class FeatureLayer extends BaseLayer {
   }
   
   /**
+   * 获取当前鼠标点的所有feature
    *
+   * @method forEachFeatureAtPiexl
    * @param frameState
-   * @param piexl
+   * @param piexl {Array}
    * @param callback
-   * @param tolerance
+   * @param tolerance {Number}
    * @returns {*}
    */
   forEachFeatureAtPiexl (frameState,piexl,callback,tolerance) {
@@ -221,9 +241,10 @@ export default class FeatureLayer extends BaseLayer {
   }
   
   /**
-   * Remove a feature from features collection
+   * 从集合中移除feature
+   *
    * @param feature
-   * @returns {boolean}
+   * @returns {Boolean}
    */
   removeFeature (feature) {
     const features = this.features
@@ -266,7 +287,13 @@ export default class FeatureLayer extends BaseLayer {
   _handleFeatureChange () {
     this.changed()
   }
-  
+
+  /**
+   * 样式读写器
+   *
+   * @property style
+   * @param value
+   */
   set style (value) {
     this._style = value !== undefined ? value : Style.defaultFunction()
     this._styleFunction = value === null ? undefined :Style.createFunction(this._style)
@@ -281,8 +308,8 @@ export default class FeatureLayer extends BaseLayer {
   }
   
   /**
-   * Getter and Setter for renderBuffer
-   * @returns {*|number}
+   * renderBuffer读写器
+   *
    */
   get renderBuffer() { return this._renderBuffer }
   set renderBuffer (renderBufferValue) {
@@ -292,9 +319,11 @@ export default class FeatureLayer extends BaseLayer {
   }
   
   /**
+   * 加载feature
    *
-   * @param extent
-   * @returns {Array}
+   * @method loadFeature
+   * @param extent {Geometry}
+   * @returns {feature}
    */
   loadFeature (extent) {
     const features = this.features
@@ -317,6 +346,12 @@ export default class FeatureLayer extends BaseLayer {
 
     return newFeatures
   }
-  
+
+  /**
+   * 获取样式
+   *
+   * @method styleFunction
+   * @returns {null|undefined|*}
+   */
   get styleFunction () { return this._styleFunction }
 }

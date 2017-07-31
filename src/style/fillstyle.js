@@ -5,7 +5,6 @@
 import BaseStyle from './basestyle'
 
 /**
- * The polygon style
  *
  * 定义多边形样式，多边形样式包括<b>填充样式</b>和<b>边框样式</b>，
  * 需要分别设置
@@ -25,6 +24,7 @@ export default class FillStyle extends BaseStyle {
   /**
    * 构建一个面样式
    * 面样式由填充样式和边框样式组成
+   *
    * @constructor
    * @param style 备有接口，以后扩充面的填充样式
    * @param color 面的填充颜色
@@ -39,6 +39,7 @@ export default class FillStyle extends BaseStyle {
   
   /**
    * 边框样式对象
+   *
    * @property borderStyle
    * @type {Datatang.LineStyle}
    */
@@ -46,7 +47,9 @@ export default class FillStyle extends BaseStyle {
   set borderStyle (value) { return this._borderStyle = value }
   
   /**
+   * 克隆面样式
    *
+   * @method clone
    * @returns {FillStyle}
    */
   clone () {

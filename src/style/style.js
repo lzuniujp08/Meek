@@ -11,6 +11,7 @@ export const Style = {}
 
 /**
  * 设置缺省图形style
+ *
  * Create a defaut style for feature layer
  * @returns {null|Array|[*]}
  */

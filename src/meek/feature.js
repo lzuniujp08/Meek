@@ -65,21 +65,22 @@ export default class Feature extends BaseObject {
 
     /**
      * 设置feature是否显示
-     * @type {boolean}
+     *
+     * @type {Boolean}
      * @private
      */
     this.display = true
 
     /**
      * 设置feature的标签是否显示
-     * @type {boolean}
+     * @type {Boolean}
      * @private
      */
     this.textDisplay = true
 
     /**
      * 设置feature的样式是否高亮
-     * @type {boolean}
+     * @type {Boolean}
      * @private
      */
     this.styleHighLight = false
@@ -95,6 +96,8 @@ export default class Feature extends BaseObject {
   }
 
   /**
+   * 设置feature属性
+   *
    * @method initArribute
    * @param attributes
    */
@@ -107,6 +110,8 @@ export default class Feature extends BaseObject {
   }
 
   /**
+   * 获取feature属性
+   *
    * @method get
    * @param property
    * @return {*}
@@ -120,6 +125,7 @@ export default class Feature extends BaseObject {
   }
 
   /**
+   * 设置属性的值
    *
    * @method set
    * @param property
@@ -131,6 +137,8 @@ export default class Feature extends BaseObject {
   }
 
   /**
+   * 删除属性
+   *
    * @method delete
    * @param property
    * @return {boolean}
@@ -140,6 +148,8 @@ export default class Feature extends BaseObject {
   }
 
   /**
+   * 遍历属性
+   *
    * @method forEachAttribute
    * @param callback
    */
@@ -148,16 +158,20 @@ export default class Feature extends BaseObject {
   }
 
   /**
+   * 判断属性是否存在
+   *
    * @method has
    * @param property
-   * @return {boolean}
+   * @return {Boolean}
    */
   has(property) {
     return this._attributesMap.has(property)
   }
 
   /**
-   * @method geometry
+   * Geometry 读写器
+   *
+   * @property geometry
    * @return {*}
    */
   get geometry() {
@@ -178,8 +192,10 @@ export default class Feature extends BaseObject {
   }
 
   /**
-   * @method styleFunction
-   * @return {*|undefined}
+   * 缺省样式读写器
+   *
+   * @property styleFunction
+   * @return {*}
    */
   get styleFunction() {
     return this._styleFunction
@@ -190,7 +206,9 @@ export default class Feature extends BaseObject {
   }
 
   /**
-   * @method style
+   * 样式读写器
+   *
+   * @property style
    * @return {*}
    */
   get style() {
@@ -202,7 +220,9 @@ export default class Feature extends BaseObject {
   }
 
   /**
-   * @method text
+   * feature标题读写器
+   *
+   * @property text
    * @return {*}
    */
   get displayText() {
@@ -213,6 +233,12 @@ export default class Feature extends BaseObject {
     this._displayText = value
   }
 
+  /**
+   * 样式高亮读写器
+   *
+   * @property styleHighLight
+   * @returns {*}
+   */
   get styleHighLight() {
     return this._styleHighLight
   }
@@ -282,6 +308,7 @@ export default class Feature extends BaseObject {
 
   /**
    * 设置图层的透明度
+   *
    * 将会触发map的重绘事件
    *
    * @method display
@@ -301,6 +328,7 @@ export default class Feature extends BaseObject {
 
   /**
    * 设置标签是否显示
+   *
    * 将会触发map的重绘事件
    *
    * @method textDisplay
@@ -316,7 +344,7 @@ export default class Feature extends BaseObject {
   }
 
   /**
-   * Clone the attribute map and return a new map
+   * 克隆map属性
    *
    * @method cloneAttributesMap
    * @returns {Map}
@@ -334,7 +362,7 @@ export default class Feature extends BaseObject {
   }
 
   /**
-   * Clone a feature
+   * features 克隆方法
    *
    * @method clone
    * @returns {Feature}

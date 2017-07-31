@@ -7,12 +7,19 @@ import {ExtentUtil} from '../geometry/support/extentutil'
 import {Config} from '../meek/config'
 
 /**
+ * View 视图类
+ *
  * @class View
  * @extends BaseObject
  * @module meek
  * @constructor
  */
 export default class View extends BaseObject {
+
+  /**
+   * @constructor
+   * @param options
+   */
   constructor (options) {
     super()
     
@@ -104,7 +111,9 @@ export default class View extends BaseObject {
   }
   
   /**
+   * 创建视图中心限制条件
    *
+   * @method createCenterConstraint
    * @param options
    * @returns {Function}
    * @private
@@ -116,7 +125,9 @@ export default class View extends BaseObject {
   }
   
   /**
+   * 创建分辨率限制条件
    *
+   * @method createResolutionConstraint
    * @param options
    * @returns {{constraint: *, maxResolution: *, minResolution: *, minZoom: *, zoomFactor: number}}
    * @private
@@ -232,6 +243,8 @@ export default class View extends BaseObject {
   }
   
   /**
+   * 获取视图状态
+   *
    * @method getViewState
    * @returns {{center: (ArrayBuffer|*|Array.<T>|Blob|string), resolution: *, rotation: *}}
    */
@@ -248,6 +261,8 @@ export default class View extends BaseObject {
   }
   
   /**
+   * 分辨率限制
+   *
    * @method constrainResolution
    * @param resolution
    * @param opt_delta
@@ -261,9 +276,11 @@ export default class View extends BaseObject {
   }
   
   /**
+   * 计算缩放中心点
+   *
    * @method calculateCenterZoom
-   * @param resolution
-   * @param anchor
+   * @param resolution {Number}
+   * @param anchor {Number}
    * @returns {Array}
    */
   calculateCenterZoom (resolution, anchor) {
@@ -282,6 +299,8 @@ export default class View extends BaseObject {
   }
   
   /**
+   * 是否限制视图中心
+   *
    * @method constrainCenter
    * @param center
    * @returns {Boolean}
@@ -293,6 +312,8 @@ export default class View extends BaseObject {
   }
 
   /**
+   * 视图中心点读写器
+   *
    * @property center
    * @return {*}
    */
@@ -303,6 +324,8 @@ export default class View extends BaseObject {
   }
 
   /**
+   * 分辨率读写器
+   *
    * @property resolution
    * @return {*}
    */
@@ -314,6 +337,8 @@ export default class View extends BaseObject {
   }
 
   /**
+   * 旋转率读写器
+   *
    * @property rotation
    * @return {*}
    */
@@ -323,6 +348,8 @@ export default class View extends BaseObject {
   }
 
   /**
+   * dataExtent读写器
+   *
    * @property dataExtent
    * @return {*}
    */
@@ -332,9 +359,18 @@ export default class View extends BaseObject {
   }
 
   /**
+   * 获取最小分辨率
+   *
    * @property minResolution
-   * @return {number}
+   * @return {Number}
    */
   get minResolution () { return this._minResolution }
+
+  /**
+   * 获取最大分辨率
+   *
+   * @property maxResolution
+   * @returns {Number}
+   */
   get maxResolution () { return this._maxResolution }
 }

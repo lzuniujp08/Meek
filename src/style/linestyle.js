@@ -5,8 +5,6 @@
 import BaseStyle from './basestyle'
 
 /**
- * The line style
- *
  * 定义一个线图形的样式
  *
  * @class LineStyle
@@ -22,7 +20,7 @@ import BaseStyle from './basestyle'
 export default class LineStyle extends BaseStyle {
   
   /**
-   *
+   * @constructor
    * @param color
    * @param alpha
    * @param width
@@ -44,6 +42,7 @@ export default class LineStyle extends BaseStyle {
   
   /**
    * 线宽
+   *
    * @property width
    * @type {Number}
    */
@@ -52,6 +51,7 @@ export default class LineStyle extends BaseStyle {
   
   /**
    * 线的末端样式
+   *
    * @property lineCap
    * @type {Number}
    */
@@ -60,6 +60,7 @@ export default class LineStyle extends BaseStyle {
   
   /**
    * 交叉线时的样式
+   *
    * @property lineJion
    * @type {Number}
    */
@@ -67,12 +68,20 @@ export default class LineStyle extends BaseStyle {
   get lineJion () { return this._lineJion }
   
   /**
+   * 斜角缝限制
+   *
    * @property miterLimit
    * @type {Number}
    */
   set miterLimit (value) { this._miterLimit = value }
   get miterLimit () { return this._miterLimit }
-  
+
+  /**
+   * 克隆线样式
+   *
+   * @method clone
+   * @returns {LineStyle}
+   */
   clone () {
     const newStyle = new LineStyle(this.color, this.alpha, this.width,
       this.style, this.lineCap, this.lineJion, this.miterLimit)

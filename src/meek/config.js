@@ -18,15 +18,16 @@ export const Config = {}
  *
  * @property DEBUG
  * @static
- * @type {boolean}
+ * @type {Boolean}
  */
 Config.DEBUG = true
 
 /**
  * Default max zomm factor
+ *
  * @property DEFAULT_ZOOM_FACTOR
  * @static
- * @type {number}
+ * @type {Number}
  */
 Config.DEFAULT_ZOOM_FACTOR = 2
 
@@ -36,7 +37,7 @@ Config.DEFAULT_ZOOM_FACTOR = 2
  *
  * @property DEFAULT_MAX_ZOOM
  * @static
- * @type {number}
+ * @type {Number}
  */
 Config.DEFAULT_MAX_ZOOM = 10
 
@@ -46,7 +47,7 @@ Config.DEFAULT_MAX_ZOOM = 10
  *
  * @property DEFAULT_MIN_ZOOM
  * @static
- * @type {number}
+ * @type {Number}
  */
 Config.DEFAULT_MIN_ZOOM = 0
 
@@ -55,7 +56,7 @@ Config.DEFAULT_MIN_ZOOM = 0
  *
  * @property MOUSE_WHEEL_ZOOM_MAXDELTA
  * @static
- * @type {number}
+ * @type {Number}
  */
 Config.MOUSE_WHEEL_ZOOM_MAXDELTA = 1
 
@@ -64,7 +65,7 @@ Config.MOUSE_WHEEL_ZOOM_MAXDELTA = 1
  *
  * @property DEFAULT_TILE_SIZE
  * @static
- * @type {number}
+ * @type {Number}
  */
 Config.DEFAULT_TILE_SIZE = 256
 

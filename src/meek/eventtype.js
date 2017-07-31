@@ -9,7 +9,7 @@ export const EventType = {}
  * @property CHANGE
  * @static
  * @final
- * @type {string}
+ * @type {String}
  */
 EventType.CHANGE = 'change'
 
@@ -19,7 +19,7 @@ EventType.CHANGE = 'change'
  * @property ERROR
  * @static
  * @final
- * @type {string}
+ * @type {String}
  */
 EventType.ERROR = 'error'
 
@@ -29,7 +29,7 @@ EventType.ERROR = 'error'
  * @property LOAD
  * @static
  * @final
- * @type {string}
+ * @type {String}
  */
 EventType.LOAD = 'load'
 

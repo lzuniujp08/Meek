@@ -3,12 +3,12 @@
  */
 
 import BaseObject from '../core/baseobject'
+//
+// Abstract base class; normally only used for createing subclasses and not
+// instantiated in apps.
+// Base class for styling geometries.
 
 /**
- * Abstract base class; normally only used for createing subclasses and not
- * instantiated in apps.
- * Base class for styling geometries.
- *
  * 定义基础样式类，包括了一些基础的属性，如颜色、对象样式、透明度
  *
  * @class BaseStyle
@@ -20,9 +20,9 @@ export default class BaseStyle extends BaseObject {
   /**
    *
    * @constructor
-   * @param color
-   * @param style
-   * @param alpha
+   * @param color {Array}
+   * @param style {Object}
+   * @param alpha {Number}
    */
   constructor (color, style, alpha = 1) {
     
@@ -52,6 +52,7 @@ export default class BaseStyle extends BaseObject {
   
   /**
    * 颜色
+   *
    * @property color
    * @type {Array}
    */
@@ -60,6 +61,7 @@ export default class BaseStyle extends BaseObject {
   
   /**
    * 样式对象
+   *
    * @property style
    * @type {Datatang.Style}
    */
@@ -68,6 +70,7 @@ export default class BaseStyle extends BaseObject {
   
   /**
    * 透明度
+   *
    * @property alpha
    * @default 1
    * @type {Number}
@@ -77,6 +80,7 @@ export default class BaseStyle extends BaseObject {
   
   /**
    * 文本样式对象
+   *
    * @property textStyle
    */
   get textStyle () { return this._textStyle }
@@ -84,6 +88,7 @@ export default class BaseStyle extends BaseObject {
   
   /**
    * 克隆一个样式对象
+   *
    * @method clone
    * @abstract
    */
