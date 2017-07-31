@@ -33,7 +33,6 @@ window.onload = function () {
     ,new Datatang.Feature(extent, null, '第51区域')
   ]
   
-  
   dom = {
     text: document.getElementById('points-text'),
     align: document.getElementById('points-align'),
