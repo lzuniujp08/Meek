@@ -43,7 +43,7 @@ export default class DragPan extends Component {
     this.lastCentroid = null
   
     /**
-     * @property kinetic
+     * kinetic
      * @private
      * @type {ol.Kinetic|undefined}
      */

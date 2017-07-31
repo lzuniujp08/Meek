@@ -33,28 +33,38 @@ export default class MouseWheelZoom extends Component {
     super()
   
     /**
+     * 私有属性Delta，默认为0
      *
-     * @type {number}
+     * @property delta
+     * @type {Number}
      * @private
      */
     this._delta = 0
   
     /**
+     * 私有属性useAnchor
      *
-     * @type {boolean}
+     * @property useAnchor
+     * @type {Boolean}
      * @private
      */
     this._useAnchor = options.useAnchor !== undefined ?
       options.useAnchor : true
   
     /**
+     * 私有属性duration
      *
+     * @property duration
+     * @type {Boolean}
+     * @private
      */
     this._duration = options.duration !== undefined ?
       options.duration : 250
   
     /**
+     * 私有属性lastAnchor
      *
+     * @property lastAnchor
      * @type {null}
      * @private
      */
@@ -141,7 +151,7 @@ export default class MouseWheelZoom extends Component {
   /**
    * Zoom to the map
    *
-   * @method handleWheelZoom
+   * handleWheelZoom
    * @param map
    * @private
    */

@@ -11,9 +11,6 @@ import {Style} from '../style/style'
 import SelectEvent from '../components/selectevent'
 
 /**
- * The select component can be used for features selecting.
- * By default,selected features are styled differently
- *
  * 图形选择模式
  *
  * @class Select
@@ -43,7 +40,7 @@ export default class Select extends Component {
     super()
 
     /**
-     * 当前鼠标点与图形之间的误差距离，小于该值则可已选中图形
+     * 当前鼠标点与图形之间的公差距离，小于该值则可已选中图形
      *
      * @property hitTolerance
      * @type {number}
@@ -126,7 +123,7 @@ export default class Select extends Component {
    *
    * 处理Ctrt键按下事件
    *
-   * @method handleCtrlKeyDwon
+   * handleCtrlKeyDwon
    * @param event
    * @private
    */
@@ -224,7 +221,7 @@ export default class Select extends Component {
   }
   
   /**
-   * 当前选中feature的集合的 getter and
+   * 当前选中feature的集合的读写器
    *
    * @property selectFeatures
    * @type {Array}
@@ -263,7 +260,7 @@ export default class Select extends Component {
   /**
    * Update the drawing state for aborting drawing if active is false
    *
-   * @method updateState
+   * updateState
    * @private
    */
   _updateState () {
@@ -297,10 +294,11 @@ export default class Select extends Component {
   }
 
   /**
-   * Map getter and setter.
-   * It will add an event listener of map rendering.
+   * map读写器, 读取设置当前map
    *
-   * @property map {Datatang.map} mapVal
+   * @type {Function}
+   * @property map
+   * @param map {Object} Datatang.map
    */
   get map (){ return this._map }
   set map (map) {
@@ -317,6 +315,13 @@ export default class Select extends Component {
     this._updateState()
   }
 
+  /**
+   * 选择方式读写器
+   *
+   * @property selectMode
+   * @type {Object} Datatang.BrowserEvent.CLICK
+   * @return {*}
+   */
   get selectMode () { return this._selectMode }
   set selectMode (value) {
     if (this._selectMode !== value) {
@@ -326,7 +331,7 @@ export default class Select extends Component {
   }
 
   /**
-   * Get the default style which will be used while a feature is drawn
+   * 获取默认编辑样式
    *
    * @method getDefaultStyleFunction
    * @returns {Function}

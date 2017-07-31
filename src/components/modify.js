@@ -64,7 +64,7 @@ export default class Modify extends Component {
     this._features = []
     
     /**
-     * 当前鼠标点与图形之间的误差距离，小于该值后立即捕捉标注数据
+     * 当前鼠标点与图形之间的公差距离，小于该值后立即捕捉标注数据
      *
      * @property pixelTolerance
      * @type {number}
@@ -86,7 +86,7 @@ export default class Modify extends Component {
   
     /**
      *
-     * @property hasMoveableGeometrys
+     * hasMoveableGeometrys
      * @type {boolean}
      * @private
      */
@@ -123,21 +123,21 @@ export default class Modify extends Component {
     /**
      * Determine if should snap to vertexs of gemetry
      *
-     * @property snappedToVertex
+     * snappedToVertex
      * @type {boolean}
      * @private
      */
     this._snappedToVertex = false
   
     /**
-     * @property vertexSegments
+     * vertexSegments
      * @type {null}
      * @private
      */
     this._vertexSegments = null
   
     /**
-     * @property snapSegments
+     * @snapSegments
      * @type {null}
      * @private
      */
@@ -182,14 +182,16 @@ export default class Modify extends Component {
     this._dragSegments = []
   
     /**
-     * @property modified
+     * 图形是否修改过，默认为false
+     *
+     * modified
      * @type {boolean}
      * @private
      */
     this._modified = false
   
     /**
-     *
+     * changingFeature
      * @type {boolean}
      * @private
      */
@@ -199,21 +201,21 @@ export default class Modify extends Component {
      * Tracks if the next `singleclick` event should be ignored to prevent
      * accidental deletion right after vertex creation.
      *
-     * @property ignoreNextSingleClick
+     * ignoreNextSingleClick
      * @type {boolean}
      * @private
      */
     this._ignoreNextSingleClick = false
   
     /**
-     * @property shouldAddToVertexs
+     * shouldAddToVertexs
      * @type {boolean}
      * @private
      */
     this._shouldAddToVertexs = false
   
     /**
-     * @property insertVertices
+     * insertVertices
      * @type {Array}
      * @private
      */
@@ -222,7 +224,7 @@ export default class Modify extends Component {
     /**
      * Keep the mouse-down point
      *
-     * @property downPoint
+     * downPoint
      * @type {null}
      * @private
      */
@@ -231,7 +233,7 @@ export default class Modify extends Component {
     /**
      * Keep the current moved geometry
      *
-     * @property currentMovedGeometry
+     * currentMovedGeometry
      * @type {null}
      * @private
      */
@@ -239,10 +241,10 @@ export default class Modify extends Component {
   }
   
   /**
-   * Features getter and setter
+   * feature的读写器，读取设置当前的feature
    *
    * @property features
-   * @returns {null|*}
+   * @returns {Object} feature
    */
   get features () { return this._features }
   set features (value = []) {
@@ -267,7 +269,7 @@ export default class Modify extends Component {
    *
    * 处理鼠标事件
    *
-   * @method handleMouseEvent
+   * handleMouseEvent
    * @param browserEvent
    * @returns {boolean}
    */
@@ -305,7 +307,7 @@ export default class Modify extends Component {
    * Removes the vertex currently being pointed.
    *
    *
-   * @method removePoint
+   * removePoint
    * @return {boolean} True when a vertex was removed.
    * @api
    */
@@ -325,7 +327,7 @@ export default class Modify extends Component {
   }
   
   /**
-   * @method compareIndexes
+   * compareIndexes
    * @param a
    * @param b
    * @returns {number}
@@ -336,7 +338,7 @@ export default class Modify extends Component {
   }
   
   /**
-   * @method willModifyFeatures
+   * willModifyFeatures
    * @param event
    * @private
    */
@@ -351,7 +353,7 @@ export default class Modify extends Component {
   /**
    * Handle poiner mouse down event
    *
-   * @method handleDownEvent
+   * handleDownEvent
    * @param evt {Event}
    * @private
    */
@@ -401,7 +403,7 @@ export default class Modify extends Component {
    *
    * 处理点移动事件
    *
-   * @method handlePointerMove
+   * handlePointerMove
    * @param evt {Event}
    * @private
    */
@@ -411,8 +413,6 @@ export default class Modify extends Component {
   }
   
   /**
-   *
-   * @method
    * @param pixel {Array}
    * @param map {map}
    * @private
@@ -492,7 +492,7 @@ export default class Modify extends Component {
   /**
    * Handle mouse drag event.
    *
-   * @method handleDragEvent
+   * handleDragEvent
    * @param evt {Event}
    * @private
    */
@@ -608,7 +608,7 @@ export default class Modify extends Component {
   }
   
   /**
-   * @method handleUpEvent
+   * handleUpEvent
    * @param evt {Event}
    * @returns {boolean}
    * @private
@@ -636,7 +636,7 @@ export default class Modify extends Component {
   
   /**
    *
-   * @param segmentData
+   * segmentData
    * @param vertex
    * @private
    */
@@ -707,7 +707,7 @@ export default class Modify extends Component {
    * Calcalute geometrys within the current extent
    * TODO 将来需要优化计算视图范围内的图形
    *
-   * @method getInExtent
+   * getInExtent
    * @param geometry {Array}
    * @param pixelCoordinate {Array}
    * @param tolarance {Number}
@@ -792,6 +792,8 @@ export default class Modify extends Component {
   }
   
   /**
+   * 设置Ceometry的坐标数据
+   *
    * @method setGeometryCoordinates
    * @param geometry {Object}
    * @param coordinates {Array}
@@ -806,7 +808,7 @@ export default class Modify extends Component {
   /**
    * @method pointDistanceToSegment
    *
-   * @param coordinates {Array}
+   * coordinates {Array}
    * @param segmentData
    * @returns {number}
    * @private
@@ -831,7 +833,7 @@ export default class Modify extends Component {
   }
   
   /**
-   * @method closestOnSegment
+   * closestOnSegment
    * @param coordinate
    * @param segmentData
    * @returns {*}
@@ -858,7 +860,7 @@ export default class Modify extends Component {
    * Create or update the vertex feature while snapping a point
    * on the edge of geometry
    *
-   * @method createOrUpdateVertexFeature
+   * createOrUpdateVertexFeature
    * @param point {Array}
    * @private
    */
@@ -876,7 +878,7 @@ export default class Modify extends Component {
   }
   
   /**
-   * Get the default geometry style
+   * 获取默认的图形编辑样式
    *
    * @method getDefaultStyleFunction
    * @returns {Function}
@@ -890,7 +892,7 @@ export default class Modify extends Component {
   
   /**
    *
-   * @param mapBrowserEvent
+   * mapBrowserEvent
    * @returns {*}
    * @private
    */
@@ -900,7 +902,10 @@ export default class Modify extends Component {
   }
   
   /**
+   * active读写器，读取设置当前的active状态
    *
+   * @property active
+   * @type {Function}
    * @returns {*}
    */
   get active () { return this._active }
@@ -914,10 +919,11 @@ export default class Modify extends Component {
   }
 
   /**
-   * Map getter and setter.
-   * It will add an event listener of map rendering.
+   * map读写器, 读取设置当前map
    *
-   * @property map {Datatang.map} mapVal
+   * @type {Function}
+   * @property map
+   * @param map {Object} Datatang.map
    */
   get map () {return this._map}
   set map (map) {

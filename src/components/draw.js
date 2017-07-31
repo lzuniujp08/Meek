@@ -50,7 +50,7 @@ export default class Draw extends Component {
     })
     
     /**
-     * @property mapRenderKey
+     * mapRenderKey
      * @type {null}
      * @private
      */
@@ -67,7 +67,7 @@ export default class Draw extends Component {
     this._drawLayer = options.drawLayer ? options.drawLayer : null
   
     /**
-     * 记录鼠标按下时的坐标点
+     * 鼠标按下时的坐标点
      *
      * @property downPointPx
      * @type {null}
@@ -76,7 +76,7 @@ export default class Draw extends Component {
     this._downPointPx = null
   
     /**
-     * 图形绘制结束事件
+     * 图形绘制结束条件
      *
      * @property finishCoordinate
      * @type {null}
@@ -610,7 +610,7 @@ export default class Draw extends Component {
   }
   
   /**
-   * 绘制完成
+   * 绘制完成，形成正式feature
    *
    * @method finishDrawing
    * @private
@@ -750,9 +750,7 @@ export default class Draw extends Component {
   /**
    * Create or update the sketch point
    *
-   * 创建或更新临时点
-   *
-   * @method updateSketchPoint
+   * updateSketchPoint
    * @param event {BrowserEvent} event
    * @private
    */
@@ -772,8 +770,7 @@ export default class Draw extends Component {
   
   /**
    * Redraw the sketch featrues.
-   *
-   * @method updateSketchFeatures
+   * updateSketchFeatures
    * @private
    */
   _updateSketchFeatures () {
@@ -797,7 +794,7 @@ export default class Draw extends Component {
   }
   
   /**
-   * Undo the drawing
+   * 执行撤销
    *
    * @method undoDrawing
    * @private
@@ -828,14 +825,15 @@ export default class Draw extends Component {
       }
     }
   }
-  
+
   /**
-   * Map setter.
-   * It will add an event listener of map rendering.
+   * map读写器, 读取设置当前map
    *
-   *
-   * @property map {Datatang.map} mapVal
+   * @type {Function}
+   * @property map
+   * @param mapValue {Object} Datatang.map
    */
+  get map (){ return this._map }
   set map (mapValue) {
     if (this._mapRenderKey) {
       unlistenByKey(this._mapRenderKey)
@@ -850,10 +848,8 @@ export default class Draw extends Component {
     this._updateState()
   }
   
-  get map (){ return this._map }
-  
   /**
-   * Update the drawing state for aborting drawing if active is false
+   * 更新绘制状态
    *
    * @method updateState
    * @private
@@ -869,7 +865,7 @@ export default class Draw extends Component {
   }
   
   /**
-   * Get the default style which will be used while a feature is drawn
+   * 获取默认绘制样式
    *
    * @method getDefaultStyleFunction
    * @returns {Function}
@@ -888,9 +884,23 @@ export default class Draw extends Component {
   shouldStopEvent () {
     return false
   }
-  
+
+  /**
+   * 获取当前的Layer
+   *
+   * @method drawLayer
+   * @return {null}
+   */
   get drawLayer () { return this._drawLayer }
-  
+
+
+  /**
+   * active读写器, 读取设置当前active
+   *
+   * @type {Function}
+   * @property active
+   * @type {Boolean}
+   */
   get active () { return this._active }
   set active (value) {
     this._active = value
@@ -903,11 +913,11 @@ export default class Draw extends Component {
 }
 
 /**
- * The static fucntion is responsibility to get the current draw mode
+ * 获取当前绘制模式的静态方法
  *
  * @method getDrawMode
- * @param type
- * @returns {*}
+ * @param type {String}
+ * @returns {Object}
  */
 Draw.getDrawMode = function(type) {
   let drawMode = null
