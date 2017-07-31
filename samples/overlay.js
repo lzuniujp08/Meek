@@ -1,18 +1,10 @@
-/**
- * Created by zhangyong on 2017/6/26.
- */
-
-
 var container = document.getElementById('popup')
 var content = document.getElementById('popup-content')
 var closer = document.getElementById('popup-closer')
-
-
 var overlay = new Datatang.Overlay(({
   element: container,
   autoPan: true
 }))
-
 
 /**
  * Add a click handler to hide the popup.
@@ -22,7 +14,6 @@ closer.onclick = function() {
   closer.blur()
   return false
 }
-
 
 /**
  * Create the map.
@@ -49,7 +40,6 @@ var map = new Datatang.Map({
     maxZoom: 8
   })
 })
-
 
 map.addEventListener('singleclick', function(evt) {
   var coordinate = evt.coordinate;

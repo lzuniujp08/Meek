@@ -1,11 +1,5 @@
-/**
- * Created by zhangyong on 2017/6/19.
- */
-
-
 window.onload = function () {
-  
-  // 将会获取缺省样式
+
   var flayer = new Datatang.FeatureLayer()
   
   var extent = [0, 0, 2783, 2125];
@@ -63,5 +57,4 @@ window.onload = function () {
   typeSelect.onchange = function() {
     drawTool.drawMode = typeSelect.value
   }
-  
 }

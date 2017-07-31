@@ -1,7 +1,3 @@
-/**
- * Created by zhangyong on 2017/6/7.
- */
-
 window.onload = function () {
   var extent = [0, 0, 1024, 768];
   
@@ -25,5 +21,4 @@ window.onload = function () {
       maxZoom: 8
     })
   });
-  
 }

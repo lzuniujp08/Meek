@@ -1,6 +1,3 @@
-/**
- * Created by guojing on 2017/6/19.
- */
 var drawTool,
   selectTool,
   modifyTool;
@@ -8,7 +5,6 @@ var drawTool,
 window.onload = function (){
   var Fortesting = new Datatang.FeatureLayer()
   var extent = [0,0,1280,800]
-
 
   //随机添加i个点
   for(i = 0; i<=2; i++){
@@ -102,8 +98,6 @@ window.onload = function (){
     const opt_duration = 250
     drawTool.zoomByDelta(view,delta,opt_anchor,opt_duration)
   }
-
-
 
   var onZoomoutClcik = document.getElementById('onZoomoutClcik')
 

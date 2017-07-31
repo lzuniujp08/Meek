@@ -1,7 +1,3 @@
-/**
- * Created by zhangyong on 2017/6/9.
- */
-
 window.onload = function () {
   
   var point = new Datatang.Point(900,500)
@@ -61,6 +57,5 @@ window.onload = function () {
   
   map.addComponents(modifyTool)
   map.addComponents(select)
-  
 }
 

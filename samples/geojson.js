@@ -1,11 +1,5 @@
-/**
- * Created by zhangyong on 2017/7/12.
- */
-
-
 //初始化图层对象以及style回调函数
 var featureLayer = new Datatang.FeatureLayer()
-
 
 // 初始化map、view和layer
 var mapextent = [0, 0, 2783, 2125];
@@ -31,7 +25,6 @@ var map = new Datatang.Map({
   })
 });
 
-
 // 绘图工具
 var drawTool = new Datatang.Draw({
   type: 'point',
@@ -51,13 +44,11 @@ var a = getJSON()
 var features = Datatang.GeoJSON.read(a)
 featureLayer.addFeatures(features)
 
-
 function onClick(e) {
   var features = featureLayer.features
   var result = Datatang.GeoJSON.write(features)
   console.log(JSON.stringify(result))
 }
-
 
 function getJSON () {
   var a = {

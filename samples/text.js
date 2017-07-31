@@ -1,8 +1,3 @@
-/**
- * Created by zhangyong on 2017/6/12.
- */
-
-
 var dom;
 /**
  * 文本样式设置
@@ -87,8 +82,7 @@ window.onload = function () {
     // 点样式 point style
     style[Datatang.Geometry.POINT] =
       [new Datatang.PointStyle(10,white,1,new Datatang.LineStyle(blue,1,width))]
-  
-  
+
     // -----------------------
     // 文本样式
     // -----------------------
@@ -98,7 +92,6 @@ window.onload = function () {
     
     return style[feature.geometry.geometryType]
   }
-  
   
   //初始化图层对象以及style回调函数
   var featureLayer = new Datatang.FeatureLayer({
@@ -187,7 +180,6 @@ function getTextStyle(feature, resolution) {
     offsetY: offsetY,
     rotation: rotation
   });
-  
 }
 
 function stringDivider(str, width, spaceReplacer) {

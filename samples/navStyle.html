@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+  <style>
+
+    *{margin:0;padding:0;}
+    body{font-size:14px;font-family:"Microsoft YaHei";}
+    ul,li{list-style:none;}
+
+    #tab{position:relative;}
+    #tab .tabList ul li{
+      float:left;
+      background:#fefefe;
+      background:-moz-linear-gradient(top, #fefefe, #ededed);
+      background:-o-linear-gradient(left top,left bottom, from(#fefefe), to(#ededed));
+      background:-webkit-gradient(linear,left top,left bottom, from(#fefefe), to(#ededed));
+      border:1px solid #ccc;
+      padding:5px 0;
+      width:100px;
+      text-align:center;
+      margin-left:-1px;
+      position:relative;
+      cursor:pointer;
+    }
+    #tab .tabCon{
+      position:absolute;
+      left:-1px;
+      top:32px;
+      border:1px solid #ccc;
+      border-top:none;
+      width:403px;
+      height:100px;
+    }
+    #tab .tabCon div{
+      padding:10px;
+      position:absolute;
+      opacity:0;
+      filter:alpha(opacity=0);
+    }
+    #tab .tabList li.cur{
+      border-bottom:none;
+      background:#fff;
+    }
+    #tab .tabCon div.cur{
+      opacity:1;
+      filter:alpha(opacity=100);
+    }
+
+  </style>
+</head>
+<body>
+
+<div id="tab" style="margin-left:460px;margin-top:20px">
+  <div class="tabList">
+    <ul>
+      <li class="">1</li>
+      <li class="">2</li>
+      <li class="">3</li>
+      <li class="cur">4</li>
+    </ul>
+  </div>
+  <div class="tabCon">
+    <div class="" style="opacity: 0;">断桥残雪、千百度、幻听、想象之中</div>
+    <div class="" style="opacity: 0;">红尘客栈、牛仔很忙、给我一首歌的时间、听妈妈的话</div>
+    <div class="" style="opacity: 0;">被风吹过的夏天、江南、一千年以后</div>
+    <div class="" style="opacity: 1;">十年、K歌之王、浮夸</div>
+  </div>
+</div>
+
+
+<script>
+  window.onload = function() {
+    var oDiv = document.getElementById("tab");
+    var oLi = oDiv.getElementsByTagName("div")[0].getElementsByTagName("li");
+    var aCon = oDiv.getElementsByTagName("div")[1].getElementsByTagName("div");
+    var timer = null;
+    for (var i = 0; i < oLi.length; i++) {
+      oLi[i].index = i;
+      oLi[i].onclick = function() {
+        show(this.index);
+      }
+    }
+    function show(a) {
+      index = a;
+      var alpha = 0;
+      for (var j = 0; j < oLi.length; j++) {
+        oLi[j].className = "";
+        aCon[j].className = "";
+        aCon[j].style.opacity = 0;
+        aCon[j].style.filter = "alpha(opacity=0)";
+      }
+      oLi[index].className = "cur";
+      clearInterval(timer);
+      timer = setInterval(function() {
+          alpha += 2;
+          alpha > 100 && (alpha = 100);
+          aCon[index].style.opacity = alpha / 100;
+          aCon[index].style.filter = "alpha(opacity=" + alpha + ")";
+          alpha == 100 && clearInterval(timer);
+        },
+        5)
+    }
+  }
+
+
+  var templet = '<div class="tabList">'+
+    '<ul>'+
+    '<li class="">1</li>'+
+    '</ul>'+
+    '</div>'+
+    '<div class="tabCon">'+
+    '<div class="" style="opacity: 0;">ddd</div>'+
+  '</div>'
+
+  $("#tab").append(templet)
+
+</script>
+
+</body>
+</html>

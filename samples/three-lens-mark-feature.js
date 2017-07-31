@@ -1,9 +1,3 @@
-/**
- * Created by guojing on 2017/6/21.
- */
-/**
- * Created by guojing on 2017/6/19.
- */
 var drawTool,
   selectTool,
   modifyTool,
@@ -20,7 +14,6 @@ window.onload = function (){
   var Fortesting2 = new Datatang.FeatureLayer()
   var extent = [0,0,1280,800]
 
-
   //随机添加i个点
   for(i = 0; i<=10; i++){
     var x = parseInt(Math.random()*1280)
@@ -29,8 +22,6 @@ window.onload = function (){
     var features = [new Datatang.Feature(point)]
     Fortesting.addFeatures(features)
   }
-
-
 
   var map = new Datatang.Map({
     layers:[new Datatang.SingleImageLayer({
@@ -52,7 +43,6 @@ window.onload = function (){
       maxZoom: 8
     })
   })
-
 
   var map1 = new Datatang.Map({
     layers:[new Datatang.SingleImageLayer({
@@ -136,7 +126,6 @@ window.onload = function (){
     selectMode: Datatang.BrowserEvent.CLICK
   });
 
-
   map.addComponents(drawTool)
   map.addComponents(selectTool)
   map.addComponents(modifyTool)
@@ -176,7 +165,6 @@ window.onload = function (){
     }
   }
 
-
   typeSelect1.onchange = function(){
     if(typeSelect1.value === "None"){
       drawTool1.active = false
@@ -190,7 +178,6 @@ window.onload = function (){
       modifyTool1.active = false
     }
   }
-
 
   typeSelect2.onchange = function(){
     if(typeSelect2.value === "None"){

@@ -1,10 +1,3 @@
-/**
- * Created by zhangyong on 2017/6/30.
- */
-
-
-
-// 将会获取缺省样式
 var flayer = new Datatang.FeatureLayer()
 
 var container = document.getElementById('popup')
@@ -68,8 +61,6 @@ select.addEventListener(Datatang.SelectEvent.EventType.SELECT, function(event) {
   formClose(true)
 
   gometrytypeSpan.innerHTML = geometry.geometryType
-
-
 })
 
 var modifyTool = new Datatang.Modify()
@@ -79,7 +70,6 @@ select.addEventListener(Datatang.SelectEvent.EventType.SELECT, function(event) {
 })
 
 map.addComponents(modifyTool)
-
 
 var typeSelect = document.getElementById('type')
 
@@ -111,47 +101,6 @@ drawTool.addEventListener(Datatang.DrawEvent.EventType.DRAW_END, function(drawEv
   gometrytypeSpan.innerHTML = geometry.geometryType
 })
 
-
-function onSubmitClick() {
-  var text = document.getElementById('textIpt').value
-
-  var brIpt = document.getElementById('BRIpt').value
-  var bgIpt = document.getElementById('BGIpt').value
-  var bbIpt = document.getElementById('BBIpt').value
-  // var baIpt = document.getElementById('BAIpt').value
-  var frIpt = document.getElementById('FRIpt').value
-  var fgIpt = document.getElementById('FGIpt').value
-  var fbIpt = document.getElementById('FBIpt').value
-  // var faIpt = document.getElementById('FAIpt').value
-
-  var featureStyle = flayer.styleFunction(currentFeature)[0].clone()
-
-  var textStyle
-  if (!featureStyle.textStyle) {
-    textStyle = new Datatang.TextStyle({
-      text: text,
-      fill: [frIpt, fgIpt, fbIpt],
-      stroke: new Datatang.LineStyle([brIpt, bgIpt, bbIpt],1,1,
-        Datatang.LineStyle.LineCap.ROUND,
-        Datatang.LineStyle.LineJion.ROUND),
-    })
-  } else {
-    textStyle = featureStyle.textStyle.clone()
-    textStyle.text = text
-    textStyle.fill =  [frIpt, fgIpt, fbIpt]
-    textStyle.stroke.color = [brIpt, bgIpt, bbIpt]
-  }
-
-  featureStyle.textStyle = textStyle
-  currentFeature.displayText = text
-  currentFeature.style = [featureStyle]
-  currentFeature.styleHighLight = true
-
-
-  formClose(false)
-  map.render()
-}
-
 function formClose(display) {
   display ? popup.style.display = 'block' : popup.style.display = 'none'
 }
@@ -159,7 +108,6 @@ function formClose(display) {
 function onFormClosedClick(e){
   formClose(false)
 }
-
 
 function onEditBtnClick(){
   drawTool.active = false

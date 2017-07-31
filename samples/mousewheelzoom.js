@@ -1,8 +1,3 @@
-/**
- * Created by zhangyong on 2017/6/5.
- */
-
-
 window.onload = function () {
   
   var extent = [0, 0, 1024, 968];

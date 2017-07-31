@@ -1,7 +1,3 @@
-/**
- * Created by zypc on 2017/6/4.
- */
-
 window.onload = function () {
   
   var point = new Datatang.Point(200,700)
@@ -19,8 +15,7 @@ window.onload = function () {
     new Datatang.Feature(line),
     new Datatang.Feature(polygon),
     new Datatang.Feature(extent)]
-  
-  
+
   var extent = [0, 0, 1024, 968]
   
   // 将会获取缺省样式
@@ -37,5 +32,4 @@ window.onload = function () {
       maxZoom: 8
     })
   })
-
 }

@@ -1,10 +1,5 @@
-/**
- * Created by zhangyong on 2017/6/19.
- */
-
 window.onload = function () {
-  
-  // 将会获取缺省样式
+
   var flayer = new Datatang.FeatureLayer()
   
   var extent = [0, 0, 2783, 2125];
@@ -61,6 +56,5 @@ window.onload = function () {
       tipDom.innerHTML = '绘制完成，当前绘制的是：' + event.feature.geometry.geometryType +
         '  他的ID为：' + event.feature.id;
     })
-  
 }
 

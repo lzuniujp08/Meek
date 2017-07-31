@@ -1,7 +1,3 @@
-/**
- * Created by zhangyong on 2017/6/22.
- */
-
 window.onload = function () {
   var extent = [0, 0, 960, 670];
   
@@ -53,5 +49,4 @@ window.onload = function () {
     
     map.render()
   }
-  
 }

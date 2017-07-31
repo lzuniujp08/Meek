@@ -1,9 +1,5 @@
-/**
- * Created by zhangyong on 2017/6/15.
- */
-
 window.onload = function () {
-  
+
   var point = new Datatang.Point(100, 100)
   
   var features = [
@@ -14,8 +10,7 @@ window.onload = function () {
   var featureLayer = new Datatang.FeatureLayer({
     features: features
   })
-  
-  
+
   var mapextent = [0, 0, 2783, 2125];
   var map = new Datatang.Map({
     layers: [
@@ -39,7 +34,6 @@ window.onload = function () {
       maxZoom: 8
     })
   });
-  
 }
 
 

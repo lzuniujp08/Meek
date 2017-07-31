@@ -1,7 +1,3 @@
-/**
- * Created by zhangyong on 2017/7/17.
- */
-
 // 多边形
 var rings = [[[800,580],[490,600],[255, 820],
   [1000,1000],[255,1100,],[1200,1200],[800,580]]]
@@ -77,7 +73,6 @@ draw.addEventListener(Datatang.DrawEvent.EventType.DRAW_END, function(drawEvent)
   featureLayer.removeFeature(feature)
   featureLayer.removeFeature(feature1)
 })
-
 
 function polybool(geometry) {
   var coords = geometry.getCoordinates()[0]

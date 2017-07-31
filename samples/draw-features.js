@@ -1,10 +1,5 @@
-/**
- * Created by zhangyong on 2017/5/23.
- */
-
 window.onload = function () {
-  
-  // 将会获取缺省样式
+
   var flayer = new Datatang.FeatureLayer()
   
   var extent = [0, 0, 2783, 2125];
@@ -52,5 +47,4 @@ window.onload = function () {
     var feature = e.feature
     feature.displayText = '测试测试'
   })
-  
 }
