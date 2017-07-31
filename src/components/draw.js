@@ -17,9 +17,7 @@ import BrowserEvent from '../meek/browserevent'
 import DrawEvent from './drawevent'
 
 /**
- * Draw class is resonsibility to draw geometries.
- *
- * 图形绘制工具，可以绘制点、线、面等图形
+ * 图形绘制工具基础类
  *
  * @class Draw
  * @extends Component
@@ -72,7 +70,6 @@ export default class Draw extends Component {
      * 记录鼠标按下时的坐标点
      *
      * @property downPointPx
-     *
      * @type {null}
      * @private
      */
@@ -114,7 +111,7 @@ export default class Draw extends Component {
     this._sketchLine = null
   
     /**
-     * 绘制完成时的结束条件(监听快捷键/最后一个点重复等)
+     * 绘制完成时的结束条件
      *
      * @property finishCondition
      * @type {null}
@@ -125,7 +122,7 @@ export default class Draw extends Component {
         options.finishCondition : function () { return true }
         
     /**
-     * 撤销方式(监听快捷键)
+     * 撤销条件
      *
      * @property undoCondition
      * @type {Function}
@@ -144,7 +141,7 @@ export default class Draw extends Component {
      * 初始化草稿图层，用于临时显示绘制的图形
      *
      * @property sketchLayer
-     * @type {FeatureLayer}
+     * @type {Object} featurelayer
      * @private
      */
     this._sketchLayer = new FeaureLayer({name: 'sketch layer for draw component'})
@@ -159,7 +156,7 @@ export default class Draw extends Component {
     this._sketchLayer.style = this.getDefaultStyleFunction()
   
     /**
-     * 绘制点的临时数据
+     * 临时点
      *
      * @property sketchPoint
      * @type {null}
@@ -196,18 +193,17 @@ export default class Draw extends Component {
     this._sketchLineCoords = null
   
     /**
-     *
-     * @property freehand
-     * @type {boolean}
+     * freehand
+     * @type {Boolean}
      * @private
      */
     this._freehand = false
   
     /**
-     * Pixel distance for snapping.
+     * 公差像素距离
      *
      * @property snapTolerance
-     * @type {number}
+     * @type {Number}
      * @private
      */
     this._snapTolerance = options.snapTolerance ?
@@ -217,7 +213,7 @@ export default class Draw extends Component {
      * 绘制线段时的最多点限制，默认没有限制
      *
      * @property maxLinePoints
-     * @type {number}
+     * @type {Number}
      * @private
      */
     this._maxLinePoints = options.maxLinePoints ?
@@ -227,7 +223,7 @@ export default class Draw extends Component {
      * 绘制多边形时的顶点限制，默认没有限制
      *
      * @property maxPolygonPoints
-     * @type {number}
+     * @type {Number}
      * @private
      */
     this._maxPolygonPoints = options.maxPolygonPoints ?
@@ -237,7 +233,7 @@ export default class Draw extends Component {
      * 绘制线段的最少点为2，多边形为3
      *
      * @property minPoints
-     * @type {number}
+     * @type {Number}
      * @private
      */
     this._minPoints = options.minPoints ?
@@ -245,7 +241,7 @@ export default class Draw extends Component {
       (this.drawMode === Draw.DrawMode.POLYGON ? 3 : 2)
   
     /**
-     * @property freehandCondition
+     * freehandCondition
      * @private
      * @type
      */
@@ -257,7 +253,7 @@ export default class Draw extends Component {
   /**
    * 处理绘制结束事件
    *
-   * @method handleKeyboardEvent
+   * handleKeyboardEvent
    * @type {Function}
    * @param event {event}
    * @private
@@ -304,14 +300,11 @@ export default class Draw extends Component {
   }
   
   /**
-   * Get the geometry function.
-   *
    * 获取图形创建、修改的工厂方法
    *
    * @property geometryFunction
    * @type {Function}
    * @retruns geometryFunction {Function}
-   *
    */
   get geometryFunction () {
     if(!this._geometryFunction){
@@ -322,9 +315,7 @@ export default class Draw extends Component {
   }
   
   /**
-   * The draw mode getter and setter.
-   * Set a draw mode means to draw a new type geometry.
-   *
+   * drawMode读写器，
    * 设置当前绘图的模式，重新赋值将会启动新图形类型的绘制
    *
    * @type {Function}
@@ -345,11 +336,11 @@ export default class Draw extends Component {
   }
 
   /**
-   * 判断绘制时传入的绘制类型是否在绘制列表中
+   * 判断传入的绘制类型是否在绘制列表中
    *
    * @method existInDrawMode
    * @param value {String}
-   * @returns {boolean}
+   * @returns {Boolean}
    * @private
    */
   _existInDrawMode (value){
@@ -369,9 +360,8 @@ export default class Draw extends Component {
    * 图形生产工厂方法
    *
    * @method geometryFactory
-   * @returns {*} 返回一个geometry对象
+   * @returns {Object} 返回一个geometry对象
    * @private
-   *
    */
   _geometryFactory () {
     let Constructor
@@ -394,7 +384,7 @@ export default class Draw extends Component {
    * 设置缺省 geometryfunction
    *
    * @method initGeometryFunction
-   * @returns {function(*, *)}
+   * @returns {Function} Geometry
    * @private
    */
   _initGeometryFunction () {
@@ -422,13 +412,11 @@ export default class Draw extends Component {
   }
   
   /**
-   * handle mouse event
-   *
    * 处理鼠标事件
    *
-   * @method handleMouseEvent
+   * handleMouseEvent
    * @param event {event}
-   * @returns {*|boolean}
+   * @returns {*|Boolean}
    */
   handleMouseEvent (event) {
     this.freehand_ = false
@@ -453,11 +441,9 @@ export default class Draw extends Component {
   }
   
   /**
-   * Handle move events
-   *
    * 处理移动事件
    *
-   * @method handleMove
+   * handleMove
    * @param {BrowserEvent} event A move event.
    * @return {boolean} Pass the event to other compoments.
    * @private
@@ -473,13 +459,11 @@ export default class Draw extends Component {
   }
   
   /**
-   * Handle down events
-   *
    * 鼠标按下时，获取当前坐标点
    *
-   * @method handleDownEvent
+   * handleDownEvent
    * @param event {BrowserEvent} event A up event.
-   * @returns {boolean}
+   * @returns {Boolean}
    * @private
    */
   _handleDownEvent (event) {
@@ -488,18 +472,15 @@ export default class Draw extends Component {
   }
   
   /**
-   * Handle up events.
-   *
    * 处理鼠标弹起事件
    *
-   * @method handleUpEvent
+   * handleUpEvent
    * @param event {BrowserEvent} event
    * @private
    */
   _handleUpEvent (event) {
     const downPx = this._downPointPx
     const clickPx = event.pixel, mode = this.drawMode
-    
     const dx = downPx[0] - clickPx[0]
     const dy = downPx[1] - clickPx[1]
     const clickDistance = dx * dx + dy * dy
@@ -529,12 +510,10 @@ export default class Draw extends Component {
   }
   
   /**
-   * Start the drawing
-   *
    * 启动绘制，生成feature
    *
    * @method startDrawing
-   * @param event {BrowserEvent} event
+   * @param event {Event}
    * @private
    */
   _startDrawing (event) {
@@ -578,7 +557,6 @@ export default class Draw extends Component {
   
   /**
    * Modify the drawing
-   *
    *
    * @param event {Event}
    * @private
@@ -632,8 +610,6 @@ export default class Draw extends Component {
   }
   
   /**
-   * Stop drawing and add the sketch feature to the target layer.
-   *
    * 绘制完成
    *
    * @method finishDrawing
@@ -672,9 +648,7 @@ export default class Draw extends Component {
   }
   
   /**
-   * Stop drawing without adding the sketch feature to the sketch layer
-   *
-   * 停止绘制，不会添加临时feature
+   * 终止绘制，不会添加临时feature
    *
    * @method abortDrawing
    * @returns {Feature|null|_Feature2.default}
@@ -735,7 +709,7 @@ export default class Draw extends Component {
    * Determine if an event is within the snapping tolerance of the start coord.
    *
    * @param event
-   * @returns {boolean}
+   * @returns {Boolean}
    * @private
    */
   _atFinish (event) {

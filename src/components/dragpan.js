@@ -7,7 +7,7 @@ import {noModifierKeys} from '../utils/mousekey'
 import {Coordinate} from '../utils/coordinate'
 
 /**
- * 拖动事件处理类
+ * 拖动事件基础类
  *
  * @class DragPan
  * @extends Component
@@ -24,8 +24,7 @@ export default class DragPan extends Component {
    */
   constructor (options = {}) {
     super()
-  
-  
+
     this.applyHandleEventOption({
       handleDownEvent: this._handleDownEvent,
       handleDragEvent: this._handleDragEvent
@@ -80,30 +79,6 @@ export default class DragPan extends Component {
     
   }
   
-  // /**
-  //  * Handles the browser event and then may call into the subclass functions.
-  //  * @param browserEvent
-  //  */
-  // // handleMouseEvent (browserEvent) {
-  // //   if (!(browserEvent instanceof BrowserEvent)) {
-  // //     return true
-  // //   }
-  // //
-  // //   this._updateTrackedPointers(browserEvent)
-  // //
-  // //   let type = browserEvent.type
-  // //   if (type === BrowserEvent.MOUSE_DOWN) {
-  // //     this._handleDownEvent(browserEvent)
-  // //   } else if (type === BrowserEvent.MOUSE_UP){
-  // //     // this._handleUpEvent(browserEvent)
-  // //   } else if (type === BrowserEvent.MOUSE_DRAG) {
-  // //     this._handleDragEvent(browserEvent)
-  // //   }
-  // //
-  // //   return true
-  // // }
-  
-  
   /**
    * 处理browserEvent
    *
@@ -141,11 +116,7 @@ export default class DragPan extends Component {
   }
   
   /**
-   * Handle the drag event
-   *
-   * 处理图片拖动事件
-   *
-   * @method handleDragEvent
+   * handleDragEvent
    * @param browserEvent {browserEvent}
    * @private
    */
@@ -200,7 +171,5 @@ export default class DragPan extends Component {
     
     return [clientX / length, clientY / length]
   }
-  
-  
-  
+
 }

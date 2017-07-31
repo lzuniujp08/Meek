@@ -7,7 +7,6 @@ import BrowserEvent from '../meek/browserevent'
 import Obj from '../utils/obj'
 
 /**
- * Abstract base class,represent a base componnet whcih should be inhrited
  *
  * 定义组件基础类
  *
@@ -16,7 +15,15 @@ import Obj from '../utils/obj'
  * @module component
  *
  */
+
+// Abstract base class,represent a base componnet whcih should be inhrited
 export default class Component extends BaseObject {
+
+  /**
+   * 构造函数
+   *
+   * @constructor
+   */
   constructor () {
     super()
   
@@ -24,7 +31,7 @@ export default class Component extends BaseObject {
      * 当前组件开关，默认为ture，设置为false时，则关闭当前组件的功能
      *
      * @property active
-     * @type {boolean}
+     * @type {Boolean}
      */
     this.active = true
   
@@ -49,18 +56,19 @@ export default class Component extends BaseObject {
     this._trackedPointers = {}
   
     /**
-     * @property handlingDownUpSequence
+     * handlingDownUpSequence
      * @type {boolean}
      */
     this.handlingDownUpSequence = false
-    
+
   }
   
   /**
-   * @method applyHandleEventOption
+   * applyHandleEventOption
    * @param options
    */
   applyHandleEventOption (options) {
+
     /**
      *
      */
@@ -95,12 +103,10 @@ export default class Component extends BaseObject {
     
   }
   
-  
   /**
-   *
    * 处理鼠标事件
    *
-   * @method handleMouseEvent
+   * handleMouseEvent
    * @param browserEvent {browserEvent}
    *
    * @returns {Boolean}
@@ -138,10 +144,10 @@ export default class Component extends BaseObject {
    *
    * 根据浏览器鼠标操作事件的类型返回true或false
    *
-   * @method isPointerDraggingEvent
+   * isPointerDraggingEvent
    * @param browserEvent {browserEvent}
    *
-   * @returns {boolean}
+   * @returns {Boolean}
    * @private
    */
   _isPointerDraggingEvent (browserEvent) {
@@ -156,7 +162,7 @@ export default class Component extends BaseObject {
    *
    * 处理浏览器鼠标操作事件
    *
-   * @method updateTrackedPointers
+   * updateTrackedPointers
    *
    * @param browserEvent {browserEvent}
    * @private
@@ -227,6 +233,7 @@ export default class Component extends BaseObject {
       if (currentResolution !== undefined && currentCenter &&
           resolution !== currentResolution && opt_duration) {
         view.resolution = resolution
+
       } else {
         if (opt_anchor) {
           const center = view.calculateCenterZoom(resolution, opt_anchor)
@@ -257,9 +264,8 @@ export default class Component extends BaseObject {
    * 坐标自检测，如果有小于0的坐标，修正为0，如果有大于最大值的坐标，修正为最大值
    *
    * @method coordinateBeyond
-   * @param coordinate {Array}
-   *
-   * @returns {Array}
+   * @param coordinate {Array} 坐标点{x,y}
+   * @returns {Array} new Coordinate
    */
   coordinateBeyond (coordinate) {
     if (coordinate === undefined) {
@@ -304,7 +310,7 @@ export default class Component extends BaseObject {
   }
   
   /**
-   * @method shouldStopEvent
+   * shouldStopEvent
    * @param handled
    * @returns {*}
    *
@@ -315,18 +321,21 @@ export default class Component extends BaseObject {
 
 
   /**
-   * The map getter and setter.
-   *
-   * It will add an event listener of map rendering.
+   * map读写器, 读取设置当前map
    *
    * @type {Function}
    * @property map
    * @type {Datatang.map}
    */
-    
   get map () { return this._map }
   set map (value) { this._map = value }
 
+  /**
+   * active读写器, 读取设置active
+   *
+   * @type {Function}
+   * @property active
+   */
   get active () { return this._active }
   set active (value) {
     this._active = value
