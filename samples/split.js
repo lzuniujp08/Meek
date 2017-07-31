@@ -3,8 +3,7 @@
  */
 
 // 多边形
-var rings = [[800,580],[490,600],[255, 820],
-  [1000,1000],[255,1100,],[1200,1200],[800,580]]
+var rings = [[[800,580],[490,600],[255, 820],[1000,1000],[255,1100,],[1200,1200],[800,580]]]
 var polygon = new Datatang.Polygon(rings)
 
 var feature = new Datatang.Feature(polygon)

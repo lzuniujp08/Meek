@@ -3,8 +3,8 @@
  */
 
 // 多边形
-var rings = [[800,580],[490,600],[255, 820],
-  [1000,1000],[255,1100,],[1200,1200],[800,580]]
+var rings = [[[800,580],[490,600],[255, 820],
+  [1000,1000],[255,1100,],[1200,1200],[800,580]]]
 var polygon = new Datatang.Polygon(rings)
 
 var feature1 = new Datatang.Feature(polygon)
@@ -59,7 +59,7 @@ draw.addEventListener(Datatang.DrawEvent.EventType.DRAW_END, function(drawEvent)
   
   arr.forEach(function(fea){
     var theGeometry = polybool(fea.geometry)
-    becutedGeometry = PolyBool.xor(theGeometry, becutedGeometry)
+    becutedGeometry = PolyBool.difference(theGeometry, becutedGeometry)
   })
   
   console.log(becutedGeometry)
@@ -69,7 +69,7 @@ draw.addEventListener(Datatang.DrawEvent.EventType.DRAW_END, function(drawEvent)
   var regions = becutedGeometry.regions
   regions.forEach(function(re){
     var g = new Datatang.Polygon()
-    g.setCoordinates(re)
+    g.setCoordinates([re])
     featureCollection.push(new Datatang.Feature(g))
   })
   
@@ -80,7 +80,7 @@ draw.addEventListener(Datatang.DrawEvent.EventType.DRAW_END, function(drawEvent)
 
 
 function polybool(geometry) {
-  var coords = geometry.getCoordinates()
+  var coords = geometry.getCoordinates()[0]
   var poly1 = {
     regions: [
       coords

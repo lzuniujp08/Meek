@@ -7,8 +7,8 @@ import {ExtentUtil} from '../../geometry/support/extentutil'
 import Polygon from '../../geometry/polygon'
 
 /**
- *
- * 使用直线来切割多边形
+ * 使用直线来切割多边形,
+ * 暂时只支持不带洞的多边形的分割
  *
  * @method splitPolygonByLine
  * @param polygon 被切割多边形
@@ -16,7 +16,7 @@ import Polygon from '../../geometry/polygon'
  * @returns {Array}
  */
 export default function splitPolygonByPolyline(polygon, line) {
-  const polygonCoordinates = polygon.getCoordinates()
+  const polygonCoordinates = polygon.getCoordinates()[0]
   const lineCoordinates = line.getCoordinates()
   
   // 找到直线和面的相交点
@@ -48,12 +48,11 @@ export default function splitPolygonByPolyline(polygon, line) {
       coords.push([arrs[0], arrs[1]])
     })
     const polygon = new Polygon()
-    polygon.setCoordinates(coords)
+    polygon.setCoordinates([coords])
     featureCollection.push(polygon)
   })
   
   return featureCollection
-  
 }
 
 

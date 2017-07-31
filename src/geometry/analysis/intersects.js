@@ -7,6 +7,7 @@ import {ExtentUtil} from '../support/extentutil'
 
 /**
  * 判断任意图形是否相交
+ * @TODO 还需要解决带洞多边形带来的问题
  *
  * @method intersects
  * @param geometry1
