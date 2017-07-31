@@ -272,7 +272,7 @@ export default class Draw extends Component {
           return
         }
         let pcoordinates = this._sketchFeature.geometry.getCoordinates()
-        if (pcoordinates.length < 4) {
+        if (pcoordinates[0].length < 4) {
           return
         }
       }
