@@ -66,6 +66,8 @@ import GeoJSON from 'data/json/geojson'
 import intersects from 'geometry/analysis/intersects'
 import splitPolygonByPolyline from 'geometry/analysis/splitpolygon'
 
+const version = VERSION
+
 export default {
   Config,
   Coordinate,
@@ -117,6 +119,7 @@ export default {
   Math,
   MouseWheelZoom,
   GeoJSON,
+  version,
   intersects,
   splitPolygonByPolyline
 }

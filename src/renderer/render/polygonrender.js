@@ -1,6 +1,7 @@
 /**
  * Created by zhangyong on 2017/3/20.
  */
+import Geometry from '../../geometry/geometry'
 import GeometryRender from '../render/geomertyrender'
 import {Transform} from '../../data/matrix/transform'
 import {colorToString} from '../../utils/helpers'
@@ -28,6 +29,9 @@ export default class PolygonRender extends GeometryRender {
   
     const  transform2D =  Transform.transform2D
     let geometryCoordinages = geometry.getCoordinates()
+    if (geometry.geometryType === Geometry.EXTENT) {
+      geometryCoordinages = [geometryCoordinages]
+    }
     
     if (!geometryCoordinages) {
       return false
@@ -39,27 +43,31 @@ export default class PolygonRender extends GeometryRender {
   
     // TODO find a way to cache the rendered data
     let coordinates = []
+    let renderCoords = []
+    
     if (this._pixelCoordinates &&
       this.equalsTransform(transform, this.renderedTransform)) {
-      coordinates = this._pixelCoordinates
-      // console.log('get the rendered data from chche for polygon')
+      renderCoords = this._pixelCoordinates
     } else {
-      const geometryCoordinates = geometry.getCoordinates()
-    
-      geometryCoordinates.forEach(function(points){
-        let coordinate = transform2D(
-          points, 0, points.length, 2,
-          transform)
-      
-        coordinate[0] = (coordinate[0] + 0.5 ) | 0
-        coordinate[1] = (coordinate[1] + 0.5 ) | 0
-      
-        coordinates.push(coordinate)
+      // 遍历多边形各个环
+      geometryCoordinages.forEach( rings => {
+        rings.forEach(points => {
+          let coordinate = transform2D(
+            points, 0, points.length, 2,
+            transform)
+  
+          coordinate[0] = (coordinate[0] + 0.5 ) | 0
+          coordinate[1] = (coordinate[1] + 0.5 ) | 0
+  
+          coordinates.push(coordinate)
+        })
+  
+        renderCoords.push(coordinates)
+        coordinates = []
       })
     
-      this._pixelCoordinates = coordinates
+      this._pixelCoordinates = renderCoords
       Transform.setFromArray(this.renderedTransform, transform)
-      // console.log('caclulate the rendered data for polygon')
     }
     
     const len = styleArray.length
@@ -67,7 +75,7 @@ export default class PolygonRender extends GeometryRender {
       let styleObj = styleArray[i]
     
       let renderOptions = {
-        coordinates: coordinates,
+        coordinates: renderCoords,
         fillStyle: colorToString(styleObj.color,styleObj.alpha),
         borderStyle: styleObj.borderStyle
       }
@@ -79,30 +87,17 @@ export default class PolygonRender extends GeometryRender {
   }
   
   /**
-   * Draw a polygon
+   * 绘制多边形，需要注意多边形各个环的绘制
    * @param ctx
    * @param renderOpt
    */
   drawPolygon (ctx, renderOpt) {
     ctx.save()
-  
-    ctx.beginPath()
-  
-    const coordinates = renderOpt.coordinates
-    ctx.moveTo(coordinates[0][0],coordinates[0][1])
     
-    for(let k = 0, kk = coordinates.length ; k < kk ; k ++){
-      let cd = coordinates[k]
-      ctx.lineTo(cd[0],cd[1])
-    }
-  
     if (renderOpt.fillStyle) {
       ctx.fillStyle = renderOpt.fillStyle
-      ctx.fill()
     }
   
-    ctx.closePath()
-    
     const borderStyle = renderOpt.borderStyle
     if (borderStyle) {
       ctx.strokeStyle = colorToString(borderStyle.color,borderStyle.alpha)
@@ -111,11 +106,25 @@ export default class PolygonRender extends GeometryRender {
       if (borderStyle.lineDash) {
         ctx.setLineDash(borderStyle.lineDash)
       }
-    
-      ctx.stroke()
     }
     
+    const coords = renderOpt.coordinates
+    coords.forEach( (coordinates, index) => {
+      if (index === 0) {
+        ctx.beginPath()
+      }
+      
+      ctx.moveTo(coordinates[0][0],coordinates[0][1])
+      for(let k = 1, kk = coordinates.length ; k < kk ; k ++){
+        let cd = coordinates[k]
+        ctx.lineTo(cd[0],cd[1])
+      }
+  
+      ctx.closePath()
+    })
+  
+    ctx.fill()
+    ctx.stroke()
     ctx.restore()
   }
-  
 }

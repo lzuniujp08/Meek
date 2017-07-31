@@ -271,7 +271,6 @@ export default class Draw extends Component {
       /**
        * 判断多边形的顶点是否小于4个（正常多边形3个顶点，首尾相接多一个顶点），小于4个不是多边形，return
        */
-
       if (this.drawMode === Draw.DrawMode.POLYGON) {
         if( this._sketchFeature === null) {
           return
@@ -285,7 +284,6 @@ export default class Draw extends Component {
       /**
        * 判断线的顶点是否小于2个，小于2个不是线段，return
        */
-
       if (this.drawMode === Draw.DrawMode.LINE) {
         if( this._sketchFeature === null) {
           return
@@ -354,7 +352,6 @@ export default class Draw extends Component {
    * @returns {boolean}
    * @private
    */
-
   _existInDrawMode (value){
     const drawMode = Draw.DrawMode
     const modeValue = value.toUpperCase()
@@ -407,7 +404,7 @@ export default class Draw extends Component {
       
       if (geometry) {
         if (mode === Draw.DrawMode.POLYGON) {
-          geometry.setCoordinates(coordinates[0])
+          geometry.setCoordinates(coordinates)
         } else if(mode === Draw.DrawMode.LINE) {
           geometry.setCoordinates(coordinates)
         } else if(mode === Draw.DrawMode.EXTENT) {

@@ -226,13 +226,6 @@ export default class Component extends BaseObject {
       
       if (currentResolution !== undefined && currentCenter &&
           resolution !== currentResolution && opt_duration) {
-        // view.animate({
-        //   resolution: resolution,
-        //   anchor: opt_anchor,
-        //   duration: opt_duration,
-        //   // easing: 1 - ol.easing.easeIn(1 - t)
-        // })
-  
         view.resolution = resolution
       } else {
         if (opt_anchor) {

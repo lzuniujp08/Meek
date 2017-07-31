@@ -363,8 +363,6 @@ export default class Modify extends Component {
     const vertexFeature = this._vertexFeature
     
     if (vertexFeature) {
-      // const geometry = vertexFeature.geometry
-      // const vertex = geometry.getCoordinates()
       const insertVertices = [this._snapSegments]
       if (insertVertices.length) {
         this._willModifyFeatures(evt)
@@ -377,7 +375,6 @@ export default class Modify extends Component {
     }
     // Move the selected geometry
     else {
-      
       if (!this._hasMoveableGeometrys) {
         return
       }
@@ -397,7 +394,6 @@ export default class Modify extends Component {
       
       return false
     }
-    
   }
   
   /**
@@ -413,7 +409,6 @@ export default class Modify extends Component {
     this._lastPixel = evt.pixel
     this._handlePointerAtPixel(evt.pixel, evt.map)
   }
-  
   
   /**
    *
@@ -441,6 +436,7 @@ export default class Modify extends Component {
     if (nodes.length > 0) {
       nodes.sort(sortByDistance)
       const node = nodes[0]
+      const geometry = node.geometry
       const closestSegment = node.segment
       let vertex = this._closestOnSegment(pixelCoordinate, node)
       const vertexPixel = map.getPixelFromCoordinate(vertex)
@@ -451,7 +447,7 @@ export default class Modify extends Component {
   
         this._snapSegments = node
   
-        if (node.geometry.geometryType === Geometry.CIRCLE &&
+        if (geometry.geometryType === Geometry.CIRCLE &&
           node.index === Modify.MODIFY_SEGMENT_CIRCLE_CIRCUMFERENCE_INDEX) {
           this._snappedToVertex = true
           this._createOrUpdateVertexFeature(vertex)
@@ -467,7 +463,14 @@ export default class Modify extends Component {
             vertex = squaredDist1 > squaredDist2 ?
                      closestSegment[1] : closestSegment[0]
             
-            this._snapSegments.index = node.geometry.getCoordinateIndex(vertex)
+            const coordinateIndex = geometry.getCoordinateIndex(vertex)
+            if (geometry.geometryType === Geometry.POLYGON) {
+              this._snapSegments.index = coordinateIndex.index
+              this._snapSegments.ringIndex = coordinateIndex.ringIndex
+            } else {
+              this._snapSegments.index = coordinateIndex
+            }
+            
             this._snapSegments.isVertex = true
           }
           
@@ -484,9 +487,7 @@ export default class Modify extends Component {
       this._overLayer.removeFeature(this._vertexFeature)
       this._vertexFeature = null
     }
-    
   }
-  
   
   /**
    * Handle mouse drag event.
@@ -550,9 +551,9 @@ export default class Modify extends Component {
           break
         case Geometry.POLYGON:
           coordinates = geometry.getCoordinates()
-          coordinates[segmentData.index] = vertex
+          coordinates[segmentData.ringIndex][segmentData.index] = vertex
           if (segmentData.index === 0) {
-            coordinates[coordinates.length - 1] = vertex
+            coordinates[segmentData.ringIndex][coordinates.length - 1] = vertex
           }
           break
         case Geometry.EXTENT:
@@ -646,12 +647,7 @@ export default class Modify extends Component {
     const depth = segmentData.depth
     const isVertex = segmentData.isVertex
     let index =  segmentData.index
-    // let dragIndex = -1
     let coordinates
-    
-    // while (vertex.length < geometry.getStride()) {
-    //   vertex.push(0)
-    // }
     
     switch (geometry.geometryType) {
     case Geometry.MULTI_LINE:
@@ -661,7 +657,7 @@ export default class Modify extends Component {
     case Geometry.POLYGON:
       coordinates = geometry.getCoordinates()
       if (!isVertex) {
-        coordinates.splice(index + 1, 0, vertex)
+        coordinates[segmentData.ringIndex].splice(index + 1, 0, vertex)
         index = index + 1
       } else {
         // dragIndex = index
@@ -693,32 +689,17 @@ export default class Modify extends Component {
     
     this._setGeometryCoordinates(geometry, coordinates)
     
-    // const rTree = this.rBush_
-    // rTree.remove(segmentData)
-    // this.updateSegmentIndices_(geometry, index, depth, 1)
     const newSegmentData = {
       segment: [segment[0], vertex],
       feature: feature,
       geometry: geometry,
       depth: depth,
       index: index,
+      ringIndex: segmentData.ringIndex,
       isVertex: isVertex
     }
     
-    // rTree.insert(ol.extent.boundingExtent(newSegmentData.segment), newSegmentData)
     this._dragSegments.push([newSegmentData, 1])
-    
-    // const newSegmentData2 = /** @type {ol.ModifySegmentDataType} */ ({
-    //   segment: [vertex, segment[1]],
-    //   feature: feature,
-    //   geometry: geometry,
-    //   depth: depth,
-    //   index: index + 1
-    // })
-    
-    // rTree.insert(ol.extent.boundingExtent(newSegmentData2.segment), newSegmentData2)
-    
-    // this._dragSegments.push([newSegmentData2, 0])
     this._ignoreNextSingleClick = true
   }
   
@@ -762,10 +743,29 @@ export default class Modify extends Component {
               index: 0
             })
           }
-        } else if (geometryType === Geometry.POLYGON ||
-          geometryType === Geometry.EXTENT ||
-          geometryType === Geometry.LINE) {
+        } else if (geometryType === Geometry.POLYGON) {
+          let coords = geometry.getCoordinates()
+          coords.forEach( (coordinates, ringIndex) => {
+            for (let j = 0, jj = coordinates.length - 1; j < jj; j++) {
+              let points = coordinates[j]
+              let nextPoints = coordinates[j + 1]
     
+              let pathExtent = _ExtentUtil.boundingExtentFromTwoPoints(points, nextPoints)
+              let pathBufferExtent = _ExtentUtil.buffer(pathExtent, tolarance)
+    
+              if (ExtentUtil.containsPoint(pathBufferExtent, pixelCoordinate)) {
+                const segment = [points, nextPoints]
+                result.push({
+                  geometry: geometry,
+                  segment: segment,
+                  index: j,
+                  ringIndex: ringIndex
+                })
+              }
+            }
+          })
+        } else if ( geometryType === Geometry.EXTENT ||
+                    geometryType === Geometry.LINE) {
           let coordinates = geometry.getCoordinates()
           
           for (let j = 0, jj = coordinates.length - 1; j < jj; j++) {

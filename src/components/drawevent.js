@@ -47,5 +47,4 @@ DrawEvent.EventType = {
    * Triggered upon feature draw end
    */
   DRAW_END: 'drawend'
-  
 }

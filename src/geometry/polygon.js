@@ -13,7 +13,10 @@ import {linearRingsAreOriented,orientLinearRings} from './support/orient'
  *
  * 面类和数据结构
  *
- * 多边形是<b>闭合数据结构</b>，所有首尾点必须相同，见例子
+ * 多边形是<b>闭合数据结构</b>，所有首尾点必须相同。
+ *
+ * 多边形顶点存储是一个二维数组，数组中第一条闭合点串表示多边形
+ * 的最外层，第二条及其以后表示多边形的内部洞环。
  *
  * @class Polygon
  * @extends Geometry
@@ -36,7 +39,7 @@ export default class Polygon extends Geometry {
 
     this._rings = []
     
-    this.rings = rings
+    this.setCoordinates(rings)
   }
 
   /**
@@ -46,20 +49,26 @@ export default class Polygon extends Geometry {
    */
   get extent () {
     if (this._extent === null) {
-      const rings = this.getCoordinates()
-      let xmin = Number.POSITIVE_INFINITY
-      let ymin = Number.POSITIVE_INFINITY
-      let xmax = Number.NEGATIVE_INFINITY
-      let ymax = Number.NEGATIVE_INFINITY
-
-      for (let ring of rings) {
-        xmin = Math.min(xmin, ring[0])
-        ymin = Math.min(ymin, ring[1])
-        xmax = Math.max(xmax, ring[0])
-        ymax = Math.max(ymax, ring[1])
+      const coords = this.getCoordinates()
+      
+      // 计算最小外界矩形，只考虑外围环
+      if (coords.length > 0) {
+        let rings = coords[0]
+  
+        let xmin = Number.POSITIVE_INFINITY
+        let ymin = Number.POSITIVE_INFINITY
+        let xmax = Number.NEGATIVE_INFINITY
+        let ymax = Number.NEGATIVE_INFINITY
+  
+        for (let ring of rings) {
+          xmin = Math.min(xmin, ring[0])
+          ymin = Math.min(ymin, ring[1])
+          xmax = Math.max(xmax, ring[0])
+          ymax = Math.max(ymax, ring[1])
+        }
+  
+        this._extent = new Extent(xmin, ymin, xmax, ymax)
       }
-
-      this._extent = new Extent(xmin, ymin, xmax, ymax)
     }
 
     return this._extent
@@ -99,12 +108,42 @@ export default class Polygon extends Geometry {
    * @returns {boolean}
    */
   containsXY (x, y) {
+    const coords = this.getCoordinates()
+    const outRing = coords[0]
+    
+    let contains = false
+    if (this._inOneRing(x, y, outRing)) {
+      contains = true
+    }
+    
+    if (coords.length > 1 && contains) {
+      const coordsTemp = coords.slice(1)
+      
+      const inHole = coordsTemp.some( ring => {
+        return this._inOneRing(x, y, ring)
+      })
+      
+      if (inHole) {
+        contains = false
+      }
+    }
+    
+    return contains
+  }
+  
+  /**
+   * 判断 x 和 y 的值是否在环内
+   * @param x
+   * @param y
+   * @param ring
+   * @returns {boolean}
+   * @private
+   */
+  _inOneRing (x, y, ring) {
     const px = x
     const py = y
     let flag = false
   
-    const ring = this.getCoordinates()
-    
     for (let i = 0, l = ring.length, j = l - 1; i < l; j = i, i++) {
       const sx = ring[i][0]
       const sy = ring[i][1]
@@ -183,7 +222,6 @@ export default class Polygon extends Geometry {
   
   /**
    * Get the collection of geometry
-   * TODO 将来都需要换成这种线性的存储方式，并逐步替换成这种模式
    * @returns {[*,*]}
    */
   getCoordinates () {
@@ -214,6 +252,7 @@ export default class Polygon extends Geometry {
   setCoordinates (coords) {
     this.rings = coords
     this._extent = null
+    this.stride = this.rings.length
     this.changed()
   }
   
@@ -223,9 +262,24 @@ export default class Polygon extends Geometry {
    * @returns {*|number}
    */
   getCoordinateIndex (coord) {
-    return this.getCoordinates().findIndex(function(points){
-      return points[0] === coord[0] && points[1] === coord[1]
-    })
+    const coords = this.getCoordinates()
+    for (let i = 0, len = coords.length; i < len; i++) {
+      const rings = coords[i]
+      for (let j = 0,jLen = rings.length; j < jLen; j++) {
+        const point = rings[j]
+        if (point[0] === coord[0] && point[1] === coord[1]) {
+          return {
+            ringIndex: i,
+            index: j
+          }
+        }
+      }
+    }
+    
+    return {
+      ringIndex: -1,
+      index: -1
+    }
   }
   
   /**
