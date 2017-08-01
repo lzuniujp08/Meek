@@ -7,6 +7,9 @@ import BaseEvent from '../core/baseevent'
 /**
  * The DrawEvent will emitted while geometrys on drawing end.
  *
+ * 绘制结束时，DrawEvent将会被派发
+ *
+ *
  * @class drawevent
  * @extends BaseObject
  * @module component

@@ -553,7 +553,7 @@ export default class Modify extends Component {
           coordinates = geometry.getCoordinates()
           coordinates[segmentData.ringIndex][segmentData.index] = vertex
           if (segmentData.index === 0) {
-            coordinates[segmentData.ringIndex][coordinates.length - 1] = vertex
+            coordinates[segmentData.ringIndex][coordinates[segmentData.ringIndex].length - 1] = vertex
           }
           break
         case Geometry.EXTENT:

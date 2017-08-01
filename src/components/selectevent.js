@@ -1,6 +1,15 @@
 /**
  * Created by zhangyong on 2017/5/25.
  */
+/**
+ * 选择结束时，SelectEvent将会被派发
+ *
+ * @class selectevent
+ * @extends BaseObject
+ * @module component
+ *
+ *
+ */
 
 import BaseEvent from '../core/baseevent'
 

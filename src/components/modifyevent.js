@@ -2,6 +2,14 @@
  * Created by zhangyong on 2017/6/9.
  */
 
+/**
+ * 修改结束时，ModifyEvent将会被派发
+ *
+ * @class modifyevent
+ * @extends BaseObject
+ * @module component
+ *
+ */
 import BaseEvent from '../core/baseevent'
 
 export default class ModifyEvent extends BaseEvent {
