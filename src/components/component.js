@@ -184,6 +184,19 @@ export default class Component extends BaseObject {
   
   /**
    *
+   * @param view
+   * @param delta
+   * @param opt_duration
+   */
+  pan (view, delta) {
+    const currentCenter = view.center
+    if (currentCenter) {
+      view.center = [currentCenter[0] + delta[0], currentCenter[1] + delta[1]]
+    }
+  }
+  
+  /**
+   *
    * 根据Delta值进行视图缩放，Delta等于1时固定放大，等于-1时固定缩小
    *
    * @method zoomByDelta
