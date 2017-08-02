@@ -21,8 +21,19 @@ export function noModifierKeys (browserEvent) {
   !originalEvent.shiftKey)
 }
 
+
+export function targetNotEditable (mapBrowserEvent) {
+  const target = mapBrowserEvent.originalEvent.target
+  const tagName = target.tagName
+  return (
+  tagName !== 'INPUT' &&
+  tagName !== 'SELECT' &&
+  tagName !== 'TEXTAREA')
+}
+
 export default {
   singleClick,
   mouseWheel,
-  noModifierKeys
+  noModifierKeys,
+  targetNotEditable
 }

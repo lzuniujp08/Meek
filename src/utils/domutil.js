@@ -47,6 +47,11 @@ export function outerHeight (element) {
   return height
 }
 
+
+export function removeNode (node) {
+  return node && node.parentNode ? node.parentNode.removeChild(node) : null
+}
+
 /**
  *
  * @param node
@@ -61,5 +66,6 @@ export default {
   createCanvasContext2D,
   outerWidth,
   outerHeight,
-  removeChildren
+  removeChildren,
+  removeNode
 }
