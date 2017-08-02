@@ -36,7 +36,7 @@ export default class Polygon extends Geometry {
     super()
 
     this._rings = []
-    
+  
     this.setCoordinates(rings)
   }
 
@@ -188,20 +188,24 @@ export default class Polygon extends Geometry {
   }
   
   /**
+   * @todo 将来需要缓存下来，渲染时频繁计算会产生性能开销,使用revision机制来控制
    * getFlatInteriorPoint
    * @returns {*}
    */
   getFlatInteriorPoint () {
     const flatCenter = [this.extent.centerX, this.extent.centerY]
   
-    const ends = [this.getCoordinates().length * 2]
+    const ends = [this.getCoordinates()[0].length * 2]
+    const orientedFlatCoordinates = this.getOrientedFlatCoordinates()
+    
     const flatInteriorPoint = linearRings(
-      this.getOrientedFlatCoordinates(), 0, ends, this.stride, flatCenter, 0)
+      orientedFlatCoordinates, 0, ends, this.stride, flatCenter, 0)
     
     return  flatInteriorPoint
   }
   
   /**
+   * 对多边形的边进行顺序化
    * getOrientedFlatCoordinates
    * @returns {*}
    */
@@ -209,7 +213,7 @@ export default class Polygon extends Geometry {
     let orientedFlatCoordinates
     
     const flatCoordinates = []
-    const coordinates = this.getCoordinates()
+    const coordinates = this.getCoordinates()[0]
   
     coordinates.forEach( point => {
       flatCoordinates.push(point[0], point[1])
@@ -248,7 +252,7 @@ export default class Polygon extends Geometry {
    * @returns {[*,*]}
    */
   getFormShowPosition (offsetX = 0, offsetY = 0) {
-    const coordinates = this.getCoordinates()
+    const coordinates = this.getCoordinates()[0]
     if (coordinates.length === 0) {
       return
     }
@@ -266,7 +270,7 @@ export default class Polygon extends Geometry {
   setCoordinates (coords) {
     this.rings = coords
     this._extent = null
-    this.stride = this.rings.length
+    this.stride = 2
     this.changed()
   }
   
@@ -303,9 +307,17 @@ export default class Polygon extends Geometry {
    * @returns {Polygon}
    */
   clone () {
+    const coords = this.getCoordinates()
+    
     const newCoordinates = []
-    this.getCoordinates().forEach( coords => {
-      newCoordinates.push([coords[0],coords[1]])
+    let outRings = []
+    coords.forEach( ring => {
+      ring.forEach(points => {
+        outRings.push([points[0], points[1]])
+      })
+  
+      newCoordinates.push(outRings)
+      outRings = []
     })
     
     const newPolygon = new Polygon()

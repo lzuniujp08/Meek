@@ -30,12 +30,22 @@ export function orientLinearRings (flatCoordinates, offset, ends, stride, opt_ri
 }
 
 
+/**
+ * 判断线串的方向
+ * @param flatCoordinates
+ * @param offset
+ * @param ends
+ * @param stride
+ * @param opt_right
+ * @returns {boolean}
+ */
 export function linearRingsAreOriented (flatCoordinates, offset, ends, stride, opt_right) {
   const right = opt_right !== undefined ? opt_right : false
   let i, ii
   
   for (i = 0, ii = ends.length; i < ii; ++i) {
     let end = ends[i]
+    // 判断坐标串是否是顺时针
     let isClockwise = linearRingIsClockwise(flatCoordinates, offset, end, stride)
     
     if (i === 0) {
@@ -54,6 +64,14 @@ export function linearRingsAreOriented (flatCoordinates, offset, ends, stride, o
   return true
 }
 
+/**
+ * 判断坐标串是否是顺时针方向
+ * @param flatCoordinates
+ * @param offset
+ * @param end
+ * @param stride
+ * @returns {boolean}
+ */
 export function linearRingIsClockwise(flatCoordinates, offset, end, stride) {
   // http://tinyurl.com/clockwise-method
   // https://github.com/OSGeo/gdal/blob/trunk/gdal/ogr/ogrlinearring.cpp
