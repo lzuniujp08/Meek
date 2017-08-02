@@ -38,15 +38,15 @@ import TextStyle from 'style/textstyle'
 import BaseLayer from 'lyr/baselayer'
 import FeatureLayer from 'lyr/featurelayer'
 import SingleImageLayer from 'lyr/singleimagelayer'
-import Renderer from 'renderer/renderer'
-import CanvasRenderer from 'renderer/canvas/canvasrenderer'
-import Component from 'components/component'
+// import Renderer from 'renderer/renderer'
+// import CanvasRenderer from 'renderer/canvas/canvasrenderer'
+// import Component from 'components/component'
 import Draw from 'components/draw'
 import DrawEvent from 'components/drawevent'
 import Select from 'components/select'
 import Modify from 'components/modify'
 import DragPan from 'components/dragpan'
-import Kinetic from 'components/kinetic'
+// import Kinetic from 'components/kinetic'
 import MouseWheelZoom from 'components/mousewheelzoom'
 
 import BrowserEvent from 'meek/browserevent'
@@ -57,7 +57,7 @@ import ModifyEvent from 'components/modifyevent'
 import Control from 'control/control'
 import Zoom from 'control/zoom'
 
-import BrowserEventHandler from 'meek/browsereventhandler'
+// import BrowserEventHandler from 'meek/browsereventhandler'
 import Feature from 'meek/feature'
 import Map from 'meek/map'
 import View from 'meek/view'
@@ -99,13 +99,13 @@ export default {
   BaseLayer,
   FeatureLayer,
   SingleImageLayer,
-  Renderer,
-  CanvasRenderer,
-  Component,
+  // Renderer,
+  // CanvasRenderer,
+  // Component,
   Draw,
   DrawEvent,
   BrowserEvent,
-  BrowserEventHandler,
+  // BrowserEventHandler,
   EventType,
   Feature,
   Map,
@@ -116,7 +116,7 @@ export default {
   Select,
   Modify,
   DragPan,
-  Kinetic,
+  // Kinetic,
   Control,
   Zoom,
   Obj,
