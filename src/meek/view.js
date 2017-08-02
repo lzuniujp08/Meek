@@ -238,9 +238,6 @@ export default class View extends BaseObject {
     return [500, 500]
   }
   
-  _calculateResolution () {
-    return 0.94
-  }
   
   /**
    * 获取视图状态

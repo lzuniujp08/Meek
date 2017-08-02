@@ -284,6 +284,7 @@ export default class Map extends BaseObject {
    */
   _handleViewChange () {
     this.render()
+    this.dispatchEvent(EventType.VIEW_CHANGED)
   }
   
   /**

@@ -132,6 +132,7 @@ export default class ImageLayerRenderer extends LayerRenderer {
       const dy = imageTransform[5]
       const dw = image.width * imageTransform[0]
       const dh = image.height * imageTransform[3]
+      context.imageSmoothingEnabled = false
       context.drawImage(image, 0, 0, +image.width, +image.height,
         Math.round(dx), Math.round(dy), Math.round(dw), Math.round(dh))
       

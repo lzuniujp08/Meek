@@ -13,6 +13,17 @@ export const EventType = {}
  */
 EventType.CHANGE = 'change'
 
+
+/**
+ * Triggered when view has been changed
+ *
+ * @property VIEW_CHANGED
+ * @static
+ * @final
+ * @type {String}
+ */
+EventType.VIEW_CHANGED = 'viewchanged'
+
 /**
  * Triggered when a image download error
  *
