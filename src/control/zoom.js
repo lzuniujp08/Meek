@@ -19,10 +19,10 @@ export default class Zoom extends Control {
     const zoomOutLabel = options.zoomOutLabel !== undefined ? options.zoomOutLabel : '\u2212'
   
     const zoomInTipLabel = options.zoomInTipLabel !== undefined ?
-      options.zoomInTipLabel : 'Zoom in'
+      options.zoomInTipLabel : '放大'
     
     const zoomOutTipLabel = options.zoomOutTipLabel !== undefined ?
-      options.zoomOutTipLabel : 'Zoom out'
+      options.zoomOutTipLabel : '缩小'
   
     const inElement = document.createElement('button')
     inElement.className = className + '-in'
