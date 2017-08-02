@@ -49,11 +49,13 @@ import DragPan from 'components/dragpan'
 import Kinetic from 'components/kinetic'
 import MouseWheelZoom from 'components/mousewheelzoom'
 
-
 import BrowserEvent from 'meek/browserevent'
 import SelectEvent from 'components/selectevent'
 import FeatureEvent from 'meek/featureevent'
 import ModifyEvent from 'components/modifyevent'
+
+import Control from 'control/control'
+import Zoom from 'control/zoom'
 
 import BrowserEventHandler from 'meek/browsereventhandler'
 import Feature from 'meek/feature'
@@ -115,6 +117,8 @@ export default {
   Modify,
   DragPan,
   Kinetic,
+  Control,
+  Zoom,
   Obj,
   Math,
   MouseWheelZoom,
