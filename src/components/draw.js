@@ -756,7 +756,7 @@ export default class Draw extends Component {
    */
   _updateSketchPoint (event) {
     let coordinates = event.coordinate
-  
+
     if (this._sketchPoint === null) {
       const geom = new Point(coordinates[0], coordinates[1])
       this._sketchPoint = new Feature(geom)
@@ -764,7 +764,6 @@ export default class Draw extends Component {
     } else {
       const sketchPointgeom = this._sketchPoint.geometry
       sketchPointgeom.setCoordinates(coordinates)
-      // this.changed()
     }
   }
   
