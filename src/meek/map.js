@@ -13,6 +13,7 @@ import {Transform} from '../data/matrix/transform'
 import {EventType} from '../meek/eventtype'
 import {ExtentUtil} from '../geometry/support/extentutil'
 import {componentsDefaults} from '../components/componentdefaults'
+import {controlDefaults} from '../control/controldefaults'
 
 
 /**
@@ -61,6 +62,13 @@ export default class Map extends BaseObject {
      */
     this._components = []
   
+    /**
+     * The collection of controls
+     * @type {Array}
+     * @private
+     */
+    this._controls = []
+  
     // Create the viewport for map container
     this._createViewport()
   
@@ -108,9 +116,12 @@ export default class Map extends BaseObject {
     this.target = optionsInner.values['target']
     this.view = optionsInner.values['view']
     
-    // add default components to maps
+    // add default components to map
     optionsInner.components.forEach(component =>
       this.addComponents(component))
+    
+    // add default controls to map
+    optionsInner.controls.forEach(control => this.addControl(control))
   
     this._overlayIdIndex = {}
     this._overlays = optionsInner.overlays
@@ -210,6 +221,17 @@ export default class Map extends BaseObject {
   }
   
   /**
+   *
+   * @param keyboardEvent
+   * @private
+   */
+  _handleKeyboardEvent (keyboardEvent) {
+    const type = keyboardEvent.type
+    const browserEvent = new BrowserEvent(this, keyboardEvent, type)
+    this._handleBrowserEvent(browserEvent)
+  }
+  
+  /**
    * Handle browser events
    * @param browserEvent
    * @private
@@ -263,8 +285,6 @@ export default class Map extends BaseObject {
     
     this._frameState = frameState
     this._renderer.renderFrame(frameState)
-    
-    
   }
   
   /**
@@ -315,6 +335,13 @@ export default class Map extends BaseObject {
    * @returns {Array}
    */
   get components () { return this._components }
+  
+  /**
+   * map中控件集合
+   * @property controls
+   * @type {[]}
+   */
+  get controls () { return this._controls }
 
   /**
    * 当前存储在Map中的图层集合
@@ -342,6 +369,16 @@ export default class Map extends BaseObject {
     this._target = value
     const targetElement = document.getElementById(this._target)
     targetElement.appendChild(this.viewport)
+  
+    // 监听键盘点击和抬起事件
+    listen(targetElement, BrowserEvent.KEYDOWN,
+      this._handleKeyboardEvent, this),
+    listen(targetElement, BrowserEvent.KEYPRESS,
+        this._handleKeyboardEvent, this)
+  
+    // 监听浏览器窗口变化，并做自适应
+    const handleRize = this.updateSize.bind(this)
+    window.addEventListener(EventType.RESIZE, handleRize, false)
     
     this.updateSize()
     this.render()
@@ -356,6 +393,16 @@ export default class Map extends BaseObject {
   addComponents (cpt) {
     this.components.push(cpt)
     cpt.map = this
+  }
+  
+  /**
+   * 添加一个控件到地图中
+   * @method addControl
+   * @param control
+   */
+  addControl (control) {
+    this.controls.push(control)
+    control.map = this
   }
 
   /**
@@ -542,7 +589,13 @@ export default class Map extends BaseObject {
     } else {
       components = componentsDefaults()
     }
-    
+  
+    let controls
+    if (options.controls) {
+      controls = options.controls
+    } else {
+      controls = controlDefaults()
+    }
     
     let overlays
     if (options.overlays !== undefined) {
@@ -556,6 +609,7 @@ export default class Map extends BaseObject {
     return {
       rendererClass,
       components,
+      controls,
       values,
       overlays
     }

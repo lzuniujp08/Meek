@@ -17,6 +17,8 @@ EventType.CHANGE = 'change'
 /**
  * Triggered when view has been changed
  *
+ * 当地图视图发生变化时将会派发改事件
+ *
  * @property VIEW_CHANGED
  * @static
  * @final
@@ -43,6 +45,16 @@ EventType.ERROR = 'error'
  * @type {String}
  */
 EventType.LOAD = 'load'
+
+/**
+ * 当浏览器窗口的尺寸发生变化时派发
+ *
+ * @property RESIZE
+ * @static
+ * @final
+ * @type {string}
+ */
+EventType.RESIZE = 'resize'
 
 
 export default {

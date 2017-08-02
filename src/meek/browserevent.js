@@ -190,3 +190,15 @@ BrowserEvent.WHEEL = 'wheel'
  * @type {String}
  */
 BrowserEvent.MOUSE_WHEEL = 'mousewheel'
+
+/**
+ *
+ * @type {string}
+ */
+BrowserEvent.KEYDOWN = 'keydown'
+
+/**
+ *
+ * @type {string}
+ */
+BrowserEvent.KEYPRESS = 'keypress'
