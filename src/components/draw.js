@@ -814,8 +814,8 @@ export default class Draw extends Component {
         
         const pcoordinates = this._sketchFeature.geometry.getCoordinates()
         
-        if (pcoordinates.length > 3 ) {
-          pcoordinates.splice(pcoordinates.length - 3, 1)
+        if (pcoordinates[0].length > 3 ) {
+          pcoordinates[0].splice(pcoordinates[0].length - 3, 1)
   
           const lineCoordinate = this._sketchLine.geometry.getCoordinates()
           lineCoordinate.splice(lineCoordinate.length - 2, 1)
