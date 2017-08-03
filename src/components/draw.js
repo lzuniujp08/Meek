@@ -812,13 +812,10 @@ export default class Draw extends Component {
     } else if (drawMode === Draw.DrawMode.POLYGON) {
       if (this._sketchFeature) {
         
-        const pcoordinates = this._sketchFeature.geometry.getCoordinates()
+        const pcoordinates = this._sketchFeature.geometry.getCoordinates()[0]
         
-        if (pcoordinates[0].length > 3 ) {
-          pcoordinates[0].splice(pcoordinates[0].length - 3, 1)
-  
-          const lineCoordinate = this._sketchLine.geometry.getCoordinates()
-          lineCoordinate.splice(lineCoordinate.length - 2, 1)
+        if (pcoordinates.length > 3 ) {
+          pcoordinates.splice(pcoordinates.length - 2, 1)
           this._sketchFeature.changed()
         }
       }
