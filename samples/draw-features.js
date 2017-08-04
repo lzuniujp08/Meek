@@ -21,8 +21,8 @@ window.onload = function () {
         extent: extent
       },
       center: Datatang.ExtentUtil.getCenter(extent),
-      zoom: 2,
-      maxZoom: 8
+      resolution: 2,
+      resolutions: [4,2,1,0.5,0.25,0.125, 0.0625, 0.03125]
     })
   });
   
