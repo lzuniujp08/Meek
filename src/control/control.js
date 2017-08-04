@@ -5,8 +5,7 @@
 import BaseObject from '../core/baseobject'
 
 import {removeNode} from '../utils/domutil'
-import {unlistenByKey, listen} from '../core/eventmanager'
-import {RenderEventType} from '../renderer/rendereventtype'
+import {unlistenByKey} from '../core/eventmanager'
 
 export default class Control extends BaseObject {
   constructor (options = {}) {
@@ -20,7 +19,6 @@ export default class Control extends BaseObject {
     
     this._listenerKeys = []
     
-    this.render = options.render ? options.render : function (){}
     
     if (options.target) {
       this.target = options.target
@@ -41,10 +39,6 @@ export default class Control extends BaseObject {
     if (this._map) {
       const target = this._target ? this._target : value.overlayContainerStopEvent
       target.appendChild(this._element)
-      
-      if (this.render) {
-        this._listenerKeys.push(listen(value, RenderEventType.PRERENDER, this.render, this))
-      }
       
       value.render()
     }

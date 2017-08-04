@@ -3,6 +3,8 @@
  */
 
 import Zoom from './zoom'
+import Home from './home'
+import zoomPercentage from './zoompercentage'
 
 export function controlDefaults (options = {}) {
   
@@ -13,16 +15,15 @@ export function controlDefaults (options = {}) {
     controls.push(new Zoom(options.zoomOptions))
   }
   
-  // const rotateControl = options.rotate !== undefined ? options.rotate : true
-  // if (rotateControl) {
-  //   controls.push(new ol.control.Rotate(options.rotateOptions))
-  // }
-  //
-  // const attributionControl = options.attribution !== undefined ?
-  //   options.attribution : true
-  // if (attributionControl) {
-  //   controls.push(new ol.control.Attribution(options.attributionOptions))
-  // }
+  const homeControl = options.home !== undefined ? options.home : true
+  if (homeControl) {
+    controls.push(new Home(options.homeOptions))
+  }
+  
+  const zoomPercentageControl = options.zoomPercentage !== undefined ? options.zoomPercentage : true
+  if (zoomPercentageControl) {
+    controls.push(new zoomPercentage(options.zoomPercentageOptions))
+  }
   
   return controls
 }
