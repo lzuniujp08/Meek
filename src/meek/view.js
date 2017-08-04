@@ -6,6 +6,9 @@ import BaseObject from '../core/baseobject'
 import {ExtentUtil} from '../geometry/support/extentutil'
 import {Config} from '../meek/config'
 
+import {linearFindNearest} from '../utils/array'
+import {clamp} from '../utils/math'
+
 /**
  * View 视图类
  *
@@ -81,23 +84,16 @@ export default class View extends BaseObject {
       rotation: rotationConstraint
     }
   
-    // if (options.resolution !== undefined) {
-    //   properties[ol.ViewProperty.RESOLUTION] = options.resolution
-    // } else if (options.zoom !== undefined) {
-    //   properties[ol.ViewProperty.RESOLUTION] = this.constrainResolution(
-    //     this.maxResolution_, options.zoom - this.minZoom_)
-    // }
-    // properties[ol.ViewProperty.ROTATION] =
-    //   options.rotation !== undefined ? options.rotation : 0
-    // this.setProperties(properties)
-  
-  
     this.center = options.center !== undefined ?
          options.center : this._calculateCenter()
 
     this.resolution = options.resolution !== undefined ?
         options.resolution : this.constrainResolution(this._maxResolution, options.zoom - this._minZoom)
 
+    // 记录原始 view 参数
+    this._originalCenter = this.center
+    this._originalResolution = this.resolution
+    
     this.rotation = 0
     
     this.dataExtent = resolutionConstraint.extent
@@ -156,7 +152,7 @@ export default class View extends BaseObject {
       const resolutions = options.resolutions
       maxResolution = resolutions[0]
       minResolution = resolutions[resolutions.length - 1]
-      // resolutionConstraint = ol.ResolutionConstraint.createSnapToResolutions(resolutions)
+      resolutionConstraint = this.createSnapToResolutions(resolutions)
     } else {
       // calculate the default min and max resolution
       const projection = options.projection
@@ -227,7 +223,32 @@ export default class View extends BaseObject {
         if (opt_maxLevel !== undefined) {
           newLevel = Math.min(newLevel, opt_maxLevel)
         }
-        return maxResolution / Math.pow(power, newLevel)
+  
+        const reso = maxResolution / Math.pow(power, newLevel)
+        return reso
+      } else {
+        return undefined
+      }
+    }
+  }
+  
+  /**
+   *
+   * @param resolutions
+   * @returns {Function}
+   */
+  createSnapToResolutions (resolutions) {
+    return function(resolution, delta, direction) {
+      if (resolution !== undefined) {
+        let z = linearFindNearest(resolutions, resolution, direction)
+        z = clamp(z + delta, 0, resolutions.length - 1)
+        const index = Math.floor(z)
+        if (z != index && index < resolutions.length - 1) {
+          let power = resolutions[index] / resolutions[index + 1]
+          return resolutions[index] / Math.pow(power, z - index)
+        } else {
+          return resolutions[index]
+        }
       } else {
         return undefined
       }
@@ -370,4 +391,21 @@ export default class View extends BaseObject {
    * @returns {Number}
    */
   get maxResolution () { return this._maxResolution }
+  
+  
+  /**
+   * 获取初始设置的地图中心点
+   *
+   * @property originalCenter
+   * @type {Array}
+   */
+  get originalCenter () { return this._originalCenter }
+  
+  /**
+   * 获取初始设置的地图级别
+   *
+   * @property originalResolution
+   * @type {Number}
+   */
+  get originalResolution () { return this._originalResolution }
 }
