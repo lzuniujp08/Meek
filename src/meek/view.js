@@ -148,6 +148,9 @@ export default class View extends BaseObject {
     const zoomFactor = options.zoomFactor !== undefined ?
       options.zoomFactor : defaultZoomFactor
   
+    const projection = options.projection
+    extent = projection.extent
+    
     if (options.resolutions !== undefined) {
       const resolutions = options.resolutions
       maxResolution = resolutions[0]
@@ -155,10 +158,7 @@ export default class View extends BaseObject {
       resolutionConstraint = this.createSnapToResolutions(resolutions)
     } else {
       // calculate the default min and max resolution
-      const projection = options.projection
-      extent = projection.extent
       const size = Math.max(ExtentUtil.getWidth(extent), ExtentUtil.getHeight(extent))
-    
       const defaultMaxResolution = size / defaultTileSize / Math.pow(
           defaultZoomFactor, defaultMinZoom)
     
