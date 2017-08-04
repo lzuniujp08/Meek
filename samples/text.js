@@ -118,8 +118,8 @@ window.onload = function () {
         extent: mapextent
       },
       center: Datatang.ExtentUtil.getCenter(mapextent),
-      zoom: 2,
-      maxZoom: 8
+      resolution: 1,
+      resolutions: [8,4,2,1,0.5,0.25,0.125]
     })
   });
 
