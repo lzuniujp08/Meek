@@ -67,6 +67,8 @@ import GeoJSON from 'data/json/geojson'
 
 import intersects from 'geometry/analysis/intersects'
 import splitPolygonByPolyline from 'geometry/analysis/splitpolygon'
+import contains from 'geometry/analysis/contains'
+import polygonWithHole from 'geometry/analysis/polygonwithhole'
 
 const version = VERSION
 
@@ -125,5 +127,7 @@ export default {
   GeoJSON,
   version,
   intersects,
-  splitPolygonByPolyline
+  splitPolygonByPolyline,
+  contains,
+  polygonWithHole
 }
