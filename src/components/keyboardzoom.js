@@ -12,7 +12,6 @@ export default class KeyboardZoom extends Component {
   
     /**
      * @private
-     * @type {ol.EventsConditionType}
      */
     this._condition = options.condition ? options.condition : targetNotEditable
   

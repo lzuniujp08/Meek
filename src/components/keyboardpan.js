@@ -12,11 +12,6 @@ export default class KeyboardPan extends Component {
   
     super()
     
-    /**
-     * @private
-     * @param {ol.MapBrowserEvent} mapBrowserEvent Browser event.
-     * @return {boolean} Combined condition result.
-     */
     this._defaultCondition = function(mapBrowserEvent) {
       const keyCode = mapBrowserEvent.originalEvent.keyCode
       return noModifierKeys(mapBrowserEvent) && targetNotEditable(mapBrowserEvent) && (
@@ -25,7 +20,6 @@ export default class KeyboardPan extends Component {
   
     /**
      * @private
-     * @type {ol.EventsConditionType}
      */
     this._condition = options.condition !== undefined ?
       options.condition : this._defaultCondition

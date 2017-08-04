@@ -6,7 +6,8 @@
 import Kinetic from './kinetic'
 import DragPan from './dragpan'
 import MouseWheelZoom from './mousewheelzoom'
-import KeyboardZoom from './keyboardzoom.js'
+import KeyboardHome from './keyboardhome'
+import KeyboardZoom from './keyboardzoom'
 import KeyboardPan from './keyboardpan'
 
 /**
@@ -37,7 +38,8 @@ export function componentsDefaults (options = {}) {
   
   const keyboard = options.keyboard !== undefined ? options.keyborad : true
   if (keyboard) {
-    components.add(new KeyboardPan())
+    components.add(new KeyboardHome(options))
+    components.add(new KeyboardPan(options))
     components.add(new KeyboardZoom({
       delta: options.zoomDelta
     }))
