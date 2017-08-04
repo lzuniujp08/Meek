@@ -235,6 +235,16 @@ export default class Polygon extends Geometry {
   }
   
   /**
+   * 判断当前多边形是否有洞
+   *
+   * @method hasHoles
+   * @returns {boolean}
+   */
+  hasHoles () {
+    return this.getCoordinates().length > 1
+  }
+  
+  /**
    * 获取多边形坐标
    *
    * @method getCoordinates
