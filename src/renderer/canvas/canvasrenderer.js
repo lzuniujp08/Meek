@@ -13,7 +13,7 @@ import RenderEvent from '../renderevent'
 
 
 /**
- *
+ * 图形渲染调度器
  *
  */
 export default class CanvasRenderer extends Renderer {
@@ -58,7 +58,7 @@ export default class CanvasRenderer extends Renderer {
       return
     }
     
-    if(!frameState){
+    if (!frameState) {
       if (this._rendererVisible) {
         this._canvas.style.display = 'none'
         this._rendererVisible = false
@@ -72,10 +72,10 @@ export default class CanvasRenderer extends Renderer {
     const canvasWidth = frameState.size[0]
     const canvasHeight = frameState.size[1]
     
-    if(this._canvas.width !== canvasWidth || this._canvas.height !== canvasHeight){
+    if (this._canvas.width !== canvasWidth || this._canvas.height !== canvasHeight) {
       this._canvas.width = canvasWidth
       this._canvas.height = canvasHeight
-    }else{
+    } else {
       context.clearRect(0,0,canvasWidth,canvasHeight)
     }
 
@@ -89,9 +89,10 @@ export default class CanvasRenderer extends Renderer {
   
     this._dispatchComposeEvent(RenderEventType.PRERENDER, frameState)
     
-    layers.forEach(layer => {
+    layers.forEach( layer => {
       let layerRender = this.getLayerRenderer(layer)
-      if(layerRender.prepareFrame(frameState)){
+      
+      if (layerRender.prepareFrame(frameState)) {
         layerRender.composeFrame(frameState,context)
       }
     })
