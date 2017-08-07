@@ -28,7 +28,27 @@ window.onload = function () {
     ]
   ]
   var holePolygon = new Datatang.Polygon(holeRings)
-  var holePolygon = new Datatang.Polygon(holeRings)
+  
+  var mutilPolygonRings = [
+    // 多边形1
+    [
+      [
+        [500, 600], [450, 680],
+        [500, 760], [600, 690],
+        [550, 580], [500, 600]
+      ]
+    ],
+    // 多边形2
+    [
+      [
+        [700, 600], [650, 680],
+        [700, 760], [800, 690],
+        [750, 580], [700, 600]
+      ]
+    ]
+  ]
+  
+  var mutilPolygon = new Datatang.MutilPolygon(mutilPolygonRings)
   
   var extent = new Datatang.Extent(1100, 300, 1400, 600)
   
@@ -36,6 +56,7 @@ window.onload = function () {
     new Datatang.Feature(line),
     new Datatang.Feature(polygon),
     new Datatang.Feature(holePolygon),
+    new Datatang.Feature(mutilPolygon),
     new Datatang.Feature(extent)]
   
   // 将会获取缺省样式
@@ -69,7 +90,10 @@ window.onload = function () {
   
   // 选择工具
   var selectTool = new Datatang.Select({
-    selectMode: Datatang.BrowserEvent.SINGLE_CLICK
+    selectMode: Datatang.BrowserEvent.SINGLE_CLICK,
+    selectMultiMode: function(event){
+      return event.keyCode === 17
+    }
   })
 
   map.addComponents(selectTool)

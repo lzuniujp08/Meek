@@ -32,10 +32,32 @@ window.onload = function () {
   ]
   var holePolygon = new Datatang.Polygon(holeRings)
   
+  var mutilPolygonRings = [
+    // 多边形1
+    [
+      [
+        [500, 600], [450, 680],
+        [500, 760], [600, 690],
+        [550, 580], [500, 600]
+      ]
+    ],
+    // 多边形2
+    [
+      [
+        [700, 600], [650, 680],
+        [700, 760], [800, 690],
+        [750, 580], [700, 600]
+      ]
+    ]
+  ]
+  
+  var mutilPolygon = new Datatang.MutilPolygon(mutilPolygonRings)
+  
   var features = [new Datatang.Feature(point),
     new Datatang.Feature(line),
     new Datatang.Feature(polygon),
     new Datatang.Feature(holePolygon),
+    new Datatang.Feature(mutilPolygon),
     new Datatang.Feature(extent),
     new Datatang.Feature(extent1)
   ]
@@ -88,7 +110,11 @@ window.onload = function () {
     } else if (value === 'line') {
       modifyTool.features = [new Datatang.Feature(line)]
     } else if (value === 'polygon') {
+      modifyTool.features = [new Datatang.Feature(polygon)]
+    } else if (value === 'holePolygon') {
       modifyTool.features = [new Datatang.Feature(holePolygon)]
+    } else if (value === 'mutilPolygon') {
+      modifyTool.features = [new Datatang.Feature(mutilPolygon)]
     } else if (value === 'extent') {
       modifyTool.features = [new Datatang.Feature(extent)]
     }
