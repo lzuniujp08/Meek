@@ -49,27 +49,78 @@ export default class PolygonRender extends GeometryRender {
       this.equalsTransform(transform, this.renderedTransform)) {
       renderCoords = this._pixelCoordinates
     } else {
-      // 遍历多边形各个环
-      geometryCoordinages.forEach( rings => {
-        rings.forEach(points => {
-          let coordinate = transform2D(
-            points, 0, points.length, 2,
-            transform)
+      if (geometry.geometryType === Geometry.MULTI_POLYGON) {
+        let polygonCoords = []
+        // 遍历各个多边形
+        geometryCoordinages.forEach( polygon => {
+          polygon.forEach( rings => {
+            rings.forEach( points => {
+              let coordinate = transform2D(
+                points, 0, points.length, 2,
+                transform)
   
-          coordinate[0] = (coordinate[0] + 0.5 ) | 0
-          coordinate[1] = (coordinate[1] + 0.5 ) | 0
+              coordinate[0] = (coordinate[0] + 0.5 ) | 0
+              coordinate[1] = (coordinate[1] + 0.5 ) | 0
   
-          coordinates.push(coordinate)
+              coordinates.push(coordinate)
+            })
+  
+            polygonCoords.push(coordinates)
+            coordinates = []
+          })
+          
+          renderCoords.push(polygonCoords)
+          polygonCoords = []
         })
-  
-        renderCoords.push(coordinates)
-        coordinates = []
-      })
+        
+        this.renderMutilPolygon (ctx, styleArray, renderCoords)
+      } else {
+        // 遍历多边形各个环
+        geometryCoordinages.forEach( rings => {
+          rings.forEach(points => {
+            let coordinate = transform2D(
+              points, 0, points.length, 2,
+              transform)
+      
+            coordinate[0] = (coordinate[0] + 0.5 ) | 0
+            coordinate[1] = (coordinate[1] + 0.5 ) | 0
+      
+            coordinates.push(coordinate)
+          })
     
-      this._pixelCoordinates = renderCoords
-      Transform.setFromArray(this.renderedTransform, transform)
+          renderCoords.push(coordinates)
+          coordinates = []
+        })
+      }
+      
+      this.renderPolygon(ctx, styleArray, renderCoords)
     }
-    
+  
+    this._pixelCoordinates = renderCoords
+    Transform.setFromArray(this.renderedTransform, transform)
+  
+    return true
+  }
+  
+  /**
+   *
+   * @param ctx
+   * @param styleArray
+   * @param renderCoords
+   */
+  renderMutilPolygon (ctx, styleArray, renderCoords) {
+    renderCoords.forEach( polygon => {
+      this.renderPolygon(ctx, styleArray, polygon)
+    })
+  }
+  
+  /**
+   *
+   * @param ctx
+   * @param styleArray
+   * @param renderCoords
+   */
+  renderPolygon (ctx, styleArray, renderCoords) {
     const len = styleArray.length
     for(let i = 0; i < len ; i ++){
       let styleObj = styleArray[i]
@@ -80,10 +131,8 @@ export default class PolygonRender extends GeometryRender {
         borderStyle: styleObj.borderStyle
       }
     
-      this.drawPolygon(ctx, renderOptions)
+      this.drawStylePolygon(ctx, renderOptions)
     }
-    
-    return true
   }
   
   /**
@@ -91,7 +140,7 @@ export default class PolygonRender extends GeometryRender {
    * @param ctx
    * @param renderOpt
    */
-  drawPolygon (ctx, renderOpt) {
+  drawStylePolygon (ctx, renderOpt) {
     ctx.save()
     
     if (renderOpt.fillStyle) {
