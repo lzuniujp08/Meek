@@ -27,6 +27,7 @@ Style.defaultFunction = function () {
     Style._default[Geometry.POLYGON] = [
       new FillStyle(white, new LineStyle(blue, 1, 1.25), 0.2)
     ]
+    Style._default[Geometry.MULTI_POLYGON] = Style._default[Geometry.POLYGON]
     
     // same as polygon style
     Style._default[Geometry.EXTENT] = Style._default[Geometry.POLYGON]
@@ -71,7 +72,7 @@ Style.createDefaultEditing = function () {
   styles[Geometry.MULTI_LINE] = styles[Geometry.LINE]
   
   // 点样式
-  styles[Geometry.POINT] = [new PointStyle(12, blue, 0.1, new LineStyle(white, 1, 1))]
+  styles[Geometry.POINT] = [new PointStyle(10, white, 0.1, new LineStyle(blue, 1, 2))]
   styles[Geometry.MULTI_POINT] = styles[Geometry.POINT]
   
   return styles
