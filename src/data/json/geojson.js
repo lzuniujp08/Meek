@@ -5,6 +5,7 @@
 import Geometry from '../../geometry/geometry'
 import Point from '../../geometry/point'
 import Polygon from '../../geometry/polygon'
+import MutilPolygon from '../../geometry/mutilpolygon'
 import Line from '../../geometry/line'
 import Extent from '../../geometry/extent'
 import Feature from '../../meek/feature'
@@ -33,7 +34,7 @@ export default class GeoJSON {
     featuresObj.forEach( featureObj => {
       if (featureObj.type === 'Feature') {
         if (featureObj.geometry) {
-          let constructor
+          let constructor = undefined
           const geometryObj = featureObj.geometry
           const geometryType = geometryObj.type
           if (geometryType === 'Point') {
@@ -44,22 +45,26 @@ export default class GeoJSON {
             constructor = Polygon
           } else if (geometryType === 'ExtentPolygon') {
             constructor = Extent
+          } else if (geometryType === 'MutilPolygon') {
+            constructor = MutilPolygon
           }
           
-          const coordinates = geometryObj.coordinates
-          const geometry = new constructor()
-          geometry.setCoordinates(coordinates)
+          if (constructor === undefined) {
+            throw new Error('包含未定义的 Geometry 类型')
+          } else {
+            const coordinates = geometryObj.coordinates
+            const geometry = new constructor()
+            geometry.setCoordinates(coordinates)
   
-          let propertiesObj
-          if (featureObj.properties) {
-            propertiesObj = featureObj.properties
+            let propertiesObj
+            if (featureObj.properties) {
+              propertiesObj = featureObj.properties
+            }
+  
+            let title = featureObj.title
+            const feature = new Feature(geometry, propertiesObj, title)
+            features.push(feature)
           }
-
-          let title = featureObj.title
-
-          const feature = new Feature(geometry, propertiesObj,title)
-  
-          features.push(feature)
         }
       }
     })
@@ -118,6 +123,9 @@ export default class GeoJSON {
       break
     case Geometry.POLYGON :
       jsonType = 'Polygon'
+      break
+    case Geometry.MULTI_POLYGON :
+      jsonType = 'MutilPolygon'
       break
     case Geometry.EXTENT :
       jsonType = 'ExtentPolygon'

@@ -17,25 +17,26 @@ import {Style} from 'style/style'
 
 import Event from 'core/event'
 import EventManager from 'core/eventmanager'
-import BaseObject from 'core/baseobject'
+// import BaseObject from 'core/baseobject'
 
 import Geometry from 'geometry/geometry'
 import Extent from 'geometry/extent'
 import Point from 'geometry/point'
 import Line from 'geometry/line'
 import Polygon from 'geometry/polygon'
+import MutilPolygon from 'geometry/mutilpolygon'
 
 import {ImageState} from 'lyr/image/imagestate'
 import {ImageEvent} from 'lyr/image/imageevent'
 import SingleImage from 'lyr/image/singleimage'
 
-import BaseStyle from 'style/basestyle'
+// import BaseStyle from 'style/basestyle'
 import PointStyle from 'style/pointstyle'
 import LineStyle from 'style/linestyle'
 import FillStyle from 'style/fillstyle'
 import TextStyle from 'style/textstyle'
 
-import BaseLayer from 'lyr/baselayer'
+// import BaseLayer from 'lyr/baselayer'
 import FeatureLayer from 'lyr/featurelayer'
 import SingleImageLayer from 'lyr/singleimagelayer'
 // import Renderer from 'renderer/renderer'
@@ -81,7 +82,7 @@ export default {
   FeatureEvent,
   ModifyEvent,
   EventManager,
-  BaseObject,
+  // BaseObject,
   Counter,
   Helpers,
   ImageState,
@@ -92,13 +93,14 @@ export default {
   Point,
   Line,
   Polygon,
+  MutilPolygon,
   Style,
-  BaseStyle,
+  // BaseStyle,
   PointStyle,
   LineStyle,
   FillStyle,
   TextStyle,
-  BaseLayer,
+  // BaseLayer,
   FeatureLayer,
   SingleImageLayer,
   // Renderer,

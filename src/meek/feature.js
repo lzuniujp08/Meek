@@ -277,7 +277,9 @@ export default class Feature extends BaseObject {
   
         newStyles.unshift(cloneStyle)
 
-      } else if (geometryType === Geometry.POLYGON || geometryType === Geometry.EXTENT ) {
+      } else if (geometryType === Geometry.POLYGON ||
+          geometryType === Geometry.MULTI_POLYGON ||
+          geometryType === Geometry.EXTENT ) {
         const firstStyle = newStyles[0]
         firstStyle.borderStyle.width = firstStyle.borderStyle.width + 2
 
