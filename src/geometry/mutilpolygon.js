@@ -108,6 +108,7 @@ export default class MutilPolygon extends Geometry {
       })
       
       outRing.push(innerRing)
+      innerRing = []
     })
     
     const polygon = new Polygon(outRing)
