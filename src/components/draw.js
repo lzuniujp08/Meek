@@ -10,6 +10,7 @@ import Geometry from '../geometry/geometry'
 import Point from '../geometry/point'
 import Line from '../geometry/line'
 import Polygon from '../geometry/polygon'
+import MultiPolygon from '../geometry/mutilpolygon'
 import Extent from '../geometry/extent'
 import {ExtentUtil} from '../geometry/support/extentutil'
 import {listen, unlistenByKey} from '../core/eventmanager'
@@ -623,18 +624,29 @@ export default class Draw extends Component {
     const sketchFeature = this._abortDrawing()// 中止绘制，
     const coordinates = this._sketchCoords
     const geometry = (sketchFeature.geometry)
+    
+    const drawMode = this.drawMode
   
-    if (this.drawMode === Draw.DrawMode.LINE) {
+    if (drawMode === Draw.DrawMode.LINE) {
       // remove the redundant last point
       coordinates.pop()
       this.geometryFunction(coordinates, geometry)
-    } else if (this.drawMode === Draw.DrawMode.POLYGON) {
+    } else if (drawMode === Draw.DrawMode.POLYGON) {
       // When we finish drawing a polygon on the last point,
       // the last coordinate is duplicated as for LineString
       // we force the replacement by the first point
       coordinates[0].pop()
       coordinates[0].push(coordinates[0][0])
       this.geometryFunction(coordinates, geometry)
+    }
+    
+    // 处理复合图形
+    if (drawMode === Geometry.MULTI_POINT) {
+      // sketchFeature.geometry = new MultiPoint([coordinates]))
+    } else if (drawMode === Geometry.MULTI_LINE) {
+      // sketchFeature.geometry = new MultiLineString([coordinates])
+    } else if (drawMode === Geometry.MULTI_POLYGON) {
+      sketchFeature.geometry = new MultiPolygon([coordinates])
     }
   
     // 最终放到shource中，形成正式feature

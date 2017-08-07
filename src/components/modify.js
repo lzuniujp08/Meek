@@ -437,6 +437,7 @@ export default class Modify extends Component {
       nodes.sort(sortByDistance)
       const node = nodes[0]
       const geometry = node.geometry
+      const geometryType = geometry.geometryType
       const closestSegment = node.segment
       let vertex = this._closestOnSegment(pixelCoordinate, node)
       const vertexPixel = map.getPixelFromCoordinate(vertex)
@@ -447,7 +448,7 @@ export default class Modify extends Component {
   
         this._snapSegments = node
   
-        if (geometry.geometryType === Geometry.CIRCLE &&
+        if (geometryType === Geometry.CIRCLE &&
           node.index === Modify.MODIFY_SEGMENT_CIRCLE_CIRCUMFERENCE_INDEX) {
           this._snappedToVertex = true
           this._createOrUpdateVertexFeature(vertex)
@@ -464,9 +465,13 @@ export default class Modify extends Component {
                      closestSegment[1] : closestSegment[0]
             
             const coordinateIndex = geometry.getCoordinateIndex(vertex)
-            if (geometry.geometryType === Geometry.POLYGON) {
+            if (geometryType === Geometry.POLYGON) {
               this._snapSegments.index = coordinateIndex.index
               this._snapSegments.ringIndex = coordinateIndex.ringIndex
+            } else if (geometryType === Geometry.MULTI_POLYGON) {
+              this._snapSegments.index = coordinateIndex.index
+              this._snapSegments.ringIndex = coordinateIndex.ringIndex
+              this._snapSegments.polygonIndex = coordinateIndex.polygonIndex
             } else {
               this._snapSegments.index = coordinateIndex
             }
@@ -561,8 +566,10 @@ export default class Modify extends Component {
           break
         case Geometry.MULTI_POLYGON:
           coordinates = geometry.getCoordinates()
-          coordinates[depth[1]][depth[0]][segmentData.index + index] = vertex
-          segment[index] = vertex
+          coordinates[segmentData.polygonIndex][segmentData.ringIndex][segmentData.index] = vertex
+          if (segmentData.index === 0) {
+            coordinates[segmentData.polygonIndex][segmentData.ringIndex][coordinates[segmentData.polygonIndex][segmentData.ringIndex].length - 1] = vertex
+          }
           break
         case Geometry.CIRCLE:
           segment[0] = segment[1] = vertex
@@ -665,7 +672,12 @@ export default class Modify extends Component {
       break
     case Geometry.MULTI_POLYGON:
       coordinates = geometry.getCoordinates()
-      coordinates[depth[1]][depth[0]].splice(index + 1, 0, vertex)
+      if (!isVertex) {
+        coordinates[segmentData.polygonIndex][segmentData.ringIndex].splice(index + 1, 0, vertex)
+        index = index + 1
+      } else {
+        // dragIndex = index
+      }
       break
     case Geometry.LINE:
       coordinates = geometry.getCoordinates()
@@ -696,6 +708,7 @@ export default class Modify extends Component {
       depth: depth,
       index: index,
       ringIndex: segmentData.ringIndex,
+      polygonIndex: segmentData.polygonIndex,
       isVertex: isVertex
     }
     
@@ -743,7 +756,7 @@ export default class Modify extends Component {
               index: 0
             })
           }
-        } else if (geometryType === Geometry.POLYGON) {
+        } else if (geometryType === Geometry.POLYGON) { // @todo 这一块需要重构
           let coords = geometry.getCoordinates()
           coords.forEach( (coordinates, ringIndex) => {
             for (let j = 0, jj = coordinates.length - 1; j < jj; j++) {
@@ -763,6 +776,30 @@ export default class Modify extends Component {
                 })
               }
             }
+          })
+        } else if (geometryType === Geometry.MULTI_POLYGON ){
+          let allCoords = geometry.getCoordinates()
+          allCoords.forEach( (coords, polygonIndex) => {
+            coords.forEach( (coordinates, ringIndex) => {
+              for (let j = 0, jj = coordinates.length - 1; j < jj; j++) {
+                let points = coordinates[j]
+                let nextPoints = coordinates[j + 1]
+      
+                let pathExtent = _ExtentUtil.boundingExtentFromTwoPoints(points, nextPoints)
+                let pathBufferExtent = _ExtentUtil.buffer(pathExtent, tolarance)
+      
+                if (ExtentUtil.containsPoint(pathBufferExtent, pixelCoordinate)) {
+                  const segment = [points, nextPoints]
+                  result.push({
+                    geometry: geometry,
+                    segment: segment,
+                    polygonIndex: polygonIndex,
+                    index: j,
+                    ringIndex: ringIndex
+                  })
+                }
+              }
+            })
           })
         } else if ( geometryType === Geometry.EXTENT ||
                     geometryType === Geometry.LINE) {
