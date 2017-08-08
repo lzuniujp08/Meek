@@ -42,57 +42,56 @@ export default class TextRender extends GeometryRender {
       })
     }
 
-    // if (!textStyle.text || textStyle.text === '') {
-    //   return
-    // }
-    
     const ctx = this.context
-  
     ctx.save()
-    const geometry = feature.geometry
-  
-    const coordinates = geometry.getFlatInteriorPoint()
-  
-    this._pixelCoordinates = []
     
+    const geometry = feature.geometry
+    const coordinates = geometry.getFlatInteriorPoint()
+    
+    this._pixelCoordinates = []
     const pixelCoordinates = Transform.transform2D(
       coordinates, 0, coordinates.length, 2,
       transform, this._pixelCoordinates)
     
-    // set the context text style
-    this._setTextStyle(ctx, textStyle)
+    for (let i = 0, len = pixelCoordinates.length ;i < len ; i += 2) {
+      const xValue = pixelCoordinates[i]
+      const yValue = pixelCoordinates[i + 1]
+      
+      // set the context text style
+      this._setTextStyle(ctx, textStyle)
   
-    const offsetX = textStyle.offsetX - 10
-    const offsetY = textStyle.offsetY - 10
-    const stroke = textStyle.stroke ? true : false
-    const fill = textStyle.fill ? true : false
-    const text = textStyle.text
+      const offsetX = textStyle.offsetX - 10
+      const offsetY = textStyle.offsetY - 10
+      const stroke = textStyle.stroke ? true : false
+      const fill = textStyle.fill ? true : false
+      const text = textStyle.text
   
-    let x = pixelCoordinates[0] + offsetX
-    let y = pixelCoordinates[1] + offsetY
+      let x = xValue + offsetX
+      let y = yValue + offsetY
   
-    let lines = text.split('\n')
-    const numLines = lines.length
-    let fontSize, lineY
-    if (numLines > 1) {
-      fontSize = Math.round(ctx.measureText('M').width * 1.5)
-      lineY = y - (((numLines - 1) / 2) * fontSize)
-    } else {
-      fontSize = 0
-      lineY = y
-    }
-  
-    for (let lineIndex = 0; lineIndex < numLines; lineIndex++) {
-      const lineText = lines[lineIndex]
-      if (stroke) {
-        ctx.strokeText(lineText, x, lineY)
+      let lines = text.split('\n')
+      const numLines = lines.length
+      let fontSize, lineY
+      if (numLines > 1) {
+        fontSize = Math.round(ctx.measureText('M').width * 1.5)
+        lineY = y - (((numLines - 1) / 2) * fontSize)
+      } else {
+        fontSize = 0
+        lineY = y
       }
-      if (fill) {
-        ctx.fillText(lineText, x, lineY)
-      }
+  
+      for (let lineIndex = 0; lineIndex < numLines; lineIndex++) {
+        const lineText = lines[lineIndex]
+        if (stroke) {
+          ctx.strokeText(lineText, x, lineY)
+        }
+        if (fill) {
+          ctx.fillText(lineText, x, lineY)
+        }
     
-      // Move next line down by fontSize px
-      lineY = lineY + fontSize
+        // Move next line down by fontSize px
+        lineY = lineY + fontSize
+      }
     }
   
     ctx.restore()
