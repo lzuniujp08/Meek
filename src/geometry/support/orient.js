@@ -2,10 +2,34 @@
  * Created by zhangyong on 2017/6/14.
  */
 
+/**
+ *
+ * @param flatCoordinates
+ * @param offset
+ * @param endss
+ * @param stride
+ * @param opt_right
+ * @returns {*}
+ */
+export function orientLinearRingss (flatCoordinates, offset, endss, stride, opt_right) {
+  let i, ii
+  for (i = 0, ii = endss.length; i < ii; ++i) {
+    offset = orientLinearRings(
+      flatCoordinates, offset, endss[i], stride, opt_right)
+  }
+  
+  return offset
+}
 
-
-
-
+/**
+ *
+ * @param flatCoordinates
+ * @param offset
+ * @param ends
+ * @param stride
+ * @param opt_right
+ * @returns {*}
+ */
 export function orientLinearRings (flatCoordinates, offset, ends, stride, opt_right) {
   const right = opt_right !== undefined ? opt_right : false
   let i, ii
@@ -29,6 +53,25 @@ export function orientLinearRings (flatCoordinates, offset, ends, stride, opt_ri
   return offset
 }
 
+/**
+ *
+ * @param flatCoordinates
+ * @param offset
+ * @param endss
+ * @param stride
+ * @param opt_right
+ * @returns {boolean}
+ */
+export function linearRingssAreOriented (flatCoordinates, offset, endss, stride, opt_right) {
+  let i, ii
+  for (i = 0, ii = endss.length; i < ii; ++i) {
+    if (!linearRingsAreOriented(
+        flatCoordinates, offset, endss[i], stride, opt_right)) {
+      return false
+    }
+  }
+  return true
+}
 
 /**
  * 判断线串的方向

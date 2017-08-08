@@ -6,8 +6,8 @@ import Geometry from './geometry'
 import Polygon from './polygon'
 import Extent from './extent'
 
-import {linearRings} from './support/interpolate'
-import {linearRingsAreOriented,orientLinearRings} from './support/orient'
+import {centerLinearRingss, linearRingss} from './support/interpolate'
+import {linearRingssAreOriented,orientLinearRingss} from './support/orient'
 
 
 /**
@@ -25,6 +25,8 @@ export default class MutilPolygon extends Geometry {
     super()
     
     this._polygons = []
+  
+    this.stride = 2
   
     this.setCoordinates(coordinates)
   }
@@ -139,45 +141,56 @@ export default class MutilPolygon extends Geometry {
    * @returns {*}
    */
   getFlatInteriorPoint () {
-    const flatCenter = [this.extent.centerX, this.extent.centerY]
-    const firstPolygonCoords = this.getCoordinates()[0]
-    const outRings = firstPolygonCoords[0]
-    const ends = [outRings.length * 2]
+    const polygons = this._polygons
+    let flatCoordinates = []
+    let endss = []
     
-    const orientedFlatCoordinates = this.getOrientedFlatCoordinates()
+    const orderArray = []
     
-    const flatInteriorPoint = linearRings(
-      orientedFlatCoordinates, 0, ends, this.stride, flatCenter, 0)
+    polygons.forEach( polygon => {
+      const outRings = polygon[0]
+      orderArray.push(outRings)
+    })
     
-    return  flatInteriorPoint
+    orderArray.sort( (arr1, arr2) => {
+      return arr1.length - arr2.length
+    })
+  
+    let lastLen = 0
+    orderArray.forEach( arr => {
+      const currLen = arr.length * 2 + lastLen
+      endss.push([currLen])
+      lastLen = currLen
+      
+      arr.forEach( points => {
+        flatCoordinates.push(points[0], points[1])
+      })
+    })
+    
+    const flatCenters = centerLinearRingss(flatCoordinates, 0, endss, this.stride)
+    let flatInteriorPoints = linearRingss(
+      this.getOrientedFlatCoordinates(flatCoordinates, endss), 0, endss, this.stride,
+      flatCenters)
+  
+    return flatInteriorPoints
   }
   
   /**
-   * 对多边形的边进行顺序化
-   * getOrientedFlatCoordinates
+   * 计算复合多边形顺时针坐标
+   * @param flatCoordinates
+   * @param endss
    * @returns {*}
    */
-  getOrientedFlatCoordinates () {
+  getOrientedFlatCoordinates (flatCoordinates, endss) {
     let orientedFlatCoordinates
     
-    const flatCoordinates = []
-    const coordinates = this.getCoordinates()[0]
-    
-    coordinates.forEach( point => {
-      flatCoordinates.push(point[0], point[1])
-    })
-    
-    const ends = [flatCoordinates.length]
-    
-    if (linearRingsAreOriented(flatCoordinates, 0, ends, this.stride)) {
+    if (linearRingssAreOriented(flatCoordinates, 0, endss, this.stride)) {
       orientedFlatCoordinates = flatCoordinates
     } else {
       orientedFlatCoordinates = flatCoordinates.slice()
-      orientedFlatCoordinates.length = orientLinearRings(orientedFlatCoordinates,
-        0, ends, this.stride)
+      orientedFlatCoordinates.length = orientLinearRingss(orientedFlatCoordinates,
+        0, endss, this.stride)
     }
-    
-    // this.orientedRevision_ = this.getRevision()
     
     return orientedFlatCoordinates
   }

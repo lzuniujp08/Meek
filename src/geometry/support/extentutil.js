@@ -15,6 +15,47 @@ ExtentUtil.createEmpty = function () {
 }
 
 /**
+ *
+ * @param flatCoordinates
+ * @param offset
+ * @param end
+ * @param stride
+ * @param opt_extent
+ */
+ExtentUtil.createOrUpdateFromFlatCoordinates = function(flatCoordinates, offset, end, stride, opt_extent) {
+  const extent = ExtentUtil.createOrUpdateEmpty(opt_extent)
+  return extendFlatCoordinates(
+    extent, flatCoordinates, offset, end, stride)
+}
+
+const extendXY = function(extent, x, y) {
+  extent[0] = Math.min(extent[0], x)
+  extent[1] = Math.min(extent[1], y)
+  extent[2] = Math.max(extent[2], x)
+  extent[3] = Math.max(extent[3], y)
+}
+
+
+const extendFlatCoordinates = function(extent, flatCoordinates, offset, end, stride) {
+  for (; offset < end; offset += stride) {
+    extendXY(
+      extent, flatCoordinates[offset], flatCoordinates[offset + 1])
+  }
+  
+  return extent
+}
+
+/**
+ *
+ * @param opt_extent
+ * @returns {*}
+ */
+ExtentUtil.createOrUpdateEmpty = function(opt_extent) {
+  return ExtentUtil.createOrUpdate(
+    Infinity, Infinity, -Infinity, -Infinity, opt_extent)
+}
+
+/**
  * 创建或更新矩形
  *
  * @method createOrUpdate

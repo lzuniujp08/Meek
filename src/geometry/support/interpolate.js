@@ -6,6 +6,7 @@
 import {binarySearch, numberSafeCompareFunction} from '../../utils/array'
 import {linearRingsContainsXY} from '../support/geometryutil'
 import {lerp} from '../../utils/math'
+import {ExtentUtil} from './extentutil'
 
 
 /**
@@ -73,6 +74,17 @@ export function lineString (flatCoordinates, offset, end, stride, fraction, opt_
 }
 
 
+/**
+ *
+ * @param flatCoordinates
+ * @param offset
+ * @param ends
+ * @param stride
+ * @param flatCenters
+ * @param flatCentersOffset
+ * @param opt_dest
+ * @returns {*}
+ */
 export function linearRings(flatCoordinates, offset,
        ends, stride, flatCenters, flatCentersOffset, opt_dest) {
   let i, ii, x, x1, x2, y1, y2
@@ -126,4 +138,49 @@ export function linearRings(flatCoordinates, offset,
   } else {
     return [pointX, y]
   }
+}
+
+
+/**
+ *
+ * @param flatCoordinates
+ * @param offset
+ * @param endss
+ * @param stride
+ * @param flatCenters
+ * @returns {Array}
+ */
+export function linearRingss (flatCoordinates, offset, endss, stride, flatCenters) {
+  let interiorPoints = []
+  let i, ii
+  for (i = 0, ii = endss.length; i < ii; ++i) {
+    const ends = endss[i]
+    interiorPoints = linearRings(flatCoordinates,
+      offset, ends, stride, flatCenters, 2 * i, interiorPoints)
+    offset = ends[ends.length - 1]
+  }
+  
+  return interiorPoints
+}
+
+/**
+ *
+ * @param flatCoordinates
+ * @param offset
+ * @param endss
+ * @param stride
+ * @returns {Array}
+ */
+export function centerLinearRingss (flatCoordinates, offset, endss, stride) {
+  const flatCenters = []
+  let i, ii
+  let extent = ExtentUtil.createEmpty()
+  for (i = 0, ii = endss.length; i < ii; ++i) {
+    const ends = endss[i]
+    extent = ExtentUtil.createOrUpdateFromFlatCoordinates(
+      flatCoordinates, offset, ends[0], stride)
+    flatCenters.push((extent[0] + extent[2]) / 2, (extent[1] + extent[3]) / 2)
+    offset = ends[ends.length - 1]
+  }
+  return flatCenters
 }
