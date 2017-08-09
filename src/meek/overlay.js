@@ -9,7 +9,8 @@ import {ExtentUtil} from '../geometry/support/extentutil'
 import {outerWidth, outerHeight, removeChildren} from '../utils/domutil'
 
 /**
- * Overlay类
+ * Overlay类提供一个可以漂浮在map上的容器，
+ * 凡是需要有和地图交互的表单，必须使用该容器承载
  *
  * @class Overlay
  * @extends BaseObject
@@ -130,26 +131,6 @@ export default class Overlay extends BaseObject {
      */
     this._mapPostrenderListenerKey = null
   
-    // ol.events.listen(
-    //   this, ol.Object.getChangeEventType(ol.Overlay.Property_.ELEMENT),
-    //   this.handleElementChanged, this)
-    //
-    // ol.events.listen(
-    //   this, ol.Object.getChangeEventType(ol.Overlay.Property_.MAP),
-    //   this.handleMapChanged, this)
-    //
-    // ol.events.listen(
-    //   this, ol.Object.getChangeEventType(ol.Overlay.Property_.OFFSET),
-    //   this.handleOffsetChanged, this)
-    //
-    // ol.events.listen(
-    //   this, ol.Object.getChangeEventType(ol.Overlay.Property_.POSITION),
-    //   this.handlePositionChanged, this)
-    //
-    // ol.events.listen(
-    //   this, ol.Object.getChangeEventType(ol.Overlay.Property_.POSITIONING),
-    //   this.handlePositioningChanged, this)
-  
     if (options.element !== undefined) {
       this.popupEelement = options.element
     }
@@ -163,7 +144,6 @@ export default class Overlay extends BaseObject {
     if (options.position !== undefined) {
       this.position = options.position
     }
-    
   }
   
   /**
@@ -265,10 +245,6 @@ export default class Overlay extends BaseObject {
         this._rendered.top_ = style.top = top
       }
     }
-    if(this.autoPan){
-      this._panIntoView()
-    }
-
   }
   
   /**
@@ -322,6 +298,7 @@ export default class Overlay extends BaseObject {
         // move map to the right
         delta[0] = Math.abs(offsetRight) + margin
       }
+      
       if (offsetTop < 0) {
         // move map up
         delta[1] = offsetTop - margin
@@ -338,14 +315,7 @@ export default class Overlay extends BaseObject {
           centerPx[1] + delta[1]
         ]
         
-        // map.view.animate({
-        //   center: map.getCoordinateFromPixel(newCenterPx),
-        //   duration: this._autoPanAnimation.duration,
-        //   easing: this._autoPanAnimation.easing
-        // })
-        
         map.view.center = map.getCoordinateFromPixel(newCenterPx)
-        this.autoPan = false
       }
     }
   }
@@ -449,7 +419,12 @@ export default class Overlay extends BaseObject {
   get position () { return this._position }
   set position (value) {
     this._position = value
+    
     this.updatePixelPosition()
+    
+    if (this._position && this.autoPan) {
+      this._panIntoView()
+    }
   }
 
   /**
@@ -463,8 +438,6 @@ export default class Overlay extends BaseObject {
     this._positioning = value
     this.updatePixelPosition()
   }
-  
-  
 }
 
 
