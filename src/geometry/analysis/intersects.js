@@ -25,6 +25,7 @@ export default function intersects (geometry1, geometry2) {
   const ext1Arr = [extent1.xmin, extent1.ymin, extent1.xmax, extent1.ymax]
   const ext2Arr = [extent2.xmin, extent2.ymin, extent2.xmax, extent2.ymax]
   
+  // 如果两个图形的外界矩形不相交，则跳出判断
   if (!ExtentUtil.intersects(ext1Arr, ext2Arr)) {
     return false
   }
@@ -37,15 +38,22 @@ export default function intersects (geometry1, geometry2) {
     result = pointIntersectsGeometry(geometry1, geometry2)
     break
   case Geometry.LINE :
+    result = lineIntersectsGeometry(geometry1, geometry2)
+    break
   case Geometry.POLYGON:
   case Geometry.EXTENT:
-    result = lineIntersectsGeometry(geometry1, geometry2)
+    result = polygonIntersectsGeometry(geometry1, geometry2)
   }
   
   return result
 }
 
-
+/**
+ * 点和图形相交判断
+ * @param point
+ * @param geometry
+ * @returns {*}
+ */
 const pointIntersectsGeometry = function(point, geometry) {
   const geometryType = geometry.geometryType
   
@@ -60,31 +68,123 @@ const pointIntersectsGeometry = function(point, geometry) {
   return false
 }
 
-
+/**
+ * 线和图形相交判断
+ * @param line
+ * @param geometry
+ * @returns {Boolean|boolean|*}
+ */
 const lineIntersectsGeometry = function (line, geometry) {
   const geometryType = geometry.geometryType
   switch (geometryType) {
   case Geometry.POINT:
     return line.containsXY(geometry.x, geometry.y)
   case Geometry.LINE:
+    return lineIntersectsLine(line, geometry)
   case Geometry.POLYGON:
   case Geometry.EXTENT:
-    return intersectsByPolygon(line, geometry)
+    return lineIntersectsPolygon(line, geometry)
   }
 }
 
-
-const intersectsByPolygon = function (line, geometry) {
-  const polygon1LinearRings = line.getCoordinates()
-  const polygon2LinearRings = geometry.getCoordinates()
+/**
+ * 线与线相交判断
+ * @param line1
+ * @param line2
+ */
+const lineIntersectsLine = function(line1, line2) {
+  const lineLinearRings1 = line1.getCoordinates()
+  const lineLinearRings2 = line2.getCoordinates()
   
-  let intersect = intersectsByLinearRings(polygon1LinearRings, polygon2LinearRings)
+  return intersectsByLinearRings(lineLinearRings1, lineLinearRings2)
+}
+
+/**
+ * 多边形和图形相交判断
+ * @param poly
+ * @param geometry
+ * @returns {Boolean|boolean|*}
+ */
+const polygonIntersectsGeometry = function (poly, geometry) {
+  const geometryType = geometry.geometryType
+  switch (geometryType) {
+  case Geometry.POINT:
+    return poly.containsXY(geometry.x, geometry.y)
+  case Geometry.LINE:
+    return lineIntersectsPolygon(geometry, poly)
+  case Geometry.POLYGON:
+  case Geometry.EXTENT:
+    return polygonIntersectsPolygon(poly, geometry)
+  }
+}
+
+/**
+ * 线和多边形相交判断
+ * @param line
+ * @param polygon
+ */
+const lineIntersectsPolygon = function (line, polygon) {
+  const lineLinearRings = line.getCoordinates()
+  let polygon2LinearRings = polygon.getCoordinates()
+  
+  if (polygon.geometryType === Geometry.POLYGON ||
+      polygon.geometry === Geometry.MULTI_POLYGON) {
+    polygon2LinearRings = polygon2LinearRings[0] // 只获得外环
+  }
+  
+  let intersect = intersectsByLinearRings(lineLinearRings, polygon2LinearRings)
   
   if (!intersect) {
     // check if this poly contains points of the ring/linestring
-    for (let i = 0, len = polygon1LinearRings.length; i < len; ++i) {
-      const point = polygon1LinearRings[i]
-      intersect = geometry.containsXY(point[0], point[1])
+    for (let i = 0, len = lineLinearRings.length; i < len; ++i) {
+      const point = lineLinearRings[i]
+      intersect = polygon.containsXY(point[0], point[1])
+      if (intersect) {
+        break
+      }
+    }
+  }
+  
+  return intersect
+}
+
+/**
+ * 多边形和多边形相交判断
+ * @param poly
+ * @param polygon
+ */
+const polygonIntersectsPolygon = function (poly, polygon) {
+  let lineLinearRings = poly.getCoordinates()
+  let polygon2LinearRings = polygon.getCoordinates()// 只获得外环
+  
+  if (poly.geometryType === Geometry.POLYGON) {
+    lineLinearRings = lineLinearRings[0]
+  }
+  
+  if (polygon.geometryType === Geometry.POLYGON) {
+    polygon2LinearRings = polygon2LinearRings[0]
+  }
+  
+  let intersect = intersectsByLinearRings(lineLinearRings, polygon2LinearRings)
+  
+  // 两个多边形要做相互内含关系的判断
+  
+  // 正向检查
+  if (!intersect) {
+    for (let i = 0, len = lineLinearRings.length; i < len; ++i) {
+      const point = lineLinearRings[i]
+      intersect = polygon.containsXY(point[0], point[1])
+      if (intersect) {
+        break
+      }
+    }
+  }
+  
+  // 反向检查
+  if (!intersect) {
+    for (let i = 0, len = polygon2LinearRings.length; i < len; ++i) {
+      const point = polygon2LinearRings[i]
+      intersect = poly.containsXY(point[0], point[1])
       if (intersect) {
         break
       }
@@ -152,7 +252,7 @@ const getSortedSegments = function (points) {
     point1 = points[i]
     point2 = points[i + 1]
     
-    if (point1.x < point2.x) {
+    if (point1[0] < point2[0]) {
       segments[i] = {
         x1: point1[0],
         y1: point1[1],

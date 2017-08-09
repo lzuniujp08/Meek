@@ -2,7 +2,7 @@
  * Created by zhangyong on 2017/7/17.
  */
 
-
+import contains from './contains'
 import {ExtentUtil} from '../../geometry/support/extentutil'
 import Polygon from '../../geometry/polygon'
 
@@ -15,7 +15,12 @@ import Polygon from '../../geometry/polygon'
  * @param line {Geometry} 切割直线
  * @returns {Array}
  */
-export default function splitPolygonByPolyline(polygon, line) {
+export default function splitPolygonByPolyline(targetPolygon, splitLine) {
+  
+  // 不再原对象上处理
+  const polygon = targetPolygon.clone()
+  const line = splitLine.clone()
+  
   const polygonCoordinates = polygon.getCoordinates()[0]
   const lineCoordinates = line.getCoordinates()
   
@@ -51,6 +56,9 @@ export default function splitPolygonByPolyline(polygon, line) {
     polygon.setCoordinates([coords])
     featureCollection.push(polygon)
   })
+  
+  // 处理带洞多边形
+  handleHolesForPolygon(polygon, featureCollection, line)
   
   return featureCollection
 }
@@ -597,4 +605,43 @@ const distanceSquaredToSegment = function (point, segment) {
     x: x, y: y,
     along: along
   }
+}
+
+/**
+ * 处理带洞多边形
+ * @param polygon
+ * @param geometryCollection
+ * @param splitLine
+ */
+const handleHolesForPolygon = function(polygon, geometryCollection, splitLine) {
+  if (!polygon.hasHoles()) {
+    return
+  }
+  
+  const addHoleToPolygon = function(polyCoods, geometryCollection) {
+    const poly = new Polygon([polyCoods])
+    const needPoly = geometryCollection.find( polygon => {
+      return contains(polygon, poly)
+    })
+    
+    if (needPoly) {
+      needPoly.getCoordinates().push(polyCoods)
+    }
+  }
+  
+  // 判断洞是否与切割线相交
+  const coords = polygon.getCoordinates()
+  const lineCoords = splitLine
+  
+  for (let i = 1, len = coords.length ;i < len ; i++) {
+    const dividedPoints = findIntersectionPoints(coords[i], lineCoords)
+    
+    // 如果分割线和洞不相交，需要判断洞的归属
+    if (dividedPoints.length === 0) {
+      // console.log('Find one need to appended to collection.')
+      addHoleToPolygon (coords[i], geometryCollection)
+    }
+  }
+  
+  
 }

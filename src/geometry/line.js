@@ -107,7 +107,7 @@ export default class Line extends Geometry {
    * @param opt
    * @returns {boolean}
    */
-  containsXY (x, y, opt) {
+  containsXY (x, y, opt = {}) {
     const tolerance = opt.tolerance ? opt.tolerance : 2
     const path = this.path
     const squaredSegmentDistanceFn = squaredSegmentDistance
