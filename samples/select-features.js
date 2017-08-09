@@ -60,7 +60,7 @@ window.onload = function () {
   var features = [new Datatang.Feature(point),
     new Datatang.Feature(line),
     new Datatang.Feature(polygon),
-    new Datatang.Feature(holePolygon),
+    new Datatang.Feature(holePolygon, null, '这是一个带洞的多边形'),
     new Datatang.Feature(mutilPolygon),
     new Datatang.Feature(extent)]
   
