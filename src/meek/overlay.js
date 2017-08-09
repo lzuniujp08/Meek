@@ -99,8 +99,7 @@ export default class Overlay extends BaseObject {
     /**
      * @private
      */
-    this._autoPanAnimation = options.autoPanAnimation ||
-      /** @type {olx.OverlayPanOptions} */ ({})
+    this._autoPanAnimation = options.autoPanAnimation || {}
   
     /**
      * @private
@@ -178,7 +177,6 @@ export default class Overlay extends BaseObject {
   /**
    * 更新渲染视图位置
    *
-   * @method updateRenderedPosition
    * @param pixel {Array}
    * @param mapSize {Number}
    */
@@ -248,7 +246,7 @@ export default class Overlay extends BaseObject {
   }
   
   /**
-   * 设置是否可见
+   * 设置浮云框是否可见
    *
    * @method setVisible
    * @param visible
@@ -262,8 +260,9 @@ export default class Overlay extends BaseObject {
   
   /**
    * 表单自动适应视图范围
+   * 如果当前表单出现的位置不全在地图中，则会平移至地图
+   * 可视范围内
    *
-   * @method panIntoView
    * @private
    */
   _panIntoView () {
@@ -340,10 +339,10 @@ export default class Overlay extends BaseObject {
   }
 
   /**
-   * 获取overlayId
+   * 获取当前浮云框对象的 ID
    *
    * @property overlayId
-   * @return {number|string|undefined}
+   * @type {number|string|undefined}
    */
   get overlayId () { return this._overlayId }
 
@@ -351,7 +350,7 @@ export default class Overlay extends BaseObject {
    * 获取表单元素
    *
    * @property popupEelement
-   * @return {*}
+   * @type {DOM}
    */
   get popupEelement () { return this._popupEelement }
   set popupEelement (value) {
@@ -376,7 +375,6 @@ export default class Overlay extends BaseObject {
   /**
    * map读写器, 读取设置当前map
    *
-   * @type {Function}
    * @property map
    * @type {Datatang.map}
    */
