@@ -826,9 +826,12 @@ export default class Draw extends Component {
         
         const pcoordinates = this._sketchFeature.geometry.getCoordinates()[0]
         
-        if (pcoordinates.length > 3 ) {
+        if (pcoordinates.length > 2 ) {
           pcoordinates.splice(pcoordinates.length - 2, 1)
           this._sketchFeature.changed()
+        }else {
+          this._abortDrawing()
+          this._finishDrawing()
         }
       }
     }

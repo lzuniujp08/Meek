@@ -369,8 +369,11 @@ ExtentUtil.updateExtent = function (geometry, newCoordinates, dragSegments) {
       extentCoordinates[index + 1][1] = newCoordinates[1]
     }
   
-    if (index === 3) {
+    if (index === 3 ) {
       extentCoordinates[0] = extentCoordinates[4]
+    }
+    if (index === 0 ) {
+      extentCoordinates[4] = extentCoordinates[0]
     }
   }
   

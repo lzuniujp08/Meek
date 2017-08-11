@@ -70,6 +70,9 @@ window.onload = function (){
   selectTool.active = false
   modifyTool.active = false
 
+  var MouseStyle = document.getElementById('map')
+  MouseStyle.style.cursor='crosshair'
+
   var typeSelect = document.getElementById('type')
 
   typeSelect.onchange = function(){

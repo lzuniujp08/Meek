@@ -158,11 +158,16 @@ export default class Extent extends Geometry {
         beyond = opts.beyond
       }
     }
-    
+    let minPoint
     const width = this.width
     const height = this.heigth
-    
-    const minPoint = coordinate[0]
+
+    if(coordinate[0][1] > coordinate[3][1]){
+      minPoint = coordinate[3]
+    }else {
+      minPoint = coordinate[0]
+    }
+
     const newMinPoint = new Array(2)
     
     newMinPoint[0] = minPoint[0] + x
