@@ -150,7 +150,7 @@ export default class Extent extends Geometry {
    * @param y {Number}
    */
   move (x = 0, y = 0, opts) {
-    const coordinate = this.getCoordinates()
+
   
     let beyond
     if (opts) {
@@ -158,15 +158,9 @@ export default class Extent extends Geometry {
         beyond = opts.beyond
       }
     }
-    let minPoint
+    let minPoint = [this.xmin,this.ymin]
     const width = this.width
     const height = this.heigth
-
-    if(coordinate[0][1] > coordinate[3][1]){
-      minPoint = coordinate[3]
-    }else {
-      minPoint = coordinate[0]
-    }
 
     const newMinPoint = new Array(2)
     
