@@ -208,7 +208,7 @@ export default class Draw extends Component {
      * @private
      */
     this._snapTolerance = options.snapTolerance ?
-        options.snapTolerance : 12
+        options.snapTolerance : 2
   
     /**
      * 绘制线段时的最多点限制，默认没有限制
@@ -618,6 +618,7 @@ export default class Draw extends Component {
    */
   _finishDrawing () {
     if (this._sketchFeature === null){
+      this.dispatchEvent(new DrawEvent(DrawEvent.EventType.DRAW_END))
       return
     }
 

@@ -355,7 +355,7 @@ export default class Feature extends BaseObject {
     const newMap = new Map()
     if (this._attributesMap.size !== 0) {
       const entries = this._attributesMap.entries()
-      for (let [key, value] of entries()) {
+      for (let [key, value] of entries) {
         newMap.set(key, value)
       }
     }
@@ -383,7 +383,7 @@ export default class Feature extends BaseObject {
     }
 
     return new Feature(this.geometry.clone(),
-      this.cloneAttributesMap(), renderStyleArr, this.displayText.clone())
+      this.cloneAttributesMap(), this.displayText ,renderStyleArr )
   }
 }
 
