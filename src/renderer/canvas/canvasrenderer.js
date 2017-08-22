@@ -90,7 +90,7 @@ export default class CanvasRenderer extends Renderer {
     this._dispatchComposeEvent(RenderEventType.PRERENDER, frameState)
     
     layers.forEach( layer => {
-      if (layer.display) {
+      if (layer.visible) {
         let layerRender = this.getLayerRenderer(layer)
   
         if (layerRender.prepareFrame(frameState)) {
