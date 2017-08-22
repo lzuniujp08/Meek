@@ -300,8 +300,10 @@ export default class Feature extends BaseObject {
 
       this.style = newStyles
     } else {
-      this.style = this.get('_originStyle')
-      this.delete('_originStyle')
+      if (this.get('_originStyle')) {
+        this.style = this.get('_originStyle')
+        this.delete('_originStyle')
+      }
     }
     
     this.changed()
