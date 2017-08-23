@@ -55,13 +55,21 @@ window.onload = function () {
   
   var mutilPolygon = new Datatang.MutilPolygon(mutilPolygonRings)
   
-  var extent = new Datatang.Extent(1100, 300, 1400, 600)
+  var extent = new Datatang.Extent(700, 300, 1000, 600)
+  
+  // 定义一个平行四边形
+  var paralletogramRings = [[
+    [650, 100], [700, 200], [1000, 200], [950, 100], [650, 100]]
+  ]
+  
+  var paralletogram = new Datatang.Parallelogram(paralletogramRings)
   
   var features = [new Datatang.Feature(point),
     new Datatang.Feature(line),
     new Datatang.Feature(polygon),
     new Datatang.Feature(holePolygon, null, '这是一个带洞的多边形'),
     new Datatang.Feature(mutilPolygon),
+    new Datatang.Feature(paralletogram, null, '平行四边形'),
     new Datatang.Feature(extent)]
   
   // 将会获取缺省样式

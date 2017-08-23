@@ -2,14 +2,14 @@
 var featureLayer = new Datatang.FeatureLayer()
 
 // 初始化map、view和layer
-var mapextent = [0, 0, 2783, 2125];
+var extent = [0, 0, 2783, 2125];
 var map = new Datatang.Map({
   layers: [
     new Datatang.SingleImageLayer({
       url: 'source/China_map.jpg',
-      imageExtent: mapextent,
+      imageExtent: extent,
       projection: {
-        extent: mapextent
+        extent: extent
       }
     }),
     featureLayer
@@ -17,11 +17,11 @@ var map = new Datatang.Map({
   target: 'map',
   view: new Datatang.View({
     projection: {
-      extent: mapextent
+      extent: extent
     },
-    center: Datatang.ExtentUtil.getCenter(mapextent),
-    zoom: 2,
-    maxZoom: 8
+    center: Datatang.ExtentUtil.getCenter(extent),
+    resolution: 2,
+    resolutions: [4,2,1,0.5,0.25,0.125, 0.0625, 0.03125]
   })
 });
 
@@ -190,6 +190,22 @@ function getJSON () {
             ]
           ]
         }
+      },
+      {
+        "type": "Feature",
+        "geometry": {
+          "type": "ParallelogramPolygon",
+          "coordinates": [
+            [
+              [1220.5, 1018.5],
+              [970.5, 1334.5],
+              [1734.5, 1178.5],
+              [1984.5, 862.5],
+              [1220.5, 1018.5]
+            ]
+          ]
+        },
+        "properties": {}
       }
     ]
   }

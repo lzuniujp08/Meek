@@ -1,122 +1,67 @@
-<!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-  <style>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <title>Insert title here</title>
+  <script type="text/javascript">
+    var cityList = new Array();
+    var quList = new Array();
+    cityList['北京'] = [ '北京' ];
+    cityList['浙江'] = [ '杭州市', '温州市', '金华市', '临安市' ];
+    cityList['陕西'] = [ '西安', '宝鸡', '咸阳' ];
+    cityList['甘肃'] = [ '兰州市', '武威市', '酒泉市', '张掖市' ];
 
-    *{margin:0;padding:0;}
-    body{font-size:14px;font-family:"Microsoft YaHei";}
-    ul,li{list-style:none;}
+    quList['北京'] = [ '1区', '2区', '3区', '4区' ];
+    quList['杭州市'] = [ '5区', '6区', '7区', '8区' ];
+    quList['温州市'] = [ '9区', '10区', '11区', '12区' ];
+    quList['西安'] = [ '13区', '14区', '15区', '16区' ];
+    quList['宝鸡'] = [ '17区', '18区', '19区', '20区' ];
+    quList['兰州市'] = [ '21区', '22区', '23区', '24区' ];
 
-    #tab{position:relative;}
-    #tab .tabList ul li{
-      float:left;
-      background:#fefefe;
-      background:-moz-linear-gradient(top, #fefefe, #ededed);
-      background:-o-linear-gradient(left top,left bottom, from(#fefefe), to(#ededed));
-      background:-webkit-gradient(linear,left top,left bottom, from(#fefefe), to(#ededed));
-      border:1px solid #ccc;
-      padding:5px 0;
-      width:100px;
-      text-align:center;
-      margin-left:-1px;
-      position:relative;
-      cursor:pointer;
+    window.onload = allData;
+    function allData() {
+      var shengfen = document.getElementById('shengfen');
+      for ( var sf in cityList) {
+        shengfen.add(new Option(sf, sf));
+      }
+
     }
-    #tab .tabCon{
-      position:absolute;
-      left:-1px;
-      top:32px;
-      border:1px solid #ccc;
-      border-top:none;
-      width:403px;
-      height:100px;
-    }
-    #tab .tabCon div{
-      padding:10px;
-      position:absolute;
-      opacity:0;
-      filter:alpha(opacity=0);
-    }
-    #tab .tabList li.cur{
-      border-bottom:none;
-      background:#fff;
-    }
-    #tab .tabCon div.cur{
-      opacity:1;
-      filter:alpha(opacity=100);
+    function changeCity() {
+
+      var chengshi = document.getElementById('chengshi');
+      var sheng = document.getElementById('shengfen').value;
+
+      chengshi.options.length = 1;
+      for ( var cs in cityList[sheng]) {
+        chengshi.add(new Option(cityList[sheng][cs], cityList[sheng][cs]));
+
+      }
     }
 
-  </style>
+    function changequ() {
+      var shiqu = document.getElementById('shiqu');
+      var cheng = document.getElementById('chengshi').value;
+      shiqu.options.length = 1;
+      for ( var sh in quList[cheng]) {
+
+        shiqu.add(new Option(quList[cheng][sh], quList[cheng][sh]));
+
+      }
+
+    }
+  </script>
 </head>
 <body>
+<br />
 
-<div id="tab" style="margin-left:460px;margin-top:20px">
-  <div class="tabList">
-    <ul>
-      <li class="">1</li>
-      <li class="">2</li>
-      <li class="">3</li>
-      <li class="cur">4</li>
-    </ul>
-  </div>
-  <div class="tabCon">
-    <div class="" style="opacity: 0;">断桥残雪、千百度、幻听、想象之中</div>
-    <div class="" style="opacity: 0;">红尘客栈、牛仔很忙、给我一首歌的时间、听妈妈的话</div>
-    <div class="" style="opacity: 0;">被风吹过的夏天、江南、一千年以后</div>
-    <div class="" style="opacity: 1;">十年、K歌之王、浮夸</div>
-  </div>
-</div>
+<select id="shengfen" style="width:100px" onchange="changeCity()"><option>--选择省份--</option>
 
+</select>
+<select id="chengshi" style="width:100px" onchange="changequ()"><option>--选择城市--</option>
 
-<script>
-  window.onload = function() {
-    var oDiv = document.getElementById("tab");
-    var oLi = oDiv.getElementsByTagName("div")[0].getElementsByTagName("li");
-    var aCon = oDiv.getElementsByTagName("div")[1].getElementsByTagName("div");
-    var timer = null;
-    for (var i = 0; i < oLi.length; i++) {
-      oLi[i].index = i;
-      oLi[i].onclick = function() {
-        show(this.index);
-      }
-    }
-    function show(a) {
-      index = a;
-      var alpha = 0;
-      for (var j = 0; j < oLi.length; j++) {
-        oLi[j].className = "";
-        aCon[j].className = "";
-        aCon[j].style.opacity = 0;
-        aCon[j].style.filter = "alpha(opacity=0)";
-      }
-      oLi[index].className = "cur";
-      clearInterval(timer);
-      timer = setInterval(function() {
-          alpha += 2;
-          alpha > 100 && (alpha = 100);
-          aCon[index].style.opacity = alpha / 100;
-          aCon[index].style.filter = "alpha(opacity=" + alpha + ")";
-          alpha == 100 && clearInterval(timer);
-        },
-        5)
-    }
-  }
+</select>
+<select id="shiqu" style="width:100px"><option>--选择区县--</option>
 
-
-  var templet = '<div class="tabList">'+
-    '<ul>'+
-    '<li class="">1</li>'+
-    '</ul>'+
-    '</div>'+
-    '<div class="tabCon">'+
-    '<div class="" style="opacity: 0;">ddd</div>'+
-  '</div>'
-
-  $("#tab").append(templet)
-
-</script>
+</select>
 
 </body>
 </html>
