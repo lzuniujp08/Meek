@@ -8,6 +8,7 @@ import Polygon from '../../geometry/polygon'
 import MutilPolygon from '../../geometry/mutilpolygon'
 import Line from '../../geometry/line'
 import Extent from '../../geometry/extent'
+import Parallelogram from '../../geometry/parallelogram'
 import Feature from '../../meek/feature'
 import Obj from '../../utils/obj'
 
@@ -47,6 +48,8 @@ export default class GeoJSON {
             constructor = Extent
           } else if (geometryType === 'MutilPolygon') {
             constructor = MutilPolygon
+          } else if (geometryType === 'ParallelogramPolygon') {
+            constructor = Parallelogram
           }
           
           if (constructor === undefined) {
@@ -130,6 +133,8 @@ export default class GeoJSON {
     case Geometry.EXTENT :
       jsonType = 'ExtentPolygon'
       break
+    case Geometry.PARALLELOGRAM :
+      jsonType = 'ParallelogramPolygon'
     }
     
     return jsonType

@@ -25,6 +25,7 @@ import Point from 'geometry/point'
 import Line from 'geometry/line'
 import Polygon from 'geometry/polygon'
 import MutilPolygon from 'geometry/mutilpolygon'
+import Parallelogram from 'geometry/parallelogram'
 
 import {ImageState} from 'lyr/image/imagestate'
 import {ImageEvent} from 'lyr/image/imageevent'
@@ -94,6 +95,7 @@ export default {
   Line,
   Polygon,
   MutilPolygon,
+  Parallelogram,
   Style,
   // BaseStyle,
   PointStyle,

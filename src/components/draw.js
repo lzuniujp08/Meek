@@ -16,6 +16,7 @@ import {ExtentUtil} from '../geometry/support/extentutil'
 import {listen, unlistenByKey} from '../core/eventmanager'
 import BrowserEvent from '../meek/browserevent'
 import DrawEvent from './drawevent'
+import Parallelogram from '../geometry/parallelogram'
 
 /**
  * 图形绘制工具基础类
@@ -376,6 +377,8 @@ export default class Draw extends Component {
       Constructor = Polygon
     } else if (mode === Draw.DrawMode.EXTENT) {
       Constructor = Extent
+    } else if (mode === Draw.DrawMode.PARALLELOGRAM) {
+      Constructor = Parallelogram
     }
     
     return Constructor
@@ -394,9 +397,9 @@ export default class Draw extends Component {
       let geometry = opt_geometry
       
       if (geometry) {
-        if (mode === Draw.DrawMode.POLYGON) {
-          geometry.setCoordinates(coordinates)
-        } else if(mode === Draw.DrawMode.LINE) {
+        if (mode === Draw.DrawMode.POLYGON ||
+            mode === Draw.DrawMode.PARALLELOGRAM ||
+            mode === Draw.DrawMode.LINE ) {
           geometry.setCoordinates(coordinates)
         } else if(mode === Draw.DrawMode.EXTENT) {
           geometry.setCoordinates(ExtentUtil.boundingExtent(coordinates))
@@ -529,6 +532,9 @@ export default class Draw extends Component {
     } else if (_drawMode === Draw.DrawMode.POLYGON ) {
       this._sketchCoords = [[startPoint.slice(), startPoint.slice()]]
       this._sketchLineCoords = this._sketchCoords[0]// temp line
+    } else if (_drawMode === Draw.DrawMode.PARALLELOGRAM) {// 平行四边形
+      this._sketchCoords = [[startPoint.slice(), startPoint.slice()]]
+      this._sketchLineCoords = this._sketchCoords[0]// temp line
     } else {
       this._sketchCoords = [startPoint.slice(),startPoint.slice()] // 缓存up的点，最后一个值，用于move的替换
       
@@ -545,7 +551,6 @@ export default class Draw extends Component {
     const geometry = this.geometryFunction(this._sketchCoords)
     
     this._sketchFeature = new Feature()
-    
     this._sketchFeature.geometry = geometry
     
     // Redraw the sketch features
@@ -570,19 +575,52 @@ export default class Draw extends Component {
     
     if (mode === Draw.DrawMode.POINT) {
       last = this._sketchCoords
+  
+      last[0] = coordinate[0]
+      last[1] = coordinate[1]
     } else if (mode === Draw.DrawMode.POLYGON) {
       coordinates = this._sketchCoords[0]
       last = coordinates[coordinates.length - 1]
       if (this._atFinish(event)) {
         coordinate = this._finishCoordinate.slice()
       }
+  
+      // 在鼠标移动的时候，将最后一个点替换成当前的鼠标点
+      last[0] = coordinate[0]
+      last[1] = coordinate[1]
+    } else if (mode === Draw.DrawMode.PARALLELOGRAM) {
+      coordinates = this._sketchCoords[0]
+      last = coordinates[coordinates.length - 1]
+      
+      // 需要清理，第三个点应该为鼠标点
+      if (coordinates.length > 3) {
+        coordinates = coordinates.slice(0, 2)
+        coordinates.push(coordinate)
+      } else {
+        last[0] = coordinate[0]
+        last[1] = coordinate[1]
+      }
+      
+      const lastSecondPoint = coordinates[coordinates.length - 2]
+  
+      // 平行四边形，如果有3个点，则直接生成平行四边形
+      if (lastSecondPoint[0] !== last[0] &&
+          lastSecondPoint[1] !== last[1] && coordinates.length === 3) {
+        const lstPoint = Parallelogram.getTheLastPoint(coordinates)
+        coordinates.push(lstPoint, coordinates[0])
+        this._sketchCoords = [coordinates]
+  
+        // 辅助效果线
+        this._sketchLineCoords = coordinates
+      }
+  
     } else {
       coordinates = this._sketchCoords // 获取up的点
       last = coordinates[coordinates.length - 1]// 替换为当前MOve的点，形成一条path
+  
+      last[0] = coordinate[0]
+      last[1] = coordinate[1]
     }
-    
-    last[0] = coordinate[0]
-    last[1] = coordinate[1]
     
     // 给 geometry 赋值
     this.geometryFunction(this._sketchCoords, geometry)
@@ -608,6 +646,78 @@ export default class Draw extends Component {
     }
     
     this._updateSketchFeatures()
+  }
+  
+  /**
+   * Add a new coordinate to the drawing
+   *
+   * @param event
+   * @private
+   */
+  _addToDrawing (event) {
+    const coordinate = event.coordinate
+    const geometry = this._sketchFeature.geometry
+    let coordinates,done
+    const mode = this.drawMode
+    
+    if (mode === Draw.DrawMode.LINE) {
+      this._finishCoordinate = coordinate.slice()
+      coordinates = this._sketchCoords
+      coordinates.push(coordinate.slice())
+      done = coordinates.length > this._maxLinePoints
+      
+      this.geometryFunction(coordinates, geometry)
+    } else if (mode === Draw.DrawMode.POLYGON) {
+      coordinates = this._sketchCoords[0]
+      
+      coordinates.push(coordinate.slice())
+      done = coordinates.length > this._maxPolygonPoints
+      
+      if (done) {
+        this._finishCoordinate = coordinates[0]
+      }
+      
+      this.geometryFunction(this._sketchCoords, geometry)
+    } else if (mode === Draw.DrawMode.PARALLELOGRAM) {
+      coordinates = this._sketchCoords[0]
+  
+      // 当前坐标数组添加新点数组
+      coordinates.push(coordinate.slice())
+      done = coordinates.length > this._maxPolygonPoints
+      
+      if (done) {
+        this._finishCoordinate = coordinates[0]
+      }
+      
+      this.geometryFunction(this._sketchCoords, geometry)
+    }
+    
+    this._updateSketchFeatures()
+    
+    if (done) {
+      this._finishDrawing()
+    }
+  }
+  
+  
+  /**
+   * 终止绘制，不会添加临时feature
+   *
+   * @method abortDrawing
+   * @returns {Feature|null|_Feature2.default}
+   * @private
+   */
+  _abortDrawing () {
+    this._finishCoordinate = null
+    const sketchFeature = this._sketchFeature
+    if (sketchFeature) {
+      this._sketchFeature = null
+      this._sketchPoint = null
+      this._sketchLine = null
+      this._sketchLayer.clear()
+    }
+    
+    return sketchFeature
   }
   
   /**
@@ -661,64 +771,6 @@ export default class Draw extends Component {
   }
   
   /**
-   * 终止绘制，不会添加临时feature
-   *
-   * @method abortDrawing
-   * @returns {Feature|null|_Feature2.default}
-   * @private
-   */
-  _abortDrawing () {
-    this._finishCoordinate = null
-    const sketchFeature = this._sketchFeature
-    if (sketchFeature) {
-      this._sketchFeature = null
-      this._sketchPoint = null
-      this._sketchLine = null
-      this._sketchLayer.clear()
-    }
-    
-    return sketchFeature
-  }
-  
-  /**
-   * Add a new coordinate to the drawing
-   *
-   * @param event
-   * @private
-   */
-  _addToDrawing (event) {
-    const coordinate = event.coordinate
-    const geometry = this._sketchFeature.geometry
-    let coordinates,done
-    const mode = this.drawMode
-    
-    if (mode === Draw.DrawMode.LINE) {
-      this._finishCoordinate = coordinate.slice()
-      coordinates = this._sketchCoords
-      coordinates.push(coordinate.slice())
-      done = coordinates.length > this._maxLinePoints
-      
-      this.geometryFunction(coordinates, geometry)
-    } else if (mode === Draw.DrawMode.POLYGON) {
-      coordinates = this._sketchCoords[0]
-      coordinates.push(coordinate.slice())
-      done = coordinates.length > this._maxPolygonPoints
-      
-      if (done) {
-        this._finishCoordinate = coordinates[0]
-      }
-      
-      this.geometryFunction(this._sketchCoords, geometry)
-    }
-    
-    this._updateSketchFeatures()
-    
-    if (done) {
-      this._finishDrawing()
-    }
-  }
-  
-  /**
    * Determine if an event is within the snapping tolerance of the start coord.
    *
    * @param event
@@ -731,12 +783,15 @@ export default class Draw extends Component {
       let potentiallyDone = false
       let potentiallyFinishCoordinates = [this._finishCoordinate]
       
-      if (this.drawMode === Draw.DrawMode.LINE) {
+      const drawMode = this.drawMode
+      if (drawMode === Draw.DrawMode.LINE) {
         potentiallyDone = this._sketchCoords.length > this._minPoints
-      } else if (this.drawMode === Draw.DrawMode.POLYGON) {
+      } else if (drawMode === Draw.DrawMode.POLYGON) {
         potentiallyDone = this._sketchCoords[0].length > this._minPoints
         potentiallyFinishCoordinates = [this._sketchCoords[0][0],
           this._sketchCoords[0][this._sketchCoords[0].length - 2]]
+      } else if (drawMode === Draw.DrawMode.PARALLELOGRAM) {
+        at = this._sketchCoords[0].length === 5 ? true : false
       }
       
       if (potentiallyDone) {
@@ -757,6 +812,7 @@ export default class Draw extends Component {
         }
       }
     }
+    
     return at
   }
   
@@ -950,6 +1006,9 @@ Draw.getDrawMode = function(type) {
   case Geometry.EXTENT:
     drawMode = Draw.DrawMode.EXTENT
     break
+  case Geometry.PARALLELOGRAM:
+    drawMode = Draw.DrawMode.PARALLELOGRAM
+    break
   }
   
   return drawMode
@@ -968,5 +1027,6 @@ Draw.DrawMode = {
   LINE: 'Line',
   POLYGON: 'Polygon',
   CIRCLE: 'Circle',
-  EXTENT: 'Extent'
+  EXTENT: 'Extent',
+  PARALLELOGRAM :'Parallelogram'
 }

@@ -274,6 +274,12 @@ Geometry.EXTENT = 'extent'
 Geometry.CIRCLE = 'circle'
 
 /**
+ * 定义平行四边形图形
+ * @type {string}
+ */
+Geometry.PARALLELOGRAM = 'parallelogram'
+
+/**
  * 未定义
  *
  * @property UNDEFINED

@@ -279,6 +279,7 @@ export default class Feature extends BaseObject {
 
       } else if (geometryType === Geometry.POLYGON ||
           geometryType === Geometry.MULTI_POLYGON ||
+          geometryType === Geometry.PARALLELOGRAM ||
           geometryType === Geometry.EXTENT ) {
         const firstStyle = newStyles[0]
         firstStyle.borderStyle.width = firstStyle.borderStyle.width + 2

@@ -28,6 +28,7 @@ Style.defaultFunction = function () {
       new FillStyle(white, new LineStyle(blue, 1, 1.25), 0.2)
     ]
     Style._default[Geometry.MULTI_POLYGON] = Style._default[Geometry.POLYGON]
+    Style._default[Geometry.PARALLELOGRAM] = Style._default[Geometry.POLYGON]
     
     // same as polygon style
     Style._default[Geometry.EXTENT] = Style._default[Geometry.POLYGON]
@@ -63,6 +64,7 @@ Style.createDefaultEditing = function () {
   ]
   styles[Geometry.MULTI_POLYGON] = styles[Geometry.POLYGON]
   styles[Geometry.EXTENT] = styles[Geometry.POLYGON]
+  styles[Geometry.PARALLELOGRAM] = styles[Geometry.POLYGON]
     
   // 线样式
   styles[Geometry.LINE] = [

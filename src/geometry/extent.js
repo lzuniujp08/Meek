@@ -76,7 +76,7 @@ export default class Extent extends Geometry {
    * @property height
    * @returns {Number}
    */
-  get heigth () { return Math.abs(this.ymax - this.ymin) }
+  get height () { return Math.abs(this.ymax - this.ymin) }
 
   /**
    * 获取最小外接矩形本对象
