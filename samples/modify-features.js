@@ -51,6 +51,13 @@ window.onload = function () {
     ]
   ]
   
+  // 定义一个平行四边形
+  var paralletogramRings = [[
+    [650, 100], [700, 200], [1000, 200], [950, 100], [650, 100]]
+  ]
+  
+  var paralletogram = new Datatang.Parallelogram(paralletogramRings)
+  
   var mutilPolygon = new Datatang.MutilPolygon(mutilPolygonRings)
   
   var features = [new Datatang.Feature(point),
@@ -58,6 +65,7 @@ window.onload = function () {
     new Datatang.Feature(polygon),
     new Datatang.Feature(holePolygon),
     new Datatang.Feature(mutilPolygon),
+    new Datatang.Feature(paralletogram, null, '平行四边形'),
     new Datatang.Feature(extent),
     new Datatang.Feature(extent1)
   ]
@@ -117,8 +125,9 @@ window.onload = function () {
       modifyTool.features = [new Datatang.Feature(mutilPolygon)]
     } else if (value === 'extent') {
       modifyTool.features = [new Datatang.Feature(extent)]
+    } else if (value === 'parallelogram') {
+      modifyTool.features = [new Datatang.Feature(paralletogram)]
     }
-    
   }
 }
 
