@@ -4,7 +4,10 @@
 
 import Geometry from './geometry'
 import Polygon from './polygon'
-import Extent from './extent'
+import {distance} from '../geometry/support/geometryutil'
+
+import {getPointInExtendedLineByDistanceFromAB} from '../geometry/support/geometryutil'
+// import Extent from './extent'
 
 export default class Parallelogram extends Polygon {
   
@@ -22,79 +25,6 @@ export default class Parallelogram extends Polygon {
       return points[0] === coord[0] && points[1] === coord[1]
     })
   }
-  
-  // get extent () {
-  //   if (this._extent === null) {
-  //     let coordinates = this.getCoordinates()
-  //     if (Array.isArray(coordinates)) {
-  //       coordinates = coordinates[0]
-  //     }
-  //
-  //     let xmin = Number.POSITIVE_INFINITY
-  //     let ymin = Number.POSITIVE_INFINITY
-  //     let xmax = Number.NEGATIVE_INFINITY
-  //     let ymax = Number.NEGATIVE_INFINITY
-  //
-  //     for (let point of coordinates) {
-  //       xmin = Math.min(xmin, point[0])
-  //       ymin = Math.min(ymin, point[1])
-  //       xmax = Math.max(xmax, point[0])
-  //       ymax = Math.max(ymax, point[1])
-  //     }
-  //
-  //     this._extent = new Extent(xmin, ymin, xmax, ymax)
-  //   }
-  //
-  //   return this._extent
-  // }
-  
-  
-  // /**
-  //  * Detemine if a point is contained in this polygon
-  //  * @param x
-  //  * @param y
-  //  * @param opt
-  //  * @returns {boolean}
-  //  */
-  // containsXY (x, y) {
-  //   const px = x
-  //   const py = y
-  //   let flag = false
-  //
-  //   const ring = this.getCoordinates()
-  //
-  //   for (let i = 0, l = ring.length, j = l - 1; i < l; j = i, i++) {
-  //     const sx = ring[i][0]
-  //     const sy = ring[i][1]
-  //     const tx = ring[j][0]
-  //     const ty = ring[j][1]
-  //
-  //     // 点与多边形顶点重合
-  //     if ((sx === px && sy === py) || (tx === px && ty === py)) {
-  //       return true
-  //     }
-  //
-  //     // 判断线段两端点是否在射线两侧
-  //     if ((sy < py && ty >= py) || (sy >= py && ty < py)) {
-  //       // 线段上与射线 Y 坐标相同的点的 X 坐标
-  //       let x = sx + (py - sy) * (tx - sx) / (ty - sy)
-  //
-  //       // 点在多边形的边上
-  //       if (x === px) {
-  //         // return 'on';
-  //         return true
-  //       }
-  //
-  //       // 射线穿过多边形的边界
-  //       if (x > px) {
-  //         flag = !flag
-  //       }
-  //     }
-  //   }
-  //
-  //   // 射线穿过多边形边界的次数为奇数时点在多边形内
-  //   return flag
-  // }
   
   clone () {
     return new Parallelogram(this.getCoordinates())
@@ -114,6 +44,86 @@ export default class Parallelogram extends Polygon {
     const dy = thirdPoint[1] - secondPoint[1]
     
     return [firstPoint[0] + dx, firstPoint[1] + dy]
+  }
+  
+  
+  /**
+   * 用于计算和更新平行四边形的顶点
+   *
+   * @param p 平行四边形对象
+   * @param vertex 新移动的点
+   * @param oldVertex 上次移动的点
+   * @param dragSegment 数据对象
+   * @returns {*} 返回新的点集合（3维数组）
+   */
+  static updateCoordinatesForModification(p, vertex, oldVertex, dragSegment) {
+    let dis = 0
+    if (oldVertex) {
+      dis = distance (oldVertex, vertex)
+    }
+    
+    const oldRingsCoordinates = p.getCoordinates()
+    if (dis === 0) {
+      return oldRingsCoordinates
+    }
+    
+    const oldCoordinates = oldRingsCoordinates[0]
+    const segement = dragSegment[0]
+    const edgeIndex = segement.index
+  
+    let firstCoord
+    let nowCood
+    let otherCood
+    
+    if (edgeIndex === 0 || edgeIndex === 4) {
+      firstCoord = oldCoordinates[3]
+      nowCood = oldCoordinates[0]
+      otherCood = oldCoordinates[1]
+    } else {
+      firstCoord = oldCoordinates[edgeIndex - 1]
+      nowCood = oldCoordinates[edgeIndex]
+      otherCood = oldCoordinates[edgeIndex + 1]
+    }
+    
+    // 计算延长线上的一点
+    const newCood1 = getPointInExtendedLineByDistanceFromAB(firstCoord[0],
+      firstCoord[1], nowCood[0], nowCood[1], dis)
+    
+    // 计算向量
+    const tempXX = nowCood[0] - firstCoord[0]
+    const tempYY = nowCood[1] - firstCoord[1]
+    const tempX2 = vertex[0] - oldVertex[0]
+    const tempY2 = vertex[1] - oldVertex[1]
+    
+    // 使用向量的点积，来计算两个向量的方向是否一致
+    // 如果 <0 则表示异向
+    const direction = ( tempX2 * tempXX ) + (tempY2 * tempYY)
+    
+    const dx = newCood1[0] - nowCood[0]
+    const dy = newCood1[1] - nowCood[1]
+    let newCood2
+    
+    // 不同方向
+    if (direction < 0) {
+      newCood1[0] = nowCood[0] - dx
+      newCood1[1] = nowCood[1] - dy
+  
+      newCood2 = [otherCood[0] - dx, otherCood[1] - dy]
+    } else {
+      newCood2 = [otherCood[0] + dx, otherCood[1] + dy]
+    }
+    
+    
+    oldCoordinates[edgeIndex] = newCood1
+    oldCoordinates[edgeIndex + 1] = newCood2
+    
+    if (edgeIndex === 0) {
+      oldCoordinates[4] = oldCoordinates[0]
+    } else if (edgeIndex === 4 || edgeIndex === 3) {
+      oldCoordinates[0] = oldCoordinates[4]
+    }
+    
+    return [oldCoordinates]
   }
   
   

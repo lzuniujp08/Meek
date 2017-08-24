@@ -244,6 +244,36 @@ export function linearRingContainsXY (flatCoordinates, offset, end, stride, x, y
   return wn !== 0
 }
 
+/**
+ * 计算在 AB 延长线上的距离点 B d 距离的点
+ * @param xa A 点的 X
+ * @param ya A 点的 Y
+ * @param xb B 点的 X
+ * @param yb B 点的 Y
+ * @param d 距离 B 点 d 距离
+ * @returns {Array} 返回延长线上的点
+ */
+export function getPointInExtendedLineByDistanceFromAB (xa, ya, xb, yb, d) {
+  let xab, yab
+  let xbd
+  let xd, yd
+  
+  xab = xb - xa
+  yab = yb - ya
+  
+  xbd = Math.sqrt((d * d) / ((yab / xab) * (yab / xab) + 1))
+  
+  if (xab > 0) {
+    xbd = Math.sqrt((d * d) / ((yab / xab) * (yab / xab) + 1))
+  } else {
+    xbd = -Math.sqrt((d * d) / ((yab / xab) * (yab / xab) + 1))
+  }
+  
+  xd = xb + xbd
+  yd = yb + yab / xab * xbd
+  
+  return [xd, yd]
+}
 
 export default {
   linearRingContainsXY,
@@ -251,6 +281,7 @@ export default {
   pointIntersectPoint,
   squaredDistance,
   closestOnSegment,
+  getPointInExtendedLineByDistanceFromAB,
   equals,
   distance
 }

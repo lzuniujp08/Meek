@@ -7,6 +7,7 @@ import Component from './component'
 import BrowserEvent from '../meek/browserevent'
 import Geometry from '../geometry/geometry'
 import Point from '../geometry/point'
+import Parallelogram from '../geometry/parallelogram'
 
 import {listen, unlistenByKey} from '../core/eventmanager'
 import {EventType} from '../meek/eventtype'
@@ -238,6 +239,15 @@ export default class Modify extends Component {
      * @private
      */
     this._currentMovedGeometry = null
+  
+    /**
+     * 记录上一次被编辑的点
+     * 一般指的是在边上的捕捉点或者顶点本身
+     * 只是用于平行四边形的编辑使用
+     * @type {null}
+     * @private
+     */
+    this._oldEditedVertex = null
   }
   
   /**
@@ -432,6 +442,7 @@ export default class Modify extends Component {
       return
     }
     
+    // 与当前屏幕内图形做碰撞检测
     const nodes = this._getInExtent(this.features, pixelCoordinate, this._pixelTolerance)
     if (nodes.length > 0) {
       nodes.sort(sortByDistance)
@@ -442,6 +453,7 @@ export default class Modify extends Component {
       let vertex = this._closestOnSegment(pixelCoordinate, node)
       const vertexPixel = map.getPixelFromCoordinate(vertex)
       
+      // 判断是否达到了捕捉阈值
       let dist = distance(pixel, vertexPixel)
       if (dist <= this._pixelTolerance) {
         const vertexSegments = {}
@@ -458,6 +470,8 @@ export default class Modify extends Component {
           const squaredDist1 = squaredDistance(vertexPixel[0], vertexPixel[1], pixel1[0], pixel1[1])
           const squaredDist2 = squaredDistance(vertexPixel[0], vertexPixel[1], pixel2[0], pixel2[1])
           dist = Math.sqrt(Math.min(squaredDist1, squaredDist2))
+          
+          // 判断是否捕捉到图形的顶点
           this._snappedToVertex = dist <= this._pixelTolerance
           // vertex snapping otherwise edge snapping
           if (this._snappedToVertex) {
@@ -465,7 +479,7 @@ export default class Modify extends Component {
                      closestSegment[1] : closestSegment[0]
             
             const coordinateIndex = geometry.getCoordinateIndex(vertex)
-            if (geometryType === Geometry.POLYGON) {
+            if (geometryType === Geometry.POLYGON || geometryType === Geometry.PARALLELOGRAM) {
               this._snapSegments.index = coordinateIndex.index
               this._snapSegments.ringIndex = coordinateIndex.ringIndex
             } else if (geometryType === Geometry.MULTI_POLYGON) {
@@ -477,6 +491,11 @@ export default class Modify extends Component {
             }
             
             this._snapSegments.isVertex = true
+          }
+          
+          if (geometryType === Geometry.PARALLELOGRAM) {
+            this._snapSegments.index = node.index
+            this._snapSegments.ringIndex = node.ringIndex
           }
           
           // draw the snapping point
@@ -507,8 +526,7 @@ export default class Modify extends Component {
   
     if (this._shouldAddToVertexs) {
       const vertexFeature = this._vertexFeature
-      const geometry = vertexFeature.geometry
-      const vertex = geometry.getCoordinates()
+      const vertex = vertexFeature.geometry.getCoordinates()
     
       const insertVertices = this._insertVertices
       for (let j = insertVertices.length - 1; j >= 0; --j) {
@@ -520,7 +538,7 @@ export default class Modify extends Component {
     
     const dragSegments = this._dragSegments
     const len = dragSegments.length
-    
+  
     // move the edge of selected geometry
     if (len !== 0) {
       this._willModifyFeatures(evt)
@@ -560,6 +578,12 @@ export default class Modify extends Component {
           if (segmentData.index === 0) {
             coordinates[segmentData.ringIndex][coordinates[segmentData.ringIndex].length - 1] = vertex
           }
+          break
+        case Geometry.PARALLELOGRAM:
+          // 重新计算平行四边的各个顶点
+          coordinates = Parallelogram.updateCoordinatesForModification(geometry,
+            vertex, this._oldEditedVertex, dragSegment)
+          this._oldEditedVertex = vertex
           break
         case Geometry.EXTENT:
           coordinates = ExtentUtil.updateExtent(geometry, vertex, dragSegment)
@@ -629,6 +653,8 @@ export default class Modify extends Component {
       this._overLayer.removeFeature(this._vertexFeature)
       this._vertexFeature = null
     }
+  
+    this._oldEditedVertex = null
     
     this._downPoint = null
     this._currentMovedGeometry = null
@@ -695,6 +721,8 @@ export default class Modify extends Component {
     case Geometry.EXTENT:
       coordinates = geometry.getCoordinates()
       break
+    case Geometry.PARALLELOGRAM:
+      break
     default:
       return
     }
@@ -756,7 +784,8 @@ export default class Modify extends Component {
               index: 0
             })
           }
-        } else if (geometryType === Geometry.POLYGON) { // @todo 这一块需要重构
+        } else if (geometryType === Geometry.POLYGON ||
+                  geometryType === Geometry.PARALLELOGRAM ) { // @todo 这一块需要重构
           let coords = geometry.getCoordinates()
           coords.forEach( (coordinates, ringIndex) => {
             for (let j = 0, jj = coordinates.length - 1; j < jj; j++) {
@@ -837,9 +866,11 @@ export default class Modify extends Component {
    * @private
    */
   _setGeometryCoordinates (geometry, coordinates) {
-    this._changingFeature = true
-    geometry.setCoordinates(coordinates)
-    this._changingFeature = false
+    if (coordinates) {
+      this._changingFeature = true
+      geometry.setCoordinates(coordinates)
+      this._changingFeature = false
+    }
   }
   
   /**
@@ -877,21 +908,8 @@ export default class Modify extends Component {
    * @private
    */
   _closestOnSegment (coordinate, segmentData) {
-    // const geometry = segmentData.geometry
     return closestOnSegment(coordinate, segmentData.segment)
   }
-  
-  // _updateSegmentIndices(
-  //   geometry, index, depth, delta) {
-  //   this.rBush_.forEachInExtent(geometry.getExtent(), function(segmentDataMatch) {
-  //     if (segmentDataMatch.geometry === geometry &&
-  //       (depth === undefined || segmentDataMatch.depth === undefined ||
-  //       ol.array.equals(segmentDataMatch.depth, depth)) &&
-  //       segmentDataMatch.index > index) {
-  //       segmentDataMatch.index += delta;
-  //     }
-  //   });
-  // };
   
   /**
    * Create or update the vertex feature while snapping a point
