@@ -3,6 +3,7 @@
  */
 
 import Geometry from '../../geometry/geometry'
+import Polygon from '../../geometry/polygon'
 
 /**
  *
@@ -28,6 +29,8 @@ export default function contains (polygon, geometry) {
       return polyContainsLine(polygon, geometry)
     } else if (targetGeometryType === Geometry.POLYGON ) {
       return polyContainsPoly(polygon, geometry)
+    } else if (targetGeometryType === Geometry.PARALLELOGRAM) {
+      return polyContainsPoly(polygon, new Polygon(geometry.getCoordinates()))
     }
   }
   
