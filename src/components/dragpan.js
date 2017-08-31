@@ -89,18 +89,7 @@ export default class DragPan extends Component {
    */
   _handleDownEvent (browserEvent) {
     if (this.targetPointers.length > 0 && this._condition(browserEvent)) {
-      // const map = browserEvent.map
-      // const view = map.view
       this.lastCentroid = null
-      
-      // if (!this.handlingDownUpSequence) {
-      //   view.setHint(ol.ViewHint.INTERACTING, 1)
-      // }
-      
-      // stop any current animation
-      // if (view.getHints()[ol.ViewHint.ANIMATING]) {
-      //   view.setCenter(browserEvent.frameState.viewState.center)
-      // }
       
       if (this._kinetic) {
         this._kinetic.begin()
@@ -120,8 +109,6 @@ export default class DragPan extends Component {
    * @param browserEvent {browserEvent}
    * @private
    */
-  // Handle the drag event
-  // Center of the view will be changed
   _handleDragEvent (browserEvent) {
     const targetPointers = this.targetPointers
     const centroid = this.centroid(targetPointers)
