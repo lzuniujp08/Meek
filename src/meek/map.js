@@ -127,7 +127,6 @@ export default class Map extends BaseObject {
     this._overlays = optionsInner.overlays
     this._overlays.forEach(overlay => this._addOverlayInternal(overlay))
     
-    
     //
     listen(this.view, EventType.CHANGE, this._handleViewChange, this)
     
@@ -371,9 +370,9 @@ export default class Map extends BaseObject {
     targetElement.appendChild(this.viewport)
   
     // 监听键盘点击和抬起事件
-    listen(targetElement, BrowserEvent.KEYDOWN,
+    listen(document, BrowserEvent.KEYDOWN,
       this._handleKeyboardEvent, this),
-    listen(targetElement, BrowserEvent.KEYPRESS,
+    listen(document, BrowserEvent.KEYPRESS,
         this._handleKeyboardEvent, this)
   
     // 监听浏览器窗口变化，并做自适应
