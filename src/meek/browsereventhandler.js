@@ -135,7 +135,7 @@ export default class BrowserEventHandler extends BaseObject {
     let event = new BrowserEvent(this.map, e, BrowserEvent.MOUSE_UP)
     this.dispatchEvent(event)
   
-    if (!this._dragging) {
+    if (!this._dragging && this._down) {
       this._emulateClick(this._down)
     }
   
