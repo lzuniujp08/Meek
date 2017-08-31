@@ -26,13 +26,32 @@ var map = new Datatang.Map({
 });
 
 
+var typeSelect = document.getElementById('type')
+
+/**
+ * Handle change event.
+ */
+typeSelect.onchange = function() {
+  var value = typeSelect.value
+  if (value === 'free') {
+    draw.freehand = true
+  } else if (value === 'nonfree'){
+    draw.freehand = false
+  } else {
+    draw.active = false
+  }
+}
+
 var features = Datatang.GeoJSON.read(exampleJSON())
 featureLayer.addFeatures(features)
 
 // 绘图工具
 var draw = new Datatang.Draw({
   type: 'line',
-  drawLayer: featureLayer
+  drawLayer: featureLayer,
+  finishCondition: function(event) {
+    return event.keyCode === 13
+  }
 })
 
 var select = new Datatang.Select({

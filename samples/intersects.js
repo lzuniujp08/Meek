@@ -26,7 +26,7 @@ var map = new Datatang.Map({
 
 // 绘图工具
 var draw = new Datatang.Draw({
-  type: 'line',
+  type: 'point',
   drawLayer: flayer
 })
 
