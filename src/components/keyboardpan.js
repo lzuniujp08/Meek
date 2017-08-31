@@ -55,17 +55,16 @@ export default class KeyboardPan extends Component {
         let deltaX = 0, deltaY = 0
         
         if (keyCode === 40) {
-          deltaY = -mapUnitsDelta
+          deltaY = mapUnitsDelta
         } else if (keyCode === 37) {
           deltaX = -mapUnitsDelta
         } else if (keyCode === 39) {
           deltaX = mapUnitsDelta
         } else {
-          deltaY = mapUnitsDelta
+          deltaY = -mapUnitsDelta
         }
         
         const delta = [deltaX, deltaY]
-        // ol.coordinate.rotate(delta, view.getRotation())
         super.pan(view, delta, null)
         mapBrowserEvent.preventDefault()
         stopEvent = true
