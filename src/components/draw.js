@@ -17,6 +17,7 @@ import {listen, unlistenByKey} from '../core/eventmanager'
 import BrowserEvent from '../meek/browserevent'
 import DrawEvent from './drawevent'
 import Parallelogram from '../geometry/parallelogram'
+import {functions} from '../utils/functions'
 
 /**
  * 图形绘制工具基础类
@@ -76,7 +77,7 @@ export default class Draw extends Component {
      * @private
      */
     this._downPointPx = null
-  
+    
     /**
      * 图形绘制结束条件
      *
@@ -121,7 +122,7 @@ export default class Draw extends Component {
      *
      */
     this._finishCondition = options.finishCondition ?
-        options.finishCondition : function () { return true }
+        options.finishCondition : functions.TURE
         
     /**
      * 撤销条件
@@ -130,9 +131,18 @@ export default class Draw extends Component {
      * @type {Function}
      * @private
      */
-    this._undoCondition = options.undoCondition ?
-        options.undoCondition : function () { return true }
-        
+    this._undoCondition = options.undoCondition !== undefined ?
+        options.undoCondition : functions.TURE
+  
+    /**
+     * 设置默认回退的顶点数，默认1
+     * @TODO 需要完善
+     * @type {number}
+     * @private
+     */
+    this._undoStep = options.freehandUndoStep ?
+      options.freehandUndoStep : 2
+      
     // add keyboard events
     if (options.undoCondition || options.finishCondition) {
       listen(document, 'keyup',
@@ -195,12 +205,12 @@ export default class Draw extends Component {
     this._sketchLineCoords = null
   
     /**
-     * freehand
+     * freehand drawing
      * @type {Boolean}
      * @private
      */
-    this._freehand = false
-  
+    this._freehand = options.freehand ? options.freehand : false
+    
     /**
      * 公差像素距离
      *
@@ -242,13 +252,31 @@ export default class Draw extends Component {
       options.minPoints :
       (this.drawMode === Draw.DrawMode.POLYGON ? 3 : 2)
   
+  
     /**
-     * freehandCondition
+     *
+     * @type {condition}
      * @private
-     * @type
      */
-    this._freehandCondition = options.freehandCondition ?
-      options.freehandCondition : function () { return true }
+    this._condition = options.condition ?
+      options.condition : functions.TURE
+    
+    /**
+     *
+     * @type {boolean}
+     * @private
+     */
+    this._shouldHandle = false
+  
+  
+    /**
+     *
+     * @type {number}
+     * @private
+     */
+    this._squaredClickTolerance = options.clickUpTolerance ?
+      options.clickUpTolerance * options.clickUpTolerance : 36
+        
       
   }
   
@@ -261,31 +289,26 @@ export default class Draw extends Component {
    * @private
    */
   _handleKeyboardEvent (event) {
-    
     // If finish drawing
-
     if (this._finishCondition(event)) {
-
-      /**
-       * 判断多边形的顶点是否小于4个（正常多边形3个顶点，首尾相接多一个顶点），小于4个不是多边形，return
-       */
+      // 判断多边形的顶点是否小于4个（正常多边形3个顶点，首尾相接多一个顶点），小于4个不是多边形，return
       if (this.drawMode === Draw.DrawMode.POLYGON) {
         if( this._sketchFeature === null) {
           return
         }
+        
         let pcoordinates = this._sketchFeature.geometry.getCoordinates()
         if (pcoordinates[0].length < 4) {
           return
         }
       }
 
-      /**
-       * 判断线的顶点是否小于2个，小于2个不是线段，return
-       */
+      // 判断线的顶点是否小于2个，小于2个不是线段，return
       if (this.drawMode === Draw.DrawMode.LINE) {
         if( this._sketchFeature === null) {
           return
         }
+        
         let pcoordinates = this._sketchFeature.geometry.getCoordinates()
         if (pcoordinates.length <= 2) {
           return
@@ -296,8 +319,10 @@ export default class Draw extends Component {
     }
     
     // If undo drawing
-    if (this._undoCondition(event)) {
-      this._undoDrawing()
+    if (this._undoCondition) {
+      if (this._undoCondition(event)) {
+        this._undoDrawing()
+      }
     }
   }
   
@@ -326,10 +351,10 @@ export default class Draw extends Component {
    */
   get drawMode () { return this._drawMode }
   set drawMode (value){
-
-    this.active = this._existInDrawMode(value) ? true : false
-
-    this._drawMode = value
+    const isIn = this._existInDrawMode(value)
+    
+    this.active = isIn ? true : false
+    this._drawMode = isIn ? value : Draw.DrawMode.UNDEFINED
     
     this._sketchLineCoords = null
     this._abortDrawing()
@@ -346,15 +371,21 @@ export default class Draw extends Component {
    * @private
    */
   _existInDrawMode (value){
-    const drawMode = Draw.DrawMode
-    const modeValue = value.toUpperCase()
-
-    for(let val in drawMode){
-      if(modeValue === drawMode[val].toUpperCase()){
-        return  true
+    if ((typeof value === 'string') && (value.constructor === String)) {
+      const drawMode = Draw.DrawMode
+      const modeValue = value.toUpperCase()
+  
+      if (modeValue === Draw.DrawMode.UNDEFINED.toUpperCase()) {
+        return false
+      }
+      
+      for (let val in drawMode) {
+        if (modeValue === drawMode[val].toUpperCase()) {
+          return true
+        }
       }
     }
-
+    
     return false
   }
 
@@ -416,6 +447,19 @@ export default class Draw extends Component {
   }
   
   /**
+   * 或者 freehand draw 的执行条件
+   *
+   * @param event
+   * @returns {boolean|*}
+   * @private
+   */
+  _freehandEnable () {
+    const drawMode = this.drawMode
+    return (drawMode === Draw.DrawMode.POLYGON ||
+            drawMode === Draw.DrawMode.LINE ) && this._freehand
+  }
+  
+  /**
    * 处理鼠标事件
    *
    * handleMouseEvent
@@ -423,19 +467,26 @@ export default class Draw extends Component {
    * @returns {*|Boolean}
    */
   handleMouseEvent (event) {
-    this.freehand_ = false
-    let pass = !this.freehand_
-    const eventType = event.type
+    // 排除右键
+    const buttons = event.originalEvent.buttons
+    if (buttons === 2) {
+      return false
+    }
     
+    // 越界限制
     event.coordinate = this.coordinateBeyond(event.coordinate)
-    
-    if (this.freehand_ &&
-      eventType === BrowserEvent.MOUSE_DRAG && this._sketchFeature !== null) {
+  
+    const freehand = this._freehandEnable()
+    // this._freehand = this._freehandEnable()
+    // let pass = !this._freehand
+    let pass = true
+    const eventType = event.type
+    if (freehand &&
+        eventType === BrowserEvent.MOUSE_DRAG &&
+        this._sketchFeature !== null) {
       this._addToDrawing(event)
-      pass = false
-    } else
-      
-    if (eventType === BrowserEvent.MOUSE_MOVE) {
+      // pass = false
+    } else if (eventType === BrowserEvent.MOUSE_MOVE) {
       pass = this._handleMove(event)
     } else if (eventType === BrowserEvent.DBLCLICK) {
       pass = false
@@ -453,6 +504,19 @@ export default class Draw extends Component {
    * @private
    */
   _handleMove (event) {
+    if (this._downPointPx &&
+      ((!this._freehand && this._shouldHandle) ||
+      (this._freehand && !this._shouldHandle))) {
+      const downPx = this._downPointPx
+      const clickPx = event.pixel
+      const dx = downPx[0] - clickPx[0]
+      const dy = downPx[1] - clickPx[1]
+      const squaredDistance = dx * dx + dy * dy
+      this._shouldHandle = this._freehand ?
+        squaredDistance > this._squaredClickTolerance :
+        squaredDistance <= this._squaredClickTolerance
+    }
+    
     if (this._finishCoordinate) {
       this._modifyDrawing(event)
     } else {
@@ -471,8 +535,21 @@ export default class Draw extends Component {
    * @private
    */
   _handleDownEvent (event) {
-    this._downPointPx = event.pixel
-    return true
+    this._shouldHandle = !this._freehand
+    
+    if (this._freehand) {
+      this._downPointPx = event.pixel
+      if (!this._finishCoordinate) {
+        this._startDrawing(event)
+      }
+      
+      return false
+    } else if (this._condition(event)) {
+      this._downPointPx = event.pixel
+      return true
+    } else {
+      return false
+    }
   }
   
   /**
@@ -483,16 +560,19 @@ export default class Draw extends Component {
    * @private
    */
   _handleUpEvent (event) {
-    const downPx = this._downPointPx
-    const clickPx = event.pixel, mode = this.drawMode
-    const dx = downPx[0] - clickPx[0]
-    const dy = downPx[1] - clickPx[1]
-    const clickDistance = dx * dx + dy * dy
+    if (this.drawMode === Draw.DrawMode.UNDEFINED) {
+      return
+    }
     
-    if (clickDistance <= 36) {
+    let pass = true
+    const mode = this.drawMode
+    
+    this._handleMove(event)
+    
+    if (this._shouldHandle) {
       if (!this._finishCoordinate) {
         this._startDrawing(event)
-  
+    
         // 点绘制在up的时候结束
         if (this.drawMode === Draw.DrawMode.POINT) {
           this._finishDrawing()
@@ -510,7 +590,12 @@ export default class Draw extends Component {
       } else {
         this._addToDrawing(event)
       }
+    } else if (this._freehand && !this._finishCondition) {
+      this._finishCoordinate = null
+      this._abortDrawing()
     }
+    
+    return pass
   }
   
   /**
@@ -663,15 +748,29 @@ export default class Draw extends Component {
     if (mode === Draw.DrawMode.LINE) {
       this._finishCoordinate = coordinate.slice()
       coordinates = this._sketchCoords
-      coordinates.push(coordinate.slice())
-      done = coordinates.length > this._maxLinePoints
       
+      if (coordinates.length > this._maxLinePoints) {
+        if (this._freehand) {
+          coordinates.pop()
+        } else {
+          done = true
+        }
+      }
+      
+      coordinates.push(coordinate.slice())
       this.geometryFunction(coordinates, geometry)
     } else if (mode === Draw.DrawMode.POLYGON) {
       coordinates = this._sketchCoords[0]
       
+      if (coordinates.length > this._maxPolygonPoints ) {
+        if (this._freehand) {
+          coordinates.pop()
+        } else {
+          done = true
+        }
+      }
+  
       coordinates.push(coordinate.slice())
-      done = coordinates.length > this._maxPolygonPoints
       
       if (done) {
         this._finishCoordinate = coordinates[0]
@@ -780,6 +879,11 @@ export default class Draw extends Component {
   _atFinish (event) {
     let at = false
     if (this._sketchFeature) {
+      
+      if (this._freehand && this._finishCondition) {
+        return false
+      }
+      
       let potentiallyDone = false
       let potentiallyFinishCoordinates = [this._finishCoordinate]
       
@@ -802,7 +906,7 @@ export default class Draw extends Component {
           const pixel = event.pixel
           const dx = pixel[0] - finishPixel[0]
           const dy = pixel[1] - finishPixel[1]
-          const freehand = this._freehand && this._freehandCondition(event)
+          const freehand = this._freehand
           const snapTolerance = freehand ? 1 : this._snapTolerance
           at = Math.sqrt(dx * dx + dy * dy) <= snapTolerance
           if (at) {
@@ -869,22 +973,25 @@ export default class Draw extends Component {
    */
   _undoDrawing () {
     const drawMode = this.drawMode
+    let undoStep = 1
+    if (this._freehand) {
+      undoStep = this._undoStep
+    }
+    
     if (drawMode === Draw.DrawMode.LINE ) {
       if (this._sketchFeature) {
         const coordinates = this._sketchFeature.geometry.getCoordinates()
-        if (coordinates.length > 2) {
-          
-          coordinates.splice(coordinates.length - 2, 1)
+        if (coordinates.length + undoStep > 3) {
+          coordinates.splice(coordinates.length - 3, undoStep)
           this._sketchFeature.changed()
         }
       }
     } else if (drawMode === Draw.DrawMode.POLYGON) {
       if (this._sketchFeature) {
-        
         const pcoordinates = this._sketchFeature.geometry.getCoordinates()[0]
         
-        if (pcoordinates.length > 2 ) {
-          pcoordinates.splice(pcoordinates.length - 2, 1)
+        if (pcoordinates.length + undoStep > 3 ) {
+          pcoordinates.splice(pcoordinates.length - 3, undoStep)
           this._sketchFeature.changed()
         }else {
           this._abortDrawing()
@@ -892,6 +999,7 @@ export default class Draw extends Component {
         }
       }
     }
+    
   }
 
   /**
@@ -950,6 +1058,10 @@ export default class Draw extends Component {
    * @returns {boolean}
    */
   shouldStopEvent () {
+    if (this._freehand) {
+      return true
+    }
+    
     return false
   }
 
@@ -960,10 +1072,19 @@ export default class Draw extends Component {
    * @return {null}
    */
   get drawLayer () { return this._drawLayer }
-
+  
+  /**
+   * 设置当前自由、绘制模式
+   * @property freehand
+   * @type {Boolean}
+   */
+  get freehand () { return this._freehand }
+  set freehand (value) {
+    this._freehand = value
+  }
 
   /**
-   * active读写器, 读取设置当前active
+   * active读写器, 读取设置当前active非自由
    *
    * @type {Function}
    * @property active
@@ -973,11 +1094,13 @@ export default class Draw extends Component {
   set active (value) {
     this._active = value
     if (this._active === false) {
-      this._sketchLayer.clear()
+      if (this._sketchLayer) {
+        this._sketchLayer.clear()
+      }
+      
       this._sketchPoint = null
     }
   }
-  
 }
 
 /**
@@ -988,7 +1111,7 @@ export default class Draw extends Component {
  * @returns {Object}
  */
 Draw.getDrawMode = function(type) {
-  let drawMode = null
+  let drawMode = Draw.DrawMode.UNDEFINED
   
   switch (type){
   case Geometry.POINT:
@@ -1028,5 +1151,6 @@ Draw.DrawMode = {
   POLYGON: 'Polygon',
   CIRCLE: 'Circle',
   EXTENT: 'Extent',
-  PARALLELOGRAM :'Parallelogram'
+  PARALLELOGRAM :'Parallelogram',
+  UNDEFINED: 'undefined'
 }
