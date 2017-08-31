@@ -55,12 +55,6 @@ export default class Zoom extends Control {
     
     listen(inElement, BrowserEvent.CLICK, this._handleClick, this)
     listen(outElement, BrowserEvent.CLICK, this._handleClickIn, this)
-    
-    /**
-     * @type {number}
-     * @private
-     */
-    // this.duration_ = options.duration !== undefined ? options.duration : 250
   }
   
   _handleClickIn (event) {
@@ -87,26 +81,13 @@ export default class Zoom extends Control {
     const map = this.map
     const view = map.view
     if (!view) {
-      // the map does not have a view, so we can't act
-      // upon it
       return
     }
     
     const currentResolution = view.resolution
     if (currentResolution) {
       const newResolution = view.constrainResolution(currentResolution, delta)
-      // if (this.duration_ > 0) {
-      //   if (view.getAnimating()) {
-      //     view.cancelAnimations()
-      //   }
-      //   view.animate({
-      //     resolution: newResolution,
-      //     duration: this.duration_,
-      //     easing: ol.easing.easeOut
-      //   })
-      // } else {
       view.resolution = newResolution
-      // }
     }
   }
   
