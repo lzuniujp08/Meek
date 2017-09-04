@@ -1037,7 +1037,7 @@ export default class Draw extends Component {
       this._abortDrawing()
     }
   
-    this._sketchLayer.map = active ? map : null
+    this._sketchLayer.map = map
   }
   
   /**

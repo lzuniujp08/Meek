@@ -48,10 +48,34 @@ window.onload = function () {
    */
   typeSelect.onchange = function() {
     drawTool.drawMode = typeSelect.value
+    drawTool.active = true
+    select.active = false
   }
   
   drawTool.addEventListener(Datatang.DrawEvent.EventType.DRAW_END, function(e){
     var feature = e.feature
     feature.displayText = '测试测试'
+    
+    select.active = true
+    drawTool.active = false
+    modifyTool.active = true
   })
+  
+  var select = new Datatang.Select()
+  select.selectMode = 'mousemove'
+  
+  var modifyTool = new Datatang.Modify()
+  modifyTool.features = flayer.features
+  
+  // add select-end event linstener
+  // select.addEventListener(Datatang.SelectEvent.EventType.SELECT, function(event) {
+  //   modifyTool.features = event.selectedFeatures
+  // })
+  
+  map.addComponents(modifyTool)
+  map.addComponents(select)
+  
+  select.active = true
+  
+  
 }
