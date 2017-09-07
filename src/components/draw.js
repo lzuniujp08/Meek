@@ -431,6 +431,7 @@ export default class Draw extends Component {
         if (mode === Draw.DrawMode.POLYGON ||
             mode === Draw.DrawMode.PARALLELOGRAM ||
             mode === Draw.DrawMode.LINE ) {
+          console.log(coordinates)
           geometry.setCoordinates(coordinates)
         } else if(mode === Draw.DrawMode.EXTENT) {
           geometry.setCoordinates(ExtentUtil.boundingExtent(coordinates))
@@ -707,6 +708,16 @@ export default class Draw extends Component {
       last[1] = coordinate[1]
     }
     
+    if (this._freehand) {
+      const tempLastRing = this._sketchCoords[0]
+      const lastPoint = tempLastRing[tempLastRing.length - 1]
+      const lastPoint2 = tempLastRing[tempLastRing.length - 2]
+      
+      if (lastPoint[0] === lastPoint2[0] && lastPoint[1] === lastPoint2[1]) {
+        tempLastRing.pop()
+      }
+    }
+    
     // 给 geometry 赋值
     this.geometryFunction(this._sketchCoords, geometry)
     
@@ -757,6 +768,14 @@ export default class Draw extends Component {
         }
       }
       
+      if (this._freehand) {
+        const lastPoint = coordinates[coordinates.length - 1]
+        if (lastPoint[0] === coordinate[0] &&
+            lastPoint[1] === coordinate[1]) {
+          coordinates.pop()
+        }
+      }
+      
       coordinates.push(coordinate.slice())
       this.geometryFunction(coordinates, geometry)
     } else if (mode === Draw.DrawMode.POLYGON) {
@@ -769,7 +788,7 @@ export default class Draw extends Component {
           done = true
         }
       }
-  
+      
       coordinates.push(coordinate.slice())
       
       if (done) {

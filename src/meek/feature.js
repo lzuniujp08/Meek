@@ -269,10 +269,10 @@ export default class Feature extends BaseObject {
 
       if (geometryType === Geometry.LINE) {
         const firstStyle = newStyles[0]
-        firstStyle.width = firstStyle.width + 2
+        firstStyle.width = firstStyle.width + 1
 
         const cloneStyle = firstStyle.clone()
-        cloneStyle.width = cloneStyle.width + 2
+        cloneStyle.width = cloneStyle.width + 1
         cloneStyle.color = white
   
         newStyles.unshift(cloneStyle)
@@ -282,11 +282,11 @@ export default class Feature extends BaseObject {
           geometryType === Geometry.PARALLELOGRAM ||
           geometryType === Geometry.EXTENT ) {
         const firstStyle = newStyles[0]
-        firstStyle.borderStyle.width = firstStyle.borderStyle.width + 2
+        firstStyle.borderStyle.width = firstStyle.borderStyle.width + 1
 
         const cloneStyle = firstStyle.clone()
         cloneStyle.alpha = 0
-        cloneStyle.borderStyle.width = firstStyle.borderStyle.width + 2
+        cloneStyle.borderStyle.width = firstStyle.borderStyle.width + 1
         cloneStyle.borderStyle.color = white
         cloneStyle.borderStyle.lineCap = LineStyle.LineCap.ROUND
         cloneStyle.borderStyle.lineJion = LineStyle.LineJion.ROUND

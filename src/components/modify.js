@@ -660,7 +660,7 @@ export default class Modify extends Component {
     this._currentMovedGeometry = null
     
     if (this._modified) {
-      this.dispatchEvent(new ModifyEvent(ModifyEvent.MODIFY_END, this.features, evt))
+      this.dispatchEvent(new ModifyEvent(ModifyEvent.EventType.MODIFY_END, this.features, evt))
       this._modified = false
     }
     
