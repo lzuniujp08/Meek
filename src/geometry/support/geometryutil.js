@@ -2,6 +2,8 @@
  * Created by zhangyong on 2017/5/23.
  */
 
+import Geometry from '../../geometry/geometry'
+
 /**
  * 判断两个点是否相交
  *
@@ -275,6 +277,30 @@ export function getPointInExtendedLineByDistanceFromAB (xa, ya, xb, yb, d) {
   return [xd, yd]
 }
 
+export function simplify(geometry) {
+  if (!geometry) {
+    return geometry
+  }
+  
+  let coordinates
+  const geoType = geometry.geometryType
+  if (geoType === Geometry.POLYGON) {
+    coordinates = geometry.getCoordinates()[0]
+  } else if (geoType === Geometry.LINE) {
+    coordinates = geometry.getCoordinates()
+    
+    const sliceCoords = coordinates.slice(1, coordinates.length - 2)
+    const newCoords = [coordinates[0]]
+    
+    for (let i = 0, len = sliceCoords.length ;i < len; i += 2) {
+      newCoords.push(sliceCoords[i])
+    }
+  
+    newCoords.push(coordinates[coordinates.length - 1])
+    geometry.setCoordinates(newCoords)
+  }
+}
+
 export default {
   linearRingContainsXY,
   linearRingsContainsXY,
@@ -283,5 +309,6 @@ export default {
   closestOnSegment,
   getPointInExtendedLineByDistanceFromAB,
   equals,
+  simplify,
   distance
 }
