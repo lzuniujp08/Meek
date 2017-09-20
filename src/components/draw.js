@@ -13,6 +13,7 @@ import Polygon from '../geometry/polygon'
 import MultiPolygon from '../geometry/mutilpolygon'
 import Extent from '../geometry/extent'
 import {ExtentUtil} from '../geometry/support/extentutil'
+import {simplify} from '../geometry/support/geometryutil'
 import {listen, unlistenByKey} from '../core/eventmanager'
 import BrowserEvent from '../meek/browserevent'
 import DrawEvent from './drawevent'
@@ -431,7 +432,6 @@ export default class Draw extends Component {
         if (mode === Draw.DrawMode.POLYGON ||
             mode === Draw.DrawMode.PARALLELOGRAM ||
             mode === Draw.DrawMode.LINE ) {
-          console.log(coordinates)
           geometry.setCoordinates(coordinates)
         } else if(mode === Draw.DrawMode.EXTENT) {
           geometry.setCoordinates(ExtentUtil.boundingExtent(coordinates))
@@ -710,11 +710,13 @@ export default class Draw extends Component {
     
     if (this._freehand) {
       const tempLastRing = this._sketchCoords[0]
-      const lastPoint = tempLastRing[tempLastRing.length - 1]
-      const lastPoint2 = tempLastRing[tempLastRing.length - 2]
-      
-      if (lastPoint[0] === lastPoint2[0] && lastPoint[1] === lastPoint2[1]) {
-        tempLastRing.pop()
+      if (tempLastRing.length > 2) {
+        const lastPoint = tempLastRing[tempLastRing.length - 1]
+        const lastPoint2 = tempLastRing[tempLastRing.length - 2]
+  
+        if (lastPoint[0] === lastPoint2[0] && lastPoint[1] === lastPoint2[1]) {
+          tempLastRing.pop()
+        }
       }
     }
     
@@ -769,10 +771,12 @@ export default class Draw extends Component {
       }
       
       if (this._freehand) {
-        const lastPoint = coordinates[coordinates.length - 1]
-        if (lastPoint[0] === coordinate[0] &&
+        if (coordinates.length > 1) {
+          const lastPoint = coordinates[coordinates.length - 1]
+          if (lastPoint[0] === coordinate[0] &&
             lastPoint[1] === coordinate[1]) {
-          coordinates.pop()
+            coordinates.pop()
+          }
         }
       }
       
@@ -878,6 +882,10 @@ export default class Draw extends Component {
       sketchFeature.geometry = new MultiPolygon([coordinates])
     }
   
+    if (this._freehand) {
+      simplify(sketchFeature.geometry)
+    }
+    
     // 最终放到shource中，形成正式feature
     if (this._drawLayer) {
       sketchFeature.style = undefined
@@ -993,15 +1001,17 @@ export default class Draw extends Component {
   _undoDrawing () {
     const drawMode = this.drawMode
     let undoStep = 1
+    let polygonDeleteStep = 2
     if (this._freehand) {
       undoStep = this._undoStep
+      polygonDeleteStep = 3
     }
     
     if (drawMode === Draw.DrawMode.LINE ) {
       if (this._sketchFeature) {
         const coordinates = this._sketchFeature.geometry.getCoordinates()
-        if (coordinates.length + undoStep > 3) {
-          coordinates.splice(coordinates.length - 3, undoStep)
+        if (coordinates.length + undoStep > 2) {
+          coordinates.splice(coordinates.length - 2, undoStep)
           this._sketchFeature.changed()
         }
       }
@@ -1009,8 +1019,8 @@ export default class Draw extends Component {
       if (this._sketchFeature) {
         const pcoordinates = this._sketchFeature.geometry.getCoordinates()[0]
         
-        if (pcoordinates.length + undoStep > 3 ) {
-          pcoordinates.splice(pcoordinates.length - 3, undoStep)
+        if (pcoordinates.length + undoStep > polygonDeleteStep ) {
+          pcoordinates.splice(pcoordinates.length - polygonDeleteStep, undoStep)
           this._sketchFeature.changed()
         }else {
           this._abortDrawing()
