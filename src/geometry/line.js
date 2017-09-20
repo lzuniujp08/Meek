@@ -5,7 +5,7 @@
 import Geometry from './geometry'
 import Extent from './extent'
 
-import {squaredSegmentDistance} from './support/geometryutil'
+import {squaredSegmentDistance, distance} from './support/geometryutil'
 import {lineString} from './support/interpolate'
 
 /**
@@ -88,6 +88,24 @@ export default class Line extends Geometry {
     this.path.push(coordinates)
     this._extent = null
     this.changed()
+  }
+  
+  /**
+   * 多段线的长度
+   *
+   * @property length
+   * @type {Number}
+   */
+  get length () {
+    const coordinates = this.getCoordinates()
+    let len = 0
+    for (let i = 0, ii = coordinates.length; i < ii - 1 ; i++) {
+      const fp = coordinates[i]
+      const np = coordinates[i + 1]
+      len += distance(fp, np)
+    }
+    
+    return len
   }
   
   /**
