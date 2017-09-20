@@ -10,7 +10,7 @@ import {Math} from 'utils/math'
 import {Coordinate} from 'utils/coordinate'
 import {Canvas} from 'utils/canvas'
 
-import {GeometryUtil} from 'geometry/support/geometryutil'
+import GeometryUtil from 'geometry/support/geometryutil'
 import {ExtentUtil} from 'geometry/support/extentutil'
 import {EventType} from 'meek/eventtype'
 import {Style} from 'style/style'
@@ -83,7 +83,6 @@ export default {
   FeatureEvent,
   ModifyEvent,
   EventManager,
-  // BaseObject,
   Counter,
   Helpers,
   ImageState,
@@ -97,21 +96,15 @@ export default {
   MutilPolygon,
   Parallelogram,
   Style,
-  // BaseStyle,
   PointStyle,
   LineStyle,
   FillStyle,
   TextStyle,
-  // BaseLayer,
   FeatureLayer,
   SingleImageLayer,
-  // Renderer,
-  // CanvasRenderer,
-  // Component,
   Draw,
   DrawEvent,
   BrowserEvent,
-  // BrowserEventHandler,
   EventType,
   Feature,
   Map,
