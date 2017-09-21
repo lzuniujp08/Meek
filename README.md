@@ -1,6 +1,6 @@
 # Meek
 
-Meek 是一个集成绘图、编辑、空间分析的图形库，基于 HTML5 Canvas 来实现
+Meek 是一个集成绘图、编辑、渲染、空间分析的图形库，基于 HTML5 Canvas 来实现
 
 主要功能包括：
 
@@ -8,11 +8,11 @@ Meek 是一个集成绘图、编辑、空间分析的图形库，基于 HTML5 Ca
 
 - 点、多段线、多边形、矩形、平行四边形的绘制，多段线、多边形的自由绘制
  
-- 点、矩形平移，多边形、多段线边和顶点编辑，平行四边形编辑
+- 点、矩形平移，矩形、多边形、多段线边和顶点编辑，平行四边形编辑
  
 - 支持复合多边形(`mutilpolygon`)、带洞多边形(`holepolygon`)
  
-- 支持图形的点选、鼠标悬浮选中，支持多选(ctrl键)
+- 支持图形的点选、鼠标悬浮选中，支持图形多选(ctrl键)
  
 - 支持点、线、面的样式设置与渲染
  
@@ -24,23 +24,10 @@ Meek 是一个集成绘图、编辑、空间分析的图形库，基于 HTML5 Ca
 
 需要支持 HTML5
 
-## Getting Started
-
-## Installation
 
 ## Authors
 
 **zy**
 
-- [Email](zyangdata@foxmail.com )
+- [Email](1106408264@qq.com )
 - [QQ](1106408264)
-- [WeChat]()
-
-##Copyright and license
-
-Copyright © 2017 bearzy. All Rights Reserved
-
-Licensed under the MIT-LICENSE;
-you may not use this work except in compliance with the License.
-You may obtain a copy of the License in the LICENSE file, or at:
-	[http://opensource.org/licenses/MIT](http://opensource.org/licenses/MIT)
