@@ -30,10 +30,33 @@ Meek 是一个集成绘图、编辑、渲染、空间分析的图形库，基于
   <img src= "https://github.com/DTFED2017/Meek/blob/master/screenshot/meek-draw-features.png">
 </div>
 
+- 选择、渲染等
+
+<div align=center>
+  <img src= "https://github.com/DTFED2017/Meek/blob/master/screenshot/meek-select-features.png">
+</div>
+
 ## Supported Browsers
 
-需要支持 HTML5
+需要支持 HTML5 的浏览器，IE10以下不支持
 
+## Installation
+
+- 下载 [meek](https://github.com/DTFED2017/Meek.git)
+
+- cd 到源码根目录
+
+- 执行 ` npm install`
+
+- 执行 `npm run build`
+
+- 发布版本 `npm run release`
+
+## API
+
+使用 yuidoc 来生成 api 文档，cd到源代码目录，执行命令
+
+    yuidoc
 
 ## Authors
 
