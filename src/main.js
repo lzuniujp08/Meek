@@ -17,7 +17,6 @@ import {Style} from 'style/style'
 
 import Event from 'core/event'
 import EventManager from 'core/eventmanager'
-// import BaseObject from 'core/baseobject'
 
 import Geometry from 'geometry/geometry'
 import Extent from 'geometry/extent'
@@ -31,24 +30,18 @@ import {ImageState} from 'lyr/image/imagestate'
 import {ImageEvent} from 'lyr/image/imageevent'
 import SingleImage from 'lyr/image/singleimage'
 
-// import BaseStyle from 'style/basestyle'
 import PointStyle from 'style/pointstyle'
 import LineStyle from 'style/linestyle'
 import FillStyle from 'style/fillstyle'
 import TextStyle from 'style/textstyle'
 
-// import BaseLayer from 'lyr/baselayer'
 import FeatureLayer from 'lyr/featurelayer'
 import SingleImageLayer from 'lyr/singleimagelayer'
-// import Renderer from 'renderer/renderer'
-// import CanvasRenderer from 'renderer/canvas/canvasrenderer'
-// import Component from 'components/component'
 import Draw from 'components/draw'
 import DrawEvent from 'components/drawevent'
 import Select from 'components/select'
 import Modify from 'components/modify'
 import DragPan from 'components/dragpan'
-// import Kinetic from 'components/kinetic'
 import MouseWheelZoom from 'components/mousewheelzoom'
 
 import BrowserEvent from 'meek/browserevent'
@@ -59,7 +52,6 @@ import ModifyEvent from 'components/modifyevent'
 import Control from 'control/control'
 import Zoom from 'control/zoom'
 
-// import BrowserEventHandler from 'meek/browsereventhandler'
 import Feature from 'meek/feature'
 import Map from 'meek/map'
 import View from 'meek/view'
@@ -115,7 +107,6 @@ export default {
   Select,
   Modify,
   DragPan,
-  // Kinetic,
   Control,
   Zoom,
   Obj,
