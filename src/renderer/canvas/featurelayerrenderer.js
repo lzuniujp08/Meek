@@ -162,11 +162,11 @@ export default class FeatureLayerRenderer extends LayerRenderer {
         let styleFunction = layer.styleFunction
         if (styleFunction) {
           renderStyle = styleFunction(feature, resolution)
+  
+          // 应用图层样式
+          feature.style = this._cloneRenderStyle(renderStyle)
         }
       }
-      
-      // 应用图层样式
-      feature.style = renderStyle
       
       let geomertyRender = this._getGeometryRender(feature.geometry)
       this._resetRender(geomertyRender)
@@ -185,6 +185,25 @@ export default class FeatureLayerRenderer extends LayerRenderer {
     this.postCompose(context, frameState, transform)
     
     return true
+  }
+  
+  /**
+   *
+   * @param renderStyle
+   * @returns {*}
+   * @private
+   */
+  _cloneRenderStyle (renderStyle) {
+    if (renderStyle) {
+      const newStyle = []
+      renderStyle.forEach( rs => {
+        newStyle.push(rs.clone())
+      })
+      
+      return newStyle
+    }
+    
+    return null
   }
   
   /**

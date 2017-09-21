@@ -64,6 +64,7 @@ export default class LineRender extends GeometryRender {
         lineCap: styleObj.lineCap,
         lineJion: styleObj.lineJion,
         miterLimit: styleObj.miterLimit
+        // hasDash: styleObj.style === LineStyle.DASH ? true : false
       }
       
       this.drawLine(ctx, renderOptions)
@@ -91,8 +92,4 @@ export default class LineRender extends GeometryRender {
     ctx.closePath()
     ctx.restore()
   }
-  
-  
-  
-  
 }
