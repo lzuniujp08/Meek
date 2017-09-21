@@ -22,6 +22,14 @@ Meek 是一个集成绘图、编辑、渲染、空间分析的图形库，基于
 
 - 图片坐标映射
 
+## 功能截图
+
+- 绘图
+
+<div align=center>
+  <img src= "https://github.com/DTFED2017/Meek/blob/master/screenshot/meek-draw-features.png">
+</div>
+
 ## Supported Browsers
 
 需要支持 HTML5
