@@ -178,6 +178,14 @@ export default class Draw extends Component {
     this._sketchPoint = null
   
     /**
+     * 绘制时，是否允许鼠标参考点
+     * @type {boolean}
+     * @private
+     */
+    this._enableSketchPoint = options.enableSketchPoint ?
+      options.enableSketchPoint : false
+  
+    /**
      * 临时Feature
      *
      * @property sketchFeature
@@ -957,6 +965,10 @@ export default class Draw extends Component {
   _updateSketchPoint (event) {
     let coordinates = event.coordinate
 
+    if (!this._enableSketchPoint) {
+      return
+    }
+    
     if (this._sketchPoint === null) {
       const geom = new Point(coordinates[0], coordinates[1])
       this._sketchPoint = new Feature(geom)
