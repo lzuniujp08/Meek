@@ -211,8 +211,15 @@ export default class FeatureLayer extends BaseLayer {
     // calculate features that their extent has intersected with a given point
     const extentFeatures = this._getIntersectedFeatures(piexl,features)
   
+    const piexlX = piexl[0]
+    const piexlY = piexl[1]
+    const options = {
+      tolerance: tolerance * frameState.viewState.resolution
+    }
+    
+    
     const result = extentFeatures.filter(function(feature){
-      return feature.geometry.containsXY(piexl[0],piexl[1],{tolerance : tolerance})
+      return feature.geometry.containsXY(piexlX, piexlY, options)
     })
     
     return result
