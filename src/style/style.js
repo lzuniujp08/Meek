@@ -54,7 +54,7 @@ Style.createDefaultEditing = function () {
   const styles = {}
   const white = [255, 255, 255]
   const blue = [0, 153, 255]
-  const width = 1.5
+  const width = 1
   
   // 面样式
   styles[Geometry.POLYGON] = [
@@ -62,13 +62,14 @@ Style.createDefaultEditing = function () {
     new LineStyle(blue,1,1)// 边框
     ,0.2)
   ]
+  
   styles[Geometry.MULTI_POLYGON] = styles[Geometry.POLYGON]
   styles[Geometry.EXTENT] = styles[Geometry.POLYGON]
   styles[Geometry.PARALLELOGRAM] = styles[Geometry.POLYGON]
     
   // 线样式
   styles[Geometry.LINE] = [
-    new LineStyle(white,1,width + 1.5,LineStyle.LineCap.ROUND,LineStyle.LineJion.ROUND),// 外框
+    new LineStyle(white,1,width + 1,LineStyle.LineCap.ROUND,LineStyle.LineJion.ROUND),// 外框
     new LineStyle(blue,1,width,LineStyle.LineCap.ROUND,LineStyle.LineJion.ROUND)// 内框
   ]
   styles[Geometry.MULTI_LINE] = styles[Geometry.LINE]
