@@ -23,6 +23,7 @@ import {closestOnSegment, squaredDistanceToSegment,
         squaredDistance, distance} from '../geometry/support/geometryutil'
 
 import {noModifierKeys, singleClick} from '../utils/mousekey'
+import {functions} from '../utils/functions'
 
 /**
  * 编辑模式，启动后可以编辑图形
@@ -120,6 +121,20 @@ export default class Modify extends Component {
      */
     this._deleteCondition = options.deleteCondition ?
       options.deleteCondition : this._defaultDeleteCondition
+  
+    /**
+     * 允许顶点编辑的条件方法，默认可编辑
+     * @private
+     */
+    this._vertexEditableCondition = options.vertexEditableCondition ?
+      options.vertexEditableCondition : functions.TURE
+  
+    /**
+     * 允许边编辑的条件方法，默认可编辑
+     * @private
+     */
+    this._edgeEditableCondition = options.edgeEditableCondition ?
+      options.edgeEditableCondition : functions.TURE
     
     /**
      * Determine if should snap to vertexs of gemetry
@@ -129,13 +144,6 @@ export default class Modify extends Component {
      * @private
      */
     this._snappedToVertex = false
-  
-    /**
-     * vertexSegments
-     * @type {null}
-     * @private
-     */
-    this._vertexSegments = null
   
     /**
      * @snapSegments
@@ -152,8 +160,13 @@ export default class Modify extends Component {
     this._vertexFeature = null
   
     /**
-     * The features
-     * @type {*}
+     * The editable features
+     *
+     * 设置需要编辑图形的集合，
+     * 如果图形不允许编辑，请从该集合移除
+     *
+     * @property features
+     * @type {[]}
      */
     this.features = options.features || []
   
@@ -259,7 +272,6 @@ export default class Modify extends Component {
   get features () { return this._features }
   set features (value = []) {
     this._features = value
-    this._vertexSegments = null
     this._snapSegments = null
   
     if (this._vertexFeature) {
@@ -450,59 +462,73 @@ export default class Modify extends Component {
       const geometry = node.geometry
       const geometryType = geometry.geometryType
       const closestSegment = node.segment
-      let vertex = this._closestOnSegment(pixelCoordinate, node)
+      let vertex = this._closestOnSegment(pixelCoordinate, node)// 计算鼠标点在线段上的投影点
       const vertexPixel = map.getPixelFromCoordinate(vertex)
       
-      // 判断是否达到了捕捉阈值
+      // 判断当前是否选中了边
       let dist = distance(pixel, vertexPixel)
       if (dist <= this._pixelTolerance) {
-        const vertexSegments = {}
-  
+        /**
+         *  已经选中了边
+         */
         this._snapSegments = node
+        
+        let vertexEditable = false
   
         if (geometryType === Geometry.CIRCLE &&
           node.index === Modify.MODIFY_SEGMENT_CIRCLE_CIRCUMFERENCE_INDEX) {
           this._snappedToVertex = true
-          this._createOrUpdateVertexFeature(vertex)
         } else {
-          const pixel1 = map.getPixelFromCoordinate(closestSegment[0])
-          const pixel2 = map.getPixelFromCoordinate(closestSegment[1])
-          const squaredDist1 = squaredDistance(vertexPixel[0], vertexPixel[1], pixel1[0], pixel1[1])
-          const squaredDist2 = squaredDistance(vertexPixel[0], vertexPixel[1], pixel2[0], pixel2[1])
-          dist = Math.sqrt(Math.min(squaredDist1, squaredDist2))
+  
+          /**
+           * 再计算是否选中了线段的两个顶点
+           */
           
-          // 判断是否捕捉到图形的顶点
-          this._snappedToVertex = dist <= this._pixelTolerance
-          // vertex snapping otherwise edge snapping
-          if (this._snappedToVertex) {
-            vertex = squaredDist1 > squaredDist2 ?
-                     closestSegment[1] : closestSegment[0]
-            
-            const coordinateIndex = geometry.getCoordinateIndex(vertex)
-            if (geometryType === Geometry.POLYGON || geometryType === Geometry.PARALLELOGRAM) {
-              this._snapSegments.index = coordinateIndex.index
-              this._snapSegments.ringIndex = coordinateIndex.ringIndex
-            } else if (geometryType === Geometry.MULTI_POLYGON) {
-              this._snapSegments.index = coordinateIndex.index
-              this._snapSegments.ringIndex = coordinateIndex.ringIndex
-              this._snapSegments.polygonIndex = coordinateIndex.polygonIndex
-            } else {
-              this._snapSegments.index = coordinateIndex
+          // 判断是否允许顶点可编辑
+          if (this._vertexEditableCondition(node)) {
+            const pixel1 = map.getPixelFromCoordinate(closestSegment[0])
+            const pixel2 = map.getPixelFromCoordinate(closestSegment[1])
+            const squaredDist1 = squaredDistance(vertexPixel[0], vertexPixel[1], pixel1[0], pixel1[1])
+            const squaredDist2 = squaredDistance(vertexPixel[0], vertexPixel[1], pixel2[0], pixel2[1])
+            dist = Math.sqrt(Math.min(squaredDist1, squaredDist2))
+  
+            // 判断当前是否选中了顶点
+            this._snappedToVertex = dist <= this._pixelTolerance
+            if (this._snappedToVertex) {
+              vertex = squaredDist1 > squaredDist2 ?
+                closestSegment[1] : closestSegment[0]
+    
+              const coordinateIndex = geometry.getCoordinateIndex(vertex)
+              if (geometryType === Geometry.POLYGON || geometryType === Geometry.PARALLELOGRAM) {
+                this._snapSegments.index = coordinateIndex.index
+                this._snapSegments.ringIndex = coordinateIndex.ringIndex
+              } else if (geometryType === Geometry.MULTI_POLYGON) {
+                this._snapSegments.index = coordinateIndex.index
+                this._snapSegments.ringIndex = coordinateIndex.ringIndex
+                this._snapSegments.polygonIndex = coordinateIndex.polygonIndex
+              } else {
+                this._snapSegments.index = coordinateIndex
+              }
+    
+              this._snapSegments.isVertex = true
+              vertexEditable = true
             }
-            
-            this._snapSegments.isVertex = true
           }
-          
+
           if (geometryType === Geometry.PARALLELOGRAM) {
             this._snapSegments.index = node.index
             this._snapSegments.ringIndex = node.ringIndex
           }
-          
-          // draw the snapping point
-          this._createOrUpdateVertexFeature(vertex)
         }
   
-        this._vertexSegments = vertexSegments
+        // 边可编辑，或者顶点可编辑
+        if (this._edgeEditableCondition(node) || vertexEditable) {
+          // draw the snapping point
+          this._createOrUpdateVertexFeature(vertex)
+        } else {
+          this._snapSegments = null
+        }
+        
         return
       }
     }
