@@ -51,7 +51,6 @@ export default class BaseLayer extends BaseObject {
     if (value) {
       this._map = value
       this._mapRenderKey = listen(this, EventType.CHANGE, value.render, value)
-      this._map.addLayer(this)
       this.changed()
     }
   }
