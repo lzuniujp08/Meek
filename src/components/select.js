@@ -169,25 +169,25 @@ export default class Select extends Component {
       this.clear()
     }
 
-    map.forEachFeatureAtPiexl(pixel, (function(features, layer) {
+    map.forEachFeatureAtPiexl(pixel, (function(features) {
       if(features.length > 0){
 
         // 克隆样式
-        features.forEach( feature => {
-          let styles
-          if (feature.style) {
-            styles = feature.style
-          } else {
-            styles = layer.styleFunction(feature)
-          }
-          
-          const newStyles = []
-          styles.forEach(style => {
-            newStyles.push(style.clone())
-          })
-
-          feature.style = newStyles
-        })
+        // features.forEach( feature => {
+        //   let styles
+        //   if (feature.style) {
+        //     styles = feature.style
+        //   } else {
+        //     styles = layer.styleFunction(feature)
+        //   }
+        //
+        //   const newStyles = []
+        //   styles.forEach(style => {
+        //     newStyles.push(style.clone())
+        //   })
+        //
+        //   feature.style = newStyles
+        // })
 
         // 赋值并填充到selectFeatures中
         this.selectFeatures = features
