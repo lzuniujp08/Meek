@@ -54,7 +54,7 @@ Style.createDefaultEditing = function () {
   const styles = {}
   const white = [255, 255, 255]
   const blue = [0, 153, 255]
-  const width = 1
+  const width = 1.5
   
   // 面样式
   styles[Geometry.POLYGON] = [

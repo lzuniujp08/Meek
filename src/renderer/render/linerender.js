@@ -82,7 +82,7 @@ export default class LineRender extends GeometryRender {
   
     ctx.beginPath()
     const coordinates = renderOpt.coordinates
-    for(let i = 0,ii = coordinates.length ; i < ii - 1 ; i++){
+    for (let i = 0,ii = coordinates.length ; i < ii - 1 ; i++) {
       ctx.moveTo(coordinates[i][0],coordinates[i][1])
       ctx.lineTo(coordinates[i + 1][0],coordinates[i + 1][1])
     }
