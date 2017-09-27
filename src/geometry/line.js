@@ -30,8 +30,28 @@ export default class Line extends Geometry {
    */
   constructor (path) {
     super()
-    
+  
+    /**
+     * 记录内点更新的次数
+     * @type {number}
+     * @private
+     */
+    this._flatInteriorPointRevision = -1
+  
+    /**
+     * 缓存当前内点
+     * @type {null}
+     * @private
+     */
+    this._flatInteriorPoint = null
+  
+    /**
+     *
+     * @type {Array}
+     * @private
+     */
     this._path = []
+    
     this.addPath(path)
   }
 
@@ -152,21 +172,26 @@ export default class Line extends Geometry {
    * @returns {Array}
    */
   getFlatInteriorPoint () {
-    const interiorPoint = null
-    const fraction = 0.5
-    const flatCoordinates = []
-    const coordinates = this.getCoordinates()
+    if (this._flatInteriorPointRevision !== this.revision) {
+      const interiorPoint = null
+      const fraction = 0.5
+      const flatCoordinates = []
+      const coordinates = this.getCoordinates()
+  
+      coordinates.forEach( point => {
+        flatCoordinates.push(point[0], point[1])
+      })
+  
+      this._flatInteriorPoint = lineString( flatCoordinates, 0, flatCoordinates.length, this.stride,
+        fraction, interiorPoint)
+      
+      this._flatInteriorPointRevision = this.revision
+    }
     
-    coordinates.forEach( point => {
-      flatCoordinates.push(point[0], point[1])
-    })
-    
-    return lineString( flatCoordinates, 0, flatCoordinates.length, this.stride,
-      fraction, interiorPoint)
+    return this._flatInteriorPoint
   }
   
   getCoordinates () { return this.path }
-
 
   /**
    * 得到最后一个点的坐标，显示表单

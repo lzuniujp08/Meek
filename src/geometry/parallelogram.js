@@ -7,7 +7,6 @@ import Polygon from './polygon'
 import {distance} from '../geometry/support/geometryutil'
 
 import {getPointInExtendedLineByDistanceFromAB} from '../geometry/support/geometryutil'
-// import Extent from './extent'
 
 export default class Parallelogram extends Polygon {
   

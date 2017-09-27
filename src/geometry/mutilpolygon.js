@@ -28,6 +28,20 @@ export default class MutilPolygon extends Geometry {
   
     this.stride = 2
   
+    /**
+     * 记录当前多边形内点更新的次数
+     * @type {number}
+     * @private
+     */
+    this._flatInteriorPointRevision = -1
+  
+    /**
+     * 缓存当前多边形内点
+     * @type {null}
+     * @private
+     */
+    this._flatInteriorPoint = null
+  
     this.setCoordinates(coordinates)
   }
   
@@ -141,38 +155,43 @@ export default class MutilPolygon extends Geometry {
    * @returns {*}
    */
   getFlatInteriorPoint () {
-    const polygons = this._polygons
-    let flatCoordinates = []
-    let endss = []
-    
-    const orderArray = []
-    
-    polygons.forEach( polygon => {
-      const outRings = polygon[0]
-      orderArray.push(outRings)
-    })
-    
-    orderArray.sort( (arr1, arr2) => {
-      return arr1.length - arr2.length
-    })
+    if (this._flatInteriorPointRevision !== this.revision) {
+      this._flatInteriorPointRevision = this.revision
   
-    let lastLen = 0
-    orderArray.forEach( arr => {
-      const currLen = arr.length * 2 + lastLen
-      endss.push([currLen])
-      lastLen = currLen
-      
-      arr.forEach( points => {
-        flatCoordinates.push(points[0], points[1])
+      const polygons = this._polygons
+      let flatCoordinates = []
+      let endss = []
+  
+      const orderArray = []
+  
+      polygons.forEach( polygon => {
+        const outRings = polygon[0]
+        orderArray.push(outRings)
       })
-    })
-    
-    const flatCenters = centerLinearRingss(flatCoordinates, 0, endss, this.stride)
-    let flatInteriorPoints = linearRingss(
-      this.getOrientedFlatCoordinates(flatCoordinates, endss), 0, endss, this.stride,
-      flatCenters)
   
-    return flatInteriorPoints
+      orderArray.sort( (arr1, arr2) => {
+        return arr1.length - arr2.length
+      })
+  
+      let lastLen = 0
+      orderArray.forEach( arr => {
+        const currLen = arr.length * 2 + lastLen
+        endss.push([currLen])
+        lastLen = currLen
+    
+        arr.forEach( points => {
+          flatCoordinates.push(points[0], points[1])
+        })
+      })
+  
+      const flatCenters = centerLinearRingss(flatCoordinates, 0, endss, this.stride)
+      this._flatInteriorPoint = linearRingss(
+        this.getOrientedFlatCoordinates(flatCoordinates, endss), 0, endss, this.stride,
+        flatCenters)
+    }
+    
+  
+    return this._flatInteriorPoint
   }
   
   /**

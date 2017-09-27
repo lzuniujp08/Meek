@@ -36,6 +36,20 @@ export default class Extent extends Geometry {
     this._ymax = ymax
   
     this._rings = []
+  
+    /**
+     * 记录内点更新的次数
+     * @type {number}
+     * @private
+     */
+    this._flatInteriorPointRevision = -1
+  
+    /**
+     * 缓存当前内点
+     * @type {null}
+     * @private
+     */
+    this._flatInteriorPoint = null
   }
 
   /**
@@ -93,7 +107,10 @@ export default class Extent extends Geometry {
    * @type {Number}
    */
   get xmin () { return this._xmin }
-  set xmin (value) { this._xmin = value }
+  set xmin (value) {
+    this._xmin = value
+    this.changed()
+  }
   
   /**
    * Y 轴最小值
@@ -102,7 +119,10 @@ export default class Extent extends Geometry {
    * @type {Number}
    */
   get ymin () { return this._ymin }
-  set ymin (value) { this._ymin = value }
+  set ymin (value) {
+    this._ymin = value
+    this.changed()
+  }
   
   /**
    * X 轴最大值
@@ -111,7 +131,10 @@ export default class Extent extends Geometry {
    * @type {Number}
    */
   get xmax () { return this._xmax }
-  set xmax (value) { this._xmax = value }
+  set xmax (value) {
+    this._xmax = value
+    this.changed()
+  }
   
   /**
    * X 轴最大值
@@ -120,7 +143,10 @@ export default class Extent extends Geometry {
    * @type {Number}
    */
   get ymax () { return this._ymax }
-  set ymax (value) { this._ymax = value }
+  set ymax (value) {
+    this._ymax = value
+    this.changed()
+  }
   
   
   /**
@@ -139,7 +165,12 @@ export default class Extent extends Geometry {
    * @returns {[*,*]}
    */
   getFlatInteriorPoint () {
-    return [this.centerX, this.centerY]
+    if (this._flatInteriorPointRevision !== this.revision) {
+      this._flatInteriorPointRevision = this.revision
+      this._flatInteriorPoint = [this.centerX, this.centerY]
+    }
+    
+    return this._flatInteriorPoint
   }
   
   /**
@@ -263,6 +294,8 @@ export default class Extent extends Geometry {
     this.ymin = extentArr[1]
     this.xmax = extentArr[2]
     this.ymax = extentArr[3]
+  
+    this.changed()
   }
   
   /**

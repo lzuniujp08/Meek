@@ -37,6 +37,23 @@ export default class Polygon extends Geometry {
 
     this._rings = []
   
+    /**
+     * 记录当前多边形内点更新的次数
+     * @type {number}
+     * @private
+     */
+    this._flatInteriorPointRevision = -1
+  
+    /**
+     * 缓存当前多边形内点
+     * @type {null}
+     * @private
+     */
+    this._flatInteriorPoint = null
+  
+    /**
+     * 更新多边形的坐标
+     */
     this.setCoordinates(rings)
   }
 
@@ -188,20 +205,26 @@ export default class Polygon extends Geometry {
   }
   
   /**
-   * @todo 将来需要缓存下来，渲染时频繁计算会产生性能开销,使用revision机制来控制
-   * getFlatInteriorPoint
-   * @returns {*}
+   * 计算多边形的内点
+   *
+   * @method getFlatInteriorPoint
+   * @returns {Array} 返回内点，格式 [x, y]
    */
   getFlatInteriorPoint () {
-    const flatCenter = [this.extent.centerX, this.extent.centerY]
+    // 缓存限制
+    if (this._flatInteriorPointRevision !== this.revision ) {
+      const flatCenter = [this.extent.centerX, this.extent.centerY]
   
-    const ends = [this.getCoordinates()[0].length * 2]
-    const orientedFlatCoordinates = this.getOrientedFlatCoordinates()
+      const ends = [this.getCoordinates()[0].length * 2]
+      const orientedFlatCoordinates = this.getOrientedFlatCoordinates()
+  
+      this._flatInteriorPoint = linearRings(
+        orientedFlatCoordinates, 0, ends, this.stride, flatCenter, 0)
+      
+      this._flatInteriorPointRevision = this.revision
+    }
     
-    const flatInteriorPoint = linearRings(
-      orientedFlatCoordinates, 0, ends, this.stride, flatCenter, 0)
-    
-    return  flatInteriorPoint
+    return  this._flatInteriorPoint
   }
   
   /**
