@@ -352,7 +352,7 @@ export default class Map extends BaseObject {
   set layers (value) {
     if (Array.isArray(value)) {
       value.forEach( layer => {
-        layer.map = this
+        this.addLayer(layer)
       })
     }
   }
@@ -412,6 +412,7 @@ export default class Map extends BaseObject {
    */
   addLayer (layer) {
     this.layers.push(layer)
+    layer.map = this
   }
   
   /**
