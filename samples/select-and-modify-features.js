@@ -13,9 +13,9 @@ window.onload = function () {
   var extent1 = new Datatang.Extent(1100, 1300, 1400, 1600)
 
   var features = [new Datatang.Feature(point),
-    new Datatang.Feature(line),
-    new Datatang.Feature(polygon),
-    new Datatang.Feature(extent1),
+    new Datatang.Feature(line, null, '这是一条线'),
+    new Datatang.Feature(polygon, null, '多边形'),
+    new Datatang.Feature(extent1, null, '矩形'),
     new Datatang.Feature(extent)]
 
   // 将会获取缺省样式
