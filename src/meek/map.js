@@ -477,9 +477,11 @@ export default class Map extends BaseObject {
     let result = null
     for (let i = 0, ii = layers.length; i < ii; i++){
       let layer = layers[i]
-      result = layer.forEachFeatureAtPiexl(this._frameState,coordinate,callback,hitTolerance)
-      if(result){
-        return callback(result, layer)
+      if (layer.visible) {
+        result = layer.forEachFeatureAtPiexl(this._frameState,coordinate,callback,hitTolerance)
+        if (result) {
+          return callback(result, layer)
+        }
       }
     }
     
