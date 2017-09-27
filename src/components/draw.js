@@ -167,7 +167,7 @@ export default class Draw extends Component {
      * @type {Function}
      */
     this._sketchLayer.style = this.getDefaultStyleFunction()
-  
+    
     /**
      * 临时点
      *
@@ -1060,6 +1060,8 @@ export default class Draw extends Component {
     if (mapValue) {
       this._map = mapValue
       // this._mapRenderKey = listen(this, EventType.CHANGE, mapValue.render, mapValue)
+      
+      mapValue.addLayer(this._sketchLayer)
     }
     
     this._updateState()

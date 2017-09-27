@@ -269,8 +269,8 @@ export default class Select extends Component {
     if (!map || !active){
       // this._abortDrawing()
     }
-
-    this._selectLayer.map = active ? map : null
+    
+    map.addLayer(this._selectLayer)
   }
   
   /**

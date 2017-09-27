@@ -1016,9 +1016,9 @@ export default class Modify extends Component {
     if (map) {
       this._map = map
       this._mapRenderKey = listen(this, EventType.CHANGE, map.render, map)
+      
+      map.addLayer(this._overLayer)
     }
-    
-    this._overLayer.map = map
   }
 }
 
