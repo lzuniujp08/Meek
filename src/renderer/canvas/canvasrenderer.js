@@ -81,7 +81,7 @@ export default class CanvasRenderer extends Renderer {
 
     const layers = this.map.layers
   
-    // render in order
+    // layers rendered in order
     stableSort(layers, this.sortByZIndex)
     
     // 更新转化运算矩阵

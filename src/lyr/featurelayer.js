@@ -5,6 +5,7 @@ import {ExtentUtil} from '../geometry/support/extentutil'
 import FeatureEvent from '../meek/featureevent'
 import {EventType} from '../meek/eventtype'
 import {listen, unlistenByKey} from '../core/eventmanager'
+import Geometry from '../geometry/geometry'
 
 /**
  * FeatureLayer
@@ -326,7 +327,9 @@ export default class FeatureLayer extends BaseLayer {
   }
   
   /**
-   * 加载feature
+   * 加载当前屏幕的 features
+   *
+   * 默认会把点、线放在队列尾部
    *
    * @method loadFeature
    * @param extent {Geometry}
@@ -334,24 +337,36 @@ export default class FeatureLayer extends BaseLayer {
    */
   loadFeature (extent) {
     const features = this.features
-    
     const intersects = ExtentUtil.intersects
     const createOrUpdate = ExtentUtil.createOrUpdate
     const newFeatures = []
+    const pointFeatures = []
+    const lineFeatures = []
+    
     features.forEach(feature => {
       // 判断图形是否显示
       if (feature.display) {
-        const geometryExtent = feature.geometry.extent
+        const geometry = feature.geometry
+        const geometryExtent = geometry.extent
         const extentArr = createOrUpdate(geometryExtent.xmin,
           geometryExtent.ymin, geometryExtent.xmax, geometryExtent.ymax)
 
         if (intersects(extentArr, extent)) {
-          newFeatures.push(feature)
+          const geometryType = geometry.geometryType
+          if (geometryType === Geometry.POINT ||
+              geometryType === Geometry.MULTI_POINT ) {
+            pointFeatures.push(feature)
+          } else if (geometryType === Geometry.LINE ||
+            geometryType === Geometry.MULTI_LINE) {
+            lineFeatures.push(feature)
+          } else {
+            newFeatures.push(feature)
+          }
         }
       }
     })
 
-    return newFeatures
+    return [].concat(newFeatures, lineFeatures, pointFeatures)
   }
 
   /**

@@ -2,9 +2,7 @@
  * Created by zhangyong on 2017/3/20.
  */
 
-
 import LayerRenderer from '../../renderer/canvas/layerrenderer'
-
 import PointRender from '../render/pointrender'
 import LineRender from '../render/linerender'
 import PolygonRender from '../render/polygonrender'
@@ -77,7 +75,34 @@ export default class FeatureLayerRenderer extends LayerRenderer {
   
   }
   
+  /**
+   *  Get a renderer by geometry type
+   * @param geometry
+   * @returns {*}
+   * @private
+   */
+  _getGeometryRender (geometry) {
+    const type = geometry.geometryType
+    
+    if ( !this._geometryRenderGroup.has(type) ) {
+      this._geometryRenderGroup.set(type, new FeatureLayerRenderer.GeometryRender[type](this.context))
+    }
+    
+    return this._geometryRenderGroup.get(type)
+  }
  
+  
+  _renderFeaturesInOrder (features) {
+    if (features === null || features === undefined) {
+      return features
+    }
+    
+    if (features.length === 0) {
+      return features
+    }
+    
+  }
+  
   /**
    * 1、对渲染对象需要做切割 （当前范围内）
    */
@@ -95,7 +120,6 @@ export default class FeatureLayerRenderer extends LayerRenderer {
     if (this._renderResolution === resolution &&
         this._renderRevision === layerRevision &&
         ExtentUtil.containsExtent(this._renderExtent, renderExtent)) {
-      // console.log(this.id + 'render cache')
       this._cacheableThisTime = true
       
       // return true
@@ -104,8 +128,6 @@ export default class FeatureLayerRenderer extends LayerRenderer {
     // 加载当前屏的图形
     const features = this.layer.loadFeature(renderExtent)
     
-    // console.log(this.layer.name + 'the renderer geometry length is :' + features.length)
-  
     this._cacheableThisTime = false
     this._renderFeatures = features
     this._maxExtent = renderExtent
@@ -113,32 +135,17 @@ export default class FeatureLayerRenderer extends LayerRenderer {
     this._renderExtent = renderExtent
     this._renderRevision = layerRevision
     
-    return true
-  }
-  
-  
-  /**
-   *  Get a renderer by geometry type
-   * @param geometry
-   * @returns {*}
-   * @private
-   */
-  _getGeometryRender (geometry) {
-    const type = geometry.geometryType
-    
-    if ( !this._geometryRenderGroup.has(type) ) {
-      this._geometryRenderGroup.set(type, new FeatureLayerRenderer.GeometryRender[type](this.context))
+    if (features.length === 0) {
+      return false
     }
     
-    return this._geometryRenderGroup.get(type)
+    return true
   }
-  
   
   /**
    *
    */
   composeFrame (frameStateOpt, context) {
-    // console.log('featureLayer Render 开启渲染')
     const frameState = frameStateOpt
     const viewState = frameState.viewState
     const layer = this.layer
