@@ -20,27 +20,6 @@ module.exports = {
         loader: 'babel-loader',
         exclude: [path.resolve(__dirname, './node_modules'),
           path.resolve(__dirname, './samples')]
-      },
-      // {
-      //   test: /\.scss$/,
-      //   loaders: ['css', 'sass?includePaths[]='
-      //       + require('node-bourbon').includePaths
-      //       + '&includePaths[]='
-      //       + path.resolve(__dirname, './src/base/scss')
-      //   ],
-      //   include: path.resolve(__dirname, 'src')
-      // },
-      {
-        test: /\.(png|woff|eot|ttf|swf|cur)/,
-        loader: 'url-loader?limit=1'
-      },
-      {
-        test: /\.svg/,
-        loader: 'svg-inline'
-      },
-      {
-        test: /\.html/,
-        loader: 'html?minimize=false'
       }
     ],
     eslint: {
