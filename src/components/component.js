@@ -281,6 +281,11 @@ export default class Component extends BaseObject {
    * @returns {Array} new Coordinate
    */
   coordinateBeyond (coordinate) {
+    // 如果允许坐标可超出图片的边界
+    if (this.map.allowCoordinatesBeyondImage) {
+      return coordinate
+    }
+    
     if (coordinate === undefined) {
       return coordinate
     }

@@ -99,6 +99,9 @@ export default class Map extends BaseObject {
   
     // Get the options inner
     const optionsInner = Map.parseOptionsInner(options)
+    
+    // 是否允许图片坐标超出图片范围
+    this.allowCoordinatesBeyondImage = options.allowCoordinatesBeyondImage || false
   
     // Create the renderer
     this._renderer = new optionsInner.rendererClass(this.viewport, this)
